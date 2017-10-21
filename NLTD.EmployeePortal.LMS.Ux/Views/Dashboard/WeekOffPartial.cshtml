@@ -1,0 +1,26 @@
+﻿@model List<NLTD.EmployeePortal.LMS.Common.DisplayModel.DropDownItem>
+
+<div class="box-body">
+    @*<div class="row">
+        <div class="col-sm-5">
+            <h6 class="box-title">Day</h6>
+        </div>
+        
+    </div>*@
+
+
+    @{
+        foreach (var item in Model)
+        {
+            <div class="row">
+                <div class="col-sm-12">
+                    <p>@item.Key</p>
+                </div>              
+
+            </div>
+
+        }
+    }
+
+</div>
+

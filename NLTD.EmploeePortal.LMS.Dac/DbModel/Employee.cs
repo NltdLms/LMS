@@ -1,0 +1,35 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace NLTD.EmploeePortal.LMS.Dac.DbModel
+{
+    public class Employee
+    {
+        public Int64 UserId { get; set; }
+        public String EmployeeId { get; set; }
+        public String LoginId { get; set; }
+        public bool IsActive { get; set; }
+        public Int64 OfficeId { get; set; }
+        public String FirstName { get; set; }
+        public String LastName { get; set; }
+        public String EmailAddress { get; set; }
+        public String MobileNumber { get; set; }
+        public String Gender { get; set; }
+        public String AvatarUrl { get; set; }
+        public Int64? ReportingToId { get; set; }
+        public Int64 OfficeHolodayId { get; set; }
+        public Int64? EmployeeRoleId { get; set; }
+        //public Boolean IsHandleMembers { get; set; }
+        public Boolean IsInProbagationPeriod { get; set; }
+        public Boolean CanAvailYearlyLeave { get; set; }        
+
+        
+        public Int64 CreatedBy { get; set; }
+        public DateTime CreatedOn { get; set; }
+        public Int64 ModifiedBy { get; set; }
+        public DateTime ModifiedOn { get; set; }
+    }
+}

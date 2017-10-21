@@ -1,0 +1,42 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Menu xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <menuitem>
+    <MenuItem>
+      <title>Admin</title>
+      <url>#</url>
+      <icon>fa fa-calculator</icon>
+      <level1item>
+        <MenuItem>
+          <title>Request History</title>
+          <url>/Leaves/AdminLeaveHistory</url>
+          <icon></icon>
+        </MenuItem>
+        <MenuItem>
+          <title>Day wise Report</title>
+          <url>/Admin/AdminDaywiseLeaves</url>
+          <icon></icon>
+        </MenuItem>
+        <MenuItem>
+          <title>Month wise Report</title>
+          <url>/Admin/AdminMonthWiseLeaves</url>
+          <icon></icon>
+        </MenuItem>
+        <MenuItem>
+          <title>Year wise Report</title>
+          <url>/Admin/AdminYearWiseLeaveSumary</url>
+          <icon></icon>
+        </MenuItem>
+        <MenuItem>
+          <title>Permissions Report</title>
+          <url>/Admin/AdminPermissions</url>
+          <icon></icon>
+        </MenuItem>
+        <MenuItem>
+          <title>View Employee Profile</title>
+          <url>/Profile/AdminLmsProfile</url>
+          <icon></icon>
+        </MenuItem>
+      </level1item>
+    </MenuItem>
+  </menuitem>
+</Menu>

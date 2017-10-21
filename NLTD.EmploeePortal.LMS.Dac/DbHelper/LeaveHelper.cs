@@ -1,0 +1,196 @@
+﻿using NLTD.EmployeePortal.LMS.Repository;
+using System;
+using System.Collections.Generic;
+using System.Text;
+using NLTD.EmployeePortal.LMS.Common.DisplayModel;
+using NLTD.EmployeePortal.LMS.Common.QueryModel;
+
+namespace NLTD.EmploeePortal.LMS.Dac.DbHelper
+{
+    public class LeaveHelper : ILeaveHelper
+    {
+        public string ChangeStatus(LeaveStatusModel status)
+        {
+            using (var dac = new LeaveDac())
+            {
+                return dac.ChangeStatus(status);
+            }
+        }
+
+        public EmailDataModel ViewLeaveFromEmail(Int64 leaveId, Int64 userId)
+        {
+            using (var dac = new LeaveDac())
+            {
+                return dac.ViewLeaveFromEmail(leaveId, userId);
+            }
+        }
+
+        public void Dispose()
+        {
+            //Nothing to impement...
+        }
+
+       
+        public IList<TeamLeaves> GetTeamLeaveHistory(ManageTeamLeavesQueryModel qryMdl)
+        {
+            using (var dac = new LeaveDac())
+            {
+                return dac.GetTeamLeaveHistory(qryMdl);
+            }
+        }
+        public IList<TeamLeaves> GetLeaveRequests(ManageTeamLeavesQueryModel qryMdl)
+        {
+            using (var dac = new LeaveDac())
+            {
+                return dac.GetLeaveRequests(qryMdl);
+            }
+        }
+        public EmailDataModel GetEmailData(Int64 leaveId,string actionName)
+        {
+            using (var dac = new LeaveDac())
+            {
+                return dac.GetEmailData(leaveId, actionName);
+            }
+        }
+        
+       
+        public int GetHolidayCount(DateTime startDate, DateTime endDate, long empId)
+        {
+            using (var dac = new LeaveDac())
+            {
+                return dac.GetHolidayCount(startDate, endDate,empId);
+            }
+        }
+        public IList<DropDownItem> GetWeekOffs(Int64 UserId)
+        {
+            using (var dac = new LeaveDac())
+            {
+                return dac.GetWeekOffs(UserId);
+            }
+        }
+
+        public List<LeaveTypesModel> GetLeaveTypes(long OfficeId, Int64 userId)
+        {
+            using (var dac = new LeaveDac())
+            {
+                return dac.GetLeaveTypes(OfficeId, userId);
+            }
+        }
+        public List<DropDownItem> GetYearsFromLeaveBalance()
+        {
+            using (var dac = new LeaveDac())
+            {
+                return dac.GetYearsFromLeaveBalance();
+            }
+        }
+        public string SaveLeaveRequest(LeaveRequestModel request)
+        {
+            using (var dac = new LeaveDac())
+            {
+                return dac.SaveLeaveRequest(request);
+            }
+        }
+        public IList<LeaveSummary> GetLeaveSumary(long UserId,Int32 summaryYear)
+        {
+            using (var dac = new LeaveDac())
+            {
+                return dac.GetLeaveSumary(UserId, summaryYear);
+            }
+        }
+        public IList<HolidayModel> GetHolidays(long UserId, Int32 holidayYear)
+        {
+            using (var dac = new LeaveDac())
+            {
+                return dac.GetHolidays(UserId, holidayYear);
+            }
+        }
+        public IList<EmployeeWiseLeaveSummaryModel> GetEmployeeWiseLeaveSumary(Int64 UserId, int Year, string reqUsr,string Name, bool OnlyReportedToMe)
+        {
+            using (var dac = new LeaveDac())
+            {
+               
+                return dac.GetEmployeeWiseLeaveSumary(UserId, Year, reqUsr,Name, OnlyReportedToMe);
+            }
+        }
+        public IList<DaywiseLeaveDtlModel> GetDaywiseLeaveDtl(DateTime? FromDate, DateTime? ToDate, bool IsLeaveOnly, Int64 LeadId, bool OnlyReportedToMe,string Name, string reqUsr, bool DonotShowRejected)
+        {
+            using (var dac = new LeaveDac())
+            {
+
+                return dac.GetDaywiseLeaveDtl(FromDate, ToDate, IsLeaveOnly, LeadId, OnlyReportedToMe, Name, reqUsr,DonotShowRejected);
+            }
+        }
+        public IList<MonthwiseLeavesCountModel> GetMonthwiseLeavesCount(Int32 year, Int64 LeadId, bool OnlyReportedToMe, string Name, string reqUsr) {
+            using (var dac = new LeaveDac())
+            {
+
+                return dac.GetMonthwiseLeavesCount(year,  LeadId, OnlyReportedToMe, Name, reqUsr);
+            }
+        }
+        public IList<LeaveDtl> GetLeaveDetailCalculation(DateTime LeaveFrom, DateTime LeaveUpto, string LeaveFromTime, string LeaveUptoTime, Int64 UserId, Int64 LeaveTypText)
+        {
+            using (var dac = new LeaveDac())
+            {
+
+                return dac.GetLeaveDetailCalculation(LeaveFrom, LeaveUpto, LeaveFromTime, LeaveUptoTime, UserId, LeaveTypText);
+            }
+        }
+        public string ReturnWeekOff(long UserId)
+        {
+            using (var dac = new LeaveDac())
+            {
+                return dac.ReturnWeekOff(UserId);
+            }
+        }
+        public decimal ReturnDuration(DateTime LeaveFrom, DateTime LeaveUpto, string LeaveFromTime, string LeaveUptoTime, Int64 UserId)
+        {
+            using (var dac = new LeaveDac())
+            {
+                return dac.ReturnDuration(LeaveFrom, LeaveUpto, LeaveFromTime, LeaveUptoTime, UserId);
+            }
+        }
+        public IList<PermissionDetailsModel> GetPermissionDetail(string Name, string reqUsr, DateTime? startDate, DateTime? endDate, bool OnlyReportedToMe, Int64 LeadId)
+        {
+            using (var dac = new LeaveDac())
+            {
+
+                return dac.GetPermissionDetail(Name, reqUsr, startDate, endDate, OnlyReportedToMe, LeadId);
+            }
+        }
+        public DashBoardModel GetDashboardData(Int64 UserId)
+        {
+            using (var dac = new LeaveDac())
+            {
+                return dac.GetDashboardData(UserId);
+            }
+        }
+        public LeaveRequestModel ApplyLeaveCommonData(Int64 UserId, Int64 OfficeId)
+        {
+            using (var dac = new LeaveDac())
+            {
+                return dac.ApplyLeaveCommonData(UserId, OfficeId);
+            }
+        }
+        public IList<LeaveDetailModel> ShowLeaveDetail(Int64 LeaveId)
+        {
+            using (var dac = new LeaveDac())
+            {
+                return dac.ShowLeaveDetail(LeaveId);
+            }
+        }
+        public IList<EmployeeList> GetEmployeeList(string param, Int64 userId)
+        {
+            using (var dac = new LeaveDac())
+            {
+                return dac.GetEmployeeList(param, userId);
+            }
+        }
+        public int GetPendingApprovalCount(Int64 userId)
+        {
+            using (var dac = new LeaveDac())
+            {
+                return dac.GetPendingApprovalCount( userId);
+            }
+        }
+    }
+}

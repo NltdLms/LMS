@@ -1,0 +1,47 @@
+﻿@model List<NLTD.EmployeePortal.LMS.Common.DisplayModel.HolidayModel>
+
+<div style="height:380px;">
+    <div class="box-header with-border" style="height:33px;">
+        <h3 class="box-title">My Holidays</h3>
+        @{
+
+            if (Model.Count > 0)
+            {
+                <h6 style="text-align:right;font-weight:bold;font-style:italic;color:maroon">@Model[0].HolidayOfficeName</h6>
+            }
+        }
+        
+        
+    </div>
+    <div class="box-body">
+        <div class="row">
+            <div class="col-sm-3">
+                <h6 class="box-title">Date</h6>
+            </div>
+            <div class="col-sm-9">
+                <h6 class="box-title">Holiday Name</h6>
+            </div>
+
+        </div>
+
+
+        @{
+            foreach (var item in Model)
+            {
+                <div class="row">
+                    <div class="col-sm-3">
+                        <p>@item.HolidayDate.ToShortDateString()</p>
+                    </div>
+                    <div class="col-sm-9" style="text-align: justify;">
+                        <p>@item.HolidayText</p>
+                    </div>
+
+                </div>
+
+            }
+        }
+
+    </div>
+</div>
+
+

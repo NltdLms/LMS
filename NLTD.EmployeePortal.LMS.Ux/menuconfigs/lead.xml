@@ -1,0 +1,48 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Menu xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <menuitem>    
+    <MenuItem>
+      <title>Manage Team Leaves</title>
+      <url>#</url>
+      <icon>fa fa-users</icon>
+      <level1item>        
+        <MenuItem>
+          <title>Manage Requests</title>
+          <url>/Leaves/ManageLeaveRequest</url>
+          <icon></icon>
+        </MenuItem>
+        <MenuItem>
+          <title>Request History</title>
+          <url>/Leaves/TeamLeaveHistory</url>
+          <icon></icon>
+        </MenuItem>
+        <MenuItem>
+          <title>Day wise Report</title>
+          <url>/Admin/TeamDaywiseLeaves</url>
+          <icon></icon>
+        </MenuItem>
+        <MenuItem>
+          <title>Month wise Report</title>
+          <url>/Admin/TeamMonthWiseLeaves</url>
+          <icon></icon>
+        </MenuItem>
+        <MenuItem>
+          <title>Year wise Report</title>
+          <url>/Admin/TeamYearWiseLeaveSumary</url>
+          <icon></icon>
+        </MenuItem>
+        <MenuItem>
+          <title>Permissions Report</title>
+          <url>/Admin/TeamPermissions</url>
+          <icon></icon>
+        </MenuItem>
+        <MenuItem>
+          <title>View Employee Profile</title>
+          <url>/Profile/TeamLmsProfile</url>
+          <icon></icon>
+        </MenuItem>
+      </level1item>
+    </MenuItem>
+
+  </menuitem>
+</Menu>
