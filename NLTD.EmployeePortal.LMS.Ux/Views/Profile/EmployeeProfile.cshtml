@@ -63,21 +63,21 @@
                         <div class="col-sm-3">
                             <div class="form-group">
                                 @Html.LabelFor(e => e.FirstName)
-                                @Html.TextBoxFor(e => e.FirstName, null, new { @class = "form-control capital" })
+                                @Html.TextBoxFor(e => e.FirstName, null, new { @class = "form-control capital", autocomplete = "off" })
                                 @Html.ValidationMessageFor(e => e.FirstName, null, new { @class = "text-danger" })
                             </div>
                         </div>
                         <div class="col-sm-3">
                             <div class="form-group">
                                 @Html.LabelFor(e => e.LastName)
-                                @Html.TextBoxFor(e => e.LastName, null, new { @class = "form-control capital" })
+                                @Html.TextBoxFor(e => e.LastName, null, new { @class = "form-control capital", autocomplete = "off" })
                                 @Html.ValidationMessageFor(e => e.LastName, null, new { @class = "text-danger" })
                             </div>
                         </div>
                         <div class="col-sm-3">
                             <div class="form-group">
                                 @Html.LabelFor(e => e.LogonId)
-                                @Html.TextBoxFor(e => e.LogonId, null, new { @class = "form-control upper" })
+                                @Html.TextBoxFor(e => e.LogonId, null, new { @class = "form-control upper", autocomplete = "off" })
                                 @Html.ValidationMessageFor(e => e.LogonId, null, new { @class = "text-danger" })
                             </div>
                         </div>
@@ -87,7 +87,7 @@
                                 @{
                                     if (Model.Mode == "Add")
                                     {
-                                        @Html.TextBoxFor(e => e.EmployeeId, null, new { @class = "form-control" })
+                                        @Html.TextBoxFor(e => e.EmployeeId, null, new { @class = "form-control", autocomplete = "off" })
                                         @Html.ValidationMessageFor(e => e.EmployeeId, null, new { @class = "text-danger" })
                                     }
                                     else
@@ -103,7 +103,7 @@
                             <div class="form-group">
 
                                 @Html.LabelFor(e => e.EmailAddress)
-                                @Html.TextBoxFor(e => e.EmailAddress, null, new { @class = "form-control lower" })
+                                @Html.TextBoxFor(e => e.EmailAddress, null, new { @class = "form-control lower", autocomplete = "off" })
                                 @Html.ValidationMessageFor(e => e.EmailAddress, null, new { @class = "text-danger" })
                             </div>
 
@@ -124,7 +124,7 @@
                             <div class="form-group">
                                 <div class="form-group">
                                     @Html.LabelFor(e => e.MobileNumber)
-                                    @Html.TextBoxFor(e => e.MobileNumber, null, new { @class = "form-control" })
+                                    @Html.TextBoxFor(e => e.MobileNumber, null, new { @class = "form-control", autocomplete = "off" })
                                     @Html.ValidationMessageFor(e => e.MobileNumber, null, new { @class = "text-danger" })
                                 </div>
                             </div>
@@ -280,7 +280,7 @@
                             <div class="box-footer">
                                 <div class="col-sm-10">
                                 </div>
-                                <div class="col-sm-2">
+                                <div class="col-sm-2" style="right:-25px;">
                                     <button type="button" class="btn btn-primary" onclick="location.href='@Url.Action("UpdateEmployee", "Profile")'">CANCEL</button>
                                     <button type="submit" class="btn btn-primary pull-right">SAVE</button>
                                 </div>
@@ -291,9 +291,18 @@
                             <div class="box-footer">
                                 <div class="col-sm-10">
                                 </div>
-                                <div class="col-sm-2">
+                                <div class="col-sm-2"  style="right:-25px;">
                                     <button type="button" class="btn btn-primary" onclick="location.href='@Url.Action("AddNewEmployee", "Profile")'">CLEAR</button>
-                                    <button type="button" class="btn btn-primary pull-right" onclick="SubmitEmpForm(this)">SAVE</button>
+                                    @{
+                                        if (Model.ErrorMesage == "Saved")
+                                        {
+                                            <button type="button" class="btn btn-primary pull-right" disabled="disabled">SAVE</button>
+                                        }
+                                        else
+                                        {
+                                            <button type="button" class="btn btn-primary pull-right" onclick="SubmitEmpForm(this)">SAVE</button>
+                                        }
+                                    }
                                 </div>
                             </div>
                         }

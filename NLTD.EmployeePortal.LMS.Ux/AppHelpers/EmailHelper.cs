@@ -137,16 +137,18 @@ namespace NLTD.EmployeePortal.LMS.Ux.AppHelpers
                 }
             }
             catch(Exception ex){
-                LogError(ex);
+                LogError(ex, leavId);
             }
 
            
         }
-        private void LogError(Exception ex)
+        private void LogError(Exception ex,Int64 leaveId)
         {
             try
             {
                 string message = string.Format("Time: {0}", DateTime.Now.ToString("dd/MM/yyyy hh:mm:ss tt"));
+                message += Environment.NewLine;
+                message += "Leave ID:" + leaveId;
                 message += Environment.NewLine;
                 message += "-----------------------------------------------------------";
                 message += Environment.NewLine;

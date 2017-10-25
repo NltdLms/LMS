@@ -84,3 +84,16 @@ Source: System
 TargetSite: Void Send(System.Net.Mail.MailMessage)
 -----------------------------------------------------------
 
+Time: 23/10/2017 12:52:49 PM
+Leave ID:136
+-----------------------------------------------------------
+Message: Value cannot be null.
+Parameter name: address
+StackTrace:    at System.Net.Mail.MailAddress..ctor(String address, String displayName, Encoding displayNameEncoding)
+   at System.Net.Mail.MailAddress..ctor(String address)
+   at NLTD.EmployeePortal.LMS.Ux.AppHelpers.EmailHelper.SendHtmlFormattedEmail(String recepientEmail, IList`1 ccEmail, String subject, String body, String emailType) in D:\SureshM NLTD\My TFS\NLTD\EmployeePortal\NLTD.EmployeePortal.LMS.Ux\AppHelpers\EmailHelper.cs:line 25
+   at NLTD.EmployeePortal.LMS.Ux.AppHelpers.EmailHelper.SendEmail(Int64 leavId, String actionName) in D:\SureshM NLTD\My TFS\NLTD\EmployeePortal\NLTD.EmployeePortal.LMS.Ux\AppHelpers\EmailHelper.cs:line 127
+Source: System
+TargetSite: Void .ctor(System.String, System.String, System.Text.Encoding)
+-----------------------------------------------------------
+

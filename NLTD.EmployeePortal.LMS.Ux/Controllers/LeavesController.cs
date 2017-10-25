@@ -190,7 +190,7 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
                         }
                         else
                         {
-                            if (result.IndexOf("$")>0)
+                            if (result.IndexOf("$") > 0)
                             {
                                 data.ErrorMesage = "Saved";
                                 try
@@ -228,7 +228,7 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
                             //else if (result == "PermissionDurationTime")
                             //    data.ErrorMesage = "Permission duration is more than 4 hours.";
                             else if (result.Contains("ExceedMaxPerRequest"))
-                                data.ErrorMesage = "Number of days allowed per request are " + result.Substring(19);
+                                data.ErrorMesage = "Number of days allowed per request are " + result.Substring(19) + ".";
                         }
                     }                          
                 }

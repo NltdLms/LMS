@@ -213,6 +213,8 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
                             employee.ErrorMesage = "Only the user with role 'HR' is allowed to do this action.";
                         else if (result == "Duplicate")
                             employee.ErrorMesage = "The employee Id already exists.";
+                        else if (result == "DupCorp")
+                            employee.ErrorMesage = "The logon id was already assigned to another employee.";
                     }
                 }        
 

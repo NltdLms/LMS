@@ -460,22 +460,40 @@ namespace NLTD.EmploeePortal.LMS.Dac.Dac
                         }
                     }
 
+                    var isCorpIdExits = context.Employee.Where(e => e.LoginId == profile.LogonId.ToUpper()).FirstOrDefault();
+
+                    if (profile.Mode == "Add")
+                    {
+                        if (isCorpIdExits != null)
+                        {
+                            return "DupCorp";
+                        }
+                    }
+                    else
+                    {
+                        if (isCorpIdExits != null)
+                        {
+                            if (isCorpIdExits.EmployeeId != profile.LogonId.ToUpper())
+                            {
+                                return "DupCorp";
+                            }
+                        }
+                    }
+
                     if (employee == null)
                     {
-                        remarks = "#LogonId" + remarks + profile.LogonId;
-                        remarks = "#EmployeeId" + remarks + profile.EmployeeId;
-                        remarks = "#OfficeId" + remarks + profile.OfficeId;
-                        remarks = "#IsActive" + remarks + profile.IsActive;
-                        remarks = "#FirstName" + remarks + profile.FirstName;
-                        remarks = "#LastName" + remarks + profile.LastName;
-                        remarks = "#Gender" + remarks + profile.Gender;
-                        remarks = "#EmailAddress" + remarks + profile.EmailAddress;                       
-                        remarks = "#MobileNumber" + remarks + profile.MobileNumber;
-                        remarks = "#RoleId" + remarks + profile.RoleId;
-                        remarks = "#ReportedToId" + remarks + profile.ReportedToId;
-                        remarks = "#OfficeHolodayId" + remarks + profile.OfficeHolodayId;
-
-
+                        remarks = "#LogonId" + "^" + profile.LogonId;
+                        remarks = remarks + "#EmployeeId" + "^" + profile.EmployeeId;
+                        remarks = remarks + "#OfficeId" + "^" + profile.OfficeId;
+                        remarks = remarks + "#IsActive" + "^" + profile.IsActive;
+                        remarks = remarks + "#FirstName" + "^" + profile.FirstName;
+                        remarks = remarks + "#LastName" + "^" + profile.LastName;
+                        remarks = remarks + "#Gender" + "^" + profile.Gender;
+                        remarks = remarks + "#EmailAddress" + "^" + profile.EmailAddress;                       
+                        remarks = remarks + "#MobileNumber" + "^" + profile.MobileNumber;
+                        remarks = remarks + "#RoleId" + "^" + profile.RoleId;
+                        remarks = remarks + "#ReportedToId" + "^" + profile.ReportedToId;
+                        remarks = remarks + "#OfficeHolodayId" + "^" + profile.OfficeHolodayId;
 
                         employee = new Employee();
                         employee.LoginId = profile.LogonId.ToUpper();
@@ -534,9 +552,9 @@ namespace NLTD.EmploeePortal.LMS.Dac.Dac
                         if (isSaved > 0)
                         {
                             EmployeeTransactionHistory hist = new EmployeeTransactionHistory();
-                            hist.UserId = profile.UserId;
+                            hist.UserId = employee.UserId;
                             hist.TransactionDate = System.DateTime.Now;
-                            hist.TransactionType = "Update";
+                            hist.TransactionType = "Insert";
                             hist.TransactionBy = ModifiedBy;
                             hist.Remarks = remarks;
                             context.EmployeeTransactiontHistory.Add(hist);
@@ -559,37 +577,37 @@ namespace NLTD.EmploeePortal.LMS.Dac.Dac
                         oldEmpData = context.Employee.Where(x => x.UserId == profile.UserId).FirstOrDefault();
 
                         if (profile.LogonId != oldEmpData.LoginId)
-                            remarks = "#LogonId" + remarks + profile.LogonId;
+                            remarks = "#LogonId" + "^" + profile.LogonId;
 
                         if (profile.EmployeeId != oldEmpData.EmployeeId)
-                            remarks = "#EmployeeId" + remarks + profile.EmployeeId;
+                            remarks = remarks + "#EmployeeId" + "^" +  profile.EmployeeId;
 
                         if (profile.IsActive != oldEmpData.IsActive)
-                            remarks = "#IsActive" + remarks + profile.IsActive;
+                            remarks = remarks + "#IsActive" + "^" +  profile.IsActive;
 
                         if (profile.ReportedToId != oldEmpData.ReportingToId)
-                            remarks = "#ReportedToId" + remarks + profile.ReportedToId;
+                            remarks = remarks + "#ReportedToId" + "^" + profile.ReportedToId;
 
                         if (profile.FirstName != oldEmpData.FirstName)
-                            remarks = "#FirstName" + remarks + profile.FirstName;
+                            remarks = remarks + "#FirstName" + "^" + profile.FirstName;
 
                         if (profile.LastName != oldEmpData.LastName)
-                            remarks = "#LastName" + remarks + profile.LastName;
+                            remarks = remarks + "#LastName" + "^" + profile.LastName;
 
                         if (profile.Gender != oldEmpData.Gender)
-                            remarks = "#Gender" + remarks + profile.Gender;
+                            remarks = remarks + "#Gender" + "^" + profile.Gender;
 
                         if (profile.MobileNumber != oldEmpData.MobileNumber)
-                            remarks = "#MobileNumber" + remarks + profile.MobileNumber;
+                            remarks = remarks + "#MobileNumber" + "^" + profile.MobileNumber;
 
                         if (profile.EmailAddress != oldEmpData.EmailAddress)
-                            remarks = "#EmailAddress" + remarks + profile.EmailAddress;
+                            remarks = remarks + "#EmailAddress" + "^" + profile.EmailAddress;
 
                         if (profile.OfficeHolodayId != oldEmpData.OfficeHolodayId)
-                            remarks = "#OfficeHolodayId" + remarks + profile.OfficeHolodayId;
+                            remarks = remarks + "#OfficeHolodayId" + "^" + profile.OfficeHolodayId;
 
                         if (profile.RoleId != oldEmpData.EmployeeRoleId)
-                            remarks = "#RoleId" + remarks + profile.RoleId;
+                            remarks = remarks + "#RoleId" + "^" + profile.RoleId;
 
 
                         employee.OfficeId = profile.OfficeId;
