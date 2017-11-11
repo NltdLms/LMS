@@ -16,6 +16,11 @@
           <url>/Profile/AddNewEmployee</url>
           <icon></icon>
         </MenuItem>
+        <MenuItem>
+          <title>Add Leave Balance</title>
+          <url>/Profile/SearchLeaveBalanceProfile</url>
+          <icon></icon>
+        </MenuItem>
       </level1item>
     </MenuItem>
   </menuitem>

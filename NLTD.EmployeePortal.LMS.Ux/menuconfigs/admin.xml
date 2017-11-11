@@ -36,6 +36,11 @@
           <url>/Profile/AdminLmsProfile</url>
           <icon></icon>
         </MenuItem>
+        <MenuItem>
+          <title>View Transaction Log</title>
+          <url>/Admin/ViewTransactionLog</url>
+          <icon></icon>
+        </MenuItem>
       </level1item>
     </MenuItem>
   </menuitem>

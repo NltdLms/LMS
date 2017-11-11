@@ -49,10 +49,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="EmployeeClient.cs" />
-    <Compile Include="EmployeeLeaveBalanceHelper.cs" />
+    <Compile Include="EmployeeLeaveBalanceClient.cs" />
     <Compile Include="EmployeeRoleHelper.cs" />
     <Compile Include="LeaveClient.cs" />
-    <Compile Include="LeaveTransactionHistoryHelper.cs" />
+    <Compile Include="LeaveTransactionHistoryClient.cs" />
     <Compile Include="OfficeHolidayHelper.cs" />
     <Compile Include="OfficeLocationClient.cs" />
     <Compile Include="OfficeWeekEndHelper.cs" />

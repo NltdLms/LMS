@@ -287,5 +287,43 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
 
             return PartialView("EmployeeLmsProfileNamesPartial",lstProfile);
         }
+        //Added by Tamil
+        public ActionResult SearchLeaveBalanceProfile()
+        {
+            EmployeeProfileSearchModel mdl = new EmployeeProfileSearchModel();
+            return View("SearchLeaveBalanceProfile", mdl);
+        }
+
+        public ActionResult EmployeeLeaveBalanceDetails(string name)
+        {
+            IList<LeaveBalanceEmpProfile> lstProfile = new List<LeaveBalanceEmpProfile>();
+            if (name != "")
+            {
+                name = name.Replace("|", " ");
+            }
+            using (var client = new EmployeeLeaveBalanceClient())
+            {
+                long userid = this.UserId;
+                lstProfile = client.GetLeaveBalanceEmpProfile(name);
+            }
+
+            return PartialView("EmployeeLeaveBalanceProfilePartial", lstProfile);
+        }
+
+        public ActionResult SaveLeaveBalance(List<EmployeeLeaveBalanceDetails> lst, Int64 EmpUserid)
+        {
+            bool isValid = true;
+            string result = "";
+            if (ModelState.IsValid)
+            {
+                using (var client = new EmployeeLeaveBalanceClient())
+                {
+                    long LoginUserId = this.UserId;
+                    result = client.UpdateLeaveBalance(lst, EmpUserid, LoginUserId);
+                }
+            }
+
+            return Json(result);
+        }
     }
 }

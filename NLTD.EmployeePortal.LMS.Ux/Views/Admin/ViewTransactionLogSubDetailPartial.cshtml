@@ -1,0 +1,33 @@
+﻿
+@model IList<NLTD.EmployeePortal.LMS.Common.DisplayModel.LeaveTransactiontHistoryModel>
+<table id="transactHist"
+       class="transaction table table-condensed table-striped table-hover">
+    <thead>
+        <tr>
+            <th>Transaction Date</th>
+            <th>Transaction Type</th>
+            <th>Number of Days</th>
+            <th>Remarks</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            string transDate = item.TransactionDate.ToString("dd-MM-yyyy");
+            <tr>
+                <td style="width:20%">
+                    @transDate
+                </td>
+                <td style="width:20%">
+                    @Html.DisplayFor(modelItem => item.TransactionType)
+                </td>
+                <td style="width:20%">
+                    @Html.DisplayFor(modelItem => item.NumberOfDays)
+                </td>
+                <td style="width:25%">
+                    @Html.DisplayFor(modelItem => item.Remarks)
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

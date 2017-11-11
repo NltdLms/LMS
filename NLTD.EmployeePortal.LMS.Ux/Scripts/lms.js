@@ -933,3 +933,195 @@ function hideElementsForHalfDay() {
     }
     
 }
+//Added by Tamil
+function loadLeaveBalanceProfile() {
+
+    if ($("#Name").val() == undefined) {
+        var name = "";
+    }
+    else {
+        if ($("#Name").val() != "") {
+            var name = $("#Name").val().replace(/ /g, "|");
+        }
+        else {
+            name = "";
+        }
+    }
+
+    $.ajax({
+        type: 'GET',
+        cache: false,
+        beforeSend: function () {
+            $("#divLoading").show();
+        },
+        url: "/Profile/EmployeeLeaveBalanceDetails",
+        data: {
+            //"onlyReportedToMe": showTeam,
+            "name": name
+            //"requestMenuUser": $("#RequestLevelPerson").val(),
+            //"hideInactiveEmp": hideInactive
+
+        },
+        success: function (data) {
+            $('#divEmpProfile').html(data);
+        },
+        complete: function () {
+            $("#divLoading").hide();
+        },
+        error: function () {
+            $("#divLoading").hide();
+
+        }
+    });
+
+}
+
+function AddTotalDays(index) {
+    var CreditOrDebit = $('#CreditOrDebit' + index).val();
+    var ExistingTotalDays = $("#ExistingTotalDays" + index).val();
+    var NoOfDays = 0;
+
+    if ($("#NoOfDays" + index).val() == undefined || $("#NoOfDays" + index).val() == '') {
+        NoOfDays = 0;
+    } else {
+        NoOfDays = $("#NoOfDays" + index).val();
+    }
+
+    if (NoOfDays > 0) {
+        if (CreditOrDebit == 'D' && parseFloat(ExistingTotalDays) < parseFloat(NoOfDays)) {
+            Clearshowalert("No of days should be less than Existing Total days", "alert alert-danger");
+            $("#NoOfDays" + index).focus();
+            return;
+        }
+
+        if (CreditOrDebit != '') {
+
+            var Total = (parseFloat(NoOfDays) + parseFloat(ExistingTotalDays)).toFixed(1);
+            if (CreditOrDebit == 'D') {
+                Total = (parseFloat(ExistingTotalDays) - parseFloat(NoOfDays)).toFixed(1);
+            }
+            $("#TotalDays" + index).val(Total);
+        }
+        else {
+            $("#TotalDays" + index).val(ExistingTotalDays);
+        }
+    } else {
+        $("#TotalDays" + index).val("");
+    }
+}
+
+function isNumber(evt) {
+    evt = (evt) ? evt : window.event;
+    var charCode = (evt.which) ? evt.which : evt.keyCode;
+    if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+        return false;
+    }
+    return true;
+}
+
+function SubmitLeaveBalanceForm(count) {
+    var things = [];
+    var valid = false;
+    for (var i = 0; i < count; i++) {
+        var CreditOrDebit = $('#CreditOrDebit' + i).val();
+
+        if ($("#NoOfDays" + i).val() == undefined || $("#NoOfDays" + i).val() == '') {
+            NoOfDays = 0;
+        } else {
+            NoOfDays = $("#NoOfDays" + i).val();
+        }
+
+        if (NoOfDays > 0) {
+            valid = true;
+            var ExistingTotalDays = $("#ExistingTotalDays" + i).val();
+
+            if (CreditOrDebit == 'D' && parseFloat(ExistingTotalDays) < parseFloat(NoOfDays)) {
+                Clearshowalert("No of days should be less than Existing Total days", "alert alert-danger");
+                $("#NoOfDays" + i).focus();
+                return;
+            }
+
+            things.push(
+                {
+                    LeaveType: $("#LeaveType" + i).val(), ExistingTotalDays: ExistingTotalDays,
+                    CreditOrDebit: CreditOrDebit, NoOfDays: NoOfDays, TotalDays: $("#TotalDays" + i).val(),
+                    LeaveTypeId: $("#LeaveTypeId" + i).val(), LeaveBalanceId: $("#LeaveBalanceId" + i).val(), Remarks: $("#Remarks" + i).val()
+                });
+        } else {
+            $("#TotalDays" + i).val("");
+        }
+    }
+
+    if (valid) {
+        var userid = $("#UserId").val();
+        things = JSON.stringify({ 'lst': things, 'EmpUserid': userid });
+        //alert(things);
+        $.ajax({
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'json',
+            type: 'POST',
+            url: '/Profile/SaveLeaveBalance',
+            data: things,
+            success: function (result) {
+                if (result == "Saved") {
+                    $("#btnsave").attr("disabled", true);
+                    Clearshowalert("Employee Leave Balance saved Successfully.", "alert alert-success");
+                }
+                else if (result == "Need Role") {
+                    $("#btnsave").attr("disabled", true);
+                    Clearshowalert("Only the user with role 'HR' is allowed to do this action.", "alert alert-danger");
+                }
+                else {
+                    Clearshowalert(result, "alert alert-danger");
+                }
+            },
+            failure: function (response) {
+                Clearshowalert(response.message, "alert alert-danger");
+            }
+        });
+    }
+    else {
+        Clearshowalert("No of Days value should be more than 0", "alert alert-danger");
+        return;
+    }
+}
+
+function Clearshowalert(message, alerttype) {
+    $("#alert_placeholder").empty();
+    $('#alert_placeholder').append('<div id="alertdiv" class="alert ' + alerttype + '"><a class="close" data-dismiss="alert">×</a><span>' + message + '</span></div>');
+}
+
+
+
+function loadTransactionLog() {
+
+    if ($("#OnlyReportedToMe").val() == undefined) {
+        var showTeam = false;
+    }
+    else {
+        var showTeam = $("#OnlyReportedToMe").prop('checked');
+    }
+
+    if ($("#Name").val() == undefined) {
+        var name = "";
+    }
+    else {
+        if ($("#Name").val() != "") {
+            var name = $("#Name").val().replace(/ /g, "|");
+        }
+        else {
+            name = "";
+        }
+    }
+    $("#divLoading").show();
+    $("#divForHistoryLeave").load('/Admin/GetTransactionLog?OnlyReportedToMe=' + showTeam + '&Name=' + name + '&RequestMenuUser=' + $("#RequestLevelPerson").val(),
+        function () {
+            $(".transaction").dataTable({ "paging": false, "bFilter": false, "bInfo": false });
+            $("#divLoading").hide();
+            $('html, body').animate({
+                scrollTop: 210  // Means Less header height
+            }, 400);
+        });
+
+    
+}

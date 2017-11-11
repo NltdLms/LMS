@@ -77,27 +77,34 @@ namespace NLTD.EmploeePortal.LMS.Dac
                                 if (isSaved > 0)
                                 {
                                     retValue = "Saved";
-                                    TransactionHistoryModel hist = new TransactionHistoryModel();
-                                    hist.EmployeeId = status.UserId;
-                                    hist.LeaveTypeId = leave.LeaveTypeId;
-                                    hist.LeaveId = leave.LeaveId;
-                                    hist.NumberOfDays = leave.Duration;
-                                    hist.TransactionBy = status.UserId;
-                                    if (leave.Status == "A")
+                                    if (adjustBal.IsTimeBased == false)
                                     {
-                                        hist.Remarks = "Approved";
-                                        hist.TransactionType = "D";
+                                        if (adjustBal.IsLeave == true)
+                                        {
+                                            TransactionHistoryModel hist = new TransactionHistoryModel();
+                                            hist.EmployeeId = status.UserId;
+                                            hist.LeaveTypeId = leave.LeaveTypeId;
+                                            hist.LeaveId = leave.LeaveId;
+                                            hist.NumberOfDays = leave.Duration;
+                                            hist.TransactionBy = status.UserId;
+                                            if (leave.Status == "A")
+                                            {
+                                                hist.Remarks = "Approved";
+                                                hist.TransactionType = "D";
+                                            }
+                                            else
+                                            {
+                                                hist.Remarks = "Rejected";
+                                                hist.TransactionType = "C";
+                                            }
+                                            bool retRes = SaveTransactionLog(hist);
+                                            if (retRes)
+                                                retValue = "Saved";
+                                            else
+                                                retValue = "NotSaved";
+                                        }
                                     }
-                                    else
-                                    {
-                                        hist.Remarks = "Rejected";
-                                        hist.TransactionType = "C";
-                                    }
-                                    bool retRes = SaveTransactionLog(hist);
-                                    if (retRes)
-                                        retValue = "Saved";
-                                    else
-                                        retValue = "NotSaved";
+
                                 }
                                 else
                                 {
@@ -1146,64 +1153,70 @@ namespace NLTD.EmploeePortal.LMS.Dac
                                 context.PermissionDetail.Add(pd);
                                 isSaved = context.SaveChanges();
                             }
-                            if (isSaved > 0)
+                            if (isTimeBased == false)//check this suresh OCT 25
                             {
-                                EmployeeLeaveBalance leaveBalRec = null;
-                                leaveBalRec = context.EmployeeLeaveBalance.Where(e => e.UserId == request.UserId && e.LeaveTypeId == request.LeaveType && e.Year == request.LeaveFrom.Year).FirstOrDefault();
-                                if (leaveBalRec == null)
-                                {
-                                    EmployeeLeaveBalance empBal = new EmployeeLeaveBalance();
-                                    empBal.UserId = request.UserId;
-                                    empBal.Year = request.LeaveFrom.Year;
-                                    empBal.LeaveTypeId = request.LeaveType;
-                                    empBal.PendingApprovalDays = leaveDuration;
-                                    empBal.CreatedBy = request.AppliedByUserId;
-                                    empBal.CreatedOn = System.DateTime.Now;
-                                    empBal.ModifiedBy = -1;
-                                    empBal.ModifiedOn = System.DateTime.Now;
-                                    context.EmployeeLeaveBalance.Add(empBal);
-                                    isSaved = context.SaveChanges();
-                                }
-                                else
-                                {
-                                    if (empProfile.ReportingToId == null)
-                                    {
-                                        leaveBalRec.LeaveTakenDays = (leaveBalRec.LeaveTakenDays ?? 0) + leaveDuration;
-                                    }
-                                    else
-                                    {
-                                        leaveBalRec.PendingApprovalDays = (leaveBalRec.PendingApprovalDays ?? 0) + leaveDuration;
-                                    }
-                                    if (adjustBal.AdjustLeaveBalance)
-                                    {
-                                        leaveBalRec.BalanceDays = (leaveBalRec.BalanceDays ?? 0) - leaveDuration;
-                                    }
-                                    leaveBalRec.ModifiedBy = request.AppliedByUserId;
-                                    leaveBalRec.ModifiedOn = System.DateTime.Now;
-                                    isSaved = context.SaveChanges();
-                                }
                                 if (isSaved > 0)
                                 {
-                                    TransactionHistoryModel hist = new TransactionHistoryModel();
-                                    hist.EmployeeId = request.UserId;
-                                    hist.LeaveTypeId = leave.LeaveTypeId;
-                                    hist.LeaveId = leave.LeaveId;
-                                    hist.TransactionType = "D";
-                                    hist.NumberOfDays = leaveDuration;
-                                    hist.TransactionBy = request.UserId;
-                                    if (empProfile.ReportingToId == null)
+                                    EmployeeLeaveBalance leaveBalRec = null;
+                                    leaveBalRec = context.EmployeeLeaveBalance.Where(e => e.UserId == request.UserId && e.LeaveTypeId == request.LeaveType && e.Year == request.LeaveFrom.Year).FirstOrDefault();
+                                    if (leaveBalRec == null)
                                     {
-                                        hist.Remarks = "Auto Approved";
+                                        EmployeeLeaveBalance empBal = new EmployeeLeaveBalance();
+                                        empBal.UserId = request.UserId;
+                                        empBal.Year = request.LeaveFrom.Year;
+                                        empBal.LeaveTypeId = request.LeaveType;
+                                        empBal.PendingApprovalDays = leaveDuration;
+                                        empBal.CreatedBy = request.AppliedByUserId;
+                                        empBal.CreatedOn = System.DateTime.Now;
+                                        empBal.ModifiedBy = -1;
+                                        empBal.ModifiedOn = System.DateTime.Now;
+                                        context.EmployeeLeaveBalance.Add(empBal);
+                                        isSaved = context.SaveChanges();
                                     }
                                     else
                                     {
-                                        hist.Remarks = "Pending";
+                                        if (empProfile.ReportingToId == null)
+                                        {
+                                            leaveBalRec.LeaveTakenDays = (leaveBalRec.LeaveTakenDays ?? 0) + leaveDuration;
+                                        }
+                                        else
+                                        {
+                                            leaveBalRec.PendingApprovalDays = (leaveBalRec.PendingApprovalDays ?? 0) + leaveDuration;
+                                        }
+                                        if (adjustBal.AdjustLeaveBalance)
+                                        {
+                                            leaveBalRec.BalanceDays = (leaveBalRec.BalanceDays ?? 0) - leaveDuration;
+                                        }
+                                        leaveBalRec.ModifiedBy = request.AppliedByUserId;
+                                        leaveBalRec.ModifiedOn = System.DateTime.Now;
+                                        isSaved = context.SaveChanges();
                                     }
-                                    bool retRes = SaveTransactionLog(hist);
-                                    if (retRes)
-                                        isSaved = 1;
-                                    else
-                                        isSaved = -1;
+                                    if (adjustBal.IsLeave == true)
+                                    {
+                                        if (isSaved > 0)
+                                        {
+                                            TransactionHistoryModel hist = new TransactionHistoryModel();
+                                            hist.EmployeeId = request.UserId;
+                                            hist.LeaveTypeId = leave.LeaveTypeId;
+                                            hist.LeaveId = leave.LeaveId;
+                                            hist.TransactionType = "D";
+                                            hist.NumberOfDays = leaveDuration;
+                                            hist.TransactionBy = request.UserId;
+                                            if (empProfile.ReportingToId == null)
+                                            {
+                                                hist.Remarks = "Auto Approved";
+                                            }
+                                            else
+                                            {
+                                                hist.Remarks = "Pending";
+                                            }
+                                            bool retRes = SaveTransactionLog(hist);
+                                            if (retRes)
+                                                isSaved = 1;
+                                            else
+                                                isSaved = -1;
+                                        }
+                                    }
                                 }
                             }
                         }

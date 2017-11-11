@@ -46,6 +46,11 @@
           <url>/Admin/MyPermissions</url>
           <icon></icon>
         </MenuItem>
+        <MenuItem>
+          <title>View Transaction Log</title>
+          <url>/Admin/MyTransactionLogs</url>
+          <icon></icon>
+        </MenuItem>
       </level1item>
     </MenuItem>
   </menuitem>

@@ -286,7 +286,7 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
             excelData = LeaveRequests.ToList();
             if (excelData.Count > 0)
             {
-                string[] columns = { "EmpId", "Name", "LeaveType", "LeaveBalanace", "LeaveDate", "PartOfDay", "Duration", "LeaveStatus", "LeaveReason", "ApproverComments" };
+                string[] columns = { "EmpId", "Name", "LeaveType", "LeaveBalance", "LeaveDate", "PartOfDay", "Duration", "LeaveStatus", "LeaveReason", "ApproverComments" };
                 byte[] filecontent = ExcelExportHelper.ExportExcel(excelData, "", false, columns);
                 return File(filecontent, ExcelExportHelper.ExcelContentType, "DaywiseLeaveReport_" + System.DateTime.Now + ".xlsx");
             }
@@ -442,6 +442,53 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
                 
             }
             return Json(mdl);
+        }
+        public ActionResult ViewTransactionLog()
+        {
+            ViewBag.RequestLevelPerson = "Admin";
+            ManageTeamLeavesQueryModel qyMdl = new ManageTeamLeavesQueryModel();
+            qyMdl.OnlyReportedToMe = true;
+            //int year = DateTime.Now.Year;
+            //DateTime firstDay = new DateTime(year, 1, 1);
+            //DateTime lastDay = new DateTime(year, 12, 31);
+            //qyMdl.FromDate = firstDay;
+            //qyMdl.ToDate = lastDay;
+            //return View("TeamHistory", qyMdl);
+            return View("SearchTransactionLog", qyMdl);
+        }
+
+        public ActionResult MyTransactionLogs()
+        {
+            ViewBag.RequestLevelPerson = "My";
+            ManageTeamLeavesQueryModel qyMdl = new ManageTeamLeavesQueryModel();
+            qyMdl.OnlyReportedToMe = true;
+            return View("SearchTransactionLog", qyMdl);
+        }
+
+        public ActionResult TeamTransactionLogs()
+        {
+            ViewBag.RequestLevelPerson = "Team";
+            ManageTeamLeavesQueryModel qyMdl = new ManageTeamLeavesQueryModel();
+            qyMdl.OnlyReportedToMe = true;
+            return View("SearchTransactionLog", qyMdl);
+        }
+
+        public ActionResult GetTransactionLog(string OnlyReportedToMe, string Name, string RequestMenuUser)
+        {
+            IList<LeaveTransactionDetail> transactionHistory = null;
+
+            if (Name != "")
+            {
+                Name = Name.Replace("|", " ");
+            }
+
+            using (var client = new LeaveTransactionHistoryClient())
+            {
+                long Userid = this.UserId;
+                transactionHistory = client.GetTransactionLog(Name, RequestMenuUser, Userid);
+            }
+
+            return PartialView("ViewTransactionLogPartial", transactionHistory);
         }
     }
 }

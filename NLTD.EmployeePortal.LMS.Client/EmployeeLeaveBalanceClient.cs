@@ -1,4 +1,4 @@
-﻿using NLTD.EmploeePortal.LMS.Dac.Dac;
+﻿using NLTD.EmploeePortal.LMS.Dac.DbHelper;
 using NLTD.EmployeePortal.LMS.Common.DisplayModel;
 using NLTD.EmployeePortal.LMS.Repository;
 using System;
@@ -7,27 +7,28 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace NLTD.EmploeePortal.LMS.Dac.DbHelper
+namespace NLTD.EmployeePortal.LMS.Client
 {
-    public class EmployeeLeaveBalanceHelper : IEmployeeLeaveBalanceHelper, IDisposable
+    public class EmployeeLeaveBalanceClient : IEmployeeLeaveBalanceHelper
     {
         public void Dispose()
         {
             //Nothing to implement...
         }
+
         public IList<LeaveBalanceEmpProfile> GetLeaveBalanceEmpProfile(string name)
         {
-            using (var dac = new EmployeeLeaveBalanceDac())
+            using (IEmployeeLeaveBalanceHelper helper = new EmployeeLeaveBalanceHelper())
             {
-                return dac.GetLeaveBalanceEmpProfile(name);
+                return helper.GetLeaveBalanceEmpProfile(name);
             }
         }
 
         public string UpdateLeaveBalance(List<EmployeeLeaveBalanceDetails> empLeaveBalanceDetails, Int64 UserId, Int64 LoginUserId)
         {
-            using (var dac = new EmployeeLeaveBalanceDac())
+            using (IEmployeeLeaveBalanceHelper helper = new EmployeeLeaveBalanceHelper())
             {
-                return dac.UpdateLeaveBalance(empLeaveBalanceDetails, UserId, LoginUserId);
+                return helper.UpdateLeaveBalance(empLeaveBalanceDetails, UserId, LoginUserId);
             }
         }
     }

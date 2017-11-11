@@ -55,6 +55,7 @@
     <Compile Include="DisplayModel\DropDownItem.cs" />
     <Compile Include="DisplayModel\EmailDataModel.cs" />
     <Compile Include="DisplayModel\EmailModel.cs" />
+    <Compile Include="DisplayModel\EmployeeLeaveBalance.cs" />
     <Compile Include="DisplayModel\EmployeeList.cs" />
     <Compile Include="DisplayModel\EmployeeProfile.cs" />
     <Compile Include="DisplayModel\EmployeeWiseLeaveSummaryModel.cs" />
@@ -65,6 +66,7 @@
     <Compile Include="DisplayModel\LeaveItem.cs" />
     <Compile Include="DisplayModel\LeaveRequestModel.cs" />
     <Compile Include="DisplayModel\LeaveSummary.cs" />
+    <Compile Include="DisplayModel\LeaveTransactiontHistoryModel.cs" />
     <Compile Include="DisplayModel\LeaveTypesModel.cs" />
     <Compile Include="DisplayModel\MonthwiseLeavesCountModel.cs" />
     <Compile Include="DisplayModel\PermissionDetailsModel.cs" />
