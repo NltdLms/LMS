@@ -71,40 +71,54 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
         public ActionResult AddNewEmployee()
         {
             EmployeeProfile profile = new EmployeeProfile();
-            using (var client = new OfficeLocationClient())
+            if (this.IsAuthorized == "NoAuth")
             {
-                var lstOfc = client.GetAllOfficeLocations();
-                DropDownItem di = new DropDownItem();
-                ViewBag.EmpOffice = lstOfc.Where(x => x.Key == Convert.ToString(OfficeId)).ToList();
-                di.Key = "";
-                di.Value = "";
-                lstOfc.Insert(0, di);
-                ViewBag.OfficeLocationList = lstOfc;
+                Response.Redirect("~/Home/Unauthorized");
+                return null;
             }
-            using (var client = new RoleClient())
+            else
             {
-                ViewBag.RoleList = client.GetAllRoles();
-            }
+                using (var client = new OfficeLocationClient())
+                {
+                    var lstOfc = client.GetAllOfficeLocations();
+                    DropDownItem di = new DropDownItem();
+                    ViewBag.EmpOffice = lstOfc.Where(x => x.Key == Convert.ToString(OfficeId)).ToList();
+                    di.Key = "";
+                    di.Value = "";
+                    lstOfc.Insert(0, di);
+                    ViewBag.OfficeLocationList = lstOfc;
+                }
+                using (var client = new RoleClient())
+                {
+                    ViewBag.RoleList = client.GetAllRoles();
+                }
 
-            using (var client = new EmployeeClient())
-            {
-                IList<DropDownItem> reptList = client.GetReportToList(OfficeId);
-                DropDownItem di = new DropDownItem();
-                di.Key = "";
-                di.Value = "";
-                reptList.Insert(0, di);
-                ViewBag.ReportToList = reptList;
+                using (var client = new EmployeeClient())
+                {
+                    IList<DropDownItem> reptList = client.GetReportToList(OfficeId);
+                    DropDownItem di = new DropDownItem();
+                    di.Key = "";
+                    di.Value = "";
+                    reptList.Insert(0, di);
+                    ViewBag.ReportToList = reptList;
+                }
+                profile.IsActive = true;
+                profile.Mode = "Add";
+                profile.LogonId = "CORP\\";
+                return View("EmployeeProfile", profile);
             }
-            profile.IsActive = true;
-            profile.Mode = "Add";
-            profile.LogonId="CORP\\";
-            return View("EmployeeProfile", profile);
 
         }
         public ActionResult UpdateEmployee()
         {
             YearwiseLeaveSummaryQueryModel emp = new YearwiseLeaveSummaryQueryModel();
-            return View("UpdateEmployee",emp);
+            if (this.IsAuthorized == "NoAuth")
+            {
+                Response.Redirect("~/Home/Unauthorized");
+                return null;
+            }
+            else
+                return View("UpdateEmployee", emp);
 
         }
         public ActionResult CallProfileEdit(string name)
@@ -291,7 +305,15 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
         public ActionResult SearchLeaveBalanceProfile()
         {
             EmployeeProfileSearchModel mdl = new EmployeeProfileSearchModel();
-            return View("SearchLeaveBalanceProfile", mdl);
+            if (this.IsAuthorized == "NoAuth")
+            {
+                Response.Redirect("~/Home/Unauthorized");
+                return null;
+            }
+            else
+            {
+                return View("SearchLeaveBalanceProfile", mdl);
+            }
         }
 
         public ActionResult EmployeeLeaveBalanceDetails(string name)

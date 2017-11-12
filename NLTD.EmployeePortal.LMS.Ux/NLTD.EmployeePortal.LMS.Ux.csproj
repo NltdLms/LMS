@@ -395,12 +395,11 @@
     <Content Include="images\Avatar\General.png" />
     <Content Include="images\Avatar\Girl1.png" />
     <Content Include="images\Avatar\Girl2.png" />
-    <Content Include="images\Avatar\Suresh Small Photo.jpg" />
-    <Content Include="images\dashboardbackground.png" />
     <Content Include="images\Error Image.png" />
     <Content Include="images\HdrDtl\details_close.png" />
     <Content Include="images\HdrDtl\details_open.png" />
     <Content Include="images\NLTD.png" />
+    <Content Include="images\warning.png" />
     <Content Include="lib\bootstrap\dist\css\bootstrap-theme.css" />
     <Content Include="lib\bootstrap\dist\css\bootstrap-theme.min.css" />
     <Content Include="lib\bootstrap\dist\css\bootstrap.css" />
@@ -713,6 +712,7 @@
     <Content Include="Views\Admin\SearchTransactionLog.cshtml" />
     <Content Include="Views\Admin\ViewTransactionLogPartial.cshtml" />
     <Content Include="Views\Admin\ViewTransactionLogSubDetailPartial.cshtml" />
+    <Content Include="Views\Home\Unauthorized.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
