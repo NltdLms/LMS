@@ -2095,8 +2095,7 @@ namespace NLTD.EmploeePortal.LMS.Dac
                                    LeaveId=leaveId
                                }
                              ).FirstOrDefault();
-                    if (qry.ReportingToId != null)
-                    {
+                   
                         qry.CcEmailIds = GetHigherApproversEmailIds(qry.ReportingToId);
                         var hrEmail = (from e in context.Employee
                                        join er in context.EmployeeRole on e.EmployeeRoleId equals er.RoleId
@@ -2110,8 +2109,14 @@ namespace NLTD.EmploeePortal.LMS.Dac
                        
                         
                         var qryReportingTo = context.Employee.Where(x => x.UserId == qry.ReportingToId).FirstOrDefault();
+                    if (qryReportingTo == null) {
+                        qry.ToEmailId = "AutoApproved";
+                    }
+                    else
+                    {
                         qry.ReportingToName = qryReportingTo.FirstName + " " + qryReportingTo.LastName;
                         qry.ToEmailId = qryReportingTo.EmailAddress;
+                    }
                         if (actionName == "Applied")
                         {
                             qry.CcEmailIds.Remove(qry.ToEmailId);
@@ -2121,7 +2126,7 @@ namespace NLTD.EmploeePortal.LMS.Dac
                         {
                             qry.ToEmailId = qry.RequestorEmailId;
                         }
-                    }
+                    
                     if (qry.IsTimeBased)
                     {
 

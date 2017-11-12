@@ -16,6 +16,8 @@ namespace NLTD.EmployeePortal.LMS.Ux.AppHelpers
     {
         private void SendHtmlFormattedEmail(string recepientEmail,IList<string>ccEmail, string subject, string body,string emailType)
         {
+           
+
             using (MailMessage mailMessage = new MailMessage())
             {
                 mailMessage.From = new MailAddress(ConfigurationManager.AppSettings["UserName"]);
@@ -23,6 +25,8 @@ namespace NLTD.EmployeePortal.LMS.Ux.AppHelpers
                 mailMessage.Body = body;
                 mailMessage.IsBodyHtml = true;
                 mailMessage.To.Add(new MailAddress(recepientEmail));
+                
+                
                 foreach (var item in ccEmail)
                 {
                     mailMessage.CC.Add(item);
@@ -62,15 +66,11 @@ namespace NLTD.EmployeePortal.LMS.Ux.AppHelpers
                     StreamReader reader = new StreamReader(stream);
                     body = reader.ReadToEnd();
                 }               
-                //using (StreamReader reader = new StreamReader(HostingEnvironment.MapPath("~/EmailCCTemplate.html")))
-                //{
-                //    body = reader.ReadToEnd();
-                //}
+               
             }
-            //body = body.Replace("{UserName}", userName);
-            //body = body.Replace("{Title}", title);
+           
             body = body.Replace("{Url}", url);
-            //body = body.Replace("{Description}", description);
+           
 
             body = body.Replace("{RequestFor}", requestFor);
             body = body.Replace("{EmpId}", empId);
@@ -84,8 +84,7 @@ namespace NLTD.EmployeePortal.LMS.Ux.AppHelpers
             body = body.Replace("{Description}", Description);
             body = body.Replace("{Reason}", reason);
             body = body.Replace("{ApproverComments}", approverComments);             
-            //body = body.Replace("{RejectLink}", baseUrl + "/Leaves/ChangeStatusFromEmail?leaveId="+ leaveId + "&clickedButton=R");
-            //body = body.Replace("{ApproveLink}", baseUrl + "/Leaves/ChangeStatusFromEmail?leaveId=" + leaveId + "&clickedButton=A");
+            
             body = body.Replace("{ManageLink}", baseUrl + "/Leaves/ManageLeaveRequest");
             return body;
         }
@@ -102,6 +101,11 @@ namespace NLTD.EmployeePortal.LMS.Ux.AppHelpers
                 {
                     mdl = client.GetEmailData(leavId, actionName);
                 }
+                if (mdl.ToEmailId == "AutoApproved")
+                {
+                    actionName = "Auto Approved";
+                    mdl.ToEmailId = mdl.RequestorEmailId;
+                }
                 if (actionName == "Applied")
                 {
                     helloUser = mdl.ReportingToName;
@@ -117,14 +121,15 @@ namespace NLTD.EmployeePortal.LMS.Ux.AppHelpers
                 string emailType = string.Empty;
                 string body = string.Empty;
 
-                if (actionName == "Applied")
+               
+
+                 if (actionName == "Applied")
                 {
                     
                     body = this.PopulateBody(helloUser, "", descritpion
         , mdl.RequestFor,mdl.EmpId, mdl.LeaveTypeText, mdl.Date, mdl.Duration, mdl.Reason, mdl.ReportingToName, mdl.ApproverComments, Convert.ToString(leavId), actionName);
-
-
-                    this.SendHtmlFormattedEmail(mdl.ToEmailId, mdl.CcEmailIds, "LMS - Request from "+  mdl.RequestFor+" - "+ "Pending", body, actionName);
+                   
+                        this.SendHtmlFormattedEmail(mdl.ToEmailId, mdl.CcEmailIds, "LMS - Request from " + mdl.RequestFor + " - " + "Pending", body, actionName);
                 }
                 else
                 {
