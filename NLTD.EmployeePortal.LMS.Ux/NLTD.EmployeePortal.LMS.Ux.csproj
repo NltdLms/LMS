@@ -652,7 +652,6 @@
     <Content Include="Views\Dashboard\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AppHelpers\AuthorizeWebpage.cs" />
     <Compile Include="AppHelpers\BaseController.cs" />
     <Compile Include="AppHelpers\EmailHelper.cs" />
     <Compile Include="AppHelpers\ExcelExportHelper.cs" />
