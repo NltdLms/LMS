@@ -434,6 +434,7 @@ namespace NLTD.EmploeePortal.LMS.Dac.Dac
             Employee employee = null;
             int isSaved = 0;
             string retMsg = string.Empty;
+            bool noChanges = false;
             bool isAuthorizedRole = false;
             string remarks = string.Empty;
             using (var context = new NLTDDbContext())
@@ -460,25 +461,25 @@ namespace NLTD.EmploeePortal.LMS.Dac.Dac
                         }
                     }
 
-                    var isCorpIdExits = context.Employee.Where(e => e.LoginId == profile.LogonId.ToUpper()).FirstOrDefault();
+                    var isCorpIdExits = context.Employee.Where(e => e.LoginId == profile.LogonId.ToUpper() && e.EmployeeId!=employee.EmployeeId).FirstOrDefault();
 
-                    if (profile.Mode == "Add")
-                    {
+                    //if (profile.Mode == "Add")
+                    //{
                         if (isCorpIdExits != null)
                         {
                             return "DupCorp";
                         }
-                    }
-                    else
-                    {
-                        if (isCorpIdExits != null)
-                        {
-                            if (isCorpIdExits.EmployeeId != profile.LogonId.ToUpper())
-                            {
-                                return "DupCorp";
-                            }
-                        }
-                    }
+                    //}
+                    //else
+                    //{
+                    //    if (isCorpIdExits != null)
+                    //    {
+                    //        if (null!=isCorpIdExits)
+                    //        {
+                    //            return "DupCorp";
+                    //        }
+                    //    }
+                    //}
 
                     if (employee == null)
                     {
@@ -489,7 +490,7 @@ namespace NLTD.EmploeePortal.LMS.Dac.Dac
                         remarks = remarks + "#FirstName" + "^" + profile.FirstName;
                         remarks = remarks + "#LastName" + "^" + profile.LastName;
                         remarks = remarks + "#Gender" + "^" + profile.Gender;
-                        remarks = remarks + "#EmailAddress" + "^" + profile.EmailAddress;                       
+                        remarks = remarks + "#EmailAddress" + "^" + profile.EmailAddress;
                         remarks = remarks + "#MobileNumber" + "^" + profile.MobileNumber;
                         remarks = remarks + "#RoleId" + "^" + profile.RoleId;
                         remarks = remarks + "#ReportedToId" + "^" + profile.ReportedToId;
@@ -513,7 +514,7 @@ namespace NLTD.EmploeePortal.LMS.Dac.Dac
                         employee.CreatedBy = ModifiedBy;
                         employee.CreatedOn = System.DateTime.Now;
                         employee.ModifiedOn = System.DateTime.Now;
-                       
+
                         context.Employee.Add(employee);
                         isSaved = context.SaveChanges();
                         if (isSaved > 0)
@@ -572,7 +573,7 @@ namespace NLTD.EmploeePortal.LMS.Dac.Dac
                     }
                     else
                     {
-                        
+
                         Employee oldEmpData = new Employee();
                         oldEmpData = context.Employee.Where(x => x.UserId == profile.UserId).FirstOrDefault();
 
@@ -580,10 +581,10 @@ namespace NLTD.EmploeePortal.LMS.Dac.Dac
                             remarks = "#LogonId" + "^" + profile.LogonId;
 
                         if (profile.EmployeeId != oldEmpData.EmployeeId)
-                            remarks = remarks + "#EmployeeId" + "^" +  profile.EmployeeId;
+                            remarks = remarks + "#EmployeeId" + "^" + profile.EmployeeId;
 
                         if (profile.IsActive != oldEmpData.IsActive)
-                            remarks = remarks + "#IsActive" + "^" +  profile.IsActive;
+                            remarks = remarks + "#IsActive" + "^" + profile.IsActive;
 
                         if (profile.ReportedToId != oldEmpData.ReportingToId)
                             remarks = remarks + "#ReportedToId" + "^" + profile.ReportedToId;
@@ -620,12 +621,19 @@ namespace NLTD.EmploeePortal.LMS.Dac.Dac
                         employee.Gender = profile.Gender;
                         employee.MobileNumber = profile.MobileNumber;
                         employee.EmailAddress = profile.EmailAddress;
-                       // employee.IsHandleMembers = profile.IsHandleMembers;
+                        // employee.IsHandleMembers = profile.IsHandleMembers;
                         employee.OfficeHolodayId = profile.OfficeHolodayId;
                         employee.EmployeeRoleId = profile.RoleId;
-                        employee.ModifiedOn = System.DateTime.Now;
-                        employee.ModifiedBy = ModifiedBy;
-                        isSaved = context.SaveChanges();
+                        if (remarks == "") { noChanges = true; }
+                        else
+                        {
+                            noChanges = false;
+                            employee.ModifiedOn = System.DateTime.Now;
+                            employee.ModifiedBy = ModifiedBy;
+                            isSaved = context.SaveChanges();
+                        }
+
+                        string isSameWeekoff = "";
 
                         var existingWeekOffs = (from wo in context.EmployeeWeekOff
                                                 join w in context.DayOfWeek on wo.DaysOfWeekId equals w.DaysOfWeekId
@@ -661,9 +669,19 @@ namespace NLTD.EmploeePortal.LMS.Dac.Dac
                                 //verify if they are same
                                 foreach (var item in existingWeekOffs)
                                 {
-                                    if (lstNewWeekOffs.Where(x => x == item.Day).Any()) { }
+                                    if (lstNewWeekOffs.Where(x => x == item.Day).Any())
+                                    {
+                                        if (isSameWeekoff == "")
+                                        {
+                                            isSameWeekoff = "Yes";
+                                            
+                                        }
+
+
+                                    }
                                     else
                                     {
+                                        isSameWeekoff = "No";
                                         dicttUpdateExisting.Add(item.EmpWeekOffId, prepareList.Where(x => x != item.Day).FirstOrDefault());
                                         prepareList.Remove(dicttUpdateExisting[item.EmpWeekOffId]);
 
@@ -680,47 +698,51 @@ namespace NLTD.EmploeePortal.LMS.Dac.Dac
                         {
                             deleteAndAdd = true;
                         }
-
-
-                        if (deleteAndAdd)
+                        if (isSameWeekoff != "Yes")
                         {
-                            var deleteOldOffs = context.EmployeeWeekOff.Where(x => x.UserId == employee.UserId).ToList();
-                            if (deleteOldOffs.Any())
+                            noChanges = false;
+                            remarks = remarks + "#WeeklyOff" + "^" + "Changed";
+                            if (deleteAndAdd)
                             {
-                                context.EmployeeWeekOff.RemoveRange(deleteOldOffs);
-                                context.SaveChanges();
-                            }
-                            EmployeeWeekOff ew;
-                            foreach (var item in lstNewWeekOffs)
-                            {
-                                dayOfWeek = context.DayOfWeek.Where(x => x.Day.ToUpper() == item.ToUpper()).FirstOrDefault().DaysOfWeekId;
-                                ew = new EmployeeWeekOff();
-                                ew.UserId = employee.UserId;
-                                ew.DaysOfWeekId = dayOfWeek;
-                                ew.ModifiedBy = -1;
-                                ew.ModifiedOn = System.DateTime.Now;
-                                ew.CreatedBy = ModifiedBy;
-                                ew.CreatedOn = System.DateTime.Now;
-                                context.EmployeeWeekOff.Add(ew);
-                                isSaved = context.SaveChanges();
-                            }
-                        }
-                        else
-                        {
-                            foreach (var item in dicttUpdateExisting)
-                            {
-                                var updtExist = context.EmployeeWeekOff.Where(x => x.EmployeeWeekOffId == item.Key).FirstOrDefault();
-                                dayOfWeek = context.DayOfWeek.Where(x => x.Day.ToUpper() == item.Value.ToUpper()).FirstOrDefault().DaysOfWeekId;
-                                if (updtExist != null)
+                                var deleteOldOffs = context.EmployeeWeekOff.Where(x => x.UserId == employee.UserId).ToList();
+                                if (deleteOldOffs.Any())
                                 {
-                                    updtExist.DaysOfWeekId = dayOfWeek;
-                                    updtExist.ModifiedBy = ModifiedBy;
-                                    updtExist.ModifiedOn = System.DateTime.Now;
+                                    context.EmployeeWeekOff.RemoveRange(deleteOldOffs);
+                                    context.SaveChanges();
+                                }
+                                EmployeeWeekOff ew;
+                                foreach (var item in lstNewWeekOffs)
+                                {
+                                    dayOfWeek = context.DayOfWeek.Where(x => x.Day.ToUpper() == item.ToUpper()).FirstOrDefault().DaysOfWeekId;
+                                    ew = new EmployeeWeekOff();
+                                    ew.UserId = employee.UserId;
+                                    ew.DaysOfWeekId = dayOfWeek;
+                                    ew.ModifiedBy = -1;
+                                    ew.ModifiedOn = System.DateTime.Now;
+                                    ew.CreatedBy = ModifiedBy;
+                                    ew.CreatedOn = System.DateTime.Now;
+                                    context.EmployeeWeekOff.Add(ew);
                                     isSaved = context.SaveChanges();
                                 }
+                            }
+                            else
+                            {
+                                foreach (var item in dicttUpdateExisting)
+                                {
+                                    var updtExist = context.EmployeeWeekOff.Where(x => x.EmployeeWeekOffId == item.Key).FirstOrDefault();
+                                    dayOfWeek = context.DayOfWeek.Where(x => x.Day.ToUpper() == item.Value.ToUpper()).FirstOrDefault().DaysOfWeekId;
+                                    if (updtExist != null)
+                                    {
+                                        updtExist.DaysOfWeekId = dayOfWeek;
+                                        updtExist.ModifiedBy = ModifiedBy;
+                                        updtExist.ModifiedOn = System.DateTime.Now;
+                                        isSaved = context.SaveChanges();
+                                    }
 
+                                }
                             }
                         }
+                        
                         if (isSaved > 0)
                         {
                             EmployeeTransactionHistory hist = new EmployeeTransactionHistory();
@@ -735,7 +757,10 @@ namespace NLTD.EmploeePortal.LMS.Dac.Dac
                         }
                         if (isSaved > 0)
                             retMsg = "Saved";
-                        else
+                        else if (noChanges) {
+                            retMsg = "noChanges";
+                        }
+                        else 
                         {
                             if (retMsg == "")
                                 retMsg = "Failed";
