@@ -16,7 +16,8 @@ namespace NLTD.EmploeePortal.LMS.Dac.Dac
         public IList<LeaveTransactionDetail> GetTransactionLog(string Name, string RequestMenuUser, long LeaduserId)
         {
             IList<LeaveTransactionDetail> retModel = new List<LeaveTransactionDetail>();
-
+            LeaveDac lv = new LeaveDac();
+            IList<Int64> empList = lv.GetEmployeesReporting(LeaduserId);
             using (var context = new NLTDDbContext())
             {
                 EmployeeDac employeeDac = new EmployeeDac();
@@ -28,7 +29,7 @@ namespace NLTD.EmploeePortal.LMS.Dac.Dac
 
                 if (userId > 0 || (RequestMenuUser == "My" && LeaduserId > 0))
                 {
-                    string ReportingTo = employeeDac.ReportingToName(userId);
+                    string ReportingTo = (RequestMenuUser == "My" && LeaduserId > 0) ? employeeDac.ReportingToName(LeaduserId) : employeeDac.ReportingToName(userId);
 
                     List<LeaveTransactiontHistoryModel> transactionDetails = new List<LeaveTransactiontHistoryModel>();
                     if (RequestMenuUser == "My")
@@ -49,9 +50,11 @@ namespace NLTD.EmploeePortal.LMS.Dac.Dac
                     }
                     else if (RequestMenuUser == "Team")
                     {
-                        int user = (from e in context.Employee
-                                    where e.UserId == userId && e.ReportingToId == LeaduserId
-                                    select e).Count();
+                        //int user = (from e in context.Employee
+                        //            where e.UserId == userId && e.ReportingToId == LeaduserId
+                        //            select e).Count();
+
+                        int user = empList.Where(x => x == userId).Count();
 
                         if (user > 0)
                         {
@@ -80,7 +83,7 @@ namespace NLTD.EmploeePortal.LMS.Dac.Dac
 
         public List<LeaveTransactiontHistoryModel> getTransactionDetails(NLTDDbContext context, long userId)
         {
-            var myInClause = new string[] { "Pending", "Rejected", "Cancelled" };
+            //var myInClause = new string[] { "Pending", "Rejected", "Cancelled" };
 
             var transactionDetails = (from lth in context.LeaveTransactionHistory
                                       join l in context.LeaveType on lth.LeaveTypeId equals l.LeaveTypeId
@@ -88,6 +91,7 @@ namespace NLTD.EmploeePortal.LMS.Dac.Dac
                                       where lth.UserId == userId && lth.LeaveId == -1 && l.IsTimeBased == false
                                       select new LeaveTransactiontHistoryModel
                                       {
+                                          LeaveId = lth.LeaveId,
                                           LeaveTypeId = -1,
                                           TransactionType = lth.TransactionType == "C" ? "Credit" : "Debit",
                                           NumberOfDays = lth.NumberOfDays,
@@ -104,10 +108,11 @@ namespace NLTD.EmploeePortal.LMS.Dac.Dac
                             join lt in context.LeaveType on lth.LeaveTypeId equals lt.LeaveTypeId
                             join l in context.Leave on lth.LeaveId equals l.LeaveId
                             join e in context.Employee on lth.UserId equals e.UserId
-                            where myInClause.Contains(lth.Remarks) && 
+                            where 
                             lth.UserId == userId && lt.IsTimeBased == false                            
                             select new LeaveTransactiontHistoryModel
                             {
+                                LeaveId = lth.LeaveId,
                                 LeaveTypeId = l.LeaveTypeId,
                                 TransactionType = lth.TransactionType == "C" ? "Credit" : "Debit",
                                 NumberOfDays = lth.NumberOfDays,

@@ -225,6 +225,8 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
                         }
                         else if (result == "NeedRole")
                             employee.ErrorMesage = "Only the user with role 'HR' is allowed to do this action.";
+                        else if (result == "noChanges")
+                            employee.ErrorMesage = "No changes made to Employee Profile.";
                         else if (result == "Duplicate")
                             employee.ErrorMesage = "The employee Id already exists.";
                         else if (result == "DupCorp")
