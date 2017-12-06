@@ -461,25 +461,26 @@ namespace NLTD.EmploeePortal.LMS.Dac.Dac
                         }
                     }
 
-                    var isCorpIdExits = context.Employee.Where(e => e.LoginId == profile.LogonId.ToUpper() && e.EmployeeId!=employee.EmployeeId).FirstOrDefault();
 
-                    //if (profile.Mode == "Add")
-                    //{
+
+                    if (profile.Mode == "Add")
+                    {
+                        var isCorpIdExits = context.Employee.Where(e => e.LoginId == profile.LogonId.ToUpper()).FirstOrDefault();
                         if (isCorpIdExits != null)
-                        {
+                        {                            
                             return "DupCorp";
                         }
-                    //}
-                    //else
-                    //{
-                    //    if (isCorpIdExits != null)
-                    //    {
-                    //        if (null!=isCorpIdExits)
-                    //        {
-                    //            return "DupCorp";
-                    //        }
-                    //    }
-                    //}
+                    }
+                    else
+                    {
+                        var isCorpIdExits = context.Employee.Where(e => e.LoginId == profile.LogonId.ToUpper() && e.EmployeeId != employee.EmployeeId).FirstOrDefault();
+                        if (isCorpIdExits != null)
+                        {
+                           
+                                return "DupCorp";
+                            
+                        }
+                    }
 
                     if (employee == null)
                     {
