@@ -57,7 +57,6 @@
 }
 @{
     @Html.Hidden("RequestLevelPerson", (string)ViewBag.RequestLevelPerson)
-
     <div class="row">
         <div class="col-sm-12">
             <div class="box box-primary">
@@ -79,7 +78,7 @@
                                 <div class="col-sm-3"></div>
                                 <div class="col-sm-2"></div>
                                 <div class="col-sm-2" style="padding-top:27px;">
-                                    <button type="button" class="btn btn-primary pull-right" onclick="loadTransactionLog()">SEARCH</button>
+                                    <button type="button" class="btn btn-primary pull-right" onclick="loadTransactionLog();">SEARCH</button>
                                 </div>
                             </div>
                         </div>
@@ -88,6 +87,7 @@
             </div>
         </div>
     </div>
+    <div id="alert_placeholder"></div>
 
     <div id="divForHistoryLeave"></div>
 
@@ -98,7 +98,7 @@
     {
             <script>
         $("document").ready(function () {
-            loadTransactionLog()
+            loadTransactionLog();
         });
             </script>
         }

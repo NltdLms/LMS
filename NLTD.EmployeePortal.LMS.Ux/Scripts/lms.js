@@ -948,6 +948,14 @@ function loadLeaveBalanceProfile() {
         }
     }
 
+    $("#alert_placeholder").empty();
+    if (name == "") {
+        if ($('#alert') != undefined && $('#alert') != "") {
+            $('#alert').remove();
+        }
+        Clearshowalert("Please enter the employee name", "alert alert-danger");
+        return;
+    }
     $.ajax({
         type: 'GET',
         cache: false,
@@ -1112,6 +1120,14 @@ function loadTransactionLog() {
         else {
             name = "";
         }
+    }
+    $("#alert_placeholder").empty();
+    if (name == "" && $("#RequestLevelPerson").val() != "My") {
+        if ($('#alert') != undefined && $('#alert') != "") {
+            $('#alert').remove();
+        }
+        Clearshowalert("Please enter the employee name", "alert alert-danger");
+        return;
     }
     $("#divLoading").show();
     $("#divForHistoryLeave").load('/Admin/GetTransactionLog?OnlyReportedToMe=' + showTeam + '&Name=' + name + '&RequestMenuUser=' + $("#RequestLevelPerson").val(),

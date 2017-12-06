@@ -4,7 +4,6 @@
        class="transaction table table-condensed table-striped table-hover">
     <thead>
         <tr>
-            <th>Leave Id</th>
             <th>Transaction Date</th>
             <th>Transaction Type</th>
             <th>Number of Days</th>
@@ -15,11 +14,7 @@
         @foreach (var item in Model)
         {
             string transDate = item.TransactionDate.ToString("dd-MM-yyyy");
-            string leaveId = item.LeaveId > -1 ? Convert.ToString(item.LeaveId) : "";
             <tr>
-                <td style="width:20%">
-                    @leaveId
-                </td>
                 <td style="width:20%">
                     @transDate
                 </td>
