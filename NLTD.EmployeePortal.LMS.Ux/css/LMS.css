@@ -28,4 +28,10 @@ input[type='text'] { font-size: 12px !important; }
 select {
     font-size: 12px !important;
 }
-.required:after { content:" *"; }
+
+.required:after 
+{
+    content: "*";
+    font-weight: bold;
+    color: red !important;
+}

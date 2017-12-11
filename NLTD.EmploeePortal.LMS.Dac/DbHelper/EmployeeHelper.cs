@@ -37,7 +37,13 @@ namespace NLTD.EmploeePortal.LMS.Dac.DbHelper
                 return dac.GetUserId(name);
             }
         }
-
+        public string GetNewEmpId(Int64 OfficeId)
+        {
+            using (var dac = new EmployeeDac())
+            {
+                return dac.GetNewEmpId(OfficeId);
+            }
+        }
         public EmployeeProfile GetEmployeeProfile(Int64 userId)
         {
             using (var dac = new EmployeeDac())
@@ -65,6 +71,13 @@ namespace NLTD.EmploeePortal.LMS.Dac.DbHelper
             using (var dac = new EmployeeDac())
             {
                 return dac.GetReportToList(OfficeId);
+            }
+        }
+        public List<DropDownItem> GetActiveEmpList(long OfficeId, Int64? exceptUserId)
+        {
+            using (var dac = new EmployeeDac())
+            {
+                return dac.GetActiveEmpList(OfficeId, exceptUserId);
             }
         }
         public IList<ViewEmployeeProfileModel> GetTeamProfiles(Int64 userId, bool onlyReportedToMe, string name, string requestMenuUser, bool hideInactiveEmp)
