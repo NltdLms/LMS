@@ -53,7 +53,7 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
             {
                 using (var client = new EmployeeClient())
                 {
-                    IList<DropDownItem> reptList = client.GetReportToList(profile.OfficeId);
+                    IList<DropDownItem> reptList = client.GetActiveEmpList(profile.OfficeId,userIdForProfile);
                     DropDownItem di = new DropDownItem();
                     di.Key = "";
                     di.Value = "";
@@ -95,16 +95,22 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
 
                 using (var client = new EmployeeClient())
                 {
-                    IList<DropDownItem> reptList = client.GetReportToList(OfficeId);
+                    IList<DropDownItem> reptList = client.GetActiveEmpList(OfficeId,null);
                     DropDownItem di = new DropDownItem();
                     di.Key = "";
                     di.Value = "";
                     reptList.Insert(0, di);
                     ViewBag.ReportToList = reptList;
                 }
+                using (var client = new EmployeeClient())
+                {
+                    profile.EmployeeId = client.GetNewEmpId(OfficeId);
+                }
                 profile.IsActive = true;
                 profile.Mode = "Add";
                 profile.LogonId = "CORP\\";
+                profile.Sunday = true;
+                profile.Saturday = true;
                 return View("EmployeeProfile", profile);
             }
 
@@ -258,12 +264,22 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
 
             using (var client = new EmployeeClient())
             {
-                IList<DropDownItem> reptList = client.GetReportToList(employee.OfficeId);
+                IList<DropDownItem> reptList = new List<DropDownItem>();
+                if (employee.Mode == "Add")
+                {
+                    ViewBag.ReportToList = client.GetActiveEmpList(employee.OfficeId, null);
+                }
+                else
+                {
+                    ViewBag.ReportToList = client.GetActiveEmpList(employee.OfficeId, employee.UserId);
+                }
+               
+
                 DropDownItem di = new DropDownItem();
                 di.Key = "";
                 di.Value = "";
                 reptList.Insert(0, di);
-                ViewBag.ReportToList = reptList;
+                
             }
             return View("EmployeeProfile", employee);
 
@@ -336,7 +352,7 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
 
         public ActionResult SaveLeaveBalance(List<EmployeeLeaveBalanceDetails> lst, Int64 EmpUserid)
         {
-            bool isValid = true;
+          
             string result = "";
             if (ModelState.IsValid)
             {

@@ -17,7 +17,8 @@ namespace NLTD.EmploeePortal.LMS.Dac.Dac
         public IList<LeaveTransactionDetail> GetTransactionLog(string Name, string RequestMenuUser, long LeaduserId)
         {
             IList<LeaveTransactionDetail> retModel = new List<LeaveTransactionDetail>();
-           
+            LeaveDac lv = new LeaveDac();
+            IList<Int64> empList = lv.GetEmployeesReporting(LeaduserId);
             using (var context = new NLTDDbContext())
             {
                 EmployeeDac employeeDac = new EmployeeDac();
@@ -50,13 +51,15 @@ namespace NLTD.EmploeePortal.LMS.Dac.Dac
                     }
                     else if (RequestMenuUser == "Team")
                     {
-                        var user = (from e in context.Employee
-                                    where e.ReportingToId == LeaduserId
-                                    select e).ToList();
+                        //var user = (from e in context.Employee
+                        //            where e.ReportingToId == LeaduserId
+                        //            select e).ToList();
 
-                        var found = FindControlRecursively(user, userId);
+                        var user = empList.Where(x => x == userId).FirstOrDefault();
 
-                        if (found != null)
+                        //var found = FindControlRecursively(user, userId);
+
+                        if (user != null)
                         {
                             transactionDetails = getTransactionDetails(context, userId);
                         }
@@ -129,6 +132,7 @@ namespace NLTD.EmploeePortal.LMS.Dac.Dac
                                       // myInClause.Contains(lth.Remarks) &&
                                       select new LeaveTransactiontHistoryModel
                                       {
+										  LeaveId= lth.LeaveId,
                                           LeaveTypeId = lth.LeaveTypeId,
                                           TransactionType = lth.TransactionType == "C" ? "Credit" : "Debit",
                                           NumberOfDays = lth.NumberOfDays,

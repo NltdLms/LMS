@@ -64,6 +64,18 @@ function SubmitForm(e) {
 }
 function SubmitEmpForm(e) {
     $('.close').click()
+    $("#alert_placeholder").empty();
+    var corpId = $("#LogonId").val()
+
+    if (corpId.trim().length < 7){
+        showalert("", "Please enter valid Logon Id.", "alert alert-danger");
+        return;
+    }
+    if ($("#ReportedToId option:selected").index() < 1) {
+        showalert("", "Please select Reporting To person name.", "alert alert-danger");
+        return;
+    }
+
     if ($("#Mode").val() == "Add") {
         var msg = "Are you sure you want to add new employee profile?"
     }
@@ -406,6 +418,14 @@ function callProfileEdit() {
         var name = "";
     }
     else {
+        $("#alert_placeholder").empty();
+        if (name == "" && $("#RequestLevelPerson").val() != "My") {
+            if ($('#alert') != undefined && $('#alert') != "") {
+                $('#alert').remove();
+            }
+            Clearshowalert("Please enter the employee name.", "alert alert-danger");
+            return;
+        }
         if ($("#Name").val() != "") {
             var name = $("#Name").val().replace(/ /g, "|");
         }
@@ -953,7 +973,7 @@ function loadLeaveBalanceProfile() {
         if ($('#alert') != undefined && $('#alert') != "") {
             $('#alert').remove();
         }
-        Clearshowalert("Please enter the employee name", "alert alert-danger");
+        Clearshowalert("Please enter the employee name.", "alert alert-danger");
         return;
     }
     $.ajax({
@@ -986,8 +1006,15 @@ function loadLeaveBalanceProfile() {
 
 function AddTotalDays(index) {
     var CreditOrDebit = $('#CreditOrDebit' + index).val();
-    var ExistingTotalDays = $("#ExistingTotalDays" + index).val();
+   
     var NoOfDays = 0;
+    var BalanceDays = 0;
+
+    if ($("#BalanceDays" + index).val() == undefined || $("#BalanceDays" + index).val() == '') {
+        BalanceDays = 0;
+    } else {
+        BalanceDays = $("#BalanceDays" + index).val();
+    }
 
     if ($("#NoOfDays" + index).val() == undefined || $("#NoOfDays" + index).val() == '') {
         NoOfDays = 0;
@@ -996,7 +1023,7 @@ function AddTotalDays(index) {
     }
 
     if (NoOfDays > 0) {
-        if (CreditOrDebit == 'D' && parseFloat(ExistingTotalDays) < parseFloat(NoOfDays)) {
+        if (CreditOrDebit == 'D' && parseFloat(BalanceDays) < parseFloat(NoOfDays)) {
             Clearshowalert("No of days should be less than Existing Total days", "alert alert-danger");
             $("#NoOfDays" + index).focus();
             return;
@@ -1004,14 +1031,14 @@ function AddTotalDays(index) {
 
         if (CreditOrDebit != '') {
 
-            var Total = (parseFloat(NoOfDays) + parseFloat(ExistingTotalDays)).toFixed(1);
+            var Total = (parseFloat(NoOfDays) + parseFloat(BalanceDays)).toFixed(1);
             if (CreditOrDebit == 'D') {
-                Total = (parseFloat(ExistingTotalDays) - parseFloat(NoOfDays)).toFixed(1);
+                Total = (parseFloat(BalanceDays) - parseFloat(NoOfDays)).toFixed(1);
             }
             $("#TotalDays" + index).val(Total);
         }
         else {
-            $("#TotalDays" + index).val(ExistingTotalDays);
+            $("#TotalDays" + index).val(BalanceDays);
         }
     } else {
         $("#TotalDays" + index).val("");
@@ -1039,19 +1066,26 @@ function SubmitLeaveBalanceForm(count) {
             NoOfDays = $("#NoOfDays" + i).val();
         }
 
+        var balanceDays = 0;
+
+        if ($("#BalanceDays" + i).val() == undefined || $("#BalanceDays" + i).val() == '') {
+            balanceDays = 0;
+        } else {
+            balanceDays = $("#BalanceDays" + i).val();
+        }
         if (NoOfDays > 0) {
             valid = true;
-            var ExistingTotalDays = $("#ExistingTotalDays" + i).val();
 
-            if (CreditOrDebit == 'D' && parseFloat(ExistingTotalDays) < parseFloat(NoOfDays)) {
-                Clearshowalert("No of days should be less than Existing Total days", "alert alert-danger");
+
+            if (CreditOrDebit == 'D' && parseFloat(balanceDays) < parseFloat(NoOfDays)) {
+                Clearshowalert("No of days should be less than Existing Balance days.", "alert alert-danger");
                 $("#NoOfDays" + i).focus();
                 return;
             }
 
             things.push(
                 {
-                    LeaveType: $("#LeaveType" + i).val(), ExistingTotalDays: ExistingTotalDays,
+                    LeaveType: $("#LeaveType" + i).val(), BalanceDays: balanceDays,
                     CreditOrDebit: CreditOrDebit, NoOfDays: NoOfDays, TotalDays: $("#TotalDays" + i).val(),
                     LeaveTypeId: $("#LeaveTypeId" + i).val(), LeaveBalanceId: $("#LeaveBalanceId" + i).val(), Remarks: $("#Remarks" + i).val()
                 });
@@ -1126,7 +1160,7 @@ function loadTransactionLog() {
         if ($('#alert') != undefined && $('#alert') != "") {
             $('#alert').remove();
         }
-        Clearshowalert("Please enter the employee name", "alert alert-danger");
+        Clearshowalert("Please enter the employee name.", "alert alert-danger");
         return;
     }
     $("#divLoading").show();

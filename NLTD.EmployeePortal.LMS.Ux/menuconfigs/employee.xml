@@ -5,12 +5,7 @@
       <title>Dashboard</title>
       <url>/Dashboard</url>      
       <icon>fa fa-tachometer</icon>
-    </MenuItem>
-    <MenuItem>
-      <title>My Profile</title>
-      <url>/Profile/MyLmsProfile</url>
-      <icon>fa fa-address-card-o</icon>
-    </MenuItem>   
+    </MenuItem>  
     <MenuItem>
       <title>My Requests</title>
       <url>#</url>

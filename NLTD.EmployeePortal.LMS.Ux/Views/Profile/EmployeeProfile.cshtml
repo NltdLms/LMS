@@ -36,6 +36,8 @@
             @Model.ErrorMesage
         </div>
     }
+
+    
 }
 
 <div class="row">
@@ -62,32 +64,32 @@
 
                         <div class="col-sm-3">
                             <div class="form-group">
-                                @Html.LabelFor(e => e.FirstName)
+                                @Html.LabelFor(e => e.FirstName, new { @class = "required" })
                                 @Html.TextBoxFor(e => e.FirstName, null, new { @class = "form-control capital", autocomplete = "off" })
                                 @Html.ValidationMessageFor(e => e.FirstName, null, new { @class = "text-danger" })
                             </div>
                         </div>
                         <div class="col-sm-3">
                             <div class="form-group">
-                                @Html.LabelFor(e => e.LastName)
+                                @Html.LabelFor(e => e.LastName, new { @class = "required" })
                                 @Html.TextBoxFor(e => e.LastName, null, new { @class = "form-control capital", autocomplete = "off" })
                                 @Html.ValidationMessageFor(e => e.LastName, null, new { @class = "text-danger" })
                             </div>
                         </div>
                         <div class="col-sm-3">
                             <div class="form-group">
-                                @Html.LabelFor(e => e.LogonId)
+                                @Html.LabelFor(e => e.LogonId, new { @class = "required" })
                                 @Html.TextBoxFor(e => e.LogonId, null, new { @class = "form-control upper", autocomplete = "off" })
                                 @Html.ValidationMessageFor(e => e.LogonId, null, new { @class = "text-danger" })
                             </div>
                         </div>
                         <div class="col-sm-3">
                             <div class="form-group">
-                                @Html.LabelFor(e => e.EmployeeId)
+                                @Html.LabelFor(e => e.EmployeeId, new { @class = "required" })
                                 @{
                                     if (Model.Mode == "Add")
                                     {
-                                        @Html.TextBoxFor(e => e.EmployeeId, null, new { @class = "form-control", autocomplete = "off" })
+                                        @Html.TextBoxFor(e => e.EmployeeId, null, new { @class = "form-control", autocomplete = "off" , @onkeypress = "return isNumber(event)" })
                                         @Html.ValidationMessageFor(e => e.EmployeeId, null, new { @class = "text-danger" })
                                     }
                                     else
@@ -102,7 +104,7 @@
                         <div class="col-sm-6">
                             <div class="form-group">
 
-                                @Html.LabelFor(e => e.EmailAddress)
+                                @Html.LabelFor(e => e.EmailAddress, new { @class = "required" })
                                 @Html.TextBoxFor(e => e.EmailAddress, null, new { @class = "form-control lower", autocomplete = "off" })
                                 @Html.ValidationMessageFor(e => e.EmailAddress, null, new { @class = "text-danger" })
                             </div>
@@ -111,7 +113,7 @@
 
                         <div class="col-sm-3">
                             <div class="form-group">
-                                @Html.LabelFor(e => e.Gender)
+                                @Html.LabelFor(e => e.Gender, new { @class = "required" })
                                 <select id="Gender" name="Gender" class="form-control">
                                     <option value=""></option>
                                     <option value="M" @if (Model.Gender == "M") { @Html.Raw("selected=\"selected\"")                 }>Male</option>
@@ -134,7 +136,7 @@
 
                         <div class="col-sm-3">
                             <div class="form-group">
-                                @Html.Label("LMS Role")
+                                @Html.LabelFor(e=>e.RoleId,"LMS Role", new { @class = "required" })
                                 <select id="RoleId" name="RoleId" class="form-control" )>
                                     @{
 
@@ -159,7 +161,7 @@
                         </div>
                         <div class="col-sm-3">
                             <div class="form-group">
-                                @Html.LabelFor(e => e.ReportedToId)
+                                @Html.LabelFor(e => e.ReportedToId, new { @class = "required" })
                                 <select id="ReportedToId" name="ReportedToId" class="form-control">
 
                                     @{
@@ -185,7 +187,7 @@
                         </div>
                         <div class="col-sm-3">
                             <div class="form-group">
-                                @Html.Label("Office")
+                                @Html.LabelFor(e=>e.OfficeId,"Office", new { @class = "required" })
                                 <select id="OfficeId" name="OfficeId" class="form-control" onchange="LoadReportToDropDown()">
                                     @{
 
@@ -210,7 +212,7 @@
                         </div>
 
                         <div class="col-sm-3">
-                            @Html.Label("Holiday Office")
+                            @Html.LabelFor(e=>e.OfficeHolodayId,"Holiday Office", new { @class = "required" })
                             <select id="OfficeHolodayId" name="OfficeHolodayId" class="form-control" onchange="LoadReportToDropDown()">
                                 @{
 
@@ -239,11 +241,7 @@
                         <div class="col-sm-12 pull-left"> @Html.Label("Select Weekly Off(s)")</div>
                     </div>
                     <div class="row" style="padding-top:10px;padding-bottom:10px;">
-                        <div class="col-sm-6">
-                            <div class="col-sm-3">
-                                @Html.CheckBoxFor(e => e.Sunday)
-                                @Html.LabelFor(e => e.Sunday, new { style = "font-weight:normal" })
-                            </div>
+                        <div class="col-sm-6">                           
                             <div class="col-sm-3">
                                 @Html.CheckBoxFor(e => e.Monday)
                                 @Html.LabelFor(e => e.Monday, new { style = "font-weight:normal" })
@@ -256,12 +254,12 @@
                                 @Html.CheckBoxFor(e => e.Wednesday)
                                 @Html.LabelFor(e => e.Wednesday, new { style = "font-weight:normal" })
                             </div>
-                        </div>
-                        <div class="col-sm-6">
                             <div class="col-sm-3">
                                 @Html.CheckBoxFor(e => e.Thursday)
                                 @Html.LabelFor(e => e.Thursday, new { style = "font-weight:normal" })
                             </div>
+                        </div>
+                        <div class="col-sm-6">                           
                             <div class="col-sm-3">
                                 @Html.CheckBoxFor(e => e.Friday)
                                 @Html.LabelFor(e => e.Friday, new { style = "font-weight:normal" })
@@ -269,6 +267,10 @@
                             <div class="col-sm-3">
                                 @Html.CheckBoxFor(e => e.Saturday)
                                 @Html.LabelFor(e => e.Saturday, new { style = "font-weight:normal" })
+                            </div>
+                            <div class="col-sm-3">
+                                @Html.CheckBoxFor(e => e.Sunday)
+                                @Html.LabelFor(e => e.Sunday, new { style = "font-weight:normal" })
                             </div>
                             <div class="col-sm-3">
                             </div>

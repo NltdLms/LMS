@@ -1,5 +1,5 @@
 ﻿@model IList<NLTD.EmployeePortal.LMS.Common.DisplayModel.LeaveBalanceEmpProfile>
-<script type="text/javascript" src="~/Scripts/lms.js?v=1.03"></script>
+<script type="text/javascript" src="~/Scripts/lms.js?v=1.04"></script>
 <script src="~/Scripts/bootbox.min.js"></script>
 <style type="text/css">
     .panel-group .panel {
@@ -41,10 +41,9 @@
     }
 </style>
 @{
-    <div id="alert_placeholder"></div>
     if (Model.Count == 0)
     {
-        <div class="alert alert-danger">
+        <div id="alert" class="alert alert-danger">
             <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                 <span aria-hidden="true">x</span>
             </button>
@@ -90,8 +89,8 @@
                                                     </div>
                                                     <div class="col-sm-3" style="width:16%;">
                                                         <div class="form-group">
-                                                            @Html.Label("Existing Total Days")
-                                                            @Html.TextBox("ExistingTotalDays", Model[i].lstEmployeeLeaveBalance[j].ExistingTotalDays, null, new { @class = "form-control", @readonly = true, @id = "ExistingTotalDays" + j })
+                                                            @Html.Label("Existing Leave Balance")
+                                                            @Html.TextBox("BalanceDays", Model[i].lstEmployeeLeaveBalance[j].BalanceDays, null, new { @class = "form-control", @readonly = true, @id = "BalanceDays" + j })
                                                         </div>
                                                     </div>
                                                     <div class="col-sm-3" style="width:25%;">
@@ -122,7 +121,7 @@
                                                     </div>
                                                     <div class="col-sm-3" style="width:16%;">
                                                         <div class="form-group">
-                                                            @Html.Label("TotalDays")
+                                                            @Html.Label("Total Leave Balance")
                                                             @Html.TextBox("TotalDays", Model[i].lstEmployeeLeaveBalance[j].TotalDays, null, new { @class = "form-control", @id = "TotalDays" + j, @readonly = true, autocomplete = "off" })
                                                         </div>
                                                     </div>
@@ -138,7 +137,7 @@
                                                 <div class="col-sm-10">
                                                 </div>
                                                 <div class="col-sm-2" style="right:-25px;">
-                                                    <button type="button" class="btn btn-primary" onclick="location.href='@Url.Action("SearchLeaveBalanceProfile", "Profile")'">CANCEL</button>
+                                                    <button type="button" class="btn btn-primary" onclick="location.href='@Url.Action("SearchLeaveBalanceProfile", "Profile")'">CLEAR</button>
                                                     <button type="button" id="btnsave" class="btn btn-primary pull-right" onclick="SubmitLeaveBalanceForm(@Model[i].lstEmployeeLeaveBalance.Count)">SAVE</button>
                                                 </div>
                                             </div>

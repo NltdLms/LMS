@@ -422,6 +422,44 @@ namespace NLTD.EmploeePortal.LMS.Dac.Dac
                 return ReportToPersons;
             }
         }
+        public List<DropDownItem> GetActiveEmpList(Int64 OfficeId, Int64? exceptUserId)
+        {
+            using (var context = new NLTDDbContext())
+            {
+                List<DropDownItem> AllEmp = new List<DropDownItem>();
+                if (exceptUserId == null || exceptUserId == 0)
+                {
+                    var emp = (from employee in context.Employee
+                               where employee.OfficeId == OfficeId && employee.IsActive == true
+                               select new DropDownItem
+                               {
+                                   Key = employee.UserId.ToString(),
+                                   Value = employee.FirstName + " " + employee.LastName
+                               }).ToList();
+
+                    AllEmp = emp.OrderBy(x => x.Value).ToList();
+                }
+                else
+                {
+                    var emp = (from employee in context.Employee
+                               where employee.OfficeId == OfficeId && employee.IsActive == true && employee.UserId!=exceptUserId
+                               select new DropDownItem
+                               {
+                                   Key = employee.UserId.ToString(),
+                                   Value = employee.FirstName + " " + employee.LastName
+                               }).ToList();
+
+                    AllEmp = emp.OrderBy(x => x.Value).ToList();
+
+                }
+                
+
+
+
+
+                return AllEmp;
+            }
+        }
         public void Dispose()
         {
             //Nothing to dispose...
@@ -797,6 +835,29 @@ namespace NLTD.EmploeePortal.LMS.Dac.Dac
                     return 0;
                 else
                     return empPrf.UserId;
+            }
+        }
+        public string GetNewEmpId(Int64 OfficeId)
+        {
+            Int32 newEmpId = 0;
+            using (var context = new NLTDDbContext())
+            {
+                var empPrf = context.Employee.Where(x => x.OfficeId == OfficeId).OrderByDescending(x => x.EmployeeId).Select(x => x.EmployeeId).ToList();
+
+                if (empPrf.Count() != 0)
+                    newEmpId = empPrf.Select(int.Parse).ToList().Max();
+
+                //var empPrf = (from max in context.Employee
+                //              where !String.IsNullOrEmpty(max.EmployeeId)
+                //              select Convert.ToInt32(max.EmployeeId)).Max();
+
+                if (empPrf == null)
+                    return "0";
+                else
+                {
+                    newEmpId = newEmpId + 1;
+                    return Convert.ToString(newEmpId);
+                }
             }
         }
         public string ReportingToName(Int64 userId)

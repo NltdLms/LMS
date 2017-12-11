@@ -45,7 +45,7 @@ namespace NLTD.EmploeePortal.LMS.Dac.Dac
                     }
 
                     var employeeLeaveBalance = (from l in context.LeaveType
-                                                from elb in context.EmployeeLeaveBalance.Where(x => x.LeaveTypeId == l.LeaveTypeId && x.UserId == userId).DefaultIfEmpty()
+                                                from elb in context.EmployeeLeaveBalance.Where(x => x.LeaveTypeId == l.LeaveTypeId && x.UserId == userId && x.Year == DateTime.Now.Year).DefaultIfEmpty()
                                                 where l.AdjustLeaveBalance == true
                                                 orderby l.LeaveTypeId
                                                 select new EmployeeLeaveBalanceDetails
@@ -56,6 +56,7 @@ namespace NLTD.EmploeePortal.LMS.Dac.Dac
                                                     AdjustLeaveBalance = l.AdjustLeaveBalance,
                                                     LeaveBalanceId = elb.LeaveBalanceId,
                                                     ExistingTotalDays = elb.TotalDays ?? 0,
+                                                    BalanceDays = elb.BalanceDays,
                                                     UserId = elb.UserId,
                                                     Year = elb.Year
                                                 }).ToList();
@@ -93,29 +94,24 @@ namespace NLTD.EmploeePortal.LMS.Dac.Dac
 
                     if (isAuthorizedRole)
                     {
-                        foreach (var item in empLeaveBalanceDetails)
+                         foreach (var item in empLeaveBalanceDetails)
                         {
                             if (item.NoOfDays > 0)
                             {
-                                var count = (from elb in context.EmployeeLeaveBalance
-                                             where elb.UserId == UserId && elb.Year == DateTime.Now.Year && elb.LeaveBalanceId == item.LeaveBalanceId
-                                             && elb.LeaveTypeId == item.LeaveTypeId
-                                             select elb).Count();
-                                if (count > 0)
-                                {
-                                    EmployeeLeaveBalance oldleaveBalance = new EmployeeLeaveBalance();
-                                    oldleaveBalance = context.EmployeeLeaveBalance.Where(x => x.UserId == UserId && x.LeaveTypeId == item.LeaveTypeId && x.LeaveBalanceId == item.LeaveBalanceId).FirstOrDefault();
+                                EmployeeLeaveBalance leaveBalance = context.EmployeeLeaveBalance.Where(x => x.UserId == UserId && x.LeaveTypeId == item.LeaveTypeId 
+                                && x.LeaveBalanceId == item.LeaveBalanceId && x.Year == DateTime.Now.Year).FirstOrDefault();
 
-                                    oldleaveBalance.TotalDays = item.TotalDays;
-                                    oldleaveBalance.ModifiedBy = LoginUserId;
-                                    oldleaveBalance.ModifiedOn = DateTime.Now;
-                                    oldleaveBalance.LeaveBalanceId = Convert.ToInt64(item.LeaveBalanceId);
-                                    oldleaveBalance.BalanceDays = (item.TotalDays - oldleaveBalance.LeaveTakenDays);
+                                if (leaveBalance != null)
+                                {
+                                    leaveBalance.TotalDays = item.CreditOrDebit == "C" ? (leaveBalance.TotalDays + item.NoOfDays) : (leaveBalance.TotalDays - item.NoOfDays);
+                                    leaveBalance.ModifiedBy = LoginUserId;
+                                    leaveBalance.ModifiedOn = DateTime.Now;
+                                    leaveBalance.BalanceDays = item.TotalDays;
                                     isSaved = context.SaveChanges();
                                 }
                                 else
                                 {
-                                    EmployeeLeaveBalance leaveBalance = new EmployeeLeaveBalance();
+                                    leaveBalance = new EmployeeLeaveBalance();
                                     leaveBalance.UserId = UserId;
                                     leaveBalance.Year = DateTime.Now.Year;
                                     leaveBalance.LeaveTypeId = Convert.ToInt64(item.LeaveTypeId);

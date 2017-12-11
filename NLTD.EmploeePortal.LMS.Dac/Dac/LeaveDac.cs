@@ -2097,7 +2097,7 @@ namespace NLTD.EmploeePortal.LMS.Dac
                         qry.CcEmailIds = GetHigherApproversEmailIds(qry.ReportingToId);
                         var hrEmail = (from e in context.Employee
                                        join er in context.EmployeeRole on e.EmployeeRoleId equals er.RoleId
-                                       where (er.Role == "HR" || er.Role == "Admin")
+                                       where (er.Role == "HR" || er.Role == "Admin") && e.IsActive==true
                                        select new { EmailId = e.EmailAddress }
                                      ).ToList();
                         foreach (var item in hrEmail)
