@@ -1,0 +1,80 @@
+﻿
+@model NLTD.EmployeePortal.LMS.Common.DisplayModel.AddShiftEmployee
+
+@{
+
+    var FromDate = Model.IsEdit ? Model.ShiftEmployees[0].FromDate.ToString("dd-MM-yyyy") : "";
+    var ToDate = Model.IsEdit ? Model.ShiftEmployees[0].ToDate.ToString("dd-MM-yyyy") : "";
+    var Shift = Model.IsEdit ? Model.ShiftEmployees[0].ShiftId : 0;
+}
+<script>
+                $(function () {
+                    $('#FromDate').datetimepicker(
+                        {
+                            viewMode: "days",
+                            format: "DD-MM-YYYY"
+                        }
+                    );
+                    $('#ToDate').datetimepicker(
+                        {
+                            viewMode: "days",
+                            format: "DD-MM-YYYY"
+                        }
+                    );
+                });
+</script>
+<div class="box-body">
+    <div class="row">
+        <div class="col-sm-5">
+            @Html.Label("Shifts")
+            @Html.DropDownList("Shift", new SelectList(Model.Shifts, "ShiftId", "ShiftName", Shift), new { @class = "form-control" })
+        </div>
+        <div class="col-sm-3">
+            @Html.Label("From Date")
+            @Html.TextBox("FromDate", FromDate, new { @class = "form-control datetpicker" })
+        </div>
+        <div class="col-sm-3">
+            @Html.Label("To Date")
+            @Html.TextBox("ToDate", ToDate, new { @class = "form-control datetpicker" })
+        </div>
+    </div>
+</div>
+<table id="addShiftDetail"
+       class="table table-condensed table-striped table-hover">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayName("Emp Id")
+            </th>
+            <th>
+                @Html.DisplayName("Name")
+            </th>
+            @if (!Model.IsEdit)
+            {
+                <th class="no-sort">#</th>
+            }
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.ShiftEmployees)
+            {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.EmpId)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                    @if (Model.IsEdit)
+                    {
+                        @Html.CheckBox("Check", new { @value = item.UserId, @style = "display:none", @checked = true })
+                        @Html.Hidden("ShiftMappingID", item.ShiftMappingID)
+                    }
+                </td>
+                @if (!Model.IsEdit)
+                {
+                    <td>@Html.CheckBox("Check", new { @value = item.UserId })</td>
+                }
+            </tr>
+        }
+    </tbody>
+</table>
