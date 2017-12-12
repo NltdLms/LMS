@@ -19,8 +19,8 @@
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <UseIISExpress>true</UseIISExpress>
     <IISExpressSSLPort />
-    <IISExpressAnonymousAuthentication />
-    <IISExpressWindowsAuthentication />
+    <IISExpressAnonymousAuthentication>disabled</IISExpressAnonymousAuthentication>
+    <IISExpressWindowsAuthentication>enabled</IISExpressWindowsAuthentication>
     <IISExpressUseClassicPipelineMode />
     <UseGlobalApplicationHostFile />
     <NuGetPackageImportStamp>
@@ -638,6 +638,8 @@
     <Content Include="Scripts\moment.min.js" />
     <Content Include="Scripts\site.js" />
     <Content Include="Scripts\site.min.js" />
+    <Content Include="static\s.html" />
+    <Content Include="Views\s.html" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -659,11 +661,13 @@
     <Compile Include="AppHelpers\MenuHelper.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\AdminController.cs" />
+    <Compile Include="Controllers\AttendenceController.cs" />
     <Compile Include="Controllers\DashboardController.cs" />
     <Compile Include="Controllers\DataController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LeavesController.cs" />
     <Compile Include="Controllers\ProfileController.cs" />
+    <Compile Include="Controllers\ShiftController.cs" />
     <Compile Include="Controllers\TimeSheetController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -715,6 +719,17 @@
     <Content Include="Views\Admin\ViewTransactionLogPartial.cshtml" />
     <Content Include="Views\Admin\ViewTransactionLogSubDetailPartial.cshtml" />
     <Content Include="Views\Home\Unauthorized.cshtml" />
+    <Content Include="Views\Attendence\MyAttendence.cshtml" />
+    <Content Include="Views\Admin\EmployeeAttendenceDtlPartial.cshtml" />
+    <Content Include="Views\TimeSheet\TimeSheet.cshtml" />
+    <Content Include="Views\Attendence\TimeSheet.cshtml" />
+    <Content Include="Views\Admin\TimeSheetPartial.cshtml" />
+    <Content Include="Views\Shift\AddOrEditShift.cshtml" />
+    <Content Include="Views\Shift\ShiftMaster.cshtml" />
+    <Content Include="Views\Shift\ShiftMasterDetailPartial.cshtml" />
+    <Content Include="Views\Shift\ShiftAllocationDetailPartial.cshtml" />
+    <Content Include="Views\Shift\AddOrEditShiftAllocation.cshtml" />
+    <Content Include="Views\Shift\ShiftAllocation.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -724,7 +739,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Views\TimeSheet\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\NLTD.EmployeePortal.LMS.Client\NLTD.EmployeePortal.LMS.Client.csproj">

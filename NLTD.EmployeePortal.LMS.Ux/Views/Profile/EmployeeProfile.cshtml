@@ -99,7 +99,7 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-sm-6">
+                        <div class="col-sm-3">
                             <div class="form-group">
 
                                 @Html.LabelFor(e => e.EmailAddress)
@@ -114,8 +114,8 @@
                                 @Html.LabelFor(e => e.Gender)
                                 <select id="Gender" name="Gender" class="form-control">
                                     <option value=""></option>
-                                    <option value="M" @if (Model.Gender == "M") { @Html.Raw("selected=\"selected\"")                 }>Male</option>
-                                    <option value="F" @if (Model.Gender == "F") { @Html.Raw("selected=\"selected\"")                 }>Female</option>
+                                    <option value="M" @if (Model.Gender == "M") { @Html.Raw("selected=\"selected\"")                  }>Male</option>
+                                    <option value="F" @if (Model.Gender == "F") { @Html.Raw("selected=\"selected\"")                  }>Female</option>
                                 </select>
                                 @Html.ValidationMessageFor(e => e.Gender, null, new { @class = "text-danger" })
                             </div>
@@ -130,6 +130,17 @@
                             </div>
                         </div>
                     </div>
+                    <div class="col-sm-3">
+                        <div class="form-group">
+                            <div class="form-group">
+                                @Html.LabelFor(e => e.ShiftId)
+                              
+                                @Html.TextBoxFor(e => e.ShiftId, null, new { @class = "form-control", autocomplete = "off" })
+                                @Html.ValidationMessageFor(e => e.MobileNumber, null, new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </div>
+                </div>
                     <div class="row">
 
                         <div class="col-sm-3">

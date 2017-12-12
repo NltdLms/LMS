@@ -44,6 +44,13 @@ namespace NLTD.EmploeePortal.LMS.Dac
         public DbSet<EmployeeWeekOff> EmployeeWeekOff { get; set; }
 
         public DbSet<DaysOfWeek> DayOfWeek { get; set; }
+
+        public DbSet<EmployeeAttendance> EmployeeAttendance { get; set; }
+
+        public DbSet<ShiftMaster> ShiftMaster { get; set; }
+
+        public DbSet<ShiftMapping> ShiftMapping { get; set; }
+        public DbSet<ShiftTransaction> ShiftTransaction { get; set; }
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Employee>().HasKey(e => e.UserId).ToTable("Employee");
@@ -62,6 +69,11 @@ namespace NLTD.EmploeePortal.LMS.Dac
             
             modelBuilder.Entity<EmployeeWeekOff>().HasKey(e => e.EmployeeWeekOffId).ToTable("EmployeeWeekOff");
             modelBuilder.Entity<DaysOfWeek>().HasKey(e => e.DaysOfWeekId).ToTable("DaysOfWeek");
+            modelBuilder.Entity<EmployeeAttendance>().HasKey(e => e.ID).ToTable("EmployeeAttendance");
+            modelBuilder.Entity<ShiftMaster>().HasKey(e => e.ShiftID).ToTable("ShiftMaster");
+            modelBuilder.Entity<ShiftMapping>().HasKey(e => e.ShiftMappingID).ToTable("ShiftMapping");
+            modelBuilder.Entity<ShiftTransaction>().HasKey(e => e.ShiftTransactionID).ToTable("ShiftTransaction");
+
         }
     }
 }

@@ -49,6 +49,8 @@ namespace NLTD.EmployeePortal.LMS.Common.DisplayModel
 
         public String Avatar { get; set; }
 
+        [Display(Name ="Default Shift")]
+        public Int64 ShiftId { get; set; }
         [Display(Name = "Is LMS Approver")]
         public Boolean IsHandleMembers { get; set; }
         public bool Sunday { get; set; }

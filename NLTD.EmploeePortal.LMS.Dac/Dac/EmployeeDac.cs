@@ -12,15 +12,15 @@ namespace NLTD.EmploeePortal.LMS.Dac.Dac
     {
         public EmployeeProfile GetEmployeeProfile(Int64 userId)
         {
-            
+
             EmployeeProfile profile = null;
             try
             {
                 using (var context = new NLTDDbContext())
                 {
                     profile = (from employee in context.Employee
-                               join rt in context.EmployeeRole on employee.EmployeeRoleId equals rt.RoleId                               
-                               where employee.UserId== userId
+                               join rt in context.EmployeeRole on employee.EmployeeRoleId equals rt.RoleId
+                               where employee.UserId == userId
                                select new EmployeeProfile
                                {
                                    EmailAddress = employee.EmailAddress,
@@ -29,17 +29,17 @@ namespace NLTD.EmploeePortal.LMS.Dac.Dac
                                    LastName = employee.LastName,
                                    Gender = employee.Gender,
                                    OfficeHolodayId = employee.OfficeHolodayId,
-                                   OfficeId=employee.OfficeId,
+                                   OfficeId = employee.OfficeId,
                                    LocationText = "",
                                    MobileNumber = employee.MobileNumber,
-                                   ReportedToId = employee.ReportingToId,                                   
+                                   ReportedToId = employee.ReportingToId,
                                    RoleId = employee.EmployeeRoleId,
                                    RoleText = rt.Role,
                                    UserId = employee.UserId,
-                                   Avatar = employee.AvatarUrl,                                  
+                                   Avatar = employee.AvatarUrl,
                                    //IsHandleMembers = employee.IsHandleMembers,                                   
                                    LogonId = employee.LoginId,
-                                   IsActive=employee.IsActive
+                                   IsActive = employee.IsActive
 
                                }).FirstOrDefault();
                     if (profile != null)
@@ -60,7 +60,7 @@ namespace NLTD.EmploeePortal.LMS.Dac.Dac
                                       ).ToList();
 
 
-                        if(weekOffs.Count>0)
+                        if (weekOffs.Count > 0)
                         {
                             foreach (var item in weekOffs)
                             {
@@ -97,10 +97,77 @@ namespace NLTD.EmploeePortal.LMS.Dac.Dac
                     }
                 }
             }
-            catch(Exception ex) { throw; }
+            catch (Exception ex) { throw; }
             return profile;
         }
-        IList<Int64> GetEmployeesReporting(long leadId)
+
+        public List<EmployeeProfile> GetReportingEmployeeProfile(Int64 userId, string role)
+        {
+            List<EmployeeProfile> employeeProfileList = new List<EmployeeProfile>();
+            try
+            {
+                using (var context = new NLTDDbContext())
+                {
+                    if (role.ToUpper() == "ADMIN" || role.ToUpper() == "HR")
+                    {// If the user role is admin we retrive all the employees in the company 
+                        employeeProfileList = (from employee in context.Employee
+                                               join rt in context.EmployeeRole on employee.EmployeeRoleId equals rt.RoleId
+                                               where employee.IsActive == true
+                                               select new EmployeeProfile
+                                               {
+                                                   EmailAddress = employee.EmailAddress,
+                                                   EmployeeId = employee.EmployeeId,
+                                                   FirstName = employee.FirstName,
+                                                   LastName = employee.LastName,
+                                                   Gender = employee.Gender,
+                                                   OfficeHolodayId = employee.OfficeHolodayId,
+                                                   OfficeId = employee.OfficeId,
+                                                   LocationText = "",
+                                                   MobileNumber = employee.MobileNumber,
+                                                   ReportedToId = employee.ReportingToId,
+                                                   RoleId = employee.EmployeeRoleId,
+                                                   RoleText = rt.Role,
+                                                   UserId = employee.UserId,
+                                                   Avatar = employee.AvatarUrl,                                   
+                                                   LogonId = employee.LoginId,
+                                                   IsActive = employee.IsActive
+                                               }).ToList();
+                    }
+                    else//for Team Lead
+                    {
+                        IList<Int64> reportingEmployeeList = GetEmployeesReporting(userId);
+                        employeeProfileList = (from employee in context.Employee
+                                               join rt in context.EmployeeRole on employee.EmployeeRoleId equals rt.RoleId
+                                               where employee.IsActive == true && reportingEmployeeList.Contains(employee.UserId)
+                                               select new EmployeeProfile
+                                               {
+                                                   EmailAddress = employee.EmailAddress,
+                                                   EmployeeId = employee.EmployeeId,
+                                                   FirstName = employee.FirstName,
+                                                   LastName = employee.LastName,
+                                                   Gender = employee.Gender,
+                                                   OfficeHolodayId = employee.OfficeHolodayId,
+                                                   OfficeId = employee.OfficeId,
+                                                   LocationText = "",
+                                                   MobileNumber = employee.MobileNumber,
+                                                   ReportedToId = employee.ReportingToId,
+                                                   RoleId = employee.EmployeeRoleId,
+                                                   RoleText = rt.Role,
+                                                   UserId = employee.UserId,
+                                                   Avatar = employee.AvatarUrl,
+                                                   LogonId = employee.LoginId,
+                                                   IsActive = employee.IsActive
+                                               }).ToList();
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+
+            }
+            return employeeProfileList;
+        }
+        public IList<Int64> GetEmployeesReporting(long leadId)
         {
             var result = new List<Int64>();
             using (var context = new NLTDDbContext())
@@ -118,15 +185,15 @@ namespace NLTD.EmploeePortal.LMS.Dac.Dac
         }
         public IList<ViewEmployeeProfileModel> GetTeamProfiles(Int64 userId, bool onlyReportedToMe, string name, string requestMenuUser, bool hideInactiveEmp)
         {
-            IList<ViewEmployeeProfileModel> retModel = new List<ViewEmployeeProfileModel>();            
+            IList<ViewEmployeeProfileModel> retModel = new List<ViewEmployeeProfileModel>();
             IList<Int64> empList = GetEmployeesReporting(userId);
             ViewEmployeeProfileModel profile = null;
             using (var context = new NLTDDbContext())
             {
                 var ids = (from e in context.Employee
-                           //where e.ReportingToId == userId
+                               //where e.ReportingToId == userId
                            orderby e.FirstName
-                           select new { userId = e.UserId,iactive=e.IsActive,reportingToId=e.ReportingToId,name=e.FirstName+" "+e.LastName }
+                           select new { userId = e.UserId, iactive = e.IsActive, reportingToId = e.ReportingToId, name = e.FirstName + " " + e.LastName }
                          ).ToList();
 
 
@@ -160,16 +227,16 @@ namespace NLTD.EmploeePortal.LMS.Dac.Dac
                         {
                             if (onlyReportedToMe)
                             {
-                                ids = ids.Where(t => t.reportingToId == userId && t.iactive==true).ToList();
+                                ids = ids.Where(t => t.reportingToId == userId && t.iactive == true).ToList();
                             }
                             else
                             {
-                                ids = ids.Where(t => empList.Contains(t.userId) && t.iactive==true).ToList();
+                                ids = ids.Where(t => empList.Contains(t.userId) && t.iactive == true).ToList();
                             }
                         }
                     }
                 }
-                
+
                 if (name != null)
                 {
                     if (name.Trim() != "")
@@ -195,7 +262,7 @@ namespace NLTD.EmploeePortal.LMS.Dac.Dac
                                    EmployeeId = employee.EmployeeId,
                                    FirstName = employee.FirstName,
                                    LastName = employee.LastName,
-                                   Name=employee.FirstName+" "+employee.LastName,
+                                   Name = employee.FirstName + " " + employee.LastName,
                                    Gender = employee.Gender == "M" ? "Male" : "Female",
                                    HolidayOfficeId = employee.OfficeHolodayId,
                                    OfficeName = o.OfficeName,
@@ -268,7 +335,7 @@ namespace NLTD.EmploeePortal.LMS.Dac.Dac
 
         public ViewEmployeeProfileModel ViewEmployeeProfile(Int64 userId)
         {
-            
+
             ViewEmployeeProfileModel profile = null;
             try
             {
@@ -287,11 +354,11 @@ namespace NLTD.EmploeePortal.LMS.Dac.Dac
                                    LastName = employee.LastName,
                                    Gender = employee.Gender == "M" ? "Male" : "Female",
                                    HolidayOfficeId = employee.OfficeHolodayId,
-                                   OfficeName = o.OfficeName,                                   
+                                   OfficeName = o.OfficeName,
                                    MobileNumber = employee.MobileNumber,
-                                   ReportedToId = employee.ReportingToId,                                   
+                                   ReportedToId = employee.ReportingToId,
                                    RoleText = rt.Role,
-                                   UserId = employee.UserId, 
+                                   UserId = employee.UserId,
                                    LogonId = employee.LoginId,
                                    IsActive = employee.IsActive
 
@@ -362,7 +429,7 @@ namespace NLTD.EmploeePortal.LMS.Dac.Dac
                 {
                     profile = (from employee in context.Employee
                                join rt in context.EmployeeRole on employee.EmployeeRoleId equals rt.RoleId
-                               where employee.LoginId == LogonId && employee.IsActive==true
+                               where employee.LoginId == LogonId && employee.IsActive == true
                                select new EmployeeProfile
                                {
                                    EmailAddress = employee.EmailAddress,
@@ -371,9 +438,9 @@ namespace NLTD.EmploeePortal.LMS.Dac.Dac
                                    LastName = employee.LastName,
                                    OfficeId = employee.OfficeId,
                                    ReportedToId = employee.ReportingToId,
-                                   RoleId=employee.EmployeeRoleId,
+                                   RoleId = employee.EmployeeRoleId,
                                    RoleText = rt.Role,
-                                   UserId = employee.UserId,                                                                   
+                                   UserId = employee.UserId,
                                    LogonId = employee.LoginId,
                                    IsActive = employee.IsActive
                                }).FirstOrDefault();
@@ -387,7 +454,7 @@ namespace NLTD.EmploeePortal.LMS.Dac.Dac
                                 profile.ReportedToName = repName.FirstName + " " + repName.LastName;
                             }
                         }
-                        var teamReporting = context.Employee.Where(x => x.ReportingToId == profile.UserId && x.IsActive==true).FirstOrDefault();
+                        var teamReporting = context.Employee.Where(x => x.ReportingToId == profile.UserId && x.IsActive == true).FirstOrDefault();
                         if (teamReporting != null)
                         {
                             profile.IsHandleMembers = true;
@@ -399,7 +466,7 @@ namespace NLTD.EmploeePortal.LMS.Dac.Dac
                     }
                 }
             }
-            catch  { throw; }
+            catch { throw; }
             return profile;
         }
         public List<DropDownItem> GetReportToList(Int64 OfficeId)
@@ -418,7 +485,7 @@ namespace NLTD.EmploeePortal.LMS.Dac.Dac
                 ReportToPersons = ReportToPersons.GroupBy(x => x.Key)
                    .Select(grp => grp.First())
                    .ToList();
-                
+
                 return ReportToPersons;
             }
         }
@@ -440,7 +507,7 @@ namespace NLTD.EmploeePortal.LMS.Dac.Dac
             {
                 var isAuthorized = (from e in context.Employee
                                     join r in context.EmployeeRole on e.EmployeeRoleId equals r.RoleId
-                                    where e.UserId==ModifiedBy
+                                    where e.UserId == ModifiedBy
                                     select new { r.Role }
                                   ).FirstOrDefault();
 
@@ -489,7 +556,7 @@ namespace NLTD.EmploeePortal.LMS.Dac.Dac
                         remarks = remarks + "#FirstName" + "^" + profile.FirstName;
                         remarks = remarks + "#LastName" + "^" + profile.LastName;
                         remarks = remarks + "#Gender" + "^" + profile.Gender;
-                        remarks = remarks + "#EmailAddress" + "^" + profile.EmailAddress;                       
+                        remarks = remarks + "#EmailAddress" + "^" + profile.EmailAddress;
                         remarks = remarks + "#MobileNumber" + "^" + profile.MobileNumber;
                         remarks = remarks + "#RoleId" + "^" + profile.RoleId;
                         remarks = remarks + "#ReportedToId" + "^" + profile.ReportedToId;
@@ -513,7 +580,7 @@ namespace NLTD.EmploeePortal.LMS.Dac.Dac
                         employee.CreatedBy = ModifiedBy;
                         employee.CreatedOn = System.DateTime.Now;
                         employee.ModifiedOn = System.DateTime.Now;
-                       
+
                         context.Employee.Add(employee);
                         isSaved = context.SaveChanges();
                         if (isSaved > 0)
@@ -572,7 +639,7 @@ namespace NLTD.EmploeePortal.LMS.Dac.Dac
                     }
                     else
                     {
-                        
+
                         Employee oldEmpData = new Employee();
                         oldEmpData = context.Employee.Where(x => x.UserId == profile.UserId).FirstOrDefault();
 
@@ -580,10 +647,10 @@ namespace NLTD.EmploeePortal.LMS.Dac.Dac
                             remarks = "#LogonId" + "^" + profile.LogonId;
 
                         if (profile.EmployeeId != oldEmpData.EmployeeId)
-                            remarks = remarks + "#EmployeeId" + "^" +  profile.EmployeeId;
+                            remarks = remarks + "#EmployeeId" + "^" + profile.EmployeeId;
 
                         if (profile.IsActive != oldEmpData.IsActive)
-                            remarks = remarks + "#IsActive" + "^" +  profile.IsActive;
+                            remarks = remarks + "#IsActive" + "^" + profile.IsActive;
 
                         if (profile.ReportedToId != oldEmpData.ReportingToId)
                             remarks = remarks + "#ReportedToId" + "^" + profile.ReportedToId;
@@ -620,7 +687,7 @@ namespace NLTD.EmploeePortal.LMS.Dac.Dac
                         employee.Gender = profile.Gender;
                         employee.MobileNumber = profile.MobileNumber;
                         employee.EmailAddress = profile.EmailAddress;
-                       // employee.IsHandleMembers = profile.IsHandleMembers;
+                        // employee.IsHandleMembers = profile.IsHandleMembers;
                         employee.OfficeHolodayId = profile.OfficeHolodayId;
                         employee.EmployeeRoleId = profile.RoleId;
                         employee.ModifiedOn = System.DateTime.Now;
@@ -731,7 +798,7 @@ namespace NLTD.EmploeePortal.LMS.Dac.Dac
                             hist.Remarks = remarks;
                             context.EmployeeTransactiontHistory.Add(hist);
                             isSaved = context.SaveChanges();
-                           
+
                         }
                         if (isSaved > 0)
                             retMsg = "Saved";

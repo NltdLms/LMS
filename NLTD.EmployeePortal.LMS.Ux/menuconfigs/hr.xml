@@ -23,5 +23,40 @@
         </MenuItem>
       </level1item>
     </MenuItem>
+    <MenuItem>
+      <title>Timesheet</title>
+      <url>#</url>
+      <icon>fa fa-user-circle-o</icon>
+      <level1item>
+        <MenuItem>
+          <title>My Team Attendance</title>
+          <url>/Attendence/TeamAttendence</url>
+          <icon></icon>
+        </MenuItem>
+        <MenuItem>
+          <title>My Team TimeSheet</title>
+          <url>/Attendence/MyTeamTimeSheet</url>
+          <icon></icon>
+        </MenuItem>
+
+        <MenuItem>
+          <title>Shift Master</title>
+          <url>/Attendence/TeamAttendence</url>
+          <icon></icon>
+        </MenuItem>
+        <MenuItem>
+          <title>Individual Shift Allocation</title>
+          <url>/Attendence/MyTeamTimeSheet</url>
+          <icon></icon>
+        </MenuItem>
+        <MenuItem>
+          <title>
+            Group Shift Allocation
+          </title>
+          <url>/Attendence/MyTeamTimeSheet</url>
+          <icon></icon>
+        </MenuItem>
+      </level1item>
+    </MenuItem>
   </menuitem>
 </Menu>

@@ -48,6 +48,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="IEmployeeAttendanceHelper.cs" />
     <Compile Include="IEmployeeHelper.cs" />
     <Compile Include="IEmployeeLeaveBalanceHelper.cs" />
     <Compile Include="IEmployeeRoleHelper.cs" />
@@ -57,6 +58,8 @@
     <Compile Include="IOfficeLocationHelper.cs" />
     <Compile Include="IOfficeWeekEndHelper.cs" />
     <Compile Include="IRoleHelper.cs" />
+    <Compile Include="IShiftHelper.cs" />
+    <Compile Include="ITimesheetHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

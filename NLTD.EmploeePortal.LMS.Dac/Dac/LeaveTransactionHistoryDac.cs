@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using NLTD.EmploeePortal.LMS.Dac.DbModel;
 
 namespace NLTD.EmploeePortal.LMS.Dac.Dac
 {
@@ -120,6 +121,16 @@ namespace NLTD.EmploeePortal.LMS.Dac.Dac
                                 EmployeeId = e.EmployeeId
                             }).ToList().OrderByDescending(x => x.TransactionDate).ToList();
             return transactionDetails;
+        }
+
+        public List<Leave> GetLeaveForEmployee(Int64 UserID)
+        {
+            List<Leave> leaveList = new List<Leave>();
+            using (var context = new NLTDDbContext())
+            {
+                leaveList = (from l in context.Leave where l.UserId == UserID select l).ToList();
+            }
+            return leaveList;
         }
     }
 }

@@ -1125,3 +1125,266 @@ function loadTransactionLog() {
 
     
 }
+
+function loadAttendenceRangeSummary() {
+  
+        URL = '/Admin/loadEmployeeAttendence?Name=' + $("#Name").val().replace(new RegExp(" ", "g"), '|') + '&FromDate=' + $('#FromDate').val() + '&ToDate=' + $('#ToDate').val() + '&requestLevelPerson=' + $('#RequestLevelPerson').val();
+        $("#divLoading").show();
+    $("#divForEmployeeAttendence")
+        .load(URL,
+        function (responseText, textStatus, req) {
+            $("#divLoading").hide();
+            if (textStatus == "error") {
+                Clearshowalert("No Records Found", "alert alert-danger");
+                $('#Attendencetable_id').DataTable().clear().destroy();
+                }
+            else {
+
+                $(".dtatable").dataTable({ "order": [] });
+                $('html, body').animate({
+                    scrollTop: 230  // Means Less header height
+                }, 400);
+            }
+
+            });
+}
+function loadTimeSheetSummary()
+{
+    debugger
+    var URL = '/Admin/LoadMyTimesheet';
+    $("#divLoading").show();
+    if ($("#RequestLevelPerson").val() === "Team") {
+        URL = '/Admin/LoadMyTeamTimesheet';
+    }
+    $("#divForTimesheet").html("");
+    $("#divForTimesheet")
+        .load(URL, { TimeSheetQueryModelObj: { FromDate: $("#FromDate").val(), ToDate: $("#ToDate").val(), Name: $("#Name").val() } },
+        function (responseText, textStatus, req) {
+            if (textStatus == "error") {
+                Clearshowalert("No Records Found", "alert alert-danger");
+                $('.dtatable').DataTable().clear().destroy();
+            }
+            else {
+                $(".dtatable").dataTable({ "aaSorting": [] });
+                $('html, body').animate({
+                    scrollTop: 230  // Means Less header height
+                }, 400);
+            }
+            $("#divLoading").hide();
+
+        });
+}
+
+
+function loadShiftDetails() {
+
+    $("#divLoading").show();
+    $("#divForShiftAllocation").load('/Shift/GetShiftDetail',
+        function () {
+            $("#ShiftDetail").dataTable({
+                columnDefs: [
+                    { targets: 'no-sort', orderable: false }
+                ]
+            });
+            $("#divLoading").hide();
+            $('html, body').animate({
+                scrollTop: 230 // Means Less header height
+            }, 400);
+        });
+}
+
+function loadShiftMasterDetails() {
+
+    $("#divLoading").show();
+    $("#divForShiftAllocation").load('/Shift/GetShiftMasterDetail',
+        function () {
+            $("#ShiftDetail").dataTable({
+                columnDefs: [
+                    { targets: 'no-sort', orderable: false }
+                ]
+            });
+            $("#divLoading").hide();
+            $('html, body').animate({
+                scrollTop: 230 // Means Less header height
+            }, 400);
+        });
+}
+
+function AddShiftPopup(shiftId) {
+    $("#alert_placeholder").empty();
+    $("#divLoading").show();
+    $("#ModelTitle").html("Edit Shift");
+    if (shiftId !== 0) {
+        $("#ModelTitle").html("Add New Shift");
+    }
+
+    $("#divForAddShift").load('/Shift/GetShiftMasterDetailwithId?shiftId=' + shiftId);
+    //$('#myModal').on('shown.bs.modal', function (e) {
+    //    $('.timepicker').timepicker({
+    //        timeFormat: "HH:mm:ss"
+    //    }
+    //    );
+    //});
+    $("#myModal").modal('show');
+    $("#divLoading").hide();
+}
+function SaveShiftMaster() {
+
+    var shiftName, fromTime, toTime, shiftId;
+    shiftName = $("#ShiftName").val().trim();
+    shiftId = $("#ShiftId").val().trim();
+    fromTime = $("#fromTime").val().trim();
+    toTime = $("#toTime").val().trim();
+    if (shiftName == '') {
+        Clearshowalert("Please enter the Shift Name", "alert alert-danger");
+        return;
+    }
+
+    $("#divLoading").show();
+    var things = JSON.stringify({ 'shiftId': shiftId, 'shiftName': shiftName, 'fromTime': fromTime, 'toTime': toTime });
+    $.ajax({
+        contentType: 'application/json; charset=utf-8',
+        dataType: 'json',
+        type: 'POST',
+        url: '/Shift/SaveShiftMaster',
+        data: things,
+        success: function (result) {
+            if (result == "Saved") {
+                $("#btnsave").attr("disabled", true);
+                window.location.reload();
+            }
+            else if (result === "Need Role") {
+                $("#btnsave").attr("disabled", true);
+                Clearshowalert("Only the user with role 'HR' is allowed to do this action.", "alert alert-danger");
+            }
+            else {
+                Clearshowalert(result, "alert alert-danger");
+            }
+        },
+        failure: function (response) {
+            Clearshowalert(response.message, "alert alert-danger");
+        }
+    });
+
+
+    //$("#myModal").modal('show');
+    $("#divLoading").hide();
+}
+
+function loadShiftDetails() {
+
+    $("#divLoading").show();
+    var RequestLevelPerson = $("#RequestLevelPerson").val();
+
+    $("#divForShiftAllocation").load('/Shift/GetShiftDetail?RequestMenuUser=' + RequestLevelPerson,
+        function () {
+            $("#ShiftDetail").dataTable({
+                columnDefs: [
+                    { targets: 'no-sort', orderable: false }
+                ]
+            });
+            $("#divLoading").hide();
+            $('html, body').animate({
+                scrollTop: 230 // Means Less header height
+            }, 400);
+        });
+}
+
+function AddPopup(ShiftMappingId) {
+    var IsEdit = !(ShiftMappingId > 0);
+    $("#divLoading").show();
+    var RequestLevelPerson = $("#RequestLevelPerson").val();
+
+    $("#divForAddShift").load('/Shift/GetShiftDetailsForUsers?RequestMenuUser=' + RequestLevelPerson + '&ShiftMappingId=' + ShiftMappingId,
+        function () {
+            $("#addShiftDetail").dataTable(
+                {
+                    "bSort": IsEdit,
+                    "paging": IsEdit,
+                    "bFilter": IsEdit,
+                    "bInfo": IsEdit,
+                    "pageLength": 5,
+                    "lengthChange": false,
+                    columnDefs: [
+                        { targets: 'no-sort', orderable: false }
+                    ]
+                });
+            $("#divLoading").hide();
+            $('html, body').animate({
+                scrollTop: 230, // Means Less header height
+            }, 400);
+        });
+
+    var title = ShiftMappingId > 0 ? "Edit Employee Shift" : "Add Employees Shift";
+    $('#modaltitle').text(title);
+    $("#alert_placeholder").empty();
+    $("#myModal").modal('show');
+
+}
+
+function toDate(dateStr) {
+    var parts = dateStr.split("-");
+    return new Date(parts[2], parts[1] - 1, parts[0]);
+}
+function SaveEmployeeShift() {
+    var checkedValues = $("input:checkbox:checked", "#addShiftDetail").map(function () {
+        return $(this).val();
+    }).get();
+
+    var Shift = $("#Shift").val();
+    var FromDate = $("#FromDate").val();
+    var ToDate = $("#ToDate").val();
+
+    if (Shift == '') {
+        Clearshowalert("Please select the Shift", "alert alert-danger");
+        return;
+    }
+
+    if (FromDate == '' || ToDate == '') {
+        Clearshowalert("Please select From Date and To Date", "alert alert-danger");
+        return;
+    }
+
+    var from = toDate(FromDate);
+    var to = toDate(ToDate);
+
+    if (from > to) {
+        Clearshowalert("Invalid Date Range", "alert alert-danger");
+        return;
+    }
+
+    if (checkedValues == '' || checkedValues == null) {
+        Clearshowalert("Please select atleast one employee", "alert alert-danger");
+        return;
+    }
+
+    var ShiftMappingID = $("#ShiftMappingID").val();
+
+    var input = JSON.stringify({
+        'UserId': checkedValues, 'Shift': Shift, 'FromDate': FromDate, 'ToDate': ToDate, 'ShiftMappingID': ShiftMappingID
+    });
+    //alert(things);
+    $.ajax({
+        contentType: 'application/json; charset=utf-8',
+        dataType: 'json',
+        type: 'POST',
+        url: '/Shift/SaveEmployeeShift',
+        data: input,
+        success: function (result) {
+            if (result == "Saved") {
+                window.location.reload();
+                $('#myModal').modal("close");
+            }
+            else if (result.indexOf("Available") > -1) {
+                result = result.replace('Available', '').replace(/\n/g, "<br />");
+                Clearshowalert("Selected employees are having shift already between these dates.<br />" + result, "alert alert-danger");
+            }
+            else {
+                Clearshowalert(result, "alert alert-danger");
+            }
+        },
+        failure: function (response) {
+            Clearshowalert(response.message, "alert alert-danger");
+        }
+    });
+}
