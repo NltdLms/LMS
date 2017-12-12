@@ -1006,7 +1006,7 @@ function loadLeaveBalanceProfile() {
 
 function AddTotalDays(index) {
     var CreditOrDebit = $('#CreditOrDebit' + index).val();
-   
+
     var NoOfDays = 0;
     var BalanceDays = 0;
 
@@ -1024,7 +1024,7 @@ function AddTotalDays(index) {
 
     if (NoOfDays > 0) {
         if (CreditOrDebit == 'D' && parseFloat(BalanceDays) < parseFloat(NoOfDays)) {
-            Clearshowalert("No of days should be less than Existing Total days", "alert alert-danger");
+            Clearshowalert("No of days should be less than Existing Balance days", "alert alert-danger");
             $("#NoOfDays" + index).focus();
             return;
         }
@@ -1044,6 +1044,7 @@ function AddTotalDays(index) {
         $("#TotalDays" + index).val("");
     }
 }
+
 
 function isNumber(evt) {
     evt = (evt) ? evt : window.event;
@@ -1225,24 +1226,6 @@ function loadTimeSheetSummary()
         });
 }
 
-
-function loadShiftDetails() {
-
-    $("#divLoading").show();
-    $("#divForShiftAllocation").load('/Shift/GetShiftDetail',
-        function () {
-            $("#ShiftDetail").dataTable({
-                columnDefs: [
-                    { targets: 'no-sort', orderable: false }
-                ]
-            });
-            $("#divLoading").hide();
-            $('html, body').animate({
-                scrollTop: 230 // Means Less header height
-            }, 400);
-        });
-}
-
 function loadShiftMasterDetails() {
 
     $("#divLoading").show();
@@ -1268,16 +1251,28 @@ function AddShiftPopup(shiftId) {
         $("#ModelTitle").html("Add New Shift");
     }
 
-    $("#divForAddShift").load('/Shift/GetShiftMasterDetailwithId?shiftId=' + shiftId);
-    //$('#myModal').on('shown.bs.modal', function (e) {
-    //    $('.timepicker').timepicker({
-    //        timeFormat: "HH:mm:ss"
-    //    }
-    //    );
-    //});
+    $("#divForAddShift").load('/Shift/GetShiftMasterDetailwithId?shiftId=' + shiftId,
+        function () {
+            $("#ShiftDetail").dataTable({
+                columnDefs: [
+                    { targets: 'no-sort', orderable: false }
+                ]
+            });
+            $("#divLoading").hide();
+            $('html, body').animate({
+                scrollTop: 230 // Means Less header height
+            }, 400);
+        });
+    $('#myModal').on('shown.bs.modal', function (e) {
+        $('.timepicker').timepicker({
+            timeFormat: "HH:mm:ss"
+        }
+        );
+    });
     $("#myModal").modal('show');
     $("#divLoading").hide();
 }
+
 function SaveShiftMaster() {
 
     var shiftName, fromTime, toTime, shiftId;
@@ -1340,44 +1335,42 @@ function loadShiftDetails() {
         });
 }
 
-function AddPopup(ShiftMappingId) {
-    var IsEdit = !(ShiftMappingId > 0);
+function loadEmployeeShifts() {
+
     $("#divLoading").show();
     var RequestLevelPerson = $("#RequestLevelPerson").val();
-
-    $("#divForAddShift").load('/Shift/GetShiftDetailsForUsers?RequestMenuUser=' + RequestLevelPerson + '&ShiftMappingId=' + ShiftMappingId,
+    var table = null;
+    $("#divForAddShift").load('/Shift/GetShiftDetailsForUsers?RequestMenuUser=' + RequestLevelPerson,
         function () {
-            $("#addShiftDetail").dataTable(
+            table = $("#addShiftDetail").DataTable(
                 {
-                    "bSort": IsEdit,
-                    "paging": IsEdit,
-                    "bFilter": IsEdit,
-                    "bInfo": IsEdit,
-                    "pageLength": 5,
-                    "lengthChange": false,
                     columnDefs: [
-                        { targets: 'no-sort', orderable: false }
-                    ]
+                        { targets: 'no-sort', orderable: false, searchable: false }
+                    ],
+                    order: [[1, 'asc']],
+                    stateSave: true
                 });
             $("#divLoading").hide();
+
+            $('#select-all').on('click', function () {
+                var rows = table.rows({ 'search': 'applied' }).nodes();
+                $('input[type="checkbox"]', rows).prop('checked', this.checked);
+            });
             $('html, body').animate({
-                scrollTop: 230, // Means Less header height
+                scrollTop: 230,
             }, 400);
         });
 
-    var title = ShiftMappingId > 0 ? "Edit Employee Shift" : "Add Employees Shift";
-    $('#modaltitle').text(title);
     $("#alert_placeholder").empty();
-    $("#myModal").modal('show');
-
 }
+
 
 function toDate(dateStr) {
     var parts = dateStr.split("-");
     return new Date(parts[2], parts[1] - 1, parts[0]);
 }
 function SaveEmployeeShift() {
-    var checkedValues = $("input:checkbox:checked", "#addShiftDetail").map(function () {
+    var checkedValues = $("input:checkbox:checked", "#addShiftDetail tbody").map(function () {
         return $(this).val();
     }).get();
 
@@ -1408,10 +1401,8 @@ function SaveEmployeeShift() {
         return;
     }
 
-    var ShiftMappingID = $("#ShiftMappingID").val();
-
     var input = JSON.stringify({
-        'UserId': checkedValues, 'Shift': Shift, 'FromDate': FromDate, 'ToDate': ToDate, 'ShiftMappingID': ShiftMappingID
+        'UserId': checkedValues, 'Shift': Shift, 'FromDate': FromDate, 'ToDate': ToDate
     });
     //alert(things);
     $.ajax({
@@ -1422,12 +1413,88 @@ function SaveEmployeeShift() {
         data: input,
         success: function (result) {
             if (result == "Saved") {
-                window.location.reload();
-                $('#myModal').modal("close");
+                Clearshowalert("Employees Shift updated successfully.", "alert alert-success");
             }
-            else if (result.indexOf("Available") > -1) {
-                result = result.replace('Available', '').replace(/\n/g, "<br />");
-                Clearshowalert("Selected employees are having shift already between these dates.<br />" + result, "alert alert-danger");
+            else {
+                Clearshowalert(result, "alert alert-danger");
+            }
+        },
+        failure: function (response) {
+            Clearshowalert(response.message, "alert alert-danger");
+        }
+    });
+}
+function GetEmployeeShiftDetails(FromDate, ToDate, Shift) {
+
+    if ($("#Name").val() == undefined) {
+        var name = "";
+    }
+    else {
+        if ($("#Name").val() != "") {
+            var name = $("#Name").val().replace(/ /g, "|");
+        }
+        else {
+            name = "";
+        }
+    }
+    $("#alert_placeholder").empty();
+    if (name == "" && $("#RequestLevelPerson").val() != "My") {
+        if ($('#alert') != undefined && $('#alert') != "") {
+            $('#alert').remove();
+        }
+        Clearshowalert("Please enter the employee name", "alert alert-danger");
+        return;
+    }
+
+    $("#divLoading").show();
+    $("#divForHistoryLeave").load('/Shift/GetEmployeeShiftDetails?Name=' + name + '&RequestMenuUser=' + $("#RequestLevelPerson").val() + '&FromDate=' + FromDate + '&ToDate=' + ToDate + '&Shift=' + Shift,
+        function () {
+            $(".shift").dataTable();
+            $("#divLoading").hide();
+            $('html, body').animate({
+                scrollTop: 210  // Means Less header height
+            }, 400);
+        });
+}
+
+function SaveIndividualEmployeeShift() {
+
+    var Shift = $("#Shift").val();
+    var FromDate = $("#FromDate").val();
+    var ToDate = $("#ToDate").val();
+    var UserId = $("#UserId").val();
+
+    if (Shift == '') {
+        Clearshowalert("Please select the Shift", "alert alert-danger");
+        return;
+    }
+
+    if (FromDate == '' || ToDate == '') {
+        Clearshowalert("Please select From Date and To Date", "alert alert-danger");
+        return;
+    }
+
+    var from = toDate(FromDate);
+    var to = toDate(ToDate);
+
+    if (from > to) {
+        Clearshowalert("Invalid Date Range", "alert alert-danger");
+        return;
+    }
+
+    var input = JSON.stringify({
+        'FromDate': from, 'ToDate': to, 'Shift': Shift, 'UserId': UserId
+    });
+    $.ajax({
+        contentType: 'application/json; charset=utf-8',
+        dataType: 'json',
+        type: 'POST',
+        url: '/Shift/SaveIndividualEmployeeShift',
+        data: input,
+        success: function (result) {
+            if (result == "Saved") {
+                GetEmployeeShiftDetails(FromDate, ToDate, Shift);
+                Clearshowalert("Shift updated Successfully.", "alert alert-success");
             }
             else {
                 Clearshowalert(result, "alert alert-danger");

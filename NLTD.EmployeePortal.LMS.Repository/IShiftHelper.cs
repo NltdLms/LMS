@@ -10,15 +10,16 @@ namespace NLTD.EmployeePortal.LMS.Repository
 {
     public interface IShiftHelper : IDisposable
     {
-        // For Maintain the shift master
+        // For Maintain the shift master	
         List<Shifts> GetShiftMaster();
         Shifts GetShiftMasterWithId(Int64 shiftId);
         string SaveShiftMaster(int shiftId, string shiftName, TimeSpan fromTime, TimeSpan toTime, Int64 MgrId);
 
         // For Assign the shifts
         List<ShiftAllocation> GetShiftAllocation(Int64 userId, string RequestMenuUser);
-        AddShiftEmployee GetShiftDetailsForUsers(Int64 userId, Int64 ShiftMappingId, string RequestMenuUser);
-        string SaveEmployeeShift(List<Int64> UserId, int Shift, DateTime FromDate, DateTime ToDate, Int64 MgrId, Int64? ShiftMappingID);
+        List<ShiftEmployees> GetShiftDetailsForUsers(Int64 userId, string RequestMenuUser);
+        string SaveEmployeeShift(List<Int64> UserId, int Shift, DateTime FromDate, DateTime ToDate, Int64 MgrId);
+        EmpShift GetEmployeeShiftDetails(string Name, string RequestMenuUser, long LeaduserId);
+        string SaveIndividualEmployeeShift(Int64 UserId, int Shift, DateTime FromDate, DateTime ToDate, Int64 MgrId);
     }
-
 }

@@ -15,14 +15,8 @@
             <th>
                 @Html.DisplayName("ShiftName")
             </th>
-            @*<th>
-                @Html.DisplayName("ShiftID")
-            </th>*@
             <th>
-                @Html.DisplayName("FromDate")
-            </th>
-            <th>
-                @Html.DisplayName("ToDate")
+                @Html.DisplayName("ShiftDate")
             </th>
             <th>
                 @Html.DisplayName("FromTime")
@@ -39,8 +33,7 @@
     <tbody>
         @foreach (var item in Model)
         {
-            var FromDate = item.FromDate.ToString("dd-MM-yyyy");
-            var ToDate = item.ToDate.ToString("dd-MM-yyyy");
+            var ShiftDate = item.ShiftDate.ToString("dd-MM-yyyy");
             <tr>
                 <td>
                     @Html.DisplayFor(modelItem => item.EmpId)
@@ -55,11 +48,7 @@
                     @Html.DisplayFor(modelItem => item.ShiftID)
                 </td>*@
                 <td>                 
-                    @Html.DisplayFor(modelItem => FromDate)
-                </td>
-
-                <td>
-                    @Html.DisplayFor(modelItem => ToDate)
+                    @Html.DisplayFor(modelItem => ShiftDate)
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.FromTime)
@@ -74,7 +63,3 @@
         }
     </tbody>
 </table>
-
-
-
-

@@ -79,22 +79,14 @@
           <url>/Attendence/MyTeamTimeSheet</url>
           <icon></icon>
         </MenuItem>
-
         <MenuItem>
-          <title>Shift Master</title>
-          <url>/Attendence/TeamAttendence</url>
+          <title>Shift Allocation - Individual</title>
+          <url>/Shift/TeamEmployeeShiftAllocation</url>
           <icon></icon>
         </MenuItem>
         <MenuItem>
-          <title>Individual Shift Allocation</title>
-          <url>/Attendence/MyTeamTimeSheet</url>
-          <icon></icon>
-        </MenuItem>
-        <MenuItem>
-          <title>
-            Group Shift Allocation
-          </title>
-          <url>/Attendence/MyTeamTimeSheet</url>
+          <title>Shift Allocation - Multiple</title>
+          <url>/Shift/TeamShiftAllocation</url>
           <icon></icon>
         </MenuItem>
       </level1item>

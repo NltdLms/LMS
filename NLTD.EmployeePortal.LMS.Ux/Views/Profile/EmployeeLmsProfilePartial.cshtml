@@ -106,7 +106,10 @@
                     </div>
                     <div class="row" style="padding-top:10px;padding-bottom:10px;">
                         <div class="col-sm-6">
-                            
+                            <div class="col-sm-3">
+                                @Html.CheckBoxFor(e => e.Sunday, new { @disabled = true })
+                                @Html.LabelFor(e => e.Sunday, new { style = "font-weight:normal" })
+                            </div>
                             <div class="col-sm-3">
                                 @Html.CheckBoxFor(e => e.Monday, new { @disabled = true })
                                 @Html.LabelFor(e => e.Monday, new { style = "font-weight:normal" })
@@ -119,13 +122,12 @@
                                 @Html.CheckBoxFor(e => e.Wednesday, new { @disabled = true })
                                 @Html.LabelFor(e => e.Wednesday, new { style = "font-weight:normal" })
                             </div>
+                        </div>
+                        <div class="col-sm-6">
                             <div class="col-sm-3">
                                 @Html.CheckBoxFor(e => e.Thursday, new { @disabled = true })
                                 @Html.LabelFor(e => e.Thursday, new { style = "font-weight:normal" })
                             </div>
-                        </div>
-                        <div class="col-sm-6">
-                           
                             <div class="col-sm-3">
                                 @Html.CheckBoxFor(e => e.Friday, new { @disabled = true })
                                 @Html.LabelFor(e => e.Friday, new { style = "font-weight:normal" })
@@ -133,10 +135,6 @@
                             <div class="col-sm-3">
                                 @Html.CheckBoxFor(e => e.Saturday, new { @disabled = true })
                                 @Html.LabelFor(e => e.Saturday, new { style = "font-weight:normal" })
-                            </div>
-                            <div class="col-sm-3">
-                                @Html.CheckBoxFor(e => e.Sunday, new { @disabled = true })
-                                @Html.LabelFor(e => e.Sunday, new { style = "font-weight:normal" })
                             </div>
                             <div class="col-sm-3">
                             </div>

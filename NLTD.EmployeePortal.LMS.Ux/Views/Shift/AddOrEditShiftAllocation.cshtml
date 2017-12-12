@@ -1,79 +1,45 @@
 ﻿
-@model NLTD.EmployeePortal.LMS.Common.DisplayModel.AddShiftEmployee
-
-@{
-
-    var FromDate = Model.IsEdit ? Model.ShiftEmployees[0].FromDate.ToString("dd-MM-yyyy") : "";
-    var ToDate = Model.IsEdit ? Model.ShiftEmployees[0].ToDate.ToString("dd-MM-yyyy") : "";
-    var Shift = Model.IsEdit ? Model.ShiftEmployees[0].ShiftId : 0;
-}
+@model IList<NLTD.EmployeePortal.LMS.Common.DisplayModel.ShiftEmployees>
 <script>
-                $(function () {
-                    $('#FromDate').datetimepicker(
-                        {
-                            viewMode: "days",
-                            format: "DD-MM-YYYY"
-                        }
-                    );
-                    $('#ToDate').datetimepicker(
-                        {
-                            viewMode: "days",
-                            format: "DD-MM-YYYY"
-                        }
-                    );
-                });
+    
+
+    $('#addShiftDetail tbody').on('change', 'input[type="checkbox"]', function () {
+        // If checkbox is not checked
+        if (!this.checked) {
+            var el = $('#select-all').get(0);
+            // If "Select all" control is checked and has 'indeterminate' property
+            if (el && el.checked && ('indeterminate' in el)) {
+                // Set visual state of "Select all" control
+                // as 'indeterminate'
+                el.indeterminate = true;
+            }
+        }
+    });
 </script>
-<div class="box-body">
-    <div class="row">
-        <div class="col-sm-5">
-            @Html.Label("Shifts")
-            @Html.DropDownList("Shift", new SelectList(Model.Shifts, "ShiftId", "ShiftName", Shift), new { @class = "form-control" })
-        </div>
-        <div class="col-sm-3">
-            @Html.Label("From Date")
-            @Html.TextBox("FromDate", FromDate, new { @class = "form-control datetpicker" })
-        </div>
-        <div class="col-sm-3">
-            @Html.Label("To Date")
-            @Html.TextBox("ToDate", ToDate, new { @class = "form-control datetpicker" })
-        </div>
-    </div>
-</div>
 <table id="addShiftDetail"
        class="table table-condensed table-striped table-hover">
     <thead>
         <tr>
+            <th class="no-sort" style="text-align: center !important;"><input type="checkbox" name="select_all" value="1" id="select-all"/></th>
             <th>
                 @Html.DisplayName("Emp Id")
             </th>
             <th>
                 @Html.DisplayName("Name")
-            </th>
-            @if (!Model.IsEdit)
-            {
-                <th class="no-sort">#</th>
-            }
+            </th>          
         </tr>
     </thead>
     <tbody>
-        @foreach (var item in Model.ShiftEmployees)
+        @foreach (var item in Model)
             {
             <tr>
+                <td class="dt-body-center">@Html.CheckBox("Check", new { @value = item.UserId })</td>
                 <td>
                     @Html.DisplayFor(modelItem => item.EmpId)
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Name)
-                    @if (Model.IsEdit)
-                    {
-                        @Html.CheckBox("Check", new { @value = item.UserId, @style = "display:none", @checked = true })
-                        @Html.Hidden("ShiftMappingID", item.ShiftMappingID)
-                    }
-                </td>
-                @if (!Model.IsEdit)
-                {
-                    <td>@Html.CheckBox("Check", new { @value = item.UserId })</td>
-                }
+                </td>                 
             </tr>
         }
     </tbody>

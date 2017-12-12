@@ -23,20 +23,19 @@ namespace NLTD.EmploeePortal.LMS.Dac.DbHelper
             }
         }
 
-
-        public AddShiftEmployee GetShiftDetailsForUsers(Int64 userId, Int64 EditUserId, string RequestMenuUser)
+        public List<ShiftEmployees> GetShiftDetailsForUsers(Int64 userId, string RequestMenuUser)
         {
             using (var dac = new ShiftDac())
             {
-                return dac.GetShiftDetailsForUsers(userId, EditUserId, RequestMenuUser);
+                return dac.GetShiftDetailsForUsers(userId, RequestMenuUser);
             }
         }
 
-        public string SaveEmployeeShift(List<Int64> UserId, int Shift, DateTime FromDate, DateTime ToDate, Int64 MgrId, Int64? ShiftMappingID)
+        public string SaveEmployeeShift(List<Int64> UserId, int Shift, DateTime FromDate, DateTime ToDate, Int64 MgrId)
         {
             using (var dac = new ShiftDac())
             {
-                return dac.SaveEmployeeShift(UserId, Shift, FromDate, ToDate, MgrId, ShiftMappingID);
+                return dac.SaveEmployeeShift(UserId, Shift, FromDate, ToDate, MgrId);
             }
         }
 
@@ -59,6 +58,22 @@ namespace NLTD.EmploeePortal.LMS.Dac.DbHelper
             using (var dac = new ShiftDac())
             {
                 return dac.GetShiftMasterWithId(shiftId);
+            }
+        }
+
+        public EmpShift GetEmployeeShiftDetails(string Name, string RequestMenuUser, long LeaduserId)
+        {
+            using (var dac = new ShiftDac())
+            {
+                return dac.GetEmployeeShiftDetails(Name, RequestMenuUser, LeaduserId);
+            }
+        }
+
+        public string SaveIndividualEmployeeShift(Int64 UserId, int Shift, DateTime FromDate, DateTime ToDate, Int64 MgrId)
+        {
+            using (var dac = new ShiftDac())
+            {
+                return dac.SaveIndividualEmployeeShift(UserId, Shift, FromDate, ToDate, MgrId);
             }
         }
     }

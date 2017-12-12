@@ -1,4 +1,4 @@
-﻿@*@model NLTD.EmployeePortal.LMS.Common.QueryModel.PermissionQueryModel*@
+﻿@model IList<NLTD.EmployeePortal.LMS.Common.DisplayModel.Shifts>
 <style type="text/css">
     .ui-autocomplete {
         height: 220px;
@@ -33,69 +33,67 @@
     <link href="~/Content/bootstrap.css" rel="stylesheet" />
 }
 @{
-    @*if (Model.ErrorMsg != "" && Model.ErrorMsg != null)
-        {
-            <div class="alert alert-danger">
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                    <span aria-hidden="true">x</span>
-                </button>
-                @Model.ErrorMsg
-            </div>
-        }*@
+    <script>
+        $(function () {
+            var year = (new Date()).getFullYear();
+            var firstDate = new Date(year, 0, 1);
+            var lastDate = new Date(year, 11, 31)
+            $('#FromDate').datetimepicker(
+                {
+                    viewMode: "days",
+                    format: "DD-MM-YYYY",
+                    minDate: firstDate,
+                    maxDate: lastDate
+                }
+            );
+            $('#ToDate').datetimepicker(
+                {
+                    viewMode: "days",
+                    format: "DD-MM-YYYY",
+                    minDate: firstDate,
+                    maxDate: lastDate
+                }
+            );
+        });
+    </script>
+
     @Html.Hidden("RequestLevelPerson", (string)ViewBag.RequestLevelPerson)
     <div class="row">
         <div class="col-sm-12">
             <div class="box box-primary">
                 <div class="box-header with-border">
-                    <h3 class="box-title">Shift Allocation</h3>
+                    <h3 class="box-title">Shift Allocation - Multiple Employees</h3>
                 </div>
                 <div class="box-body">
-                    <div class="row">
-                        <div class="col-sm-12">
-                            <button type="button" class="btn btn-primary pull-right" onclick="AddPopup(0)">ADD</button>
+                    <div class="row">                       
+                        <div class="col-sm-3">
+                            @Html.Label("From Date")
+                            @Html.TextBox("FromDate", "", new { @class = "form-control datetpicker" })
+                        </div>
+                        <div class="col-sm-3">
+                            @Html.Label("To Date")
+                            @Html.TextBox("ToDate", "", new { @class = "form-control datetpicker" })
+                        </div>
+                        <div class="col-sm-3">
+                            @Html.Label("Shifts")
+                            @Html.DropDownList("Shift", new SelectList(Model, "ShiftId", "Shift"), new { @class = "form-control" })
+                        </div>
+                        <div class="col-sm-2" style="padding-top:27px;">
+                            <button type="button" class="btn btn-primary pull-right" onclick="SaveEmployeeShift();">Update Shift</button>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-
     </div>
-
-    <div id="divForShiftAllocation" class="col-sm-12"></div>
-
-    <style>
-        .datepicker {
-            z-index: 1600 !important; /* has to be larger than 1050 */
-        }
-    </style>
-
-    <!-- Modal -->
-    <div id="myModal" class="modal fade" role="dialog">
-        <div class="modal-dialog">
-
-            <!-- Modal content-->
-            <div class="modal-content">
-                <div class="box-header with-border" style="background-color: #337ab7;color: white;border-radius: 4px 4px 0px 0px;">
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h4 id="modaltitle" class="modal-title">Modal Header</h4>
-                </div>
-                <div id="alert_placeholder"></div>
-                <div id="divForAddShift" class="modal-body">
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" onclick="SaveEmployeeShift();">Save</button>
-                    <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
-                </div>
-            </div>
-
-        </div>
-    </div>
+    <div id="alert_placeholder"></div>
+    <div id="divForAddShift" class="col-sm-12"></div>
 }
 @section readyscript{
     @{
         <script>
             $("document").ready(function () {
-                loadShiftDetails();              
+                loadEmployeeShifts();
             });
         </script>
     }

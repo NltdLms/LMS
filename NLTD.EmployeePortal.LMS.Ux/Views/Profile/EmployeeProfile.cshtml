@@ -101,7 +101,7 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-sm-3">
+                        <div class="col-sm-6">
                             <div class="form-group">
 
                                 @Html.LabelFor(e => e.EmailAddress, new { @class = "required" })
@@ -116,8 +116,8 @@
                                 @Html.LabelFor(e => e.Gender, new { @class = "required" })
                                 <select id="Gender" name="Gender" class="form-control">
                                     <option value=""></option>
-                                    <option value="M" @if (Model.Gender == "M") { @Html.Raw("selected=\"selected\"")                  }>Male</option>
-                                    <option value="F" @if (Model.Gender == "F") { @Html.Raw("selected=\"selected\"")                  }>Female</option>
+                                    <option value="M" @if (Model.Gender == "M") { @Html.Raw("selected=\"selected\"")                 }>Male</option>
+                                    <option value="F" @if (Model.Gender == "F") { @Html.Raw("selected=\"selected\"")                 }>Female</option>
                                 </select>
                                 @Html.ValidationMessageFor(e => e.Gender, null, new { @class = "text-danger" })
                             </div>
@@ -132,17 +132,6 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-sm-3">
-                        <div class="form-group">
-                            <div class="form-group">
-                                @Html.LabelFor(e => e.ShiftId)
-                              
-                                @Html.TextBoxFor(e => e.ShiftId, null, new { @class = "form-control", autocomplete = "off" })
-                                @Html.ValidationMessageFor(e => e.MobileNumber, null, new { @class = "text-danger" })
-                            </div>
-                        </div>
-                    </div>
-                </div>
                     <div class="row">
 
                         <div class="col-sm-3">
@@ -247,6 +236,42 @@
                         </div>
 
 
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                @Html.Label("Employee Shift")
+                                <select id="ShiftId" name="ShiftId" class="form-control">
+                                    <option value=""></option>
+                                    @{
+
+                                        if (ViewBag.ShiftList != null)
+                                        {
+                                            foreach (var item in (List<NLTD.EmployeePortal.LMS.Common.DisplayModel.Shifts>)ViewBag.ShiftList)
+                                            {
+                                                if (item.ShiftId == Model.ShiftId)
+                                                {
+                                                    <option value="@item.ShiftId" selected="selected">@item.Shift</option>
+                                                }
+                                                else
+                                                {
+                                                    <option value="@item.ShiftId">@item.Shift</option>
+                                                }
+                                            }
+                                        }
+                                    }
+                                </select>
+                                @Html.ValidationMessageFor(e => e.ShiftId, null, new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <div class="form-group">
+                                    @Html.Label("Card Number")
+                                    @Html.TextBoxFor(e => e.CardId, null, new { @class = "form-control", autocomplete = "off" })
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     <div class="row">
                         <div class="col-sm-12 pull-left"> @Html.Label("Select Weekly Off(s)")</div>

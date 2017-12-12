@@ -10,7 +10,7 @@ namespace NLTD.EmploeePortal.LMS.Dac.DbModel
     {
         public int ShiftMappingID { get; set; }
         public Int64 UserID { get; set; }
-        public int ShiftID { get; set; }
+        public int? ShiftID { get; set; }
         public DateTime ShiftDate { get; set; }
         public DateTime? Createddate { get; set; }
         public Int64? CreatedBy { get; set; }

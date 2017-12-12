@@ -31,5 +31,8 @@ namespace NLTD.EmploeePortal.LMS.Dac.DbModel
         public DateTime CreatedOn { get; set; }
         public Int64 ModifiedBy { get; set; }
         public DateTime ModifiedOn { get; set; }
+
+        public Int32? ShiftId { get; set; }
+        public Int64? Cardid { get; set; }
     }
 }

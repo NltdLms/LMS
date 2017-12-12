@@ -85,7 +85,7 @@ namespace NLTD.EmploeePortal.LMS.Dac.Dac
             return retModel;
         }
 		
-		public Employee FindControlRecursively(List<Employee> root, Int64 id)
+		public static Employee FindControlRecursively(List<Employee> root, Int64 id)
         {
             foreach (Employee emp in root)
             {

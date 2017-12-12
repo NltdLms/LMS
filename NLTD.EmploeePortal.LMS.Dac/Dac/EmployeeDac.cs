@@ -37,6 +37,8 @@ namespace NLTD.EmploeePortal.LMS.Dac.Dac
                                    RoleText = rt.Role,
                                    UserId = employee.UserId,
                                    Avatar = employee.AvatarUrl,
+                                   CardId = employee.Cardid,
+                                   ShiftId = employee.ShiftId,
                                    //IsHandleMembers = employee.IsHandleMembers,                                   
                                    LogonId = employee.LoginId,
                                    IsActive = employee.IsActive
@@ -527,6 +529,51 @@ namespace NLTD.EmploeePortal.LMS.Dac.Dac
                 return AllEmp;
             }
         }
+
+        public static int AddOrUpdateEmployeeDefaultShift(string mode, Int64 eUserId, int? newShiftId, Int64 currentUserId, int? oldShiftId)
+        {
+            using (var context = new NLTDDbContext())
+            {
+                var isSaved = 0;
+                if (mode == "Add")
+                {
+
+                    DateTime fromdate = new DateTime(DateTime.Now.Year, 1, 1);
+                    DateTime todate = new DateTime(DateTime.Now.Year, 12, 31);
+                    var listofDays = Enumerable.Range(0, (todate - fromdate).Days + 1).Select(d => fromdate.AddDays(d));
+
+                    var shiftMapping = from date in listofDays
+                                       select new ShiftMapping
+                                       {
+                                           UserID = eUserId,
+                                           ShiftID = newShiftId,
+                                           ShiftDate = date,
+                                           Createddate = DateTime.Now,
+                                           CreatedBy = currentUserId,
+                                           ModifiedDate = DateTime.Now,
+                                           ModifiedBy = currentUserId,
+                                       };
+                    context.ShiftMapping.AddRange(shiftMapping);
+                    isSaved = context.SaveChanges();
+
+                }
+                else
+                {
+                    var shiftMapping = context.ShiftMapping.Where(c => c.UserID == eUserId && c.ShiftDate > DateTime.Now && c.ShiftID == oldShiftId).ToList();
+                    shiftMapping.ForEach(u =>
+                    {
+                        u.ShiftID = newShiftId;
+                        u.ModifiedBy = currentUserId;
+                        u.ModifiedDate = DateTime.Now;
+                    });
+                    isSaved = context.SaveChanges();
+                }
+
+                return isSaved;
+            }
+        }
+
+
         public void Dispose()
         {
             //Nothing to dispose...
@@ -572,7 +619,7 @@ namespace NLTD.EmploeePortal.LMS.Dac.Dac
                     {
                         var isCorpIdExits = context.Employee.Where(e => e.LoginId == profile.LogonId.ToUpper()).FirstOrDefault();
                         if (isCorpIdExits != null)
-                        {                            
+                        {
                             return "DupCorp";
                         }
                     }
@@ -581,9 +628,9 @@ namespace NLTD.EmploeePortal.LMS.Dac.Dac
                         var isCorpIdExits = context.Employee.Where(e => e.LoginId == profile.LogonId.ToUpper() && e.EmployeeId != employee.EmployeeId).FirstOrDefault();
                         if (isCorpIdExits != null)
                         {
-                           
-                                return "DupCorp";
-                            
+
+                            return "DupCorp";
+
                         }
                     }
 
@@ -601,6 +648,8 @@ namespace NLTD.EmploeePortal.LMS.Dac.Dac
                         remarks = remarks + "#RoleId" + "^" + profile.RoleId;
                         remarks = remarks + "#ReportedToId" + "^" + profile.ReportedToId;
                         remarks = remarks + "#OfficeHolodayId" + "^" + profile.OfficeHolodayId;
+                        remarks = remarks + "#ShiftId" + "^" + profile.ShiftId;
+                        remarks = remarks + "#CardId" + "^" + profile.CardId;
 
                         employee = new Employee();
                         employee.LoginId = profile.LogonId.ToUpper();
@@ -614,8 +663,9 @@ namespace NLTD.EmploeePortal.LMS.Dac.Dac
                         employee.EmailAddress = profile.EmailAddress;
                         employee.EmployeeRoleId = profile.RoleId;
                         employee.ReportingToId = profile.ReportedToId;
-                        //employee.IsHandleMembers = profile.IsHandleMembers;
                         employee.OfficeHolodayId = profile.OfficeHolodayId;
+                        employee.ShiftId = profile.ShiftId;
+                        employee.Cardid = profile.CardId;
                         employee.ModifiedBy = -1;
                         employee.CreatedBy = ModifiedBy;
                         employee.CreatedOn = System.DateTime.Now;
@@ -623,6 +673,12 @@ namespace NLTD.EmploeePortal.LMS.Dac.Dac
 
                         context.Employee.Add(employee);
                         isSaved = context.SaveChanges();
+                        if (isSaved > 0)
+                        {
+                            isSaved = AddOrUpdateEmployeeDefaultShift(profile.Mode, employee.UserId, employee.ShiftId, ModifiedBy,
+                                employee.ShiftId);
+                        }
+
                         if (isSaved > 0)
                         {
                             List<String> lstNewWeekOffs = new List<string>();
@@ -716,7 +772,13 @@ namespace NLTD.EmploeePortal.LMS.Dac.Dac
                         if (profile.RoleId != oldEmpData.EmployeeRoleId)
                             remarks = remarks + "#RoleId" + "^" + profile.RoleId;
 
+                        if (profile.ShiftId != oldEmpData.ShiftId)
+                            remarks = remarks + "#ShiftId" + "^" + profile.ShiftId;
 
+                        if (profile.CardId != oldEmpData.Cardid)
+                            remarks = remarks + "#CardId" + "^" + profile.CardId;
+
+                        int? oldShiftid = oldEmpData.ShiftId;
                         employee.OfficeId = profile.OfficeId;
                         employee.LoginId = profile.LogonId;
                         employee.EmployeeId = profile.EmployeeId;
@@ -727,7 +789,8 @@ namespace NLTD.EmploeePortal.LMS.Dac.Dac
                         employee.Gender = profile.Gender;
                         employee.MobileNumber = profile.MobileNumber;
                         employee.EmailAddress = profile.EmailAddress;
-                        // employee.IsHandleMembers = profile.IsHandleMembers;
+                        employee.ShiftId = profile.ShiftId;
+                        employee.Cardid = profile.CardId;
                         employee.OfficeHolodayId = profile.OfficeHolodayId;
                         employee.EmployeeRoleId = profile.RoleId;
                         if (remarks == "") { noChanges = true; }
@@ -737,6 +800,13 @@ namespace NLTD.EmploeePortal.LMS.Dac.Dac
                             employee.ModifiedOn = System.DateTime.Now;
                             employee.ModifiedBy = ModifiedBy;
                             isSaved = context.SaveChanges();
+
+
+                            if (isSaved > 0)
+                            {
+                                isSaved = AddOrUpdateEmployeeDefaultShift(profile.Mode, employee.UserId, employee.ShiftId, ModifiedBy,
+                                    oldShiftid);
+                            }
                         }
 
                         string isSameWeekoff = "";
@@ -780,7 +850,7 @@ namespace NLTD.EmploeePortal.LMS.Dac.Dac
                                         if (isSameWeekoff == "")
                                         {
                                             isSameWeekoff = "Yes";
-                                            
+
                                         }
 
 
@@ -848,9 +918,13 @@ namespace NLTD.EmploeePortal.LMS.Dac.Dac
                                 }
                             }
                         }
-                        
+
                         if (isSaved > 0)
                         {
+
+
+
+
                             EmployeeTransactionHistory hist = new EmployeeTransactionHistory();
                             hist.UserId = profile.UserId;
                             hist.TransactionDate = System.DateTime.Now;
@@ -863,10 +937,11 @@ namespace NLTD.EmploeePortal.LMS.Dac.Dac
                         }
                         if (isSaved > 0)
                             retMsg = "Saved";
-                        else if (noChanges) {
+                        else if (noChanges)
+                        {
                             retMsg = "noChanges";
                         }
-                        else 
+                        else
                         {
                             if (retMsg == "")
                                 retMsg = "Failed";
@@ -882,6 +957,7 @@ namespace NLTD.EmploeePortal.LMS.Dac.Dac
                 }
             }
         }
+
         public long GetEmployeeId(string LogonId)
         {
             using (var context = new NLTDDbContext())

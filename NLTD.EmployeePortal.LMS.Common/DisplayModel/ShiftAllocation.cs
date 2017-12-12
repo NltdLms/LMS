@@ -10,13 +10,14 @@ namespace NLTD.EmployeePortal.LMS.Common.DisplayModel
         public string Name { get; set; }
         public Int64 UserId { get; set; }
         public Int64? ShiftID { get; set; }
-        public DateTime FromDate { get; set; }
         public DateTime ShiftDate { get; set; }
-        
+        public TimeSpan FromTime { get; set; }
         public TimeSpan ToTime { get; set; }
         public string ShiftName { get; set; }
         public bool IsActive { get; set; }
         public Int64 ShiftMappingID { get; set; }
+        public string Month { get; set; }
+        public int Year { get; set; }
     }
 
     public class ShiftEmployees
@@ -26,7 +27,6 @@ namespace NLTD.EmployeePortal.LMS.Common.DisplayModel
         public Int64 UserId { get; set; }
         public Int64 ShiftId { get; set; }
         public DateTime ShiftDate { get; set; }
-        
         public Int64? ShiftMappingID { get; set; }
     }
 
@@ -38,13 +38,7 @@ namespace NLTD.EmployeePortal.LMS.Common.DisplayModel
         public TimeSpan FromTime { get; set; }
         public TimeSpan ToTime { get; set; }
         public string ShiftName { get; set; }
-    }
-
-    public class AddShiftEmployee
-    {
-        public List<ShiftEmployees> ShiftEmployees { get; set; }
-        public List<Shifts> Shifts { get; set; }
-        public bool IsEdit { get; set; }
+        public string Shift { get; set; }
     }
 
     public class SaveShiftEmployee
@@ -53,5 +47,27 @@ namespace NLTD.EmployeePortal.LMS.Common.DisplayModel
         public Int64 Shift { get; set; }
         public DateTime Fromdate { get; set; }
         public DateTime ToDate { get; set; }
+    }
+
+    public class ShiftDetail
+    {
+        public string Month { get; set; }
+        public List<ShiftAllocation> shiftAllocation { get; set; }
+    }
+
+    public class EmpShift
+    {
+        public string Name { get; set; }
+        public string EmpId { get; set; }
+        public string ReportingTo { get; set; }
+        public List<ShiftDetail> shiftDetail { get; set; }
+        public List<Shifts> Shifts { get; set; }
+        public Int64 UserId { get; set; }
+    }
+
+    public class EmployeeShifts
+    {
+        public List<ShiftEmployees> shiftEmployees { get; set; }
+        public List<Shifts> Shifts { get; set; }
     }
 }

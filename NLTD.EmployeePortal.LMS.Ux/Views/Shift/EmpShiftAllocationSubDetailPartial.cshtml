@@ -1,0 +1,41 @@
+﻿
+@model IList<NLTD.EmployeePortal.LMS.Common.DisplayModel.ShiftAllocation>
+<table id="ShiftDetail"
+       class="shift table table-condensed table-striped table-hover">
+    <thead>
+        <tr>          
+            <th>
+                @Html.DisplayName("ShiftDate")
+            </th>
+            <th>
+                @Html.DisplayName("ShiftName")
+            </th>
+            <th>
+                @Html.DisplayName("FromTime")
+            </th>
+            <th>
+                @Html.DisplayName("ToTime")
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            var ShiftDate = item.ShiftDate.ToString("dd-MM-yyyy");
+            <tr>               
+                <td>
+                    @Html.DisplayFor(modelItem => ShiftDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ShiftName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FromTime)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ToTime)
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

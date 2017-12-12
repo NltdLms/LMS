@@ -1,4 +1,5 @@
-﻿using NLTD.EmploeePortal.LMS.Dac.DbModel;
+﻿using NLTD.EmploeePortal.LMS.Dac.Dac;
+using NLTD.EmploeePortal.LMS.Dac.DbModel;
 using NLTD.EmployeePortal.LMS.Common.DisplayModel;
 using NLTD.EmployeePortal.LMS.Common.QueryModel;
 using NLTD.EmployeePortal.LMS.Repository;
@@ -37,7 +38,8 @@ namespace NLTD.EmploeePortal.LMS.Dac
                                                   EmpId = e.EmployeeId,
                                                   UserId = sm.UserID,
                                                   ShiftID = s.ShiftID,
-                                                   ShiftDate= sm.ShiftDate,
+                                                  ShiftDate = sm.ShiftDate,
+                                                  FromTime = s.FromTime,
                                                   ToTime = s.ToTime,
                                                   ShiftName = s.ShiftDescription,
                                                   IsActive = e.IsActive,
@@ -53,175 +55,83 @@ namespace NLTD.EmploeePortal.LMS.Dac
             return lstShiftAllocation;
         }
 
-
-
-
         public List<Shifts> GetShiftMaster()
         {
             List<Shifts> lstShift = new List<Shifts>();
 
             using (var context = new NLTDDbContext())
             {
-                lstShift = (from s in context.ShiftMaster
+                lstShift = (from s in context.ShiftMaster.AsEnumerable()
                             select new Shifts
                             {
                                 ShiftId = s.ShiftID,
                                 ShiftName = s.ShiftDescription,
                                 FromTime = s.FromTime,
                                 ToTime = s.ToTime,
+                                Shift = string.Format("{0:hh\\:mm}", s.FromTime) + " - " + string.Format("{0:hh\\:mm}", s.ToTime)
                             }).ToList();
 
             }
             return lstShift;
         }
 
-
-        public AddShiftEmployee GetShiftDetailsForUsers(Int64 UserId, Int64 ShiftMappingId, string RequestMenuUser)
+        public List<ShiftEmployees> GetShiftDetailsForUsers(Int64 UserId, string RequestMenuUser)
         {
-            AddShiftEmployee lstAddShiftEmployee = new AddShiftEmployee();
+            var lstShiftEmployees = new List<ShiftEmployees>();
 
             using (var context = new NLTDDbContext())
             {
-                var lstShiftEmployees = new List<ShiftEmployees>();
-
                 if (RequestMenuUser == "Admin")
                 {
-                    if (ShiftMappingId > 0)
-                    {
-                        lstShiftEmployees = (from sm in context.ShiftMapping
-                                             join e in context.Employee on sm.UserID equals e.UserId
-                                             where sm.ShiftMappingID == ShiftMappingId
-                                             select new ShiftEmployees
-                                             {
-                                                 Name = e.FirstName + " " + e.LastName,
-                                                 EmpId = e.EmployeeId,
-                                                 UserId = e.UserId,
-                                                 ShiftId = sm.ShiftID,
-                                                 ShiftDate = sm.ShiftDate,
-                                                 ShiftMappingID = sm.ShiftMappingID
-                                             }).ToList();
-                    }
-                    else
-                    {
-                        lstShiftEmployees = (from e in context.Employee
-                                             where e.IsActive == true
-                                             select new ShiftEmployees
-                                             {
-                                                 Name = e.FirstName + " " + e.LastName,
-                                                 EmpId = e.EmployeeId,
-                                                 UserId = e.UserId
-                                             }).ToList();
-                    }
+                    lstShiftEmployees = (from e in context.Employee
+                                         where e.IsActive == true
+                                         select new ShiftEmployees
+                                         {
+                                             Name = e.FirstName + " " + e.LastName,
+                                             EmpId = e.EmployeeId,
+                                             UserId = e.UserId
+                                         }).ToList();
                 }
                 else
                 {
-                    if (ShiftMappingId > 0)
-                    {
-                        lstShiftEmployees = (from sm in context.ShiftMapping
-                                             join e in context.Employee on sm.UserID equals e.UserId
-                                             where sm.ShiftMappingID == ShiftMappingId
-                                             select new ShiftEmployees
-                                             {
-                                                 Name = e.FirstName + " " + e.LastName,
-                                                 EmpId = e.EmployeeId,
-                                                 UserId = e.UserId,
-                                                 ShiftId = sm.ShiftID,
-                                                 ShiftDate = sm.ShiftDate,
-                                                 ShiftMappingID = sm.ShiftMappingID
-                                             }).ToList();
-                    }
-                    else
-                    {
-                        lstShiftEmployees = GetEmployees(context, UserId);
-                    }
+                    lstShiftEmployees = GetEmployees(context, UserId);
                 }
-                var lstShift = context.ShiftMaster.AsEnumerable().Select(s => new Shifts
-                {
-                    ShiftId = s.ShiftID,
-                    ShiftName = s.ShiftDescription + "( " + string.Format("{0:hh\\:mm}", s.FromTime) + " - " + string.Format("{0:hh\\:mm}", s.ToTime) + " )",
-                    FromTime = s.FromTime,
-                    ToTime = s.ToTime
-                }).ToList();
-
-                lstAddShiftEmployee.ShiftEmployees = lstShiftEmployees;
-                lstAddShiftEmployee.Shifts = lstShift;
-                lstAddShiftEmployee.IsEdit = (ShiftMappingId > 0);
             }
-            return lstAddShiftEmployee;
+            return lstShiftEmployees;
         }
 
-
-        public string SaveEmployeeShift(List<Int64> UserId, int Shift, DateTime FromDate, DateTime ToDate, Int64 MgrId, Int64? ShiftMappingID)
+        public string SaveEmployeeShift(List<Int64> UserId, int Shift, DateTime FromDate, DateTime ToDate, Int64 MgrId)
         {
             try
             {
                 int isSaved = 0;
 
-                string errorMsg = "";
                 using (var context = new NLTDDbContext())
                 {
-                    foreach (var Id in UserId)
+                    var shiftMapping = context.ShiftMapping.Where(c => UserId.Contains(c.UserID) && (c.ShiftDate >= FromDate && c.ShiftDate <= ToDate)).ToList();
+                    shiftMapping.ForEach(u =>
                     {
-                        int exists=0;
-                        //if (ShiftMappingID != null)
-                        //{
-                        //    exists = context.ShiftMapping.Where(c => c.UserID == Id && c.ShiftMappingID != ShiftMappingID &&
-                        //((FromDate >= c.FromDate && FromDate <= c.ToDate) || (ToDate >= c.FromDate && ToDate <= c.ToDate)
-                        // || (c.FromDate >= FromDate && c.FromDate <= ToDate) || (c.ToDate >= FromDate && c.ToDate <= ToDate))).Select(p => p.ShiftMappingID).Count();
-                        //}
-                        //else
-                        //{
-                        //    exists = context.ShiftMapping.Where(c => c.UserID == Id &&
-                        //((FromDate >= c.FromDate && FromDate <= c.ToDate) || (ToDate >= c.FromDate && ToDate <= c.ToDate)
-                        //|| (c.FromDate >= FromDate && c.FromDate <= ToDate) || (c.ToDate >= FromDate && c.ToDate <= ToDate))).Select(p => p.ShiftMappingID).Count();
-                        //}
+                        u.ShiftID = Shift;
+                        u.ModifiedBy = MgrId;
+                        u.ModifiedDate = DateTime.Now;
+                    });
 
-                        if (exists > 0)
-                        {
-                            var emp = (from e in context.Employee
-                                       where e.UserId == Id
-                                       select new { Name = e.FirstName + " " + e.LastName }).FirstOrDefault();
-                            errorMsg += emp.Name + Environment.NewLine;
-                        }
-                        else
-                        {
-                            if (ShiftMappingID != null)
-                            {
-                                var shiftMapping = context.ShiftMapping.Where(c => c.ShiftMappingID == ShiftMappingID).SingleOrDefault();
-                                shiftMapping.ShiftID = Shift;
-                                //shiftMapping.ShiftDate = ShiftDate,
-                                shiftMapping.ModifiedBy = MgrId;
-                                shiftMapping.ModifiedDate = DateTime.Now;
-                            }
-                            else
-                            {
-                                ShiftMapping shiftMapping = new ShiftMapping();
-                                shiftMapping.UserID = Id;
-                                shiftMapping.ShiftID = Shift;
-                                //shiftMapping.FromDate = FromDate;
-                                //shiftMapping.ToDate = ToDate;
-                                shiftMapping.CreatedBy = MgrId;
-                                shiftMapping.Createddate = DateTime.Now;
-                                context.ShiftMapping.Add(shiftMapping);
-                            }
+                    isSaved = context.SaveChanges();
 
-                            isSaved = context.SaveChanges();
+                    var shiftTransaction = from id in UserId
+                                           select new ShiftTransaction
+                                           {
+                                               ShiftID = Shift,
+                                               UserId = id,
+                                               CreatedBy = MgrId,
+                                               Createddate = DateTime.Now,
+                                               FromDate = FromDate,
+                                               ToDate = ToDate
+                                           };
 
-                            ShiftTransaction shiftTransaction = new ShiftTransaction();
-                            shiftTransaction.ShiftID = Shift;
-                            shiftTransaction.UserId = Id;
-                            shiftTransaction.CreatedBy = MgrId;
-                            shiftTransaction.Createddate = DateTime.Now;
-                            shiftTransaction.FromDate = FromDate;
-                            shiftTransaction.ToDate = ToDate;
-                            context.ShiftTransaction.Add(shiftTransaction);
-                            isSaved = context.SaveChanges();
-                        }
-                    }
+                    context.ShiftTransaction.AddRange(shiftTransaction);
+                    isSaved = context.SaveChanges();
                 }
-
-                if (!string.IsNullOrWhiteSpace(errorMsg))
-                    return "Available" + errorMsg;
 
                 return isSaved > 0 ? "Saved" : "Failed";
             }
@@ -271,9 +181,8 @@ namespace NLTD.EmploeePortal.LMS.Dac
                                  EmpId = e.EmployeeId,
                                  UserId = sm.UserID,
                                  ShiftID = s.ShiftID,
-                                 //FromDate = sm.FromDate,
-                                 //ToDate = sm.ToDate,
-                                 //FromTime = s.FromTime,
+                                 ShiftDate = sm.ShiftDate,
+                                 FromTime = s.FromTime,
                                  ToTime = s.ToTime,
                                  ShiftName = s.ShiftDescription,
                                  IsActive = e.IsActive,
@@ -308,22 +217,12 @@ namespace NLTD.EmploeePortal.LMS.Dac
                                      FromTime = s.FromTime,
                                      ToTime = s.ToTime
                                  }).SingleOrDefault();
-
-                    //objShifts = (from sm in context.ShiftMaster
-                    //             where sm.ShiftID == shiftId
-                    //select new Shifts
-                    //{
-                    //    ShiftId = sm.ShiftID,
-                    //    ShiftName = sm.ShiftDescription,
-                    //    FromTime = sm.FromTime,
-                    //    CreatedBy = sm.CreatedBy
-                    //}).SingleOrDefault();
                 }
 
             }
             return objShifts;
         }
-        
+
         public string SaveShiftMaster(int shiftId, string shiftName, TimeSpan fromTime, TimeSpan toTime, Int64 mgrId)
         {
             try
@@ -353,6 +252,146 @@ namespace NLTD.EmploeePortal.LMS.Dac
                     context.ShiftMaster.AddOrUpdate(objShiftMaster);
                     isSaved = context.SaveChanges();
 
+                }
+
+                return isSaved > 0 ? "Saved" : "Failed";
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
+            }
+        }
+
+        public EmpShift GetEmployeeShiftDetails(string Name, string RequestMenuUser, long LeaduserId)
+        {
+            EmpShift retModel = new EmpShift();
+
+            using (var context = new NLTDDbContext())
+            {
+                EmployeeDac employeeDac = new EmployeeDac();
+                long userId = 0; string EmpId = "";
+
+                if (RequestMenuUser != "My")
+                {
+                    var empPrf = context.Employee.Where(x => string.Concat(x.FirstName, " ", x.LastName).ToUpper() == Name.ToUpper()).FirstOrDefault();
+                    if (empPrf != null)
+                    {
+                        userId = empPrf.UserId;
+                        EmpId = empPrf.EmployeeId;
+                    }
+                }
+
+                if (userId > 0 || (RequestMenuUser == "My" && LeaduserId > 0))
+                {
+                    string ReportingTo = (RequestMenuUser == "My" && LeaduserId > 0) ? employeeDac.ReportingToName(LeaduserId) : employeeDac.ReportingToName(userId);
+
+                    List<ShiftAllocation> shiftDetails = new List<ShiftAllocation>();
+                    if (RequestMenuUser == "My")
+                    {
+                        shiftDetails = getShiftDetails(context, LeaduserId);
+                    }
+                    else if (RequestMenuUser == "Admin")
+                    {
+                        var leadinfo = (from emp in context.Employee
+                                        join role in context.EmployeeRole on emp.EmployeeRoleId equals role.RoleId
+                                        where emp.UserId == LeaduserId
+                                        select new { RoleName = role.Role }).FirstOrDefault();
+
+                        if (leadinfo.RoleName.ToUpper() == "ADMIN" || leadinfo.RoleName.ToUpper() == "HR")
+                        {
+                            shiftDetails = getShiftDetails(context, userId);
+                        }
+                    }
+                    else if (RequestMenuUser == "Team")
+                    {
+                        var user = (from e in context.Employee
+                                    where e.ReportingToId == LeaduserId
+                                    select e).ToList();
+
+                        var found = LeaveTransactionHistoryDac.FindControlRecursively(user, userId);
+                        if (found != null)
+                        {
+                            shiftDetails = getShiftDetails(context, userId);
+                        }
+                    }
+
+                    var groupedLeaveList = shiftDetails.GroupBy(u => u.Month)
+                                                          .Select(grp => new { Month = grp.Key, shiftAllocation = grp.ToList() })
+                                                          .ToList();
+
+                    List<ShiftDetail> lstshiftDetails = (from gv in groupedLeaveList
+                                                         select new ShiftDetail
+                                                         {
+                                                             Month = gv.Month,
+                                                             shiftAllocation = gv.shiftAllocation
+                                                         }).ToList();
+                    retModel.shiftDetail = lstshiftDetails;
+                    retModel.ReportingTo = ReportingTo;
+
+                    var lstShift = context.ShiftMaster.AsEnumerable().Select(s => new Shifts
+                    {
+                        ShiftId = s.ShiftID,
+                        ShiftName = string.Format("{0:hh\\:mm}", s.FromTime) + " - " + string.Format("{0:hh\\:mm}", s.ToTime),
+                    }).ToList();
+
+                    retModel.Shifts = lstShift;
+                }
+
+                retModel.Name = Name;
+                retModel.EmpId = EmpId;
+                retModel.UserId = userId;
+            }
+
+            return retModel;
+        }
+
+        public List<ShiftAllocation> getShiftDetails(NLTDDbContext context, long UserId)
+        {
+            var shiftDetails = (from sm in context.ShiftMapping.AsEnumerable()
+                                join s in context.ShiftMaster.AsEnumerable() on sm.ShiftID equals s.ShiftID
+                                join e in context.Employee.AsEnumerable() on sm.UserID equals e.UserId
+                                where e.UserId == UserId && e.IsActive == true && sm.ShiftDate.Year == DateTime.Now.Year
+                                select new ShiftAllocation
+                                {
+                                    Month = sm.ShiftDate.ToString("MMMM"),
+                                    Year = sm.ShiftDate.Year,
+                                    UserId = sm.UserID,
+                                    ShiftID = s.ShiftID,
+                                    ShiftDate = sm.ShiftDate,
+                                    FromTime = s.FromTime,
+                                    ToTime = s.ToTime,
+                                    ShiftName = s.ShiftDescription,
+                                    ShiftMappingID = sm.ShiftMappingID
+                                }).ToList();
+            return shiftDetails;
+        }
+
+        public string SaveIndividualEmployeeShift(Int64 UserId, int Shift, DateTime FromDate, DateTime ToDate, Int64 MgrId)
+        {
+            try
+            {
+                int isSaved = 0;
+                using (var context = new NLTDDbContext())
+                {
+                    var shiftMapping = context.ShiftMapping.Where(c => c.UserID == UserId && (c.ShiftDate >= FromDate && c.ShiftDate <= ToDate)).ToList();
+                    shiftMapping.ForEach(u =>
+                    {
+                        u.ShiftID = Shift;
+                        u.ModifiedBy = MgrId;
+                        u.ModifiedDate = DateTime.Now;
+                    });
+
+                    isSaved = context.SaveChanges();
+
+                    ShiftTransaction shiftTransaction = new ShiftTransaction();
+                    shiftTransaction.ShiftID = Shift;
+                    shiftTransaction.UserId = UserId;
+                    shiftTransaction.CreatedBy = MgrId;
+                    shiftTransaction.Createddate = DateTime.Now;
+                    shiftTransaction.FromDate = FromDate;
+                    shiftTransaction.ToDate = ToDate;
+                    context.ShiftTransaction.Add(shiftTransaction);
+                    isSaved = context.SaveChanges();
                 }
 
                 return isSaved > 0 ? "Saved" : "Failed";

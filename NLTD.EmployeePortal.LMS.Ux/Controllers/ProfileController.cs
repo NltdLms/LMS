@@ -34,6 +34,11 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
             using (var client = new EmployeeClient())
             {
                 profile = client.GetEmployeeProfile(userIdForProfile);
+                
+            }
+            using (var client = new ShiftClient())
+            {
+                ViewBag.ShiftList = client.GetShiftMaster();
             }
             using (var client = new OfficeLocationClient())
             {
@@ -92,7 +97,10 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
                 {
                     ViewBag.RoleList = client.GetAllRoles();
                 }
-
+                using (var client = new ShiftClient())
+                {
+                    ViewBag.ShiftList = client.GetShiftMaster();
+                }
                 using (var client = new EmployeeClient())
                 {
                     IList<DropDownItem> reptList = client.GetActiveEmpList(OfficeId,null);
@@ -261,7 +269,10 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
             {
                 ViewBag.RoleList = client.GetAllRoles();
             }
-
+            using (var client = new ShiftClient())
+            {
+                ViewBag.ShiftList = client.GetShiftMaster();
+            }
             using (var client = new EmployeeClient())
             {
                 IList<DropDownItem> reptList = new List<DropDownItem>();

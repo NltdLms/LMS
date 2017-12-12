@@ -28,7 +28,7 @@ namespace NLTD.EmployeePortal.LMS.Common.DisplayModel
         [Required(ErrorMessage = "Enter Email Address.")]
         [Display(Name = "Email Address")]
         public String EmailAddress { get; set; }
-        
+
         [Display(Name = "Mobile Number")]
         [StringLength(10, ErrorMessage = "Should not exceed 10 characters.")]
         public String MobileNumber { get; set; }
@@ -46,11 +46,11 @@ namespace NLTD.EmployeePortal.LMS.Common.DisplayModel
 
         public Int64 OfficeId { get; set; }
         public String LocationText { get; set; }
-
+        public Int32? ShiftId { get; set; }
+        [Required(ErrorMessage = "Select Emplye Shift.")]
+        public Int64? CardId { get; set; }
         public String Avatar { get; set; }
 
-        [Display(Name ="Default Shift")]
-        public Int64 ShiftId { get; set; }
         [Display(Name = "Is LMS Approver")]
         public Boolean IsHandleMembers { get; set; }
         public bool Sunday { get; set; }
