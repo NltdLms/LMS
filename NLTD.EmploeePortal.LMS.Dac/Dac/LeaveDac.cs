@@ -79,10 +79,10 @@ namespace NLTD.EmploeePortal.LMS.Dac
                                     retValue = "Saved";
                                     if (adjustBal.IsTimeBased == false)
                                     {
-                                        if (adjustBal.IsLeave == true)
-                                        {
+                                        //if (adjustBal.IsLeave == true)
+                                        //{
                                             TransactionHistoryModel hist = new TransactionHistoryModel();
-                                            hist.EmployeeId = status.UserId;
+                                            hist.EmployeeId = leave.UserId;
                                             hist.LeaveTypeId = leave.LeaveTypeId;
                                             hist.LeaveId = leave.LeaveId;
                                             hist.NumberOfDays = leave.Duration;
@@ -92,7 +92,12 @@ namespace NLTD.EmploeePortal.LMS.Dac
                                                 hist.Remarks = "Approved";
                                                 hist.TransactionType = "D";
                                             }
-                                            else
+                                        else if (leave.Status == "C")
+                                        {
+                                            hist.Remarks = "Cancelled";
+                                            hist.TransactionType = "C";
+                                        }
+                                        else
                                             {
                                                 hist.Remarks = "Rejected";
                                                 hist.TransactionType = "C";
@@ -102,7 +107,7 @@ namespace NLTD.EmploeePortal.LMS.Dac
                                                 retValue = "Saved";
                                             else
                                                 retValue = "NotSaved";
-                                        }
+                                        //}
                                     }
 
                                 }
@@ -865,15 +870,8 @@ namespace NLTD.EmploeePortal.LMS.Dac
                                 {
                                     if (item.Duration > 0)
                                     {
-                                        duplicateRequest = "Duplicate";
-                                    }
-                                    else
-                                    {
-                                        if (request.LeaveFromTime == "A" && request.LeaveUptoTime == "A")
-                                        {
-                                            if(isTimeBased==false)
+                                        if (isTimeBased == false)
                                             duplicateRequest = "Duplicate";
-                                        }
                                     }
                                 }
                                 else
@@ -1191,8 +1189,8 @@ namespace NLTD.EmploeePortal.LMS.Dac
                                         leaveBalRec.ModifiedOn = System.DateTime.Now;
                                         isSaved = context.SaveChanges();
                                     }
-                                    if (adjustBal.IsLeave == true)
-                                    {
+                                    //if (adjustBal.IsLeave == true)
+                                    //{
                                         if (isSaved > 0)
                                         {
                                             TransactionHistoryModel hist = new TransactionHistoryModel();
@@ -1216,7 +1214,7 @@ namespace NLTD.EmploeePortal.LMS.Dac
                                             else
                                                 isSaved = -1;
                                         }
-                                    }
+                                    //}
                                 }
                             }
                         }
@@ -2099,7 +2097,7 @@ namespace NLTD.EmploeePortal.LMS.Dac
                         qry.CcEmailIds = GetHigherApproversEmailIds(qry.ReportingToId);
                         var hrEmail = (from e in context.Employee
                                        join er in context.EmployeeRole on e.EmployeeRoleId equals er.RoleId
-                                       where (er.Role == "HR" || er.Role == "Admin")
+                                       where (er.Role == "HR" || er.Role == "Admin") && e.IsActive==true
                                        select new { EmailId = e.EmailAddress }
                                      ).ToList();
                         foreach (var item in hrEmail)

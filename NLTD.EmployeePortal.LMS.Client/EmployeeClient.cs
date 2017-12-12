@@ -28,6 +28,13 @@ namespace NLTD.EmployeePortal.LMS.Client
                 return helper.ReportingToName(userId);
             }
         }
+        public string GetNewEmpId(Int64 OfficeId)
+        {
+            using (IEmployeeHelper helper = new EmployeeHelper())
+            {
+                return helper.GetNewEmpId(OfficeId);
+            }
+        }
         public long GetUserId(string name)
         {
             using (IEmployeeHelper helper = new EmployeeHelper())
@@ -59,11 +66,19 @@ namespace NLTD.EmployeePortal.LMS.Client
             }
 
         }
+        
         public List<DropDownItem> GetReportToList(long OfficeId)
         {
             using (IEmployeeHelper helper = new EmployeeHelper())
             {
                 return helper.GetReportToList(OfficeId);
+            }
+        }
+        public List<DropDownItem> GetActiveEmpList(long OfficeId, Int64? exceptUserId)
+        {
+            using (IEmployeeHelper helper = new EmployeeHelper())
+            {
+                return helper.GetActiveEmpList(OfficeId, exceptUserId);
             }
         }
 

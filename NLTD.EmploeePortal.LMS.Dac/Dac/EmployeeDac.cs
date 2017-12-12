@@ -489,6 +489,44 @@ namespace NLTD.EmploeePortal.LMS.Dac.Dac
                 return ReportToPersons;
             }
         }
+        public List<DropDownItem> GetActiveEmpList(Int64 OfficeId, Int64? exceptUserId)
+        {
+            using (var context = new NLTDDbContext())
+            {
+                List<DropDownItem> AllEmp = new List<DropDownItem>();
+                if (exceptUserId == null || exceptUserId == 0)
+                {
+                    var emp = (from employee in context.Employee
+                               where employee.OfficeId == OfficeId && employee.IsActive == true
+                               select new DropDownItem
+                               {
+                                   Key = employee.UserId.ToString(),
+                                   Value = employee.FirstName + " " + employee.LastName
+                               }).ToList();
+
+                    AllEmp = emp.OrderBy(x => x.Value).ToList();
+                }
+                else
+                {
+                    var emp = (from employee in context.Employee
+                               where employee.OfficeId == OfficeId && employee.IsActive == true && employee.UserId!=exceptUserId
+                               select new DropDownItem
+                               {
+                                   Key = employee.UserId.ToString(),
+                                   Value = employee.FirstName + " " + employee.LastName
+                               }).ToList();
+
+                    AllEmp = emp.OrderBy(x => x.Value).ToList();
+
+                }
+                
+
+
+
+
+                return AllEmp;
+            }
+        }
         public void Dispose()
         {
             //Nothing to dispose...
@@ -501,6 +539,7 @@ namespace NLTD.EmploeePortal.LMS.Dac.Dac
             Employee employee = null;
             int isSaved = 0;
             string retMsg = string.Empty;
+            bool noChanges = false;
             bool isAuthorizedRole = false;
             string remarks = string.Empty;
             using (var context = new NLTDDbContext())
@@ -527,23 +566,24 @@ namespace NLTD.EmploeePortal.LMS.Dac.Dac
                         }
                     }
 
-                    var isCorpIdExits = context.Employee.Where(e => e.LoginId == profile.LogonId.ToUpper()).FirstOrDefault();
+
 
                     if (profile.Mode == "Add")
                     {
+                        var isCorpIdExits = context.Employee.Where(e => e.LoginId == profile.LogonId.ToUpper()).FirstOrDefault();
                         if (isCorpIdExits != null)
-                        {
+                        {                            
                             return "DupCorp";
                         }
                     }
                     else
                     {
+                        var isCorpIdExits = context.Employee.Where(e => e.LoginId == profile.LogonId.ToUpper() && e.EmployeeId != employee.EmployeeId).FirstOrDefault();
                         if (isCorpIdExits != null)
                         {
-                            if (isCorpIdExits.EmployeeId != profile.LogonId.ToUpper())
-                            {
+                           
                                 return "DupCorp";
-                            }
+                            
                         }
                     }
 
@@ -690,9 +730,16 @@ namespace NLTD.EmploeePortal.LMS.Dac.Dac
                         // employee.IsHandleMembers = profile.IsHandleMembers;
                         employee.OfficeHolodayId = profile.OfficeHolodayId;
                         employee.EmployeeRoleId = profile.RoleId;
-                        employee.ModifiedOn = System.DateTime.Now;
-                        employee.ModifiedBy = ModifiedBy;
-                        isSaved = context.SaveChanges();
+                        if (remarks == "") { noChanges = true; }
+                        else
+                        {
+                            noChanges = false;
+                            employee.ModifiedOn = System.DateTime.Now;
+                            employee.ModifiedBy = ModifiedBy;
+                            isSaved = context.SaveChanges();
+                        }
+
+                        string isSameWeekoff = "";
 
                         var existingWeekOffs = (from wo in context.EmployeeWeekOff
                                                 join w in context.DayOfWeek on wo.DaysOfWeekId equals w.DaysOfWeekId
@@ -728,9 +775,19 @@ namespace NLTD.EmploeePortal.LMS.Dac.Dac
                                 //verify if they are same
                                 foreach (var item in existingWeekOffs)
                                 {
-                                    if (lstNewWeekOffs.Where(x => x == item.Day).Any()) { }
+                                    if (lstNewWeekOffs.Where(x => x == item.Day).Any())
+                                    {
+                                        if (isSameWeekoff == "")
+                                        {
+                                            isSameWeekoff = "Yes";
+                                            
+                                        }
+
+
+                                    }
                                     else
                                     {
+                                        isSameWeekoff = "No";
                                         dicttUpdateExisting.Add(item.EmpWeekOffId, prepareList.Where(x => x != item.Day).FirstOrDefault());
                                         prepareList.Remove(dicttUpdateExisting[item.EmpWeekOffId]);
 
@@ -747,47 +804,51 @@ namespace NLTD.EmploeePortal.LMS.Dac.Dac
                         {
                             deleteAndAdd = true;
                         }
-
-
-                        if (deleteAndAdd)
+                        if (isSameWeekoff != "Yes")
                         {
-                            var deleteOldOffs = context.EmployeeWeekOff.Where(x => x.UserId == employee.UserId).ToList();
-                            if (deleteOldOffs.Any())
+                            noChanges = false;
+                            remarks = remarks + "#WeeklyOff" + "^" + "Changed";
+                            if (deleteAndAdd)
                             {
-                                context.EmployeeWeekOff.RemoveRange(deleteOldOffs);
-                                context.SaveChanges();
-                            }
-                            EmployeeWeekOff ew;
-                            foreach (var item in lstNewWeekOffs)
-                            {
-                                dayOfWeek = context.DayOfWeek.Where(x => x.Day.ToUpper() == item.ToUpper()).FirstOrDefault().DaysOfWeekId;
-                                ew = new EmployeeWeekOff();
-                                ew.UserId = employee.UserId;
-                                ew.DaysOfWeekId = dayOfWeek;
-                                ew.ModifiedBy = -1;
-                                ew.ModifiedOn = System.DateTime.Now;
-                                ew.CreatedBy = ModifiedBy;
-                                ew.CreatedOn = System.DateTime.Now;
-                                context.EmployeeWeekOff.Add(ew);
-                                isSaved = context.SaveChanges();
-                            }
-                        }
-                        else
-                        {
-                            foreach (var item in dicttUpdateExisting)
-                            {
-                                var updtExist = context.EmployeeWeekOff.Where(x => x.EmployeeWeekOffId == item.Key).FirstOrDefault();
-                                dayOfWeek = context.DayOfWeek.Where(x => x.Day.ToUpper() == item.Value.ToUpper()).FirstOrDefault().DaysOfWeekId;
-                                if (updtExist != null)
+                                var deleteOldOffs = context.EmployeeWeekOff.Where(x => x.UserId == employee.UserId).ToList();
+                                if (deleteOldOffs.Any())
                                 {
-                                    updtExist.DaysOfWeekId = dayOfWeek;
-                                    updtExist.ModifiedBy = ModifiedBy;
-                                    updtExist.ModifiedOn = System.DateTime.Now;
+                                    context.EmployeeWeekOff.RemoveRange(deleteOldOffs);
+                                    context.SaveChanges();
+                                }
+                                EmployeeWeekOff ew;
+                                foreach (var item in lstNewWeekOffs)
+                                {
+                                    dayOfWeek = context.DayOfWeek.Where(x => x.Day.ToUpper() == item.ToUpper()).FirstOrDefault().DaysOfWeekId;
+                                    ew = new EmployeeWeekOff();
+                                    ew.UserId = employee.UserId;
+                                    ew.DaysOfWeekId = dayOfWeek;
+                                    ew.ModifiedBy = -1;
+                                    ew.ModifiedOn = System.DateTime.Now;
+                                    ew.CreatedBy = ModifiedBy;
+                                    ew.CreatedOn = System.DateTime.Now;
+                                    context.EmployeeWeekOff.Add(ew);
                                     isSaved = context.SaveChanges();
                                 }
+                            }
+                            else
+                            {
+                                foreach (var item in dicttUpdateExisting)
+                                {
+                                    var updtExist = context.EmployeeWeekOff.Where(x => x.EmployeeWeekOffId == item.Key).FirstOrDefault();
+                                    dayOfWeek = context.DayOfWeek.Where(x => x.Day.ToUpper() == item.Value.ToUpper()).FirstOrDefault().DaysOfWeekId;
+                                    if (updtExist != null)
+                                    {
+                                        updtExist.DaysOfWeekId = dayOfWeek;
+                                        updtExist.ModifiedBy = ModifiedBy;
+                                        updtExist.ModifiedOn = System.DateTime.Now;
+                                        isSaved = context.SaveChanges();
+                                    }
 
+                                }
                             }
                         }
+                        
                         if (isSaved > 0)
                         {
                             EmployeeTransactionHistory hist = new EmployeeTransactionHistory();
@@ -802,7 +863,10 @@ namespace NLTD.EmploeePortal.LMS.Dac.Dac
                         }
                         if (isSaved > 0)
                             retMsg = "Saved";
-                        else
+                        else if (noChanges) {
+                            retMsg = "noChanges";
+                        }
+                        else 
                         {
                             if (retMsg == "")
                                 retMsg = "Failed";
@@ -838,6 +902,29 @@ namespace NLTD.EmploeePortal.LMS.Dac.Dac
                     return 0;
                 else
                     return empPrf.UserId;
+            }
+        }
+        public string GetNewEmpId(Int64 OfficeId)
+        {
+            Int32 newEmpId = 0;
+            using (var context = new NLTDDbContext())
+            {
+                var empPrf = context.Employee.Where(x => x.OfficeId == OfficeId).OrderByDescending(x => x.EmployeeId).Select(x => x.EmployeeId).ToList();
+
+                if (empPrf.Count() != 0)
+                    newEmpId = empPrf.Select(int.Parse).ToList().Max();
+
+                //var empPrf = (from max in context.Employee
+                //              where !String.IsNullOrEmpty(max.EmployeeId)
+                //              select Convert.ToInt32(max.EmployeeId)).Max();
+
+                if (empPrf == null)
+                    return "0";
+                else
+                {
+                    newEmpId = newEmpId + 1;
+                    return Convert.ToString(newEmpId);
+                }
             }
         }
         public string ReportingToName(Int64 userId)

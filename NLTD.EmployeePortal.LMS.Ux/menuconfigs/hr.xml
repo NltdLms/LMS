@@ -7,13 +7,13 @@
       <icon>fa fa-asterisk</icon>
       <level1item>
         <MenuItem>
-          <title>Update Employee</title>
-          <url>/Profile/UpdateEmployee</url>
+          <title>Add Employee</title>
+          <url>/Profile/AddNewEmployee</url>
           <icon></icon>
         </MenuItem>
         <MenuItem>
-          <title>Add Employee</title>
-          <url>/Profile/AddNewEmployee</url>
+          <title>Update Employee</title>
+          <url>/Profile/UpdateEmployee</url>
           <icon></icon>
         </MenuItem>
         <MenuItem>

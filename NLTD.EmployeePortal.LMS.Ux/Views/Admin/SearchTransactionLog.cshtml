@@ -24,7 +24,7 @@
 @section scripts
 {
     <script src="~/Scripts/jquery-2.2.4.js"></script>
-    <script src="~/Scripts/lms.js?v=1.03"></script>
+    <script src="~/Scripts/lms.js?v=1.04"></script>
     <script type="text/javascript" src="~/Scripts/bootstrap.js"></script>
     <script src="~/Scripts/moment.js"></script>
     <link href="~/Content/bootstrap.css" rel="stylesheet" />
@@ -57,7 +57,6 @@
 }
 @{
     @Html.Hidden("RequestLevelPerson", (string)ViewBag.RequestLevelPerson)
-
     <div class="row">
         <div class="col-sm-12">
             <div class="box box-primary">
@@ -71,7 +70,7 @@
                                 <div class="col-sm-5">
                                     @*@{ if ((string)ViewBag.RequestLevelPerson != "My")
                                         {*@
-                                    @Html.LabelFor(x => x.Name)
+                                    @Html.LabelFor(x => x.Name, new { @class = "required" })
                                     @Html.TextBoxFor(m => m.Name, new { @class = "form-control" })
                                     @*}
                                         }*@
@@ -79,7 +78,7 @@
                                 <div class="col-sm-3"></div>
                                 <div class="col-sm-2"></div>
                                 <div class="col-sm-2" style="padding-top:27px;">
-                                    <button type="button" class="btn btn-primary pull-right" onclick="loadTransactionLog()">SEARCH</button>
+                                    <button type="button" class="btn btn-primary pull-right" onclick="loadTransactionLog();">SEARCH</button>
                                 </div>
                             </div>
                         </div>
@@ -88,6 +87,7 @@
             </div>
         </div>
     </div>
+    <div id="alert_placeholder"></div>
 
     <div id="divForHistoryLeave"></div>
 
@@ -98,7 +98,7 @@
     {
             <script>
         $("document").ready(function () {
-            loadTransactionLog()
+            loadTransactionLog();
         });
             </script>
         }
