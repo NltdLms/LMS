@@ -50,25 +50,31 @@
       <icon>fa fa-calculator</icon>
       <level1item>
         <MenuItem>
-          <title>My Team Attendance</title>
+          <title>Employee Attendence</title>
           <url>/Attendence/TeamAttendence</url>
           <icon></icon>
         </MenuItem>
         <MenuItem>
-          <title>My Team TimeSheet</title>
-          <url>/Attendence/MyTeamTimeSheet</url>
+          <title>Employee TimeSheet</title>
+          <url>/Attendence/TeamTimeSheet</url>
+          <icon></icon>
+        </MenuItem>
+        <MenuItem>
+          <title>Shift Master</title>
+          <url>/Shift/ShiftMaster</url>
           <icon></icon>
         </MenuItem>
         <MenuItem>
           <title>Shift Allocation - Individual</title>
-          <url>/Shift/TeamEmployeeShiftAllocation</url>
+          <url>/Shift/EmployeeShiftAllocation</url>
           <icon></icon>
         </MenuItem>
         <MenuItem>
           <title>Shift Allocation - Multiple</title>
-          <url>/Shift/TeamShiftAllocation</url>
+          <url>/Shift/AdminShiftAllocation</url>
           <icon></icon>
         </MenuItem>
+
       </level1item>
     </MenuItem>
   </menuitem>
