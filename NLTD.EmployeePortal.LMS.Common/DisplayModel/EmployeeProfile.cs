@@ -46,8 +46,9 @@ namespace NLTD.EmployeePortal.LMS.Common.DisplayModel
 
         public Int64 OfficeId { get; set; }
         public String LocationText { get; set; }
-        public Int32? ShiftId { get; set; }
         [Required(ErrorMessage = "Select Emplye Shift.")]
+        public Int32? ShiftId { get; set; }
+        
         public Int64? CardId { get; set; }
         public String Avatar { get; set; }
 

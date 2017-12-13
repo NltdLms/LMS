@@ -245,6 +245,8 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
                             employee.ErrorMesage = "The employee Id already exists.";
                         else if (result == "DupCorp")
                             employee.ErrorMesage = "The logon id was already assigned to another employee.";
+                        else if (result == "DupCard")
+                            employee.ErrorMesage = "The card id was already assigned to another employee.";
                     }
                 }        
 

@@ -71,7 +71,7 @@
       <level1item>
         <MenuItem>
           <title>My Team Attendance</title>
-          <url>/Attendence/TeamAttendence</url>
+          <url>/Attendence/MyTeamAttendence</url>
           <icon></icon>
         </MenuItem>
         <MenuItem>

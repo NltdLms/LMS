@@ -90,7 +90,7 @@ namespace NLTD.EmployeePortal.LMS.Ux.AppHelpers
                     menuPerPath = (Menu)serializer.Deserialize(reader);
                     menu.menuitem.AddRange(menuPerPath.menuitem);
                 }
-
+                menu.menuitem=RemoveDublicates(menu.menuitem);
                 return FormatMenuForAdminLTE(menu);
             }
             else
@@ -156,6 +156,53 @@ namespace NLTD.EmployeePortal.LMS.Ux.AppHelpers
             }
             MenuBuilder.Append("</a>");
             return MenuBuilder.ToString();
+        }
+
+        private static List<MenuItem> RemoveDublicates(List<MenuItem> menuItem)
+        {
+            List<MenuItem> returnList = new List<MenuItem>();
+            List<string> dublicateTitleList = new List<string>();
+            var dublicateTitle = (from m in menuItem
+                                           group m by m.title into g
+                                           where g.Count() > 1
+                                           select  new { title = g.Key });
+            foreach (var item in dublicateTitle)
+            {
+                dublicateTitleList.Add(item.title);   
+            }
+            List<MenuItem> menuWithoutDublicate = (from m in menuItem where !(dublicateTitleList.Contains(m.title)) select m).ToList();
+            List < MenuItem > menuWithDublicate = (from m in menuItem where (dublicateTitleList.Contains(m.title)) select m).OrderBy(m=>m.title).ToList();
+            List<string> alreadyFound = new List<string>();
+            List<MenuItem> mergedDublicateList = new List<MenuItem>();
+            for (int i = 0; i < menuWithDublicate.Count(); i++)
+            {
+                bool alreadyFoundTitle = false;
+                string currentTittle = menuWithDublicate[i].title;
+                for (int k = 0; k < alreadyFound.Count; k++)
+                {
+                    if (currentTittle == alreadyFound[k])
+                    {
+                        alreadyFoundTitle = true;
+                        break;
+                    }
+                }
+                if (alreadyFoundTitle)
+                {
+                    i = i + 1;
+                    continue;
+                }
+                mergedDublicateList.Add(menuWithDublicate[i]);
+                for (int j = i+1; j < menuWithDublicate.Count(); j++)
+                {
+                        if(currentTittle== menuWithDublicate[j].title)
+                        {
+                        mergedDublicateList[mergedDublicateList.Count() - 1].level1item.AddRange(menuWithDublicate[j].level1item);
+                        }
+                }
+                alreadyFound.Add(menuWithDublicate[i].title);
+            }
+            menuWithoutDublicate.AddRange(mergedDublicateList);
+            return menuWithoutDublicate;
         }
     }
 }

@@ -130,7 +130,7 @@ namespace NLTD.EmploeePortal.LMS.Dac.Dac
                                                    RoleId = employee.EmployeeRoleId,
                                                    RoleText = rt.Role,
                                                    UserId = employee.UserId,
-                                                   Avatar = employee.AvatarUrl,                                   
+                                                   Avatar = employee.AvatarUrl,
                                                    LogonId = employee.LoginId,
                                                    IsActive = employee.IsActive
                                                }).ToList();
@@ -511,7 +511,7 @@ namespace NLTD.EmploeePortal.LMS.Dac.Dac
                 else
                 {
                     var emp = (from employee in context.Employee
-                               where employee.OfficeId == OfficeId && employee.IsActive == true && employee.UserId!=exceptUserId
+                               where employee.OfficeId == OfficeId && employee.IsActive == true && employee.UserId != exceptUserId
                                select new DropDownItem
                                {
                                    Key = employee.UserId.ToString(),
@@ -521,7 +521,7 @@ namespace NLTD.EmploeePortal.LMS.Dac.Dac
                     AllEmp = emp.OrderBy(x => x.Value).ToList();
 
                 }
-                
+
 
 
 
@@ -622,6 +622,12 @@ namespace NLTD.EmploeePortal.LMS.Dac.Dac
                         {
                             return "DupCorp";
                         }
+                        var isCardIdExits = context.Employee.Where(e => e.Cardid == profile.CardId && e.Cardid != null && e.IsActive).FirstOrDefault();
+                        if (isCardIdExits != null)
+                        {
+                            return "DupCard";
+                        }
+
                     }
                     else
                     {
@@ -631,6 +637,11 @@ namespace NLTD.EmploeePortal.LMS.Dac.Dac
 
                             return "DupCorp";
 
+                        }
+                        var isCardIdExits = context.Employee.Where(e => e.Cardid == profile.CardId && e.Cardid != null && e.EmployeeId != employee.EmployeeId && e.IsActive).FirstOrDefault();
+                        if (isCardIdExits != null)
+                        {
+                            return "DupCard";
                         }
                     }
 
