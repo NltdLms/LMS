@@ -47,21 +47,6 @@
           <icon></icon>
         </MenuItem>
         
-        <MenuItem>
-          <title>My Team Attendence</title>
-          <url>/Attendence/TeamAttendence</url>
-          <icon></icon>
-        </MenuItem>
-       <MenuItem>
-          <title>My Team TimeSheet</title>
-          <url>/Attendence/MyTeamTimeSheet</url>
-          <icon></icon>
-        </MenuItem>
-        <MenuItem>
-          <title>Shift Management</title>
-          <url>/Shift/TeamShiftAllocation</url>
-          <icon></icon>
-        </MenuItem>
       </level1item>
     </MenuItem>
     <MenuItem>
