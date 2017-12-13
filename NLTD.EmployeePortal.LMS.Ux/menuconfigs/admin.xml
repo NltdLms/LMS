@@ -2,6 +2,53 @@
 <Menu xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <menuitem>
     <MenuItem>
+      <title>Dashboard</title>
+      <url>/Dashboard</url>
+      <icon>fa fa-tachometer</icon>
+    </MenuItem>
+    <MenuItem>
+      <title>My Requests</title>
+      <url>#</url>
+      <icon>fa fa-user-circle-o</icon>
+      <level1item>
+        <MenuItem>
+          <title>Apply New Request</title>
+          <url>/Leaves/Apply</url>
+          <icon></icon>
+        </MenuItem>
+        <MenuItem>
+          <title>Request History</title>
+          <url>/Leaves/MyLeaveHistory</url>
+          <icon></icon>
+        </MenuItem>
+        <MenuItem>
+          <title>Day wise Report</title>
+          <url>/Admin/MyDaywiseLeaves</url>
+          <icon></icon>
+        </MenuItem>
+        <MenuItem>
+          <title>Month wise Report</title>
+          <url>/Admin/MyMonthWiseLeaves</url>
+          <icon></icon>
+        </MenuItem>
+        <MenuItem>
+          <title>Year wise Report</title>
+          <url>/Admin/MyYearWiseLeaveSumary</url>
+          <icon></icon>
+        </MenuItem>
+        <MenuItem>
+          <title>Permissions Report</title>
+          <url>/Admin/MyPermissions</url>
+          <icon></icon>
+        </MenuItem>
+        <MenuItem>
+          <title>View Transaction Log</title>
+          <url>/Admin/MyTransactionLogs</url>
+          <icon></icon>
+        </MenuItem>
+      </level1item>
+    </MenuItem>
+    <MenuItem>
       <title>Admin</title>
       <url>#</url>
       <icon>fa fa-calculator</icon>
@@ -50,13 +97,23 @@
       <icon>fa fa-calculator</icon>
       <level1item>
         <MenuItem>
+          <title>My Attendendance</title>
+          <url>/Attendence/MyAttendence</url>
+          <icon></icon>
+        </MenuItem>
+        <MenuItem>
+          <title>My TimeSheet</title>
+          <url>/Attendence/MyTimeSheet</url>
+          <icon></icon>
+        </MenuItem>
+        <MenuItem>
           <title>Employee Attendence</title>
-          <url>/Attendence/TeamAttendence</url>
+          <url>/Attendence/MyTeamAttendence</url>
           <icon></icon>
         </MenuItem>
         <MenuItem>
           <title>Employee TimeSheet</title>
-          <url>/Attendence/TeamTimeSheet</url>
+          <url>/Attendence/MyTeamTimeSheet</url>
           <icon></icon>
         </MenuItem>
         <MenuItem>
