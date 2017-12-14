@@ -97,7 +97,7 @@
       <icon>fa fa-calculator</icon>
       <level1item>
         <MenuItem>
-          <title>My Attendendance</title>
+          <title>My Attendance</title>
           <url>/Attendence/MyAttendence</url>
           <icon></icon>
         </MenuItem>
@@ -107,7 +107,7 @@
           <icon></icon>
         </MenuItem>
         <MenuItem>
-          <title>Employee Attendence</title>
+          <title>Employee Attendance</title>
           <url>/Attendence/MyTeamAttendence</url>
           <icon></icon>
         </MenuItem>

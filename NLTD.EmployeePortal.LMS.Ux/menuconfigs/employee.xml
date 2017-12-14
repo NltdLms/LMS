@@ -55,7 +55,7 @@
       <icon>fa fa-user-circle-o</icon>
       <level1item>
         <MenuItem>
-          <title>My Attendendance</title>
+          <title>My Attendance</title>
           <url>/Attendence/MyAttendence</url>
           <icon></icon>
         </MenuItem>
