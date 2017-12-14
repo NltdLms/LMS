@@ -1255,11 +1255,6 @@ function AddShiftPopup(shiftId) {
 
     $("#divForAddShift").load('/Shift/GetShiftMasterDetailwithId?shiftId=' + shiftId,
         function () {
-            $("#ShiftDetail").dataTable({
-                columnDefs: [
-                    { targets: 'no-sort', orderable: false }
-                ]
-            });
             $("#divLoading").hide();
             $('html, body').animate({
                 scrollTop: 230 // Means Less header height
@@ -1267,12 +1262,12 @@ function AddShiftPopup(shiftId) {
         });
     $('#myModal').on('shown.bs.modal', function (e) {
         $('.timepicker').timepicker({
-            timeFormat: "HH:mm:ss"
+            timeFormat: "HH:mm"
         }
         );
     });
     $("#myModal").modal('show');
-    $("#divLoading").hide();
+    // $("#divLoading").hide();
 }
 
 function SaveShiftMaster() {
@@ -1282,8 +1277,24 @@ function SaveShiftMaster() {
     shiftId = $("#ShiftId").val().trim();
     fromTime = $("#fromTime").val().trim();
     toTime = $("#toTime").val().trim();
-    if (shiftName == '') {
-        Clearshowalert("Please enter the Shift Name", "alert alert-danger");
+
+    //if (shiftName == '') {
+    //    Clearshowalert("Please enter the Shift Name", "alert alert-danger");
+    //    return;
+    //}
+
+    if (fromTime == '') {
+        Clearshowalert("Please enter the Start Time.", "alert alert-danger");
+        return;
+    }
+
+    if (toTime == '') {
+        Clearshowalert("Please enter the End Time.", "alert alert-danger");
+        return;
+    }
+
+    if (fromTime == toTime) {
+        Clearshowalert("Start time and End time should not be same.", "alert alert-danger");
         return;
     }
 
@@ -1317,7 +1328,6 @@ function SaveShiftMaster() {
     //$("#myModal").modal('show');
     $("#divLoading").hide();
 }
-
 function loadShiftDetails() {
 
     $("#divLoading").show();

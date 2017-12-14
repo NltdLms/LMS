@@ -109,28 +109,30 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
         public ActionResult SaveShiftMaster(int shiftId, string shiftName, TimeSpan fromTime, TimeSpan toTime)
         {
             string result = "";
-            TimeSpan tempToTime = toTime;
-            if (toTime < fromTime)
-                tempToTime = toTime.Add(TimeSpan.FromHours(24));
+            //TimeSpan tempToTime = toTime;
+            //if (toTime < fromTime)
+            //    tempToTime = toTime.Add(TimeSpan.FromHours(24));
 
-            TimeSpan duration = tempToTime - fromTime;
-            int workinghours = Math.Abs(Convert.ToInt32(duration.TotalHours));
-            if (workinghours == 9)
+            //TimeSpan duration = tempToTime - fromTime;
+            //int workinghours = Math.Abs(Convert.ToInt32(duration.TotalHours));
+            //if (workinghours == 9)
+            //{
+            if (ModelState.IsValid)
             {
-                if (ModelState.IsValid)
+                using (var client = new ShiftClient())
                 {
-                    using (var client = new ShiftClient())
-                    {
-                        result = client.SaveShiftMaster(shiftId, shiftName, fromTime, toTime, this.UserId);
-                    }
+                    result = client.SaveShiftMaster(shiftId, shiftName, fromTime, toTime, this.UserId);
                 }
             }
-            else
-            {
-                result = "Woking hours should be 9 hours only ";
-            }
+            //}
+            //else
+            //{
+            //    result = "Woking hours should be 9 hours only ";
+            //}
             return Json(result);
         }
+
+
 
         public ActionResult EmployeeShiftAllocation()
         {

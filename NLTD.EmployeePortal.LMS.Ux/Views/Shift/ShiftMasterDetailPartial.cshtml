@@ -5,18 +5,17 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayName("ShiftID")
+                @Html.DisplayName("Shift ID")
             </th>
             <th>
-                @Html.DisplayName("ShiftName")
+                @Html.DisplayName("From Time")
             </th>
             <th>
-                @Html.DisplayName("FromTime")
+                @Html.DisplayName("To Time")
             </th>
             <th>
-                @Html.DisplayName("ToTime")
+                @Html.DisplayName("Shift Name")
             </th>
-
             <th class="no-sort">
                 @Html.DisplayName("Action")
             </th>
@@ -25,21 +24,21 @@
     <tbody>
         @foreach (var item in Model)
         {
+            string FromTime = string.Format("{0:hh\\:mm}", item.FromTime);
+            string ToTime = string.Format("{0:hh\\:mm}", item.ToTime);
             <tr>
-
                 <td>
                     @Html.DisplayFor(modelItem => item.ShiftId)
                 </td>
                 <td>
+                    @FromTime
+                </td>
+                <td>
+                    @ToTime
+                </td>
+                <td>
                     @Html.DisplayFor(modelItem => item.ShiftName)
                 </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.FromTime)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.ToTime)
-                </td>
-
                 <td>
                     <button type="button" class="btn btn-primary" onclick="AddShiftPopup(@item.ShiftId)">EDIT</button>
                 </td>
@@ -47,4 +46,3 @@
         }
     </tbody>
 </table>
-

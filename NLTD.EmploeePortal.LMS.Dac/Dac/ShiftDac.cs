@@ -231,27 +231,34 @@ namespace NLTD.EmploeePortal.LMS.Dac
 
                 using (var context = new NLTDDbContext())
                 {
-                    var objShiftMaster = context.ShiftMaster.Where(c => c.ShiftID == shiftId).SingleOrDefault();
-                    if (objShiftMaster != null)
+                    var exists = context.ShiftMaster.Where(c => c.FromTime == fromTime && c.ToTime == toTime && c.ShiftID != shiftId).ToList();
+                    if (exists != null && exists.Count > 0)
                     {
-                        objShiftMaster = context.ShiftMaster.Where(c => c.ShiftID == shiftId).Single();
-                        objShiftMaster.ShiftID = shiftId;
-                        objShiftMaster.ShiftDescription = shiftName;
-                        objShiftMaster.FromTime = fromTime;
-                        objShiftMaster.ToTime = toTime;
+                        return "Shift Already Available.";
                     }
                     else
                     {
-                        objShiftMaster = new ShiftMaster();
-                        objShiftMaster.ShiftDescription = shiftName;
-                        objShiftMaster.FromTime = fromTime;
-                        objShiftMaster.ToTime = toTime;
-                        objShiftMaster.CreatedBy = mgrId;
-                        objShiftMaster.CreatedDate = DateTime.Now;
+                        var objShiftMaster = context.ShiftMaster.Where(c => c.ShiftID == shiftId).SingleOrDefault();
+                        if (objShiftMaster != null)
+                        {
+                            objShiftMaster = context.ShiftMaster.Where(c => c.ShiftID == shiftId).Single();
+                            objShiftMaster.ShiftID = shiftId;
+                            objShiftMaster.ShiftDescription = shiftName;
+                            objShiftMaster.FromTime = fromTime;
+                            objShiftMaster.ToTime = toTime;
+                        }
+                        else
+                        {
+                            objShiftMaster = new ShiftMaster();
+                            objShiftMaster.ShiftDescription = shiftName;
+                            objShiftMaster.FromTime = fromTime;
+                            objShiftMaster.ToTime = toTime;
+                            objShiftMaster.CreatedBy = mgrId;
+                            objShiftMaster.CreatedDate = DateTime.Now;
+                        }
+                        context.ShiftMaster.AddOrUpdate(objShiftMaster);
+                        isSaved = context.SaveChanges();
                     }
-                    context.ShiftMaster.AddOrUpdate(objShiftMaster);
-                    isSaved = context.SaveChanges();
-
                 }
 
                 return isSaved > 0 ? "Saved" : "Failed";
@@ -261,6 +268,8 @@ namespace NLTD.EmploeePortal.LMS.Dac
                 return ex.Message;
             }
         }
+
+
 
         public EmpShift GetEmployeeShiftDetails(string Name, string RequestMenuUser, long LeaduserId)
         {

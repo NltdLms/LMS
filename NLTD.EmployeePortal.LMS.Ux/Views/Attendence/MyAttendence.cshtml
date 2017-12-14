@@ -29,12 +29,12 @@
     <script src="~/Scripts/lms.js?v=1.03"></script>
     <script type="text/javascript" src="~/Scripts/bootstrap.js"></script>
     <script src="~/Scripts/bootstrap-datetimepicker.js"></script>
-    <link href="~/Content/bootstrap-datetimepicker.css" rel="stylesheet"/>
+    <link href="~/Content/bootstrap-datetimepicker.css" rel="stylesheet" />
 
     <script src="~/Scripts/moment.js"></script>
-    <link href="~/Content/bootstrap.css" rel="stylesheet"/>
+    <link href="~/Content/bootstrap.css" rel="stylesheet" />
     <script type="text/JavaScript">
-        $(document).ready(function() {
+        $(document).ready(function () {
             $("#DateRange").daterangepicker({
                 locale: {
                     format: 'DD-MM-YYYY'
@@ -57,21 +57,21 @@
             $("#ToDate").val(curdate.getDate() + "-" + curdate.getMonth() + "-" + curdate.getFullYear());
 
             $('#DateRange').on('apply.daterangepicker',
-                function(ev, picker) {
+                function (ev, picker) {
                     $("#FromDate").val(picker.startDate.format('DD-MM-YYYY'));
                     $("#ToDate").val(picker.endDate.format('DD-MM-YYYY'));
                 });
 
             $("#Name").autocomplete({
-                source: function(request, response) {
+                source: function (request, response) {
                     $.ajax({
                         url: "/Admin/GetEmployeeList",
                         type: "POST",
                         dataType: "json",
                         data: { term: request.term },
-                        success: function(data) {
+                        success: function (data) {
                             response($.map(data,
-                                function(item) {
+                                function (item) {
                                     return { label: item.Name, value: item.Name };
                                 }))
 
@@ -81,29 +81,29 @@
                 },
                 messages: {
                     noResults: "",
-                    results: function() {}
+                    results: function () { }
                 }
             });
-          
-                $("#divLoading").show();
-                $("#divForEmployeeAttendence")
-                    .load('/Admin/loadEmployeeAttendence?FromDate=Nodate&ToDate=Nodate&requestLevelPerson=' + $("#RequestLevelPerson").val(),
-                        function() {
-                            $("#Attendencetable_id").dataTable();
-                            $("#divLoading").hide();
-                            $('html, body').animate({
-                                    scrollTop: 230 // Means Less header height
-                                },
-                                400);
 
-                        });
+            $("#divLoading").show();
+            $("#divForEmployeeAttendence")
+                .load('/Admin/loadEmployeeAttendence?FromDate=Nodate&ToDate=Nodate&requestLevelPerson=' + $("#RequestLevelPerson").val(),
+                function () {
+                    $("#Attendencetable_id").dataTable();
+                    $("#divLoading").hide();
+                    $('html, body').animate({
+                        scrollTop: 230 // Means Less header height
+                    },
+                        400);
+
+                });
 
 
         });
 
         function Validate() {
             if ($("#RequestLevelPerson").val() === "Team") {
-                if ($("#Name").val()==="") {
+                if ($("#Name").val() === "") {
                     alert("Please enter the name");
                     return false;
                 }
@@ -114,9 +114,9 @@
 }
 
 @{
- 
 
-   
+
+
 
     if (@Model != null)
     {
@@ -159,7 +159,7 @@
                                         <button type="button" class="btn btn-primary" onclick="loadAttendenceRangeSummary()">SEARCH</button>
 
                                     </div>
-                                   
+
                                 </div>
 
 
@@ -180,22 +180,20 @@
                                         @Html.TextBoxFor(m => m.Name, new { @class = "form-control" })
 
                                     </div>
-
-                                </div>
-                                <div class="row">
-                                    <div class="col-sm-9"></div>
                                     <div class="col-sm-1">
-
-                                        <button type="button" class="btn btn-primary" onclick="loadAttendenceRangeSummary()">SEARCH</button>
+                                    </div>
+                                    <div class="col-sm-1">
+                                        <br />
+                                        <button style="margin-top:5px" type="button" class="btn btn-primary" onclick="loadAttendenceRangeSummary()">SEARCH</button>
 
                                     </div>
-                                    
                                 </div>
-                                            }
+
+                            }
                         }
                         <br />
-                        <div id="alert_placeholder" >
-                            
+                        <div id="alert_placeholder">
+
                         </div>
                     </form>
 
