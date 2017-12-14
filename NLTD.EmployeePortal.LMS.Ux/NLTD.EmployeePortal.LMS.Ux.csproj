@@ -729,6 +729,9 @@
     <Content Include="Views\Shift\ShiftAllocationDetailPartial.cshtml" />
     <Content Include="Views\Shift\AddOrEditShiftAllocation.cshtml" />
     <Content Include="Views\Shift\ShiftAllocation.cshtml" />
+    <Content Include="Views\Shift\EmployeeShiftAllocation.cshtml" />
+    <Content Include="Views\Shift\EmpShiftAllocationPartial.cshtml" />
+    <Content Include="Views\Shift\EmpShiftAllocationSubDetailPartial.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

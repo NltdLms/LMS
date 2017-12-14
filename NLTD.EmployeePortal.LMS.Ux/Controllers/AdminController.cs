@@ -584,7 +584,7 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
                  startDateFormatted = DateTime.Parse(FromDate, new CultureInfo("en-GB", true));
                  endDateFormatted = DateTime.Parse(ToDate, new CultureInfo("en-GB", true));
             }
-            
+           
             IEmployeeAttendanceHelper employeeAttendanceHelper = new EmplyeeAttendenceClient();
             employeeAttendanceModelList = employeeAttendanceHelper.GetAttendenceForRange(userID, startDateFormatted, endDateFormatted, requestLevelPerson);
             requestLevelPerson = tempRequestLevelPerson;
@@ -638,6 +638,10 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
                 requestLevelPerson = "My";
                 
                 TimeSheetQueryModelObj.UserID = UserID;
+            }
+            if(TimeSheetQueryModelObj.ToDate>DateTime.Now)
+            {
+                TimeSheetQueryModelObj.ToDate = DateTime.Now;
             }
             List<TimeSheetModel> timeSheetModelList = new List<TimeSheetModel>();
             if(requestLevelPerson=="My")

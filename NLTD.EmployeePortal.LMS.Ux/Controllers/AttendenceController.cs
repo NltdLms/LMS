@@ -42,5 +42,15 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
             ViewBag.RequestLevelPerson = "Team";
             return View("TimeSheet");
         }
+        public ActionResult EmployeeTimeSheet()
+        {
+            ViewBag.RequestLevelPerson = "Admin";
+            return View("TimeSheet");
+        }
+        public ActionResult EmployeeAttendence()
+        {
+            ViewBag.RequestLevelPerson = "Admin";
+            return View("MyAttendence");
+        }
     }
 }

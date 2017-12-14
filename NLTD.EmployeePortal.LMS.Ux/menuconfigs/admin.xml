@@ -108,12 +108,12 @@
         </MenuItem>
         <MenuItem>
           <title>Employee Attendance</title>
-          <url>/Attendence/MyTeamAttendence</url>
+          <url>/Attendence/EmployeeAttendence</url>
           <icon></icon>
         </MenuItem>
         <MenuItem>
           <title>Employee TimeSheet</title>
-          <url>/Attendence/MyTeamTimeSheet</url>
+          <url>/Attendence/EmployeeTimeSheet</url>
           <icon></icon>
         </MenuItem>
         <MenuItem>

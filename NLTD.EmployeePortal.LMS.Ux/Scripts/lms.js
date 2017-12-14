@@ -1203,13 +1203,14 @@ function loadAttendenceRangeSummary() {
 }
 function loadTimeSheetSummary()
 {
-    debugger
     var URL = '/Admin/LoadMyTimesheet';
     $("#divLoading").show();
     if ($("#RequestLevelPerson").val() === "Team") {
         URL = '/Admin/LoadMyTeamTimesheet';
     }
     $("#divForTimesheet").html("");
+    $("#alert_placeholder").html("");
+    
     $("#divForTimesheet")
         .load(URL, { TimeSheetQueryModelObj: { FromDate: $("#FromDate").val(), ToDate: $("#ToDate").val(), Name: $("#Name").val() } },
         function (responseText, textStatus, req) {
@@ -1248,9 +1249,9 @@ function loadShiftMasterDetails() {
 function AddShiftPopup(shiftId) {
     $("#alert_placeholder").empty();
     $("#divLoading").show();
-    $("#ModelTitle").html("Edit Shift");
+    $("#ModelTitle").html("Add New Shift");
     if (shiftId !== 0) {
-        $("#ModelTitle").html("Add New Shift");
+        $("#ModelTitle").html("Edit Shift");
     }
 
     $("#divForAddShift").load('/Shift/GetShiftMasterDetailwithId?shiftId=' + shiftId,

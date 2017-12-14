@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using NLTD.EmployeePortal.LMS.Repository;
 using NLTD.EmploeePortal.LMS.Dac.DbModel;
+using System.Configuration;
 
 namespace NLTD.EmploeePortal.LMS.Dac.Dac
 {
@@ -219,12 +220,13 @@ namespace NLTD.EmploeePortal.LMS.Dac.Dac
             // To get the employee Leave Details
             LeaveTransactionHistoryDac leaveTransactionHistoryDacObj = new LeaveTransactionHistoryDac();
             List<Leave> employeeLeaveList = leaveTransactionHistoryDacObj.GetLeaveForEmployee(UserID);
-
+            int BeforeShiftBuffer = Convert.ToInt32(ConfigurationManager.AppSettings["BeforeShiftBuffer"]);
+            int AfterShiftBuffer = Convert.ToInt32(ConfigurationManager.AppSettings["AfterShiftBuffer"]);
             for (int i = 0; i < ShiftQueryModelList.Count(); i++)
             {
                 TimeSheetModel TimeSheetModelObj = new TimeSheetModel();
-                DateTime shiftFromDateTime = ShiftQueryModelList[i].ShiftDate.Add(ShiftQueryModelList[i].ShiftFromtime.Add(new TimeSpan(-3, 0, 0)));
-                DateTime shiftEndDateTime = ShiftQueryModelList[i].ShiftDate.Add(ShiftQueryModelList[i].ShiftTotime.Add(new TimeSpan(5, 0, 0)));
+                DateTime shiftFromDateTime = ShiftQueryModelList[i].ShiftDate.Add(ShiftQueryModelList[i].ShiftFromtime.Add(new TimeSpan(-BeforeShiftBuffer, 0, 0)));
+                DateTime shiftEndDateTime = ShiftQueryModelList[i].ShiftDate.Add(ShiftQueryModelList[i].ShiftTotime.Add(new TimeSpan(AfterShiftBuffer, 0, 0)));
 
                 if(shiftEndDateTime<shiftFromDateTime)
                 {
