@@ -22,15 +22,17 @@
         @foreach (var item in Model)
         {
             var ShiftDate = item.ShiftDate.ToString("dd-MM-yyyy");
+            string FromTime = string.Format("{0:hh\\:mm}", item.FromTime);
+            string ToTime = string.Format("{0:hh\\:mm}", item.ToTime);
             <tr>
                 <td>
                     @Html.DisplayFor(modelItem => ShiftDate)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.FromTime)
+                    @Html.DisplayFor(modelItem => FromTime)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.ToTime)
+                    @Html.DisplayFor(modelItem => ToTime)
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.ShiftName)

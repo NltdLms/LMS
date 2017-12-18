@@ -1179,9 +1179,12 @@ function loadTransactionLog() {
 }
 
 function loadAttendenceRangeSummary() {
-    URL = '/Admin/loadEmployeeAttendence?Name=' + $("#Name").val().replace(new RegExp(" ", "g"), '|') + '&FromDate=' + $('#FromDate').val() + '&ToDate=' + $('#ToDate').val() + '&requestLevelPerson=' + $('#RequestLevelPerson').val();
-    if ($("#RequestLevelPerson").val() === "My" ) {
+    
+    if ($("#RequestLevelPerson").val() === "My") {
         URL = '/Admin/loadEmployeeAttendence?&FromDate=' + $('#FromDate').val() + '&ToDate=' + $('#ToDate').val() + '&requestLevelPerson=' + $('#RequestLevelPerson').val();
+    }
+    else {
+        URL = '/Admin/loadEmployeeAttendence?Name=' + $("#Name").val().replace(new RegExp(" ", "g"), '|') + '&FromDate=' + $('#FromDate').val() + '&ToDate=' + $('#ToDate').val() + '&requestLevelPerson=' + $('#RequestLevelPerson').val();
     }
         $("#divLoading").show();
     $("#divForEmployeeAttendence")
