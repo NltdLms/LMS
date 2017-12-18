@@ -1479,7 +1479,7 @@ function GetEmployeeShiftDetails(FromDate, ToDate, Shift) {
 }
 
 function SaveIndividualEmployeeShift() {
-
+    $("#alert_placeholder").empty();
     var Shift = $("#Shift").val();
     var FromDate = $("#FromDate").val();
     var ToDate = $("#ToDate").val();
