@@ -2,9 +2,9 @@
 
 
 @model IList<NLTD.EmployeePortal.LMS.Common.DisplayModel.TimeSheetModel>
-
+<script type="text/javascript" src="~/Scripts/lms.js?v=1.04"></script>
 <style type="text/css">
-    .red {
+    .belowworkinghours {
         color: red;
     }
 
@@ -51,7 +51,120 @@
         background-color: #26a69a;
     }
 </style>
-@if (ViewBag.RequestLevelPerson == "Team")
+
+@if (ViewBag.RequestLevelPerson == "My")
+{
+    <table id="TimesheetTable_id"
+           class="table table-condensed table-striped table-hover dtatable">
+        <thead>
+
+            <tr>
+
+
+
+                <th>
+                    @Html.DisplayName("Date")
+                </th>
+                <th>
+                    @Html.DisplayName("Shift")
+                </th>
+                <th>
+                    @Html.DisplayName("In Time")
+                </th>
+                <th>
+                    @Html.DisplayName("Out Time")
+                </th>
+                <th>
+                    @Html.DisplayName("Working Hours")
+                </th>
+                <th>
+                    @Html.DisplayName("Status")
+                </th>
+                <th>
+                    @Html.DisplayName("LMS Status")
+                </th>
+            </tr>
+        </thead>
+
+        <tbody>
+            @if (Model != null)
+            {
+                foreach (var item in Model)
+                {
+                    string statusStyle = string.Empty;
+                    if (@item.Status == "WeekOff")
+                    {
+                        statusStyle = "weekoff";
+                    }
+                    else if (@item.WorkingHours < new TimeSpan(9, 0, 0))
+                    {
+                        statusStyle = "belowworkinghours";
+                    }
+                    <tr class="@statusStyle">
+
+
+                        <td>
+                            @if (item.WorkingDate != null)
+                        {
+                                @item.WorkingDate.ToString("dd-MM-yyyy");
+                        }
+                        else
+                        {
+                                @Html.DisplayName("-")
+                            }
+                        </td>
+                        <td>
+
+                            @item.Shift
+
+                        </td>
+                        <td>
+                            @if (item.InTime == DateTime.MinValue)
+                        {
+                                @Html.DisplayName("-")
+                            }
+                            else if (@item.InTime != null)
+                            {
+                                @item.InTime.ToString("HH:mm:ss");
+                        }
+
+                        else
+                        {
+                                @Html.DisplayName("-")
+                            }
+                        </td>
+                        <td>
+
+                            @if (item.OutTime == DateTime.MinValue)
+                        {
+                                @Html.DisplayName("-")
+                            }
+                            else if (@item.OutTime != null)
+                            {
+                                @item.OutTime.ToString("HH:mm:ss")
+                            }
+                            else
+                            {
+                                @Html.DisplayName("-")
+                            }
+                        </td>
+                        <td>
+                            @item.WorkingHours
+                        </td>
+                        <td>
+                            @item.Status
+                        </td>
+                        <td>
+                            @item.LMSStatus
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+
+}
+else
 {
     <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
         @for (int i = 0; i < Model.Count; i++)
@@ -67,15 +180,11 @@
 
                     </h4>
                 </div>
-                <div id="@("collapse" + Model[i].userID)" style="background-color:#ecf0f5" class="panel-collapse collapse" role="tabpanel" aria-labelledby="@("heading" + Model[i].Name)">
+                <div id="@("collapse" + Model[i].userID)" style="background-color:#ecf0f5" class="panel-collapse collapse" role="tabpanel" aria-labelledby="@("heading" + Model[i].userID)">
                     <div class="panel-body">
                         <table class="table table-condensed table-striped table-hover dtatable">
                             <thead>
-                                <tr>
-                                    <th>
-                                        @Html.DisplayName("Name")
-                                    </th>
-
+                                <tr>                                    
                                     <th>
                                         @Html.DisplayName("Date")
                                     </th>
@@ -94,6 +203,9 @@
                                     <th>
                                         @Html.DisplayName("Status")
                                     </th>
+                                    <th>
+                                        @Html.DisplayName("LMS Status")
+                                    </th>
                                 </tr>
                             </thead>
 
@@ -104,6 +216,10 @@
                                     if (Model[j].Status == "WeekOff")
                                     {
                                         statusStyle = "weekoff";
+                                    }
+                                    else if (Model[j].WorkingHours < new TimeSpan(9, 0, 0) && Model[j].Status=="Present")
+                                    {
+                                        statusStyle = "belowworkinghours";
                                     }
                                     if (Model[j].userID != userID)
                                     {
@@ -116,10 +232,7 @@
                                         i = j;
                                         break;
                                     }
-                                    <tr class="@statusStyle">
-                                        <td>
-                                            @Model[j].Name
-                                        </td>
+                                    <tr >
                                         <td>
                                             @if (Model[j].WorkingDate != null)
                                             {
@@ -165,11 +278,14 @@
                                                 @Html.DisplayName("-")
                                             }
                                         </td>
-                                        <td>
+                                        <td class="@statusStyle">
                                             @Model[j].WorkingHours
                                         </td>
                                         <td>
                                             @Model[j].Status
+                                        </td>
+                                        <td>
+                                            @Model[j].LMSStatus
                                         </td>
                                     </tr>
 
@@ -181,106 +297,5 @@
             </div>
         }
     </div>
-}
-else
-{
-    <table id="TimesheetTable_id"
-           class="table table-condensed table-striped table-hover dtatable">
-        <thead>
-
-            <tr>
-
-
-                
-                <th>
-                    @Html.DisplayName("Date")
-                </th>
-                <th>
-                    @Html.DisplayName("Shift")
-                </th>
-                <th>
-                    @Html.DisplayName("In Time")
-                </th>
-                <th>
-                    @Html.DisplayName("Out Time")
-                </th>
-                <th>
-                    @Html.DisplayName("Working Hours")
-                </th>
-                <th>
-                    @Html.DisplayName("Status")
-                </th>
-            </tr>
-        </thead>
-
-        <tbody>
-            @if (Model != null)
-            {
-                foreach (var item in Model)
-                {
-                    string statusStyle = string.Empty;
-                    if (@item.Status == "WeekOff")
-                    {
-                        statusStyle = "weekoff";
-                    }
-                    <tr class="@statusStyle">
-
-
-                        <td>
-                            @if (item.WorkingDate != null)
-                        {
-                            @item.WorkingDate.ToString("dd-MM-yyyy");
-                        }
-                        else
-                        {
-                            @Html.DisplayName("-")
-                            }
-                        </td>
-                        <td>
-
-                            @item.Shift
-
-                        </td>
-                        <td>
-                            @if (item.InTime == DateTime.MinValue)
-                        {
-                            @Html.DisplayName("-")
-                            }
-                            else if (@item.InTime != null)
-                            {
-                            @item.InTime.ToString("HH:mm:ss");
-                        }
-
-                        else
-                        {
-                            @Html.DisplayName("-")
-                            }
-                        </td>
-                        <td>
-
-                            @if (item.OutTime == DateTime.MinValue)
-                        {
-                            @Html.DisplayName("-")
-                            }
-                            else if (@item.OutTime != null)
-                            {
-                            @item.OutTime.ToString("HH:mm:ss")
-                            }
-                            else
-                            {
-                            @Html.DisplayName("-")
-                            }
-                        </td>
-                        <td>
-                            @item.WorkingHours
-                        </td>
-                        <td>
-                            @item.Status
-                        </td>
-                    </tr>
-                }
-            }
-        </tbody>
-    </table>
 }
 

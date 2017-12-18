@@ -43,8 +43,6 @@
                             response($.map(data, function (item) {
                                 return { label: item.Name, value: item.Name };
                             }))
-
-
                         }
                     })
                 },
@@ -71,7 +69,7 @@
                                 <div class="col-sm-5">
                                     @*@{ if ((string)ViewBag.RequestLevelPerson != "My")
                                         {*@
-                                    @Html.LabelFor(x => x.Name)
+                                    @Html.LabelFor(x => x.Name, new { @class = "required" })
                                     @Html.TextBoxFor(m => m.Name, new { @class = "form-control" })
                                     @*}
                                         }*@

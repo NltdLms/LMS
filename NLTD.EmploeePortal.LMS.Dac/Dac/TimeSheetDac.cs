@@ -35,107 +35,9 @@ namespace NLTD.EmploeePortal.LMS.Dac.Dac
             }
             return shiftQueryModelList.OrderBy(m => m.ShiftDate).ToList();
         }
-        public List<TimeSheetModel> GetTimeSheet(Int64 UserID, DateTime FromDate, DateTime ToDate, string requestLevelPerson)
-        {
-            List<TimeSheetModel> timeSheetModelList = new List<TimeSheetModel>();
-            // To retrive the Shift details for the employee
-            List<ShiftQueryModel> shiftQueryModelList = GetShiftDetails(UserID, FromDate, ToDate);
-
-            IEmployeeAttendanceHelper EmployeeAttendanceDacObj = new EmployeeAttendanceDac();
-            //To Retrive the Employee Attendence for the given date.
-            List<EmployeeAttendanceModel> EmployeeAttendenceList = EmployeeAttendanceDacObj.GetAttendenceForRange(UserID, FromDate, ToDate, requestLevelPerson);
-
-            DateTime currentDate = FromDate;
-            // To get the employee profile
-            EmployeeProfile EmployeeProfileObj = new EmployeeDac().GetEmployeeProfile(UserID);
-            string employeeName = EmployeeProfileObj.FirstName + " " + EmployeeProfileObj.LastName;
-
-            // To get the employee weekoff Days
-            OfficeWeekOffDac officeWeekOffDacObj = new OfficeWeekOffDac();
-            List<string> officeWeekOffDayList = officeWeekOffDacObj.GetEmployeeWeekOffDay(UserID);
-            // To get the employee Holiday List 
-            OfficeHolidayDac officeHolidayDacObj = new OfficeHolidayDac();
-            List<OfficeHoliday> officeHolidayList = officeHolidayDacObj.GetOfficeHoliday(UserID);
-            // To get the employee Leave Details
-            LeaveTransactionHistoryDac leaveTransactionHistoryDacObj = new LeaveTransactionHistoryDac();
-            List<Leave> employeeLeaveList = leaveTransactionHistoryDacObj.GetLeaveForEmployee(UserID);
-            bool found = false;
-            TimeSpan shiftFromTime = new TimeSpan(09, 30, 0);
-            TimeSpan shiftToTime = new TimeSpan(18, 30, 0);
-            TimeSpan empFromTime = new TimeSpan(09, 30, 0);
-            TimeSpan empToTime = new TimeSpan(18, 30, 0);
-            if (EmployeeAttendenceList.Count > 0)
-            {
-
-                DateTime shiftFromDateTime = currentDate.Add(shiftFromTime);
-                DateTime shiftToDateTime = currentDate.Add(shiftToTime);
-                TimeSheetModel timeSheetModelObj = null;
-
-                while (currentDate != ToDate.AddDays(1))
-                {
-                    found = false;
-                    timeSheetModelObj = new TimeSheetModel();
-                    timeSheetModelObj.WorkingDate = currentDate;
-                    var shift = GetEmployeeShift(shiftQueryModelList, currentDate);
-                    if (shift.Count() > 0)
-                    {
-                        shiftFromTime = shift.First().ShiftFromtime;
-                        shiftToTime = shift.First().ShiftTotime;
-                    }
-                    shiftFromDateTime = currentDate.Add(shiftFromTime);
-                    shiftToDateTime = currentDate.Add(shiftToTime);
-                    if (shiftToDateTime < shiftFromDateTime)
-                    {
-                        shiftToDateTime = shiftToDateTime.AddDays(1);
-                    }
-                    timeSheetModelObj.userID = UserID;
-                    timeSheetModelObj.Shift = shiftFromTime + " - " + shiftToTime;
-                    var startandendtime = from ea in EmployeeAttendenceList
-                                          where ea.InOutDate >= shiftFromDateTime.AddHours(-3)
-                                            && ea.InOutDate <= shiftToDateTime.AddHours(5)
-                                          group ea.InOutDate
-                                            by ea.UserID into grp
-                                          select new { startTime = grp.Min(), toTime = grp.Max() };
-                    if (startandendtime.Count() > 0)
-                    {
-                        timeSheetModelObj.InTime = startandendtime.First().startTime;
-                        timeSheetModelObj.OutTime = startandendtime.First().toTime;
-                        timeSheetModelObj.WorkingHours = timeSheetModelObj.OutTime - timeSheetModelObj.InTime;
-
-                        timeSheetModelObj.Status = TimeSheetStatus.Present;
-                    }
-                    else
-                    {
-
-                        timeSheetModelObj.Status = GetAbsentStatus(timeSheetModelObj.WorkingDate,
-                            officeWeekOffDayList, officeHolidayList, employeeLeaveList);
-                    }
-                    timeSheetModelObj.Name = employeeName;
-                    timeSheetModelList.Add(timeSheetModelObj);
-                    currentDate = currentDate.AddDays(1);
-                }
-            }
-            else
-            {
-                TimeSheetModel timeSheetModelObj = null;
-                while (currentDate != ToDate.AddDays(1))
-                {
-                    timeSheetModelObj = new TimeSheetModel();
-                    timeSheetModelObj.Status = GetAbsentStatus(currentDate, officeWeekOffDayList,
-            officeHolidayList, employeeLeaveList);
-                    timeSheetModelObj.WorkingDate = currentDate;
-                    timeSheetModelList.Add(timeSheetModelObj);
-                    //timeSheetModelList.add
-                    currentDate = currentDate.AddDays(1);
-                }
-            }
-
-            return timeSheetModelList;
-
-        }
 
         private string GetAbsentStatus(DateTime CurrentDate, List<string> officeWeekOffDayList,
-            List<OfficeHoliday> officeHolidayList, List<Leave> employeeLeaveList)
+            List<OfficeHoliday> officeHolidayList, List<EmployeeLeave> employeeLeaveList)
         {
             string status = string.Empty;
             bool found = false;
@@ -181,7 +83,11 @@ namespace NLTD.EmploeePortal.LMS.Dac.Dac
                     }
                 }
             }
-            return status;
+            if (!found)
+            {
+                status = GetLMSStatus(employeeLeaveList, CurrentDate);
+            }
+                return status;
         }
 
         private List<ShiftQueryModel> GetEmployeeShift(List<ShiftQueryModel> shiftQueryModelList, DateTime currentDate)
@@ -219,7 +125,7 @@ namespace NLTD.EmploeePortal.LMS.Dac.Dac
             List<OfficeHoliday> officeHolidayList = officeHolidayDacObj.GetOfficeHoliday(UserID);
             // To get the employee Leave Details
             LeaveTransactionHistoryDac leaveTransactionHistoryDacObj = new LeaveTransactionHistoryDac();
-            List<Leave> employeeLeaveList = leaveTransactionHistoryDacObj.GetLeaveForEmployee(UserID);
+            List<EmployeeLeave> employeeLeaveList = leaveTransactionHistoryDacObj.GetLeaveForEmployee(UserID);
             int BeforeShiftBuffer = Convert.ToInt32(ConfigurationManager.AppSettings["BeforeShiftBuffer"]);
             int AfterShiftBuffer = Convert.ToInt32(ConfigurationManager.AppSettings["AfterShiftBuffer"]);
             for (int i = 0; i < ShiftQueryModelList.Count(); i++)
@@ -252,6 +158,7 @@ namespace NLTD.EmploeePortal.LMS.Dac.Dac
                     TimeSheetModelObj.OutTime = maxmin.ToList()[0].max;
                     TimeSheetModelObj.WorkingHours = TimeSheetModelObj.OutTime - TimeSheetModelObj.InTime;
                     TimeSheetModelObj.Status = "Present";
+                  
                 }
                 else// If no record found in the employee for the given date 
                 {
@@ -259,6 +166,7 @@ namespace NLTD.EmploeePortal.LMS.Dac.Dac
                     TimeSheetModelObj.Status = GetAbsentStatus(ShiftQueryModelList[i].ShiftDate, officeWeekOffDayList,
            officeHolidayList, employeeLeaveList);
                 }
+                TimeSheetModelObj.LMSStatus = GetLMSStatus(employeeLeaveList, ShiftQueryModelList[i].ShiftDate);
                 timeSheetModelList.Add(TimeSheetModelObj);
 
             }
@@ -287,5 +195,36 @@ namespace NLTD.EmploeePortal.LMS.Dac.Dac
             }
             return timeSheetModelList;
         }
+
+        public string GetLMSStatus(List<EmployeeLeave> employeeLeaveList,DateTime statusDate)
+        {
+            string LMSStatus = string.Empty;
+            if(employeeLeaveList.Count>0)
+            {
+                LMSStatus = (from e in employeeLeaveList where statusDate >= e.StartDate && statusDate <= e.EndDate select e.LeaveType).FirstOrDefault();
+            }
+            return LMSStatus;
+        }
+        
+    }
+    public class EmployeeLeave
+    {
+        public Int64 LeaveId { get; set; }
+        public Int64 UserId { get; set; }
+        public DateTime StartDate { get; set; }
+        public DateTime EndDate { get; set; }
+        public String StartDateType { get; set; }
+        public String EndDateType { get; set; }
+        public Int64 LeaveTypeId { get; set; }
+        public Decimal Duration { get; set; }
+        public String Remarks { get; set; }
+        public String Comments { get; set; }
+        public String Status { get; set; }
+        public Int64 AppliedBy { get; set; }
+        public DateTime AppliedAt { get; set; }
+        public Int64? ApprovedBy { get; set; }
+        public DateTime? ApprovedAt { get; set; }
+
+        public string LeaveType { get; set; }
     }
 }

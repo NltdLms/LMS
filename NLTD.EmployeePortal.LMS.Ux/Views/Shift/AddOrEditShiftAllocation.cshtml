@@ -1,32 +1,47 @@
 ﻿
 @model IList<NLTD.EmployeePortal.LMS.Common.DisplayModel.ShiftEmployees>
 <script>
-    
+    var table;
+    $("document").ready(function () {
+        table = $('#addShiftDetail').DataTable({
+            columnDefs: [
+                { targets: 'no-sort', orderable: false, searchable: false }
+            ],
+            order: [[1, 'asc']],
+            stateSave: true
+        });
 
-    $('#addShiftDetail tbody').on('change', 'input[type="checkbox"]', function () {
-        // If checkbox is not checked
-        if (!this.checked) {
-            var el = $('#select-all').get(0);
-            // If "Select all" control is checked and has 'indeterminate' property
-            if (el && el.checked && ('indeterminate' in el)) {
-                // Set visual state of "Select all" control
-                // as 'indeterminate'
-                el.indeterminate = true;
+        $('#select-all').on('click', function () {
+            var rows = table.rows({ 'search': 'applied' }).nodes();
+            $('input[type="checkbox"]', rows).prop('checked', this.checked);
+        });
+
+        $('#addShiftDetail tbody').on('change', 'input[type="checkbox"]', function () {
+            // If checkbox is not checked
+            if (!this.checked) {
+                var el = $('#select-all').get(0);
+                // If "Select all" control is checked and has 'indeterminate' property
+                if (el && el.checked && ('indeterminate' in el)) {
+                    // Set visual state of "Select all" control
+                    // as 'indeterminate'
+                    el.indeterminate = true;
+                }
             }
-        }
+        });
     });
+
 </script>
 <table id="addShiftDetail"
        class="table table-condensed table-striped table-hover">
     <thead>
         <tr>
-            <th class="no-sort" style="text-align: center !important;"><input type="checkbox" name="select_all" value="1" id="select-all"/></th>
+            <th class="no-sort" style="text-align: center !important;"><input type="checkbox" name="select_all" value="1" id="select-all" /></th>
             <th>
                 @Html.DisplayName("Emp Id")
             </th>
             <th>
                 @Html.DisplayName("Name")
-            </th>          
+            </th>
         </tr>
     </thead>
     <tbody>
@@ -39,7 +54,7 @@
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Name)
-                </td>                 
+                </td>
             </tr>
         }
     </tbody>

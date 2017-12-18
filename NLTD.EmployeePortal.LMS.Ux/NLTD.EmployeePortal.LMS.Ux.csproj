@@ -718,7 +718,7 @@
     <Content Include="Views\Admin\ViewTransactionLogPartial.cshtml" />
     <Content Include="Views\Admin\ViewTransactionLogSubDetailPartial.cshtml" />
     <Content Include="Views\Home\Unauthorized.cshtml" />
-    <Content Include="Views\Attendence\MyAttendence.cshtml" />
+    <Content Include="Views\Attendence\MyAttendance.cshtml" />
     <Content Include="Views\Admin\EmployeeAttendenceDtlPartial.cshtml" />
     <Content Include="Views\TimeSheet\TimeSheet.cshtml" />
     <Content Include="Views\Attendence\TimeSheet.cshtml" />

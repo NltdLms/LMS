@@ -553,7 +553,7 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
                 ViewBag.RequestLevelPerson = RequestLevelPerson;
                 EmployeeAttendenceQueryModel data = new EmployeeAttendenceQueryModel();
                 data.ErrorMsg = "Excel file is not generated as no data returned.";
-                return View("~/Views/Attendence/MyAttendence.cshtml", data);
+                return View("~/Views/Attendence/MyAttendance.cshtml", data);
             }
         }
 
@@ -703,7 +703,7 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
                 ViewBag.RequestLevelPerson = RequestLevelPerson;
                 EmployeeAttendenceQueryModel data = new EmployeeAttendenceQueryModel();
                 data.ErrorMsg = "Excel file is not generated as no data returned.";
-                return View("~/Views/Attendence/MyAttendence.cshtml", data);
+                return View("~/Views/Attendence/MyAttendance.cshtml", data);
             }
         }
     }

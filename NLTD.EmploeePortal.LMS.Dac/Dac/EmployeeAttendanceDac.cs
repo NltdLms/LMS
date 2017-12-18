@@ -89,7 +89,7 @@ namespace NLTD.EmploeePortal.LMS.Dac.Dac
                                                                    //InOut = GetInOut(ea.InOut)
                                                                    InOut = (ea.InOut ? "Out" : "In"),
                                                                    Name = (e.FirstName+ " " + e.LastName)
-                                                               }).OrderByDescending(e => e.InOutDate).OrderBy(e => e.UserID).ToList();
+                                                               }).OrderBy(e => e.Name).ThenByDescending(e => e.InOutDate).ToList();
                             }
                             else
                             {
@@ -105,7 +105,7 @@ namespace NLTD.EmploeePortal.LMS.Dac.Dac
                                                                    //InOut = GetInOut(ea.InOut)
                                                                    InOut = (ea.InOut ? "Out" : "In"),
                                                                    Name = (e.FirstName + " " + e.LastName)
-                                                               }).OrderByDescending(e => e.InOutDate).OrderBy(e => e.UserID).ToList();
+                                                               }).OrderBy(e => e.Name).ThenByDescending(e => e.InOutDate).ToList();
                                 // Get all the employee time sheet under the manager
                             }
                         }

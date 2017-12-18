@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using NLTD.EmploeePortal.LMS.Dac.DbModel;
 
+
 namespace NLTD.EmploeePortal.LMS.Dac.Dac
 {
     public class LeaveTransactionHistoryDac : IDisposable
@@ -148,12 +149,22 @@ namespace NLTD.EmploeePortal.LMS.Dac.Dac
             return transactionDetails;
         }
 
-        public List<Leave> GetLeaveForEmployee(Int64 UserID)
+        public List<EmployeeLeave> GetLeaveForEmployee(Int64 UserID)
         {
-            List<Leave> leaveList = new List<Leave>();
+            List<EmployeeLeave> leaveList = new List<EmployeeLeave>();
             using (var context = new NLTDDbContext())
             {
-                leaveList = (from l in context.Leave where l.UserId == UserID select l).ToList();
+                leaveList = (from l in context.Leave join
+                             lt in context.LeaveType on l.LeaveTypeId equals lt.LeaveTypeId
+                             where l.UserId == UserID && l.Status== "A"
+                             select new EmployeeLeave
+                             {
+                                 UserId = l.UserId,
+                                 StartDate=l.StartDate,
+                                 EndDate = l.EndDate,
+                                 LeaveType = lt.Type
+                             }
+                             ).ToList();
             }
             return leaveList;
         }

@@ -1131,8 +1131,9 @@ function SubmitLeaveBalanceForm(count) {
 
 function Clearshowalert(message, alerttype) {
     $("#alert_placeholder").empty();
-    $('#alert_placeholder').append('<div id="alertdiv" class="alert ' + alerttype + '"><a class="close" data-dismiss="alert">×</a><span>' + message + '</span></div>');
+    $('#alert_placeholder').append('<div id="alertdiv" class="alert ' + alerttype + '"><span class="close" data-dismiss="alert">×</span><span>' + message + '</span></div>');
 }
+
 
 
 
@@ -1178,9 +1179,9 @@ function loadTransactionLog() {
 }
 
 function loadAttendenceRangeSummary() {
-    URL = '/Admin/loadEmployeeAttendence?&FromDate=' + $('#FromDate').val() + '&ToDate=' + $('#ToDate').val() + '&requestLevelPerson=' + $('#RequestLevelPerson').val();
-    if ($("#RequestLevelPerson").val() === "Team") {
-        URL = '/Admin/loadEmployeeAttendence?Name=' + $("#Name").val().replace(new RegExp(" ", "g"), '|') + '&FromDate=' + $('#FromDate').val() + '&ToDate=' + $('#ToDate').val() + '&requestLevelPerson=' + $('#RequestLevelPerson').val();
+    URL = '/Admin/loadEmployeeAttendence?Name=' + $("#Name").val().replace(new RegExp(" ", "g"), '|') + '&FromDate=' + $('#FromDate').val() + '&ToDate=' + $('#ToDate').val() + '&requestLevelPerson=' + $('#RequestLevelPerson').val();
+    if ($("#RequestLevelPerson").val() === "My" ) {
+        URL = '/Admin/loadEmployeeAttendence?&FromDate=' + $('#FromDate').val() + '&ToDate=' + $('#ToDate').val() + '&requestLevelPerson=' + $('#RequestLevelPerson').val();
     }
         $("#divLoading").show();
     $("#divForEmployeeAttendence")
@@ -1193,7 +1194,7 @@ function loadAttendenceRangeSummary() {
                 }
             else {
 
-                $(".dtatable").dataTable({ "order": [] });
+                $(".dtatable").dataTable({ "aaSorting": [] });
                 $('html, body').animate({
                     scrollTop: 230  // Means Less header height
                 }, 400);
@@ -1203,10 +1204,11 @@ function loadAttendenceRangeSummary() {
 }
 function loadTimeSheetSummary()
 {
-    var URL = '/Admin/LoadMyTimesheet';
+    var URL = '/Admin/LoadMyTeamTimesheet';
     $("#divLoading").show();
-    if ($("#RequestLevelPerson").val() === "Team") {
-        URL = '/Admin/LoadMyTeamTimesheet';
+    if ($("#RequestLevelPerson").val() === "My") {
+        
+        URL = '/Admin/LoadMyTimesheet';
     }
     $("#divForTimesheet").html("");
     $("#alert_placeholder").html("");
@@ -1383,21 +1385,23 @@ function toDate(dateStr) {
     return new Date(parts[2], parts[1] - 1, parts[0]);
 }
 function SaveEmployeeShift() {
-    var checkedValues = $("input:checkbox:checked", "#addShiftDetail tbody").map(function () {
+    var checkedValues = table.$('input:checkbox:checked').map(function () {
         return $(this).val();
     }).get();
+
+    $("#alert_placeholder").empty();
 
     var Shift = $("#Shift").val();
     var FromDate = $("#FromDate").val();
     var ToDate = $("#ToDate").val();
 
     if (Shift == '') {
-        Clearshowalert("Please select the Shift", "alert alert-danger");
+        Clearshowalert("Please select the Shift.", "alert alert-danger");
         return;
     }
 
     if (FromDate == '' || ToDate == '') {
-        Clearshowalert("Please select From Date and To Date", "alert alert-danger");
+        Clearshowalert("Please select From Date and To Date.", "alert alert-danger");
         return;
     }
 
@@ -1405,12 +1409,12 @@ function SaveEmployeeShift() {
     var to = toDate(ToDate);
 
     if (from > to) {
-        Clearshowalert("Invalid Date Range", "alert alert-danger");
+        Clearshowalert("Invalid Date Range.", "alert alert-danger");
         return;
     }
 
     if (checkedValues == '' || checkedValues == null) {
-        Clearshowalert("Please select atleast one employee", "alert alert-danger");
+        Clearshowalert("Please select atleast one employee.", "alert alert-danger");
         return;
     }
 
@@ -1437,6 +1441,7 @@ function SaveEmployeeShift() {
         }
     });
 }
+
 function GetEmployeeShiftDetails(FromDate, ToDate, Shift) {
 
     if ($("#Name").val() == undefined) {

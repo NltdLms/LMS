@@ -19,7 +19,7 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
             EmployeeAttendanceHelper = new EmplyeeAttendenceClient();
         }
 
-        public ActionResult MyAttendence()
+        public ActionResult MyAttendance()
         {
             EmployeeProfile employeeProfileObj = (EmployeeProfile) Session["Profile"];
             ViewBag.RequestLevelPerson = "My";
@@ -27,10 +27,10 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
                 EmployeeAttendanceHelper.GetAttendence(employeeProfileObj.UserId);
             return View();
         }
-        public ActionResult MyTeamAttendence()
+        public ActionResult MyTeamAttendance()
         {
             ViewBag.RequestLevelPerson = "Team";
-            return View("MyAttendence");
+            return View("MyAttendance");
         }
         public ActionResult MyTimeSheet()
         {
@@ -50,7 +50,7 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
         public ActionResult EmployeeAttendence()
         {
             ViewBag.RequestLevelPerson = "Admin";
-            return View("MyAttendence");
+            return View("MyAttendance");
         }
     }
 }

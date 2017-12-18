@@ -16,26 +16,31 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
 
         public ActionResult TeamShiftAllocation()
         {
+            EmployeeShifts shiftEmployees = new EmployeeShifts();
             ViewBag.RequestLevelPerson = "Team";
-            IList<Shifts> shiftMaster = null;
+            //IList<Shifts> shiftMaster = null;
             using (var client = new ShiftClient())
             {
-                shiftMaster = client.GetShiftMaster();
+                shiftEmployees.Shifts = client.GetShiftMaster();
+                shiftEmployees.shiftEmployees = client.GetShiftDetailsForUsers(this.UserId, "Team");
             }
-            return View("ShiftAllocation", shiftMaster);
+            return View("ShiftAllocation", shiftEmployees);
         }
 
         public ActionResult AdminShiftAllocation()
         {
             ViewBag.RequestLevelPerson = "Admin";
-            IList<Shifts> shiftMaster = null;
+            //IList<Shifts> shiftMaster = null;
+            EmployeeShifts shiftEmployees = new EmployeeShifts();
 
             using (var client = new ShiftClient())
             {
-                shiftMaster = client.GetShiftMaster();
+                shiftEmployees.Shifts = client.GetShiftMaster();
+                shiftEmployees.shiftEmployees = client.GetShiftDetailsForUsers(this.UserId, "Admin");
             }
-            return View("ShiftAllocation", shiftMaster);
+            return View("ShiftAllocation", shiftEmployees);
         }
+
         public ActionResult ShiftMaster()
         {
             ViewBag.Authorize = this.IsAuthorized;

@@ -16,5 +16,7 @@ namespace NLTD.EmployeePortal.LMS.Common.DisplayModel
         public DateTime OutTime { get; set; }
         public TimeSpan WorkingHours { get; set; }
         public string Status { get; set; }
+
+        public string LMSStatus { get; set; }
     }
 }

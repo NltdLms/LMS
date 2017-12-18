@@ -1,4 +1,4 @@
-﻿@model IList<NLTD.EmployeePortal.LMS.Common.DisplayModel.Shifts>
+﻿@model NLTD.EmployeePortal.LMS.Common.DisplayModel.EmployeeShifts
 <style type="text/css">
     .ui-autocomplete {
         height: 220px;
@@ -14,14 +14,12 @@
         font-size: 12px;
     }
 </style>
-
 <script src="~/Scripts/DataTables/jquery.dataTables.min.js"></script>
 <link href="~/Content/DataTables/css/jquery.dataTables.min.css" rel="stylesheet" />
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 <script src="~/Scripts/daterangepicker.js"></script>
 <link href="~/Content/daterangepicker.css" rel="stylesheet" />
-
 @section scripts
 {
     <script src="~/Scripts/jquery-2.2.4.js"></script>
@@ -65,20 +63,20 @@
                     <h3 class="box-title">Shift Allocation - Multiple Employees</h3>
                 </div>
                 <div class="box-body">
-                    <div class="row">                       
+                    <div class="row">
                         <div class="col-sm-3">
-                            @Html.Label("From Date")
+                            @Html.Label("From Date", new { @class = "required" })
                             @Html.TextBox("FromDate", "", new { @class = "form-control datetpicker" })
                         </div>
                         <div class="col-sm-3">
-                            @Html.Label("To Date")
+                            @Html.Label("To Date", new { @class = "required" })
                             @Html.TextBox("ToDate", "", new { @class = "form-control datetpicker" })
                         </div>
                         <div class="col-sm-3">
-                            @Html.Label("Shifts")
-                            @Html.DropDownList("Shift", new SelectList(Model, "ShiftId", "Shift"), new { @class = "form-control" })
+                            @Html.Label("Shift", new { @class = "required" })
+                            @Html.DropDownList("Shift", new SelectList(Model.Shifts, "ShiftId", "Shift"), new { @class = "form-control" })
                         </div>
-                        <div class="col-sm-2" style="padding-top:27px;">
+                        <div class="col-sm-3" style="padding-top:27px;">
                             <button type="button" class="btn btn-primary pull-right" onclick="SaveEmployeeShift();">Update Shift</button>
                         </div>
                     </div>
@@ -87,14 +85,12 @@
         </div>
     </div>
     <div id="alert_placeholder"></div>
-    <div id="divForAddShift" class="col-sm-12"></div>
+    <div id="divForAddShift">
+        @Html.Partial("~/Views/Shift/AddOrEditShiftAllocation.cshtml", Model.shiftEmployees)
+    </div>
 }
 @section readyscript{
     @{
-        <script>
-            $("document").ready(function () {
-                loadEmployeeShifts();
-            });
-        </script>
+
     }
 }

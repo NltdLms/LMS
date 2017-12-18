@@ -1,6 +1,5 @@
 ﻿
 
-
 @model NLTD.EmployeePortal.LMS.Common.DisplayModel.EmpShift
 <script type="text/javascript" src="~/Scripts/lms.js?v=1.03"></script>
 <style type="text/css">
@@ -42,35 +41,32 @@
         background-color: #26a69a;
     }
 </style>
-
 <script>
     $(function () {
         var year = (new Date()).getFullYear();
         var firstDate = new Date(year, 0, 1);
         var lastDate = new Date(year, 11, 31)
-         $('#FromDate').datetimepicker(
-             {
-                 viewMode: "days",
-                 format: "DD-MM-YYYY",
-                 minDate: firstDate,
-                 maxDate: lastDate
-             }
-         );
-         $('#ToDate').datetimepicker(
-             {
-                 viewMode: "days",
-                 format: "DD-MM-YYYY",
-                 minDate: firstDate,
-                 maxDate: lastDate
-             }
-         );
-     });
+        $('#FromDate').datetimepicker(
+            {
+                viewMode: "days",
+                format: "DD-MM-YYYY",
+                minDate: firstDate,
+                maxDate: lastDate
+            }
+        );
+        $('#ToDate').datetimepicker(
+            {
+                viewMode: "days",
+                format: "DD-MM-YYYY",
+                minDate: firstDate,
+                maxDate: lastDate
+            }
+        );
+    });
 </script>
 
-
-
 @{
-    if ((Model.shiftDetail == null) ||(Model.shiftDetail != null && Model.shiftDetail.Count() == 0))
+    if ((Model.shiftDetail == null) || (Model.shiftDetail != null && Model.shiftDetail.Count() == 0))
     {
         <div id="alert" class="alert alert-danger">
             <button type="button" class="close" data-dismiss="alert" aria-label="Close">
@@ -97,28 +93,28 @@
                     </div>
                     @*@{ if ((string)ViewBag.RequestLevelPerson != "My")
                         {*@
-                            <div class="box-body">
-                                <div class="row">
-                                    <div class="col-sm-3">
-                                        @Html.Label("From Date")
-                                        @Html.TextBox("FromDate", (string)ViewBag.FromDate, new { @class = "form-control" })
-                                    </div>
-                                    <div class="col-sm-3">
-                                        @Html.Label("To Date")
-                                        @Html.TextBox("ToDate", (string)ViewBag.TodDate, new { @class = "form-control" })
-                                    </div>
-                                    <div class="col-sm-3">
-                                        @Html.Label("Shifts")
-                                        @Html.DropDownList("Shift", new SelectList(Model.Shifts, "ShiftId", "ShiftName", ViewBag.Shift), new { @class = "form-control" })
-                                        @Html.Hidden("UserId", Model.UserId)
-                                    </div>
-                                    <div class="col-sm-2" style="padding-top:27px;">
-                                        <button type="button" class="btn btn-primary pull-right" onclick="SaveIndividualEmployeeShift();">Update Shift</button>
-                                    </div>
-                                </div>
+                    <div class="box-body">
+                        <div class="row">
+                            <div class="col-sm-3">
+                                @Html.Label("From Date", new { @class = "required" })
+                                @Html.TextBox("FromDate", (string)ViewBag.FromDate, new { @class = "form-control" })
                             </div>
-                        @*}
-                    }*@
+                            <div class="col-sm-3">
+                                @Html.Label("To Date", new { @class = "required" })
+                                @Html.TextBox("ToDate", (string)ViewBag.TodDate, new { @class = "form-control" })
+                            </div>
+                            <div class="col-sm-3">
+                                @Html.Label("Shift", new { @class = "required" })
+                                @Html.DropDownList("Shift", new SelectList(Model.Shifts, "ShiftId", "ShiftName", ViewBag.Shift), new { @class = "form-control" })
+                                @Html.Hidden("UserId", Model.UserId)
+                            </div>
+                            <div class="col-sm-3" style="padding-top:27px;">
+                                <button type="button" class="btn btn-primary pull-right" onclick="SaveIndividualEmployeeShift();">Update Shift</button>
+                            </div>
+                        </div>
+                    </div>
+                    @*}
+                        }*@
                 </div>
             </div>
         </div>

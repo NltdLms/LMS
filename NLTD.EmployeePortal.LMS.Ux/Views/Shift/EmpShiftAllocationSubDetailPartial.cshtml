@@ -3,18 +3,18 @@
 <table id="ShiftDetail"
        class="shift table table-condensed table-striped table-hover">
     <thead>
-        <tr>          
+        <tr>
             <th>
-                @Html.DisplayName("ShiftDate")
+                @Html.DisplayName("Shift Date")
             </th>
             <th>
-                @Html.DisplayName("ShiftName")
+                @Html.DisplayName("Start Time")
             </th>
             <th>
-                @Html.DisplayName("FromTime")
+                @Html.DisplayName("End Time")
             </th>
             <th>
-                @Html.DisplayName("ToTime")
+                @Html.DisplayName("Shift Name")
             </th>
         </tr>
     </thead>
@@ -22,18 +22,18 @@
         @foreach (var item in Model)
         {
             var ShiftDate = item.ShiftDate.ToString("dd-MM-yyyy");
-            <tr>               
+            <tr>
                 <td>
                     @Html.DisplayFor(modelItem => ShiftDate)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.ShiftName)
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.FromTime)
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.ToTime)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ShiftName)
                 </td>
             </tr>
         }
