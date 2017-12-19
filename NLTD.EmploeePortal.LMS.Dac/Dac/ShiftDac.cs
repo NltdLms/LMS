@@ -83,14 +83,22 @@ namespace NLTD.EmploeePortal.LMS.Dac
             {
                 if (RequestMenuUser == "Admin")
                 {
-                    lstShiftEmployees = (from e in context.Employee
-                                         where e.IsActive == true
-                                         select new ShiftEmployees
-                                         {
-                                             Name = e.FirstName + " " + e.LastName,
-                                             EmpId = e.EmployeeId,
-                                             UserId = e.UserId
-                                         }).ToList();
+                    var leadinfo = (from emp in context.Employee
+                                    join role in context.EmployeeRole on emp.EmployeeRoleId equals role.RoleId
+                                    where emp.UserId == UserId
+                                    select new { RoleName = role.Role }).FirstOrDefault();
+
+                    if (leadinfo.RoleName.ToUpper() == "ADMIN" || leadinfo.RoleName.ToUpper() == "HR")
+                    {
+                        lstShiftEmployees = (from e in context.Employee
+                                             where e.IsActive == true
+                                             select new ShiftEmployees
+                                             {
+                                                 Name = e.FirstName + " " + e.LastName,
+                                                 EmpId = e.EmployeeId,
+                                                 UserId = e.UserId
+                                             }).ToList();
+                    }
                 }
                 else
                 {

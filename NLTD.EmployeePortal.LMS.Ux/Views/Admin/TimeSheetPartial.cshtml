@@ -4,15 +4,6 @@
 @model IList<NLTD.EmployeePortal.LMS.Common.DisplayModel.TimeSheetModel>
 <script type="text/javascript" src="~/Scripts/lms.js?v=1.04"></script>
 <style type="text/css">
-    .belowworkinghours {
-        color: red;
-    }
-
-    .weekoff {
-        color: dodgerblue;
-    }
-</style>
-<style type="text/css">
     .panel-group .panel {
         border-radius: 0;
         box-shadow: none;
@@ -50,9 +41,28 @@
     body {
         background-color: #26a69a;
     }
+    .belowworkinghours {
+        color: red;
+    }
+
+    .weekoff {
+        color: dodgerblue;
+    }
 </style>
 
-@if (ViewBag.RequestLevelPerson == "My")
+@if (Model.Count == 0)
+{
+    <div class="alert alert-danger">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">x</span>
+        </button>
+        No matching records found.
+    </div>
+
+}
+else
+{
+if (ViewBag.RequestLevelPerson == "My")
 {
     <table id="TimesheetTable_id"
            class="table table-condensed table-striped table-hover dtatable">
@@ -96,20 +106,20 @@
                     {
                         statusStyle = "weekoff";
                     }
-                    else if (@item.WorkingHours < new TimeSpan(9, 0, 0))
+                    else if (@item.WorkingHours < new TimeSpan(9, 0, 0) && item.Status == "Present")
                     {
                         statusStyle = "belowworkinghours";
                     }
-                    <tr class="@statusStyle">
+                    <tr >
 
 
                         <td>
                             @if (item.WorkingDate != null)
-                        {
+                            {
                                 @item.WorkingDate.ToString("dd-MM-yyyy");
-                        }
-                        else
-                        {
+                            }
+                            else
+                            {
                                 @Html.DisplayName("-")
                             }
                         </td>
@@ -120,23 +130,23 @@
                         </td>
                         <td>
                             @if (item.InTime == DateTime.MinValue)
-                        {
+                            {
                                 @Html.DisplayName("-")
                             }
                             else if (@item.InTime != null)
                             {
                                 @item.InTime.ToString("HH:mm:ss");
-                        }
+                            }
 
-                        else
-                        {
+                            else
+                            {
                                 @Html.DisplayName("-")
                             }
                         </td>
                         <td>
 
                             @if (item.OutTime == DateTime.MinValue)
-                        {
+                            {
                                 @Html.DisplayName("-")
                             }
                             else if (@item.OutTime != null)
@@ -148,7 +158,7 @@
                                 @Html.DisplayName("-")
                             }
                         </td>
-                        <td>
+                        <td class="@statusStyle">
                             @item.WorkingHours
                         </td>
                         <td>
@@ -168,8 +178,8 @@ else
 {
     <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
         @for (int i = 0; i < Model.Count; i++)
-                {
-                    Int64 userID = Model[i].userID;
+        {
+            Int64 userID = Model[i].userID;
             <div class="panel panel-default">
                 <div class="panel-heading" role="tab" id="@("heading" + Model[i].userID)">
                     <h4 class="panel-title">
@@ -217,29 +227,25 @@ else
                                     {
                                         statusStyle = "weekoff";
                                     }
-                                    else if (Model[j].WorkingHours < new TimeSpan(9, 0, 0) && Model[j].Status=="Present")
+                                    else if (Model[j].WorkingHours < new TimeSpan(9, 0, 0) && Model[j].Status == "Present")
                                     {
                                         statusStyle = "belowworkinghours";
                                     }
                                     if (Model[j].userID != userID)
                                     {
                                         userID = Model[j].userID;
-                                        i = j;
+                                        i = j-1;
                                         break;
                                     }
-                                    if (j == Model.Count - 1)
-                                    {
-                                        i = j;
-                                        break;
-                                    }
+                                    
                                     <tr >
                                         <td>
                                             @if (Model[j].WorkingDate != null)
                                             {
                                                 @Model[j].WorkingDate.ToString("dd-MM-yyyy");
-                        }
-                        else
-                        {
+                                            }
+                                            else
+                                            {
                                                 @Html.DisplayName("-")
                                             }
                                         </td>
@@ -256,10 +262,10 @@ else
                                             else if (Model[j].InTime != null)
                                             {
                                                 @Model[j].InTime.ToString("HH:mm:ss");
-                        }
+                                            }
 
-                        else
-                        {
+                                            else
+                                            {
                                                 @Html.DisplayName("-")
                                             }
                                         </td>
@@ -288,7 +294,11 @@ else
                                             @Model[j].LMSStatus
                                         </td>
                                     </tr>
-
+                                    if (j == Model.Count - 1)
+                                    {
+                                        i = Model.Count - 1;
+                                        break;
+                                    }
                                 }
                             </tbody>
                         </table>
@@ -299,3 +309,4 @@ else
     </div>
 }
 
+}

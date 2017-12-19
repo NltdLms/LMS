@@ -67,26 +67,8 @@ namespace NLTD.EmploeePortal.LMS.Dac.Dac
                     }
                 }
             }
-            if (!found)
-            {
-                if (employeeLeaveList.Count > 0)
-                {
-                    int count = (from el in employeeLeaveList
-                                 where
-    CurrentDate >= el.StartDate
-    && CurrentDate <= el.EndDate
-                                 select el).Count();
-                    if (count > 0)
-                    {
-                        status = TimeSheetStatus.Leave;
-                        found = true;
-                    }
-                }
-            }
-            if (!found)
-            {
-                status = GetLMSStatus(employeeLeaveList, CurrentDate);
-            }
+            
+            
                 return status;
         }
 

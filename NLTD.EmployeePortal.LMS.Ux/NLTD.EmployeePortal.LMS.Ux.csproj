@@ -660,7 +660,7 @@
     <Compile Include="AppHelpers\MenuHelper.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\AdminController.cs" />
-    <Compile Include="Controllers\AttendenceController.cs" />
+    <Compile Include="Controllers\AttendanceController.cs" />
     <Compile Include="Controllers\DashboardController.cs" />
     <Compile Include="Controllers\DataController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -718,10 +718,10 @@
     <Content Include="Views\Admin\ViewTransactionLogPartial.cshtml" />
     <Content Include="Views\Admin\ViewTransactionLogSubDetailPartial.cshtml" />
     <Content Include="Views\Home\Unauthorized.cshtml" />
-    <Content Include="Views\Attendence\MyAttendance.cshtml" />
+    <Content Include="Views\Attendance\MyAttendance.cshtml" />
     <Content Include="Views\Admin\EmployeeAttendenceDtlPartial.cshtml" />
     <Content Include="Views\TimeSheet\TimeSheet.cshtml" />
-    <Content Include="Views\Attendence\TimeSheet.cshtml" />
+    <Content Include="Views\Attendance\TimeSheet.cshtml" />
     <Content Include="Views\Admin\TimeSheetPartial.cshtml" />
     <Content Include="Views\Shift\AddOrEditShift.cshtml" />
     <Content Include="Views\Shift\ShiftMaster.cshtml" />

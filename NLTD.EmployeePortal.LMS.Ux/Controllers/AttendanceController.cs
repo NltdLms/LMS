@@ -10,11 +10,11 @@ using NLTD.EmployeePortal.LMS.Ux.AppHelpers;
 
 namespace NLTD.EmployeePortal.LMS.Ux.Controllers
 {
-    public class AttendenceController : BaseController
+    public class AttendanceController : BaseController
     {
         private IEmployeeAttendanceHelper EmployeeAttendanceHelper;
         // GET: Attentance
-        public AttendenceController()
+        public AttendanceController()
         {
             EmployeeAttendanceHelper = new EmplyeeAttendenceClient();
         }
@@ -47,7 +47,7 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
             ViewBag.RequestLevelPerson = "Admin";
             return View("TimeSheet");
         }
-        public ActionResult EmployeeAttendence()
+        public ActionResult EmployeeAttendance()
         {
             ViewBag.RequestLevelPerson = "Admin";
             return View("MyAttendance");

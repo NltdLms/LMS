@@ -582,7 +582,7 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
             else
             {
                  startDateFormatted = DateTime.Parse(FromDate, new CultureInfo("en-GB", true));
-                 endDateFormatted = DateTime.Parse(ToDate, new CultureInfo("en-GB", true));
+                endDateFormatted = DateTime.Parse(ToDate, new CultureInfo("en-GB", true)).Add(new TimeSpan(23,59,59)); ;
             }
            
             IEmployeeAttendanceHelper employeeAttendanceHelper = new EmplyeeAttendenceClient();
@@ -618,6 +618,10 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
                     TimeSheetQueryModelObj.FromDate = DateTime.Now.Add(TimeSpan.Parse("00:00:00")).AddDays(-30);
                     TimeSheetQueryModelObj.ToDate = DateTime.Now.AddDays(-1);
                 }
+                else
+                {
+                    TimeSheetQueryModelObj.ToDate=TimeSheetQueryModelObj.ToDate.Add(TimeSpan.Parse("23:59:59"));
+                }
             }
             else if (!string.IsNullOrEmpty(TimeSheetQueryModelObj.Name))
             {
@@ -632,8 +636,12 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
                   
                     // For Last 15 days Attendence
                     TimeSheetQueryModelObj.FromDate = DateTime.Now.Add(TimeSpan.Parse("00:00:00")).AddDays(-30);
-                    TimeSheetQueryModelObj.ToDate = DateTime.Now.AddDays(-1);
+                    TimeSheetQueryModelObj.ToDate = DateTime.Now.AddDays(-1).Add(TimeSpan.Parse("23:59:59"));
                     
+                }
+                else
+                {
+                    TimeSheetQueryModelObj.ToDate = TimeSheetQueryModelObj.ToDate.Add(TimeSpan.Parse("23:59:59"));
                 }
                 requestLevelPerson = "My";
                 
@@ -641,7 +649,7 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
             }
             if(TimeSheetQueryModelObj.ToDate>DateTime.Now)
             {
-                TimeSheetQueryModelObj.ToDate = DateTime.Now;
+                TimeSheetQueryModelObj.ToDate = DateTime.Now.AddDays(-1);
             }
             List<TimeSheetModel> timeSheetModelList = new List<TimeSheetModel>();
             if(requestLevelPerson=="My")

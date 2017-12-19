@@ -31,6 +31,12 @@ else
         td {
             font-size: 12px;
         }
+        .alert {
+            margin-bottom: 1px;
+            height: 30px;
+            line-height: 30px;
+            padding: 0px 15px;
+        }
     </style>
 
     <script src="~/Scripts/DataTables/jquery.dataTables.min.js"></script>
@@ -76,7 +82,7 @@ else
 
     </div>
 
-        <div id="divForShiftAllocation" class="col-sm-12"></div>
+        <div id="divForShiftAllocation"></div>
 
         <style>
             .datepicker {
@@ -99,8 +105,8 @@ else
                     </div>
                     <div class="modal-footer">
                         
-                        <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary" onclick="SaveShiftMaster();">Save</button>
+                        <button type="button" class="btn btn-primary" data-dismiss="modal">CLOSE</button>
+                        <button type="button" class="btn btn-primary" onclick="SaveShiftMaster();">SAVE</button>
                     </div>
                 </div>
 
