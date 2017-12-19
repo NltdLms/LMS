@@ -56,11 +56,12 @@
     </script>
 
     @Html.Hidden("RequestLevelPerson", (string)ViewBag.RequestLevelPerson)
+    string Title = ((string)ViewBag.RequestLevelPerson == "Team") ? "Team" : "Multiple Employees";
     <div class="row">
         <div class="col-sm-12">
             <div class="box box-primary">
                 <div class="box-header with-border">
-                    <h3 class="box-title">Shift Allocation - Multiple Employees</h3>
+                    <h3 class="box-title">Shift Allocation - @Title</h3>
                 </div>
                 <div class="box-body">
                     <div class="row">
@@ -88,9 +89,4 @@
     <div id="divForAddShift">
         @Html.Partial("~/Views/Shift/AddOrEditShiftAllocation.cshtml", Model.shiftEmployees)
     </div>
-}
-@section readyscript{
-    @{
-
-    }
 }

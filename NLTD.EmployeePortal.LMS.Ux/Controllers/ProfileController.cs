@@ -301,7 +301,8 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
         public ActionResult MyLmsProfile()
         {
             EmployeeProfileSearchModel mdl = new EmployeeProfileSearchModel();
-            mdl.RequestLevelPerson = "My";            
+            mdl.RequestLevelPerson = "My";
+            
             return View("SearchTeamLmsProfile", mdl);
         }
         public ActionResult TeamLmsProfile()
@@ -309,6 +310,10 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
             EmployeeProfileSearchModel mdl = new EmployeeProfileSearchModel();
             mdl.RequestLevelPerson = "Team";
             mdl.OnlyReportedToMe = true;
+            using (var client = new ShiftClient())
+            {
+                ViewBag.ShiftList = client.GetShiftMaster();
+            }
             return View("SearchTeamLmsProfile", mdl);
         }
         public ActionResult AdminLmsProfile()

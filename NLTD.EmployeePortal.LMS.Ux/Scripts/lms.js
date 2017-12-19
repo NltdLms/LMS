@@ -40,26 +40,26 @@ function SubmitForm(e) {
         var msg = "Are you sure you want to apply '" + $("#LeaveType option:selected").text() + "' from " + $("#PermissionTimeFrom").val() + " to " + $("#PermissionTimeTo").val() + " ?."
     }
     var msg =
-    bootbox.confirm({
-        title: "LMS Request Confirm",
-        message: msg,
-        buttons: {
-            cancel: {
-                label: '<i class="fa fa-times"></i> Cancel'
+        bootbox.confirm({
+            title: "LMS Request Confirm",
+            message: msg,
+            buttons: {
+                cancel: {
+                    label: '<i class="fa fa-times"></i> Cancel'
+                },
+                confirm: {
+                    label: '<i class="fa fa-check"></i> Confirm'
+                }
             },
-            confirm: {
-                label: '<i class="fa fa-check"></i> Confirm'
-            }
-        },
-        callback: function (result) {
-            if (result == true) {
-                
-                $("#frmSubmitLeave").submit();
-               
-            }
+            callback: function (result) {
+                if (result == true) {
 
-        }
-    });
+                    $("#frmSubmitLeave").submit();
+
+                }
+
+            }
+        });
 
 }
 function SubmitEmpForm(e) {
@@ -67,7 +67,7 @@ function SubmitEmpForm(e) {
     $("#alert_placeholder").empty();
     var corpId = $("#LogonId").val()
 
-    if (corpId.trim().length < 7){
+    if (corpId.trim().length < 7) {
         showalert("", "Please enter valid Logon Id.", "alert alert-danger");
         return;
     }
@@ -97,14 +97,14 @@ function SubmitEmpForm(e) {
             if (result == true) {
                 $("#frmEmployee").submit();
             }
-           
+
         }
     });
-   
+
 }
 function applyComplete(data) {
     if (data.responseJSON == "Saved") {
-        resMessage =  "Request submitted Successfully.";
+        resMessage = "Request submitted Successfully.";
         showalert("", resMessage, "alert alert-success");
         loadApplyLeaveSummary();
     }
@@ -118,7 +118,7 @@ function applyComplete(data) {
         showalert("", resMessage, "alert alert-danger")
     }
 }
-    
+
 
 function toggleIcon(e) {
     $(e.target)
@@ -134,7 +134,7 @@ $(function () {
         var offset = $(this).find('.collapse.in').prev('.panel-heading');
         if (offset) {
             $('html,body').animate({
-                scrollTop: $(offset).offset().top -10
+                scrollTop: $(offset).offset().top - 10
             }, 200);
         }
     });
@@ -168,36 +168,35 @@ function returnHolidayArray() {
         return [];
     return arr;
 }
-function loadLeaveSummary(userId)
-{
+function loadLeaveSummary(userId) {
     $.ajax({
         type: 'GET',
-        cache:false,
+        cache: false,
         url: "/Leaves/LoadLeaveSummaryFull",
         data: { "userId": userId },
         success: function (data) {
             $('#divForCreate' + userId).html(data);
         }
     });
-    
+
 }
 function loadApplyLeaveSummary() {
-  
-        $.ajax({
-            type: 'GET',
-            cache: false,
-            url: "/Leaves/LoadApplyLeaveSummary",
-            success: function (data) {
-                $('#divLeaveSummaryInApply').html(data);
-            }
-        });
+
+    $.ajax({
+        type: 'GET',
+        cache: false,
+        url: "/Leaves/LoadApplyLeaveSummary",
+        success: function (data) {
+            $('#divLeaveSummaryInApply').html(data);
+        }
+    });
 
 
 }
 
 function loadPendingLeaves() {
 
-    if ($("#btnSearchPending").length==1) {
+    if ($("#btnSearchPending").length == 1) {
 
         $.ajax({
             type: 'GET',
@@ -257,13 +256,13 @@ function loadViewHistoryLeaves() {
             $("#divLoading").show();
         },
         url: "/Leaves/ViewLeaveHistory",
-        data: {            
+        data: {
             "OnlyReportedToMe": showTeam,
-            "FromDate" : $("#FromDate").val(),
+            "FromDate": $("#FromDate").val(),
             "ToDate": $("#ToDate").val(),
             "IsLeaveOnly": leaveOnly,
-            "Name":name,
-            "RequestMenuUser" : $("#RequestLevelPerson").val()
+            "Name": name,
+            "RequestMenuUser": $("#RequestLevelPerson").val()
 
         },
         success: function (data) {
@@ -317,7 +316,7 @@ function loadTeamProfiles() {
         },
         url: "/Profile/TeamProfileData",
         data: {
-            "onlyReportedToMe": showTeam,           
+            "onlyReportedToMe": showTeam,
             "name": name,
             "requestMenuUser": $("#RequestLevelPerson").val(),
             "hideInactiveEmp": hideInactive
@@ -362,14 +361,14 @@ function loadYearwiseLeaveSummary() {
 
     $("#divLoading").show();
     $("#divForLeaveSummary")
-  .load('/Admin/loadYearwiseLeaveSummary?Year=' + $("#Year").val() + '&reqUsr=' + $("#RequestLevelPerson").val() + '&Name=' + name + '&OnlyReportedToMe=' + showTeam,
-  function () {
-      $("#table_id").dataTable()
-      $("#divLoading").hide();
-      $('html, body').animate({
-          scrollTop: 210  // Means Less header height
-      }, 400);
-  });
+        .load('/Admin/loadYearwiseLeaveSummary?Year=' + $("#Year").val() + '&reqUsr=' + $("#RequestLevelPerson").val() + '&Name=' + name + '&OnlyReportedToMe=' + showTeam,
+        function () {
+            $("#table_id").dataTable()
+            $("#divLoading").hide();
+            $('html, body').animate({
+                scrollTop: 210  // Means Less header height
+            }, 400);
+        });
 }
 function loadMonthwiseCount() {
     if ($("#Name").val() == undefined) {
@@ -391,26 +390,26 @@ function loadMonthwiseCount() {
     }
     $("#divLoading").show();
     $("#divForLeaveMonthCount")
-  .load('/Admin/LoadMonthWiseLeaveCount?Year=' + $("#Year").val() + '&reqUsr=' + $("#RequestLevelPerson").val() + '&Name=' + name + '&OnlyReportedToMe=' + showTeam,
-  function () {
-      $('#Monthwisetable_id').DataTable({
-          "scrollX": true,
-          "bSort": false,
-          "bAutoWidth": false,
-          fixedColumns:   {
-              leftColumns: 2,              
-          },
-          "columnDefs": [
-            { "width": "200px", "targets": 1 }
-          ],
-      });
-      
-      $("#divLoading").hide();
+        .load('/Admin/LoadMonthWiseLeaveCount?Year=' + $("#Year").val() + '&reqUsr=' + $("#RequestLevelPerson").val() + '&Name=' + name + '&OnlyReportedToMe=' + showTeam,
+        function () {
+            $('#Monthwisetable_id').DataTable({
+                "scrollX": true,
+                "bSort": false,
+                "bAutoWidth": false,
+                fixedColumns: {
+                    leftColumns: 2,
+                },
+                "columnDefs": [
+                    { "width": "200px", "targets": 1 }
+                ],
+            });
 
-      $('html, body').animate({
-          scrollTop: 210  // Means Less header height
-      }, 400);
-  });
+            $("#divLoading").hide();
+
+            $('html, body').animate({
+                scrollTop: 210  // Means Less header height
+            }, 400);
+        });
 }
 function callProfileEdit() {
     $('.close').click()
@@ -433,25 +432,25 @@ function callProfileEdit() {
             name = "";
         }
     }
-        $.ajax({
-            method: "POST",
-            //beforeSend: function () {
-            //    $("#divLoading").show()
-            //},
-            url: '/Profile/CallProfileEdit?Name=' + $("#Name").val(),
-            data:{name:name},
-            success: function (result) {
-                if (result == "InvalidName") {
-                    showalert("", "Employee profile not found for the entered name.", "alert alert-danger")
-                }
-                else {
-                    window.location.href = result.redirectToUrl
-                }
-            },           
-            error: function () {                
+    $.ajax({
+        method: "POST",
+        //beforeSend: function () {
+        //    $("#divLoading").show()
+        //},
+        url: '/Profile/CallProfileEdit?Name=' + $("#Name").val(),
+        data: { name: name },
+        success: function (result) {
+            if (result == "InvalidName") {
+                showalert("", "Employee profile not found for the entered name.", "alert alert-danger")
             }
+            else {
+                window.location.href = result.redirectToUrl
+            }
+        },
+        error: function () {
+        }
 
-        });
+    });
 }
 function callProfileView() {
     $('.close').click()
@@ -522,22 +521,22 @@ function callApplyFor() {
 function loadPendingCount() {
     if ($("#hdnIsMLSApprvr").val() == "True") {
 
-            $.ajax({
-                method: "GET",
-                url: '/DashBoard/LoadPendingCount',
-                cache:false,
-                success: function (response) {
-                    $('#divPendingCount').html(response);
+        $.ajax({
+            method: "GET",
+            url: '/DashBoard/LoadPendingCount',
+            cache: false,
+            success: function (response) {
+                $('#divPendingCount').html(response);
 
-                },
-                complete: function () {
-                    
-                },
-                error: function () {
-                    
-                }
+            },
+            complete: function () {
 
-            });
+            },
+            error: function () {
+
+            }
+
+        });
     }
 }
 function loadDaywiseLeaves() {
@@ -555,7 +554,7 @@ function loadDaywiseLeaves() {
         var leaveOnly = $("#IsLeaveOnly").prop('checked');
     }
     if ($("#DonotShowRejected").val() == undefined) {
-        var donotshowRejected =false;
+        var donotshowRejected = false;
     }
     else {
         var donotshowRejected = $("#DonotShowRejected").prop('checked');
@@ -575,14 +574,14 @@ function loadDaywiseLeaves() {
 
     $("#divLoading").show();
     $("#divForDaywiseLeave")
-  .load('/Admin/loadDaywiseLeaves?Name=' + name + '&FromDate=' + $("#FromDate").val() + '&ToDate=' + $("#ToDate").val() + '&IsLeaveOnly=' + leaveOnly + '&OnlyReportedToMe=' + showTeam + '&reqUsr=' + $("#RequestLevelPerson").val() + '&DonotShowRejected=' + donotshowRejected,
-  function () {
-      $("#Daywisetable_id").dataTable()
-      $("#divLoading").hide();     
-      $('html, body').animate({
-          scrollTop: 230  // Means Less header height
-      }, 400);
-  });
+        .load('/Admin/loadDaywiseLeaves?Name=' + name + '&FromDate=' + $("#FromDate").val() + '&ToDate=' + $("#ToDate").val() + '&IsLeaveOnly=' + leaveOnly + '&OnlyReportedToMe=' + showTeam + '&reqUsr=' + $("#RequestLevelPerson").val() + '&DonotShowRejected=' + donotshowRejected,
+        function () {
+            $("#Daywisetable_id").dataTable()
+            $("#divLoading").hide();
+            $('html, body').animate({
+                scrollTop: 230  // Means Less header height
+            }, 400);
+        });
 
 }
 function loadPermissionDetail() {
@@ -606,14 +605,14 @@ function loadPermissionDetail() {
     }
     $("#divLoading").show();
     $("#divForPermissionDetail")
-  .load('/Admin/GetPermissionDetail?Name=' + name + '&reqUsr=' + $("#RequestLevelPerson").val() + '&startDate=' + $("#FromDate").val() + '&endDate=' + $("#ToDate").val() + '&OnlyReportedToMe=' + showTeam,
-  function () {
-      $("#Permissions_id").dataTable()
-      $("#divLoading").hide();
-      $('html, body').animate({
-          scrollTop: 230 // Means Less header height
-      }, 400);
-  });
+        .load('/Admin/GetPermissionDetail?Name=' + name + '&reqUsr=' + $("#RequestLevelPerson").val() + '&startDate=' + $("#FromDate").val() + '&endDate=' + $("#ToDate").val() + '&OnlyReportedToMe=' + showTeam,
+        function () {
+            $("#Permissions_id").dataTable()
+            $("#divLoading").hide();
+            $('html, body').animate({
+                scrollTop: 230 // Means Less header height
+            }, 400);
+        });
 }
 
 //function loadPermissionDetail() {
@@ -626,7 +625,7 @@ function loadPermissionDetail() {
 //        async: false,
 //        success: function (response) {
 //            $('#divForPermissionDetail').html(response);
-            
+
 //        },
 //        complete: function () {
 //            $("#divLoading").hide();
@@ -641,7 +640,7 @@ function loadPermissionDetail() {
 
 function hideLeaveSplit(e) {
 
-    $("#LeaveDtlSplit"+e).css("display", "none");
+    $("#LeaveDtlSplit" + e).css("display", "none");
 
 }
 function hideLeaveCalculation() {
@@ -654,54 +653,54 @@ function showLeaveDtlSplit(e) {
     $("#divLoading").show();
 
     $("#LeaveDtlSplit" + e)
-.load('/Leaves/ShowLeaveDetail?LeaveId=' + e,
-function () {
+        .load('/Leaves/ShowLeaveDetail?LeaveId=' + e,
+        function () {
 
-    $("#divLoading").hide();
-    $("#LeaveDtlSplit" + e).toggle("fast");
-});
+            $("#divLoading").hide();
+            $("#LeaveDtlSplit" + e).toggle("fast");
+        });
 }
 
 function LoadLeaveDtlSplit() {
     $("#divLoading").show();
-    
+
     $("#LeaveDtlSplit")
-.load('/Leaves/GetLeaveDetailCalculation?LeaveFrom=' + $("#LeaveFrom").val() + '&LeaveUpto=' + $("#LeaveUpto").val() + '&LeaveFromTime=' + $("#LeaveFromTime").val() + '&LeaveUptoTime=' + $("#LeaveUptoTime").val() + '&LeaveTyp=' + $("#LeaveType").val(),
-function () {
-    
-    $("#divLoading").hide();
-    $('#LeaveDtlSplit').toggle("fast");
-    
-});
+        .load('/Leaves/GetLeaveDetailCalculation?LeaveFrom=' + $("#LeaveFrom").val() + '&LeaveUpto=' + $("#LeaveUpto").val() + '&LeaveFromTime=' + $("#LeaveFromTime").val() + '&LeaveUptoTime=' + $("#LeaveUptoTime").val() + '&LeaveTyp=' + $("#LeaveType").val(),
+        function () {
+
+            $("#divLoading").hide();
+            $('#LeaveDtlSplit').toggle("fast");
+
+        });
 
 
-        //$.ajax({
-        //    method: "GET",
-        //    beforeSend:function(){
+    //$.ajax({
+    //    method: "GET",
+    //    beforeSend:function(){
 
-        //        $("#divLoading").show();
-        //    },
-        //    url: '/Leaves/GetLeaveDetailCalculation?LeaveFrom=' + $("#LeaveFrom").val() + '&LeaveUpto=' + $("#LeaveUpto").val() + '&LeaveFromTime=' + $("#LeaveFromTime").val() + '&LeaveUptoTime=' + $("#LeaveUptoTime").val(),
-        
-        //   async:false,
-        //    dataType:'html',
-        //    success: function (response) {
-               
-        //        $('#LeaveDtlSplit').html(response);
-                
-        //    },
-        //    complete: function () {
-        //        $("#divLoading").hide();
-        //    },
-        //    error: function () {
+    //        $("#divLoading").show();
+    //    },
+    //    url: '/Leaves/GetLeaveDetailCalculation?LeaveFrom=' + $("#LeaveFrom").val() + '&LeaveUpto=' + $("#LeaveUpto").val() + '&LeaveFromTime=' + $("#LeaveFromTime").val() + '&LeaveUptoTime=' + $("#LeaveUptoTime").val(),
 
-        //        $("#divLoading").hide();
-        //    }
+    //   async:false,
+    //    dataType:'html',
+    //    success: function (response) {
 
-        //});
+    //        $('#LeaveDtlSplit').html(response);
 
-        
-    }
+    //    },
+    //    complete: function () {
+    //        $("#divLoading").hide();
+    //    },
+    //    error: function () {
+
+    //        $("#divLoading").hide();
+    //    }
+
+    //});
+
+
+}
 
 
 function hideSplitDiv() {
@@ -752,7 +751,7 @@ function RejectLeave(LeaveId, userId) {
     ChangeStatus(obj);
 }
 function ChangeStatus(obj) {
-    
+
     var resMessage = "";
     var LeaveId = obj.LeaveId;
     $.ajax({
@@ -779,8 +778,8 @@ function ChangeStatus(obj) {
                 else if (obj.Status == "C") {
                     resMessage = "Request cancelled successfully."
                 }
-                showalert(obj.userId,resMessage, "alert alert-success")
-                
+                showalert(obj.userId, resMessage, "alert alert-success")
+
             }
             else if (response = "EmailFailed") {
                 $("#divLoading").hide();
@@ -800,12 +799,12 @@ function ChangeStatus(obj) {
                 resMessage = "Leave status not changed.";
                 showalert(obj.userId, resMessage, "alert alert-danger")
             }
-            
+
         }
     });
 }
 
-function showalert(userId,message, alerttype) {
+function showalert(userId, message, alerttype) {
     if (userId == "") {
         $('#alert_placeholder').append('<div id="alertdiv" class="alert ' + alerttype + '"><a class="close" data-dismiss="alert">×</a><span>' + message + '</span></div>')
     }
@@ -813,7 +812,7 @@ function showalert(userId,message, alerttype) {
         var alertDivId = "alertdiv" + userId;
         $('#alert_placeholder' + userId).append('<div id=alertDivId class="alert ' + alerttype + '"><a class="close" data-dismiss="alert">×</a><span>' + message + '</span></div>')
     }
-   
+
 }
 
 /*-- Data Fetching --*/
@@ -836,7 +835,7 @@ function LoadReportToDropDown() {
 }
 
 function isTimeBasedLayout() {
-    
+
     var arr = ($("#hdnTimebasedLeaveTypeIds").val()).split(',');
     var found = $.inArray($("#LeaveType").val(), arr);
     if (found == -1)
@@ -846,19 +845,19 @@ function isTimeBasedLayout() {
 
 }
 function hourEntryLayout() {
-    
-    if (isTimeBasedLayout()==true) {
+
+    if (isTimeBasedLayout() == true) {
         $(".duration").hide();
         $(".timeentry").show();
-        $('#PermissionTimeFrom').timepicker({ 'scrollDefault': '10am'});
+        $('#PermissionTimeFrom').timepicker({ 'scrollDefault': '10am' });
         $('#PermissionTimeTo').timepicker({ 'scrollDefault': '10am' });
         $("#LeaveUpto").val($("#LeaveFrom").val())
     }
-    else{
+    else {
         $(".duration").show();
         $(".timeentry").hide();
     }
-    
+
     //if ($("#LeaveType option:selected").text().indexOf("Sick") > 0) {
     //    $("divSickLeaveMsg").st
     //}
@@ -869,18 +868,18 @@ function hourEntryLayout() {
 }
 function hideRuleText() {
 
-    if ($('#LeaveType :selected').text().indexOf("Sick") !=-1)
+    if ($('#LeaveType :selected').text().indexOf("Sick") != -1)
         $('#divSickLeaveMsg > p').html("* If sick leave is more than 3 days, submit medical certificate.");
-    else if ($('#LeaveType :selected').text().indexOf("Compensatory Off") !=-1)
+    else if ($('#LeaveType :selected').text().indexOf("Compensatory Off") != -1)
         $('#divSickLeaveMsg > p').html("* In Reason box, enter the date against which the Compensatory Off is to be availed.");
-    else 
+    else
         $('#divSickLeaveMsg > p').html("");
 }
 function CountLeaveDays() {
 
     if ($("#LeaveFrom").val() == $("#LeaveUpto").val()) {
         if ($("#LeaveUptoTime").val() == "F") {
-            $("#LeaveUptoTime").val("A");            
+            $("#LeaveUptoTime").val("A");
         }
     }
     hideElementsForHalfDay();
@@ -922,7 +921,7 @@ function CountLeaveDays() {
 
         $("#NumberOfDays").val(duration);
     }
-    
+
 }
 function hideElementsForHalfDay() {
     if (isTimeBasedLayout() == false) {
@@ -951,7 +950,7 @@ function hideElementsForHalfDay() {
             }
         }
     }
-    
+
 }
 //Added by Tamil
 function loadLeaveBalanceProfile() {
@@ -1175,18 +1174,18 @@ function loadTransactionLog() {
             }, 400);
         });
 
-    
+
 }
 
 function loadAttendenceRangeSummary() {
-    
+
     if ($("#RequestLevelPerson").val() === "My") {
         URL = '/Admin/loadEmployeeAttendence?&FromDate=' + $('#FromDate').val() + '&ToDate=' + $('#ToDate').val() + '&requestLevelPerson=' + $('#RequestLevelPerson').val();
     }
     else {
         URL = '/Admin/loadEmployeeAttendence?Name=' + $("#Name").val().replace(new RegExp(" ", "g"), '|') + '&FromDate=' + $('#FromDate').val() + '&ToDate=' + $('#ToDate').val() + '&requestLevelPerson=' + $('#RequestLevelPerson').val();
     }
-        $("#divLoading").show();
+    $("#divLoading").show();
     $("#divForEmployeeAttendence")
         .load(URL,
         function (responseText, textStatus, req) {
@@ -1194,7 +1193,7 @@ function loadAttendenceRangeSummary() {
             if (textStatus == "error") {
                 Clearshowalert("No Records Found", "alert alert-danger");
                 $('#Attendencetable_id').DataTable().clear().destroy();
-                }
+            }
             else {
 
                 $(".dtatable").dataTable({ "aaSorting": [] });
@@ -1203,19 +1202,18 @@ function loadAttendenceRangeSummary() {
                 }, 400);
             }
 
-            });
+        });
 }
-function loadTimeSheetSummary()
-{
+function loadTimeSheetSummary() {
     var URL = '/Admin/LoadMyTeamTimesheet';
     $("#divLoading").show();
     if ($("#RequestLevelPerson").val() === "My") {
-        
+
         URL = '/Admin/LoadMyTimesheet';
     }
     $("#divForTimesheet").html("");
     $("#alert_placeholder").html("");
-    
+
     $("#divForTimesheet")
         .load(URL, { TimeSheetQueryModelObj: { FromDate: $("#FromDate").val(), ToDate: $("#ToDate").val(), Name: $("#Name").val() } },
         function (responseText, textStatus, req) {
@@ -1470,7 +1468,7 @@ function GetEmployeeShiftDetails(FromDate, ToDate, Shift) {
     $("#divLoading").show();
     $("#divForHistoryLeave").load('/Shift/GetEmployeeShiftDetails?Name=' + name + '&RequestMenuUser=' + $("#RequestLevelPerson").val() + '&FromDate=' + FromDate + '&ToDate=' + ToDate + '&Shift=' + Shift,
         function () {
-            $(".shift").dataTable();
+            $(".shift").dataTable({ pageLength: 50, bPaginate: false, bInfo: false });
             $("#divLoading").hide();
             $('html, body').animate({
                 scrollTop: 210  // Means Less header height

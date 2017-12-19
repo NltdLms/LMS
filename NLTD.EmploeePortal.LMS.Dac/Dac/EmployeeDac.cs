@@ -192,10 +192,10 @@ namespace NLTD.EmploeePortal.LMS.Dac.Dac
             ViewEmployeeProfileModel profile = null;
             using (var context = new NLTDDbContext())
             {
-                var ids = (from e in context.Employee
+                var ids = (from e in context.Employee join s in context.ShiftMaster on e.ShiftId equals s.ShiftID
                                //where e.ReportingToId == userId
                            orderby e.FirstName
-                           select new { userId = e.UserId, iactive = e.IsActive, reportingToId = e.ReportingToId, name = e.FirstName + " " + e.LastName }
+                           select new { userId = e.UserId, iactive = e.IsActive, reportingToId = e.ReportingToId, name = e.FirstName + " " + e.LastName,Shift=s.FromTime +"-" +s.ToTime }
                          ).ToList();
 
 
@@ -253,10 +253,11 @@ namespace NLTD.EmploeePortal.LMS.Dac.Dac
                 foreach (var memId in ids)
                 {
 
-                    profile = (from employee in context.Employee
+                    profile = (from employee in context.Employee.AsEnumerable()
                                join rt in context.EmployeeRole on employee.EmployeeRoleId equals rt.RoleId
                                join o in context.OfficeLocation on employee.OfficeId equals o.OfficeId
                                join h in context.OfficeHoliday on employee.OfficeHolodayId equals h.OfficeHolodayId
+                               join s in context.ShiftMaster on employee.ShiftId equals s.ShiftID
                                where employee.UserId == memId.userId
                                select new ViewEmployeeProfileModel
                                {
@@ -273,7 +274,9 @@ namespace NLTD.EmploeePortal.LMS.Dac.Dac
                                    RoleText = rt.Role,
                                    UserId = employee.UserId,
                                    LogonId = employee.LoginId,
-                                   IsActive = employee.IsActive
+                                   IsActive = employee.IsActive,
+                                   CardId = employee.Cardid,
+                                   Shift = string.Format("{0:hh\\:mm}", s.FromTime) + " - " + string.Format("{0:hh\\:mm}", s.ToTime)
 
                                }).FirstOrDefault();
                     if (profile != null)

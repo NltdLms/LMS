@@ -65,7 +65,7 @@
                                     @Html.TextBoxFor(m => m.Name, new { @class = "form-control" })
                                 
                         </div>
-                        <div class="col-sm-2">
+                        <div class="col-sm-4">
                             @{ if (Model.RequestLevelPerson == "Team")
                                 {
                                     <p style="padding-top:27px;"> @Html.CheckBoxFor(m => m.OnlyReportedToMe)   My Direct Reportees</p>
@@ -76,7 +76,7 @@
                                 }
                             }
                         </div>
-                        <div class="col-sm-5" style="padding-top:27px;">
+                        <div class="col-sm-3" style="padding-top:27px;">
                             <button type="button" class="btn btn-primary pull-right" onclick="loadTeamProfiles()">SEARCH</button>
                         </div>
                     </div>

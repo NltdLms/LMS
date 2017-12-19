@@ -128,7 +128,7 @@
           <icon></icon>
         </MenuItem>
         <MenuItem>
-          <title>Shift Allocation - Multiple</title>
+          <title>Shift Allocation - Team</title>
           <url>/Shift/TeamShiftAllocation</url>
           <icon></icon>
         </MenuItem>

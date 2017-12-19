@@ -12,6 +12,6 @@ namespace NLTD.EmploeePortal.LMS.Dac.DbModel
         public const string Absent = "Absent";
         public const string Leave = "Leave";
         public const string Holiday = "Holiday";
-        public const string WeekOff = "WeekOff";
+        public const string WeekOff = "Week Off";
     }
 }
