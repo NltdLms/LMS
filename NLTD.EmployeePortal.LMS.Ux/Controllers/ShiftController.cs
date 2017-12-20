@@ -97,14 +97,21 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
             return PartialView("AddOrEditShift", objShifts);
         }
 
-        public ActionResult SaveEmployeeShift(List<Int64> UserId, int Shift, DateTime FromDate, DateTime ToDate)
+        public ActionResult SaveEmployeeShift(List<Int64> UserId, int Shift, DateTime FromDate, DateTime ToDate, string RequestMenuUser)
         {
             string result = "";
             if (ModelState.IsValid)
             {
-                using (var client = new ShiftClient())
+                if (RequestMenuUser == "Team" && (FromDate <= DateTime.Now || ToDate <= DateTime.Now))
                 {
-                    result = client.SaveEmployeeShift(UserId, Shift, FromDate, ToDate, this.UserId);
+                    result = "Leads are allowed to update the shift for future date only. Contact Admin/HR to modify it.";
+                }
+                else
+                {
+                    using (var client = new ShiftClient())
+                    {
+                        result = client.SaveEmployeeShift(UserId, Shift, FromDate, ToDate, this.UserId);
+                    }
                 }
             }
 
@@ -174,14 +181,21 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
             return PartialView("EmpShiftAllocationPartial", shiftDetail);
         }
 
-        public ActionResult SaveIndividualEmployeeShift(DateTime FromDate, DateTime ToDate, int Shift, Int64 UserId)
+        public ActionResult SaveIndividualEmployeeShift(DateTime FromDate, DateTime ToDate, int Shift, Int64 UserId, string RequestMenuUser)
         {
             string result = "";
             if (ModelState.IsValid)
             {
-                using (var client = new ShiftClient())
+                if (RequestMenuUser == "Team" && (FromDate <= DateTime.Now || ToDate <= DateTime.Now))
                 {
-                    result = client.SaveIndividualEmployeeShift(UserId, Shift, FromDate, ToDate, this.UserId);
+                    result = "Leads are allowed to update the shift for future date only. Contact Admin/HR to modify it.";
+                }
+                else
+                {
+                    using (var client = new ShiftClient())
+                    {
+                        result = client.SaveIndividualEmployeeShift(UserId, Shift, FromDate, ToDate, this.UserId);
+                    }
                 }
             }
 

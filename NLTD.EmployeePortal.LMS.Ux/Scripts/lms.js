@@ -1395,6 +1395,7 @@ function SaveEmployeeShift() {
     var Shift = $("#Shift").val();
     var FromDate = $("#FromDate").val();
     var ToDate = $("#ToDate").val();
+    var RequestLevelPerson = $("#RequestLevelPerson").val();
 
     if (Shift == '') {
         Clearshowalert("Please select the Shift.", "alert alert-danger");
@@ -1420,7 +1421,7 @@ function SaveEmployeeShift() {
     }
 
     var input = JSON.stringify({
-        'UserId': checkedValues, 'Shift': Shift, 'FromDate': FromDate, 'ToDate': ToDate
+        'UserId': checkedValues, 'Shift': Shift, 'FromDate': FromDate, 'ToDate': ToDate, 'RequestMenuUser': RequestLevelPerson
     });
     //alert(things);
     $.ajax({
@@ -1482,6 +1483,7 @@ function SaveIndividualEmployeeShift() {
     var FromDate = $("#FromDate").val();
     var ToDate = $("#ToDate").val();
     var UserId = $("#UserId").val();
+    var RequestLevelPerson = $("#RequestLevelPerson").val();
 
     if (Shift == '') {
         Clearshowalert("Please select the Shift", "alert alert-danger");
@@ -1502,7 +1504,7 @@ function SaveIndividualEmployeeShift() {
     }
 
     var input = JSON.stringify({
-        'FromDate': from, 'ToDate': to, 'Shift': Shift, 'UserId': UserId
+        'FromDate': from, 'ToDate': to, 'Shift': Shift, 'UserId': UserId, 'RequestMenuUser': RequestLevelPerson
     });
     $.ajax({
         contentType: 'application/json; charset=utf-8',
