@@ -17,40 +17,48 @@ namespace NLTD.EmploeePortal.LMS.Dac
         {
             List<ShiftAllocation> lstShiftAllocation = new List<ShiftAllocation>();
 
-            using (var context = new NLTDDbContext())
+            try
             {
-                if (RequestMenuUser == "Admin")
+                using (var context = new NLTDDbContext())
                 {
-                    var leadinfo = (from emp in context.Employee
-                                    join role in context.EmployeeRole on emp.EmployeeRoleId equals role.RoleId
-                                    where emp.UserId == UserId
-                                    select new { RoleName = role.Role }).FirstOrDefault();
-
-                    if (leadinfo.RoleName.ToUpper() == "ADMIN" || leadinfo.RoleName.ToUpper() == "HR")
+                    if (RequestMenuUser == "Admin")
                     {
-                        lstShiftAllocation = (from sm in context.ShiftMapping
-                                              join s in context.ShiftMaster on sm.ShiftID equals s.ShiftID
-                                              join e in context.Employee on sm.UserID equals e.UserId
-                                              where e.IsActive == true
-                                              select new ShiftAllocation
-                                              {
-                                                  Name = e.FirstName + " " + e.LastName,
-                                                  EmpId = e.EmployeeId,
-                                                  UserId = sm.UserID,
-                                                  ShiftID = s.ShiftID,
-                                                  ShiftDate = sm.ShiftDate,
-                                                  FromTime = s.FromTime,
-                                                  ToTime = s.ToTime,
-                                                  ShiftName = s.ShiftDescription,
-                                                  IsActive = e.IsActive,
-                                                  ShiftMappingID = sm.ShiftMappingID
-                                              }).ToList();
+                        var leadinfo = (from emp in context.Employee
+                                        join role in context.EmployeeRole on emp.EmployeeRoleId equals role.RoleId
+                                        where emp.UserId == UserId
+                                        select new { RoleName = role.Role }).FirstOrDefault();
+
+                        if (leadinfo.RoleName.ToUpper() == "ADMIN" || leadinfo.RoleName.ToUpper() == "HR")
+                        {
+                            lstShiftAllocation = (from sm in context.ShiftMapping
+                                                  join s in context.ShiftMaster on sm.ShiftID equals s.ShiftID
+                                                  join e in context.Employee on sm.UserID equals e.UserId
+                                                  where e.IsActive == true
+                                                  select new ShiftAllocation
+                                                  {
+                                                      Name = e.FirstName + " " + e.LastName,
+                                                      EmpId = e.EmployeeId,
+                                                      UserId = sm.UserID,
+                                                      ShiftID = s.ShiftID,
+                                                      ShiftDate = sm.ShiftDate,
+                                                      FromTime = s.FromTime,
+                                                      ToTime = s.ToTime,
+                                                      ShiftName = s.ShiftDescription,
+                                                      IsActive = e.IsActive,
+                                                      ShiftMappingID = sm.ShiftMappingID
+                                                  }).ToList();
+                        }
+                    }
+                    else
+                    {
+                        lstShiftAllocation = GetShiftEmployees(context, UserId);
                     }
                 }
-                else
-                {
-                    lstShiftAllocation = GetShiftEmployees(context, UserId);
-                }
+            }
+            catch (Exception)
+            {
+
+                throw;
             }
             return lstShiftAllocation;
         }
@@ -59,18 +67,26 @@ namespace NLTD.EmploeePortal.LMS.Dac
         {
             List<Shifts> lstShift = new List<Shifts>();
 
-            using (var context = new NLTDDbContext())
+            try
             {
-                lstShift = (from s in context.ShiftMaster.AsEnumerable()
-                            select new Shifts
-                            {
-                                ShiftId = s.ShiftID,
-                                ShiftName = s.ShiftDescription,
-                                FromTime = s.FromTime,
-                                ToTime = s.ToTime,
-                                Shift = string.Format("{0:hh\\:mm}", s.FromTime) + " - " + string.Format("{0:hh\\:mm}", s.ToTime)
-                            }).ToList();
+                using (var context = new NLTDDbContext())
+                {
+                    lstShift = (from s in context.ShiftMaster.AsEnumerable()
+                                select new Shifts
+                                {
+                                    ShiftId = s.ShiftID,
+                                    ShiftName = s.ShiftDescription,
+                                    FromTime = s.FromTime,
+                                    ToTime = s.ToTime,
+                                    Shift = string.Format("{0:hh\\:mm}", s.FromTime) + " - " + string.Format("{0:hh\\:mm}", s.ToTime)
+                                }).ToList();
 
+                }
+            }
+            catch (Exception)
+            {
+
+                throw;
             }
             return lstShift;
         }
@@ -79,31 +95,39 @@ namespace NLTD.EmploeePortal.LMS.Dac
         {
             var lstShiftEmployees = new List<ShiftEmployees>();
 
-            using (var context = new NLTDDbContext())
+            try
             {
-                if (RequestMenuUser == "Admin")
+                using (var context = new NLTDDbContext())
                 {
-                    var leadinfo = (from emp in context.Employee
-                                    join role in context.EmployeeRole on emp.EmployeeRoleId equals role.RoleId
-                                    where emp.UserId == UserId
-                                    select new { RoleName = role.Role }).FirstOrDefault();
-
-                    if (leadinfo.RoleName.ToUpper() == "ADMIN" || leadinfo.RoleName.ToUpper() == "HR")
+                    if (RequestMenuUser == "Admin")
                     {
-                        lstShiftEmployees = (from e in context.Employee
-                                             where e.IsActive == true
-                                             select new ShiftEmployees
-                                             {
-                                                 Name = e.FirstName + " " + e.LastName,
-                                                 EmpId = e.EmployeeId,
-                                                 UserId = e.UserId
-                                             }).ToList();
+                        var leadinfo = (from emp in context.Employee
+                                        join role in context.EmployeeRole on emp.EmployeeRoleId equals role.RoleId
+                                        where emp.UserId == UserId
+                                        select new { RoleName = role.Role }).FirstOrDefault();
+
+                        if (leadinfo.RoleName.ToUpper() == "ADMIN" || leadinfo.RoleName.ToUpper() == "HR")
+                        {
+                            lstShiftEmployees = (from e in context.Employee
+                                                 where e.IsActive == true
+                                                 select new ShiftEmployees
+                                                 {
+                                                     Name = e.FirstName + " " + e.LastName,
+                                                     EmpId = e.EmployeeId,
+                                                     UserId = e.UserId
+                                                 }).ToList();
+                        }
+                    }
+                    else
+                    {
+                        lstShiftEmployees = GetEmployees(context, UserId);
                     }
                 }
-                else
-                {
-                    lstShiftEmployees = GetEmployees(context, UserId);
-                }
+            }
+            catch (Exception)
+            {
+
+                throw;
             }
             return lstShiftEmployees;
         }
@@ -153,19 +177,27 @@ namespace NLTD.EmploeePortal.LMS.Dac
         {
             var result = new List<ShiftEmployees>();
 
-            var employees = (from e in context.Employee
-                             where e.ReportingToId == UserId && e.IsActive == true
-                             select new ShiftEmployees
-                             {
-                                 Name = e.FirstName + " " + e.LastName,
-                                 EmpId = e.EmployeeId,
-                                 UserId = e.UserId
-                             }).ToList();
-
-            foreach (var employee in employees)
+            try
             {
-                result.Add(employee);
-                result.AddRange(GetEmployees(context, employee.UserId));
+                var employees = (from e in context.Employee
+                                 where e.ReportingToId == UserId && e.IsActive == true
+                                 select new ShiftEmployees
+                                 {
+                                     Name = e.FirstName + " " + e.LastName,
+                                     EmpId = e.EmployeeId,
+                                     UserId = e.UserId
+                                 }).ToList();
+
+                foreach (var employee in employees)
+                {
+                    result.Add(employee);
+                    result.AddRange(GetEmployees(context, employee.UserId));
+                }
+            }
+            catch (Exception)
+            {
+
+                throw;
             }
 
             return result;
@@ -175,34 +207,42 @@ namespace NLTD.EmploeePortal.LMS.Dac
         {
             var result = new List<ShiftAllocation>();
 
-            var emp = (from e in context.Employee
-                       where e.ReportingToId == UserId && e.IsActive == true
-                       select e.UserId).ToList();
-
-            var employees = (from sm in context.ShiftMapping
-                             join s in context.ShiftMaster on sm.ShiftID equals s.ShiftID
-                             join e in context.Employee on sm.UserID equals e.UserId
-                             where e.ReportingToId == UserId && e.IsActive == true
-                             select new ShiftAllocation
-                             {
-                                 Name = e.FirstName + " " + e.LastName,
-                                 EmpId = e.EmployeeId,
-                                 UserId = sm.UserID,
-                                 ShiftID = s.ShiftID,
-                                 ShiftDate = sm.ShiftDate,
-                                 FromTime = s.FromTime,
-                                 ToTime = s.ToTime,
-                                 ShiftName = s.ShiftDescription,
-                                 IsActive = e.IsActive,
-                                 ShiftMappingID = sm.ShiftMappingID
-                             }).ToList();
-
-            if (employees != null && employees.Count > 0)
-                result.AddRange(employees);
-
-            foreach (Int64 id in emp)
+            try
             {
-                result.AddRange(GetShiftEmployees(context, id));
+                var emp = (from e in context.Employee
+                           where e.ReportingToId == UserId && e.IsActive == true
+                           select e.UserId).ToList();
+
+                var employees = (from sm in context.ShiftMapping
+                                 join s in context.ShiftMaster on sm.ShiftID equals s.ShiftID
+                                 join e in context.Employee on sm.UserID equals e.UserId
+                                 where e.ReportingToId == UserId && e.IsActive == true
+                                 select new ShiftAllocation
+                                 {
+                                     Name = e.FirstName + " " + e.LastName,
+                                     EmpId = e.EmployeeId,
+                                     UserId = sm.UserID,
+                                     ShiftID = s.ShiftID,
+                                     ShiftDate = sm.ShiftDate,
+                                     FromTime = s.FromTime,
+                                     ToTime = s.ToTime,
+                                     ShiftName = s.ShiftDescription,
+                                     IsActive = e.IsActive,
+                                     ShiftMappingID = sm.ShiftMappingID
+                                 }).ToList();
+
+                if (employees != null && employees.Count > 0)
+                    result.AddRange(employees);
+
+                foreach (Int64 id in emp)
+                {
+                    result.AddRange(GetShiftEmployees(context, id));
+                }
+            }
+            catch (Exception)
+            {
+
+                throw;
             }
 
             return result;
@@ -212,21 +252,29 @@ namespace NLTD.EmploeePortal.LMS.Dac
         {
             var objShifts = new Shifts();
 
-            using (var context = new NLTDDbContext())
+            try
             {
-                if (shiftId > 0)
+                using (var context = new NLTDDbContext())
                 {
-                    objShifts = (from s in context.ShiftMaster
-                                 where s.ShiftID == shiftId
-                                 select new Shifts
-                                 {
-                                     ShiftId = s.ShiftID,
-                                     ShiftName = s.ShiftDescription,
-                                     FromTime = s.FromTime,
-                                     ToTime = s.ToTime
-                                 }).SingleOrDefault();
-                }
+                    if (shiftId > 0)
+                    {
+                        objShifts = (from s in context.ShiftMaster
+                                     where s.ShiftID == shiftId
+                                     select new Shifts
+                                     {
+                                         ShiftId = s.ShiftID,
+                                         ShiftName = s.ShiftDescription,
+                                         FromTime = s.FromTime,
+                                         ToTime = s.ToTime
+                                     }).SingleOrDefault();
+                    }
 
+                }
+            }
+            catch (Exception)
+            {
+
+                throw;
             }
             return objShifts;
         }
@@ -283,82 +331,90 @@ namespace NLTD.EmploeePortal.LMS.Dac
         {
             EmpShift retModel = new EmpShift();
 
-            using (var context = new NLTDDbContext())
+            try
             {
-                EmployeeDac employeeDac = new EmployeeDac();
-                long userId = 0; string EmpId = "";
-
-                if (RequestMenuUser != "My")
+                using (var context = new NLTDDbContext())
                 {
-                    var empPrf = context.Employee.Where(x => string.Concat(x.FirstName, " ", x.LastName).ToUpper() == Name.ToUpper()).FirstOrDefault();
-                    if (empPrf != null)
-                    {
-                        userId = empPrf.UserId;
-                        EmpId = empPrf.EmployeeId;
-                    }
-                }
+                    EmployeeDac employeeDac = new EmployeeDac();
+                    long userId = 0; string EmpId = "";
 
-                if (userId > 0 || (RequestMenuUser == "My" && LeaduserId > 0))
-                {
-                    string ReportingTo = (RequestMenuUser == "My" && LeaduserId > 0) ? employeeDac.ReportingToName(LeaduserId) : employeeDac.ReportingToName(userId);
-
-                    List<ShiftAllocation> shiftDetails = new List<ShiftAllocation>();
-                    if (RequestMenuUser == "My")
+                    if (RequestMenuUser != "My")
                     {
-                        shiftDetails = getShiftDetails(context, LeaduserId);
-                    }
-                    else if (RequestMenuUser == "Admin")
-                    {
-                        var leadinfo = (from emp in context.Employee
-                                        join role in context.EmployeeRole on emp.EmployeeRoleId equals role.RoleId
-                                        where emp.UserId == LeaduserId
-                                        select new { RoleName = role.Role }).FirstOrDefault();
-
-                        if (leadinfo.RoleName.ToUpper() == "ADMIN" || leadinfo.RoleName.ToUpper() == "HR")
+                        var empPrf = context.Employee.Where(x => string.Concat(x.FirstName, " ", x.LastName).ToUpper() == Name.ToUpper()).FirstOrDefault();
+                        if (empPrf != null)
                         {
-                            shiftDetails = getShiftDetails(context, userId);
-                        }
-                    }
-                    else if (RequestMenuUser == "Team")
-                    {
-                        var user = (from e in context.Employee
-                                    where e.ReportingToId == LeaduserId
-                                    select e).ToList();
-
-                        var found = LeaveTransactionHistoryDac.FindControlRecursively(user, userId);
-                        if (found != null)
-                        {
-                            shiftDetails = getShiftDetails(context, userId);
+                            userId = empPrf.UserId;
+                            EmpId = empPrf.EmployeeId;
                         }
                     }
 
-                    var groupedLeaveList = shiftDetails.GroupBy(u => u.Month)
-                                                          .Select(grp => new { Month = grp.Key, shiftAllocation = grp.ToList() })
-                                                          .ToList();
-
-                    List<ShiftDetail> lstshiftDetails = (from gv in groupedLeaveList
-                                                         select new ShiftDetail
-                                                         {
-                                                             Month = gv.Month,
-                                                             shiftAllocation = gv.shiftAllocation
-                                                         }).ToList();
-                    retModel.shiftDetail = lstshiftDetails;
-                    retModel.ReportingTo = ReportingTo;
-
-                    var lstShift = context.ShiftMaster.AsEnumerable().Select(s => new Shifts
+                    if (userId > 0 || (RequestMenuUser == "My" && LeaduserId > 0))
                     {
-                        ShiftId = s.ShiftID,
-                        ShiftName = string.Format("{0:hh\\:mm}", s.FromTime) + " - " + string.Format("{0:hh\\:mm}", s.ToTime),
-                    }).ToList();
+                        string ReportingTo = (RequestMenuUser == "My" && LeaduserId > 0) ? employeeDac.ReportingToName(LeaduserId) : employeeDac.ReportingToName(userId);
 
-                    retModel.Shifts = lstShift;
+                        List<ShiftAllocation> shiftDetails = new List<ShiftAllocation>();
+                        if (RequestMenuUser == "My")
+                        {
+                            shiftDetails = getShiftDetails(context, LeaduserId);
+                        }
+                        else if (RequestMenuUser == "Admin")
+                        {
+                            var leadinfo = (from emp in context.Employee
+                                            join role in context.EmployeeRole on emp.EmployeeRoleId equals role.RoleId
+                                            where emp.UserId == LeaduserId
+                                            select new { RoleName = role.Role }).FirstOrDefault();
+
+                            if (leadinfo.RoleName.ToUpper() == "ADMIN" || leadinfo.RoleName.ToUpper() == "HR")
+                            {
+                                shiftDetails = getShiftDetails(context, userId);
+                            }
+                        }
+                        else if (RequestMenuUser == "Team")
+                        {
+                            var user = (from e in context.Employee
+                                        where e.ReportingToId == LeaduserId
+                                        select e).ToList();
+
+                            var found = LeaveTransactionHistoryDac.FindControlRecursively(user, userId);
+                            if (found != null)
+                            {
+                                shiftDetails = getShiftDetails(context, userId);
+                            }
+                        }
+
+                        var groupedLeaveList = shiftDetails.GroupBy(u => u.Month)
+                                                              .Select(grp => new { Month = grp.Key, shiftAllocation = grp.ToList() })
+                                                              .ToList();
+
+                        List<ShiftDetail> lstshiftDetails = (from gv in groupedLeaveList
+                                                             select new ShiftDetail
+                                                             {
+                                                                 Month = gv.Month,
+                                                                 shiftAllocation = gv.shiftAllocation
+                                                             }).ToList();
+                        retModel.shiftDetail = lstshiftDetails;
+                        retModel.ReportingTo = ReportingTo;
+
+                        var lstShift = context.ShiftMaster.AsEnumerable().Select(s => new Shifts
+                        {
+                            ShiftId = s.ShiftID,
+                            ShiftName = string.Format("{0:hh\\:mm}", s.FromTime) + " - " + string.Format("{0:hh\\:mm}", s.ToTime),
+                        }).ToList();
+
+                        retModel.Shifts = lstShift;
+                    }
+
+                    retModel.Name = Name;
+                    retModel.EmpId = EmpId;
+                    retModel.UserId = userId;
                 }
 
-                retModel.Name = Name;
-                retModel.EmpId = EmpId;
-                retModel.UserId = userId;
             }
+            catch (Exception)
+            {
 
+                throw;
+            }
             return retModel;
         }
 

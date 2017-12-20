@@ -15,12 +15,21 @@ namespace NLTD.EmploeePortal.LMS.Dac.Dac
         public List<string> GetEmployeeWeekOffDay(Int64 UserID)
         {
             List<string> weekOffDaysList = new List<string>();
-            using (var context = new NLTDDbContext())
+            try
             {
-                weekOffDaysList = (from ewf in context.EmployeeWeekOff
-                                   join dw in context.DayOfWeek
-                                    on ewf.DaysOfWeekId equals dw.DaysOfWeekId
-                                   where ewf.UserId==UserID select dw.Day ).ToList();
+                using (var context = new NLTDDbContext())
+                {
+                    weekOffDaysList = (from ewf in context.EmployeeWeekOff
+                                       join dw in context.DayOfWeek
+                                        on ewf.DaysOfWeekId equals dw.DaysOfWeekId
+                                       where ewf.UserId == UserID
+                                       select dw.Day).ToList();
+                }
+            }
+            catch (Exception)
+            {
+
+                throw;
             }
             return weekOffDaysList;
         }
