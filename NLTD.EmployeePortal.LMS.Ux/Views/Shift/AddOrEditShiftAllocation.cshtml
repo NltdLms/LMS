@@ -11,21 +11,35 @@
         });
 
         $('#select-all').on('click', function () {
+            debugger
             var rows = table.rows({ 'search': 'applied' }).nodes();
             $('input[type="checkbox"]', rows).prop('checked', this.checked);
         });
 
         $('#addShiftDetail tbody').on('change', 'input[type="checkbox"]', function () {
             // If checkbox is not checked
-            if (!this.checked) {
-                var el = $('#select-all').get(0);
-                // If "Select all" control is checked and has 'indeterminate' property
-                if (el && el.checked && ('indeterminate' in el)) {
-                    // Set visual state of "Select all" control
-                    // as 'indeterminate'
-                    el.indeterminate = true;
+            var rows = table.rows({ 'search': 'applied' }).nodes();
+            var allCheckbox = $('input[type="checkbox"]', rows)
+            var selectall = false;
+            var checkedCount = 0;
+            for (var i = 0; i < allCheckbox.length; i++) {
+                if (allCheckbox[i].checked)
+                {
+                    checkedCount = checkedCount + 1;
                 }
             }
+            var el = $('#select-all').get(0);
+            if (checkedCount == allCheckbox.length)
+            {
+               // el.indeterminate = false;
+                el.checked = true;
+            }
+            else 
+            {
+              //  $('#select-all').prop("checked", false);
+                el.checked = false;
+            }
+           
         });
     });
 
