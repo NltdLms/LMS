@@ -94,7 +94,8 @@ namespace NLTD.EmploeePortal.LMS.Dac.Dac
         {
             List<TimeSheetModel> timeSheetModelList = new List<TimeSheetModel>();
             List<ShiftQueryModel> ShiftQueryModelList = GetShiftDetails(UserID, FromDate, ToDate);
-
+            int BeforeShiftBuffer = Convert.ToInt32(ConfigurationManager.AppSettings["BeforeShiftBuffer"]);
+            int AfterShiftBuffer = Convert.ToInt32(ConfigurationManager.AppSettings["AfterShiftBuffer"]);
             try
             {
                 var toDateShift = (from m in ShiftQueryModelList where m.ShiftDate == ToDate select new { fromTime = m.ShiftFromtime, toTime = m.ShiftTotime }).FirstOrDefault();
@@ -102,11 +103,11 @@ namespace NLTD.EmploeePortal.LMS.Dac.Dac
                 TimeSpan toTime = toDateShift.toTime;
                 if(fromTime>toTime)
                 {
-                    ToDate = ToDate.AddDays(1).Add(toTime.Add(new TimeSpan(5,0,0)));
+                    ToDate = ToDate.AddDays(1).Add(toTime.Add(new TimeSpan(AfterShiftBuffer, 0,0)));
                 }
                 else
                 {
-                    ToDate = ToDate.Add(toTime.Add(new TimeSpan(5, 0, 0)));
+                    ToDate = ToDate.Add(toTime.Add(new TimeSpan(AfterShiftBuffer, 0, 0)));
                 }
                 // TimeSpan ToDate = ToDate.Add(toDateShift);
             }
@@ -137,8 +138,7 @@ namespace NLTD.EmploeePortal.LMS.Dac.Dac
             {
                 LeaveTransactionHistoryDac leaveTransactionHistoryDacObj = new LeaveTransactionHistoryDac();
                 List<EmployeeLeave> employeeLeaveList = leaveTransactionHistoryDacObj.GetLeaveForEmployee(UserID);
-                int BeforeShiftBuffer = Convert.ToInt32(ConfigurationManager.AppSettings["BeforeShiftBuffer"]);
-                int AfterShiftBuffer = Convert.ToInt32(ConfigurationManager.AppSettings["AfterShiftBuffer"]);
+                
                 for (int i = 0; i < ShiftQueryModelList.Count(); i++)
                 {
                     TimeSheetModel TimeSheetModelObj = new TimeSheetModel();
