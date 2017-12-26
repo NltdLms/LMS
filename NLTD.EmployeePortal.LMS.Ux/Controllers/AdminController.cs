@@ -608,6 +608,7 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
             errorMessage = string.Empty;
             List<EmployeeAttendanceModel> employeeAttendanceModelList = new List<EmployeeAttendanceModel>();
             ITimesheetHelper EmployeeAttendanceHelperObj = new TimesheetClient();
+            DateTime currentDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day);
             if (string.IsNullOrEmpty(TimeSheetQueryModelObj.Name))
             {
                 EmployeeProfile profile = (EmployeeProfile)Session["Profile"];
@@ -615,12 +616,12 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
                 if (TimeSheetQueryModelObj.FromDate == DateTime.MinValue)
                 {
                     // For Last 15 days Attendence
-                    TimeSheetQueryModelObj.FromDate = DateTime.Now.Add(TimeSpan.Parse("00:00:00")).AddDays(-30);
-                    TimeSheetQueryModelObj.ToDate = DateTime.Now.AddDays(-1);
+                    TimeSheetQueryModelObj.FromDate = currentDate.AddDays(-30);
+                    TimeSheetQueryModelObj.ToDate = currentDate.AddDays(-1);
                 }
                 else
                 {
-                    TimeSheetQueryModelObj.ToDate=TimeSheetQueryModelObj.ToDate.Add(TimeSpan.Parse("23:59:59"));
+                    TimeSheetQueryModelObj.ToDate=TimeSheetQueryModelObj.ToDate;
                 }
             }
             else if (!string.IsNullOrEmpty(TimeSheetQueryModelObj.Name))
@@ -635,13 +636,13 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
                 {
                   
                     // For Last 15 days Attendence
-                    TimeSheetQueryModelObj.FromDate = DateTime.Now.Add(TimeSpan.Parse("00:00:00")).AddDays(-30);
-                    TimeSheetQueryModelObj.ToDate = DateTime.Now.AddDays(-1).Add(TimeSpan.Parse("23:59:59"));
+                    TimeSheetQueryModelObj.FromDate = currentDate.AddDays(-30);
+                    TimeSheetQueryModelObj.ToDate = currentDate.AddDays(-1);
                     
                 }
                 else
                 {
-                    TimeSheetQueryModelObj.ToDate = TimeSheetQueryModelObj.ToDate.Add(TimeSpan.Parse("23:59:59"));
+                    TimeSheetQueryModelObj.ToDate = TimeSheetQueryModelObj.ToDate;
                 }
                 requestLevelPerson = "My";
                 
@@ -649,7 +650,7 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
             }
             if(TimeSheetQueryModelObj.ToDate>DateTime.Now)
             {
-                TimeSheetQueryModelObj.ToDate = DateTime.Now.AddDays(-1);
+                TimeSheetQueryModelObj.ToDate = currentDate.AddDays(-1);
             }
             List<TimeSheetModel> timeSheetModelList = new List<TimeSheetModel>();
             if(requestLevelPerson=="My")

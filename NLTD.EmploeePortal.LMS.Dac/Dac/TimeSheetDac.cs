@@ -94,6 +94,26 @@ namespace NLTD.EmploeePortal.LMS.Dac.Dac
         {
             List<TimeSheetModel> timeSheetModelList = new List<TimeSheetModel>();
             List<ShiftQueryModel> ShiftQueryModelList = GetShiftDetails(UserID, FromDate, ToDate);
+
+            try
+            {
+                var toDateShift = (from m in ShiftQueryModelList where m.ShiftDate == ToDate select new { fromTime = m.ShiftFromtime, toTime = m.ShiftTotime }).FirstOrDefault();
+                TimeSpan fromTime= toDateShift.fromTime;
+                TimeSpan toTime = toDateShift.toTime;
+                if(fromTime>toTime)
+                {
+                    ToDate = ToDate.AddDays(1).Add(toTime.Add(new TimeSpan(5,0,0)));
+                }
+                else
+                {
+                    ToDate = ToDate.Add(toTime.Add(new TimeSpan(5, 0, 0)));
+                }
+                // TimeSpan ToDate = ToDate.Add(toDateShift);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
             IEmployeeAttendanceHelper EmployeeAttendanceDacObj = new EmployeeAttendanceDac();
             //To Retrive the Employee Attendence for the given date.
             List<EmployeeAttendanceModel> EmployeeAttendenceList = EmployeeAttendanceDacObj.GetAttendenceForRange(UserID, FromDate, ToDate, "My");
