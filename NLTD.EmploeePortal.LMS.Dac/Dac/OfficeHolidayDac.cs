@@ -18,7 +18,7 @@ namespace NLTD.EmploeePortal.LMS.Dac.Dac
             List<OfficeHoliday> officeHolidayList = new List<OfficeHoliday>();
             using (var context = new NLTDDbContext())
             {
-                officeHolidayList = (from oh in context.OfficeHoliday join e in context.Employee on oh.OfficeId equals e.OfficeId
+                officeHolidayList = (from oh in context.OfficeHoliday join e in context.Employee on oh.OfficeId equals e.OfficeHolodayId
                                      where e.UserId == userID  || userID ==0
                                      select oh).ToList();
             }
