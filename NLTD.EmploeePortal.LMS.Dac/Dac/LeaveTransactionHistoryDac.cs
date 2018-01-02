@@ -173,17 +173,34 @@ namespace NLTD.EmploeePortal.LMS.Dac.Dac
                 using (var context = new NLTDDbContext())
                 {
                     leaveList = (from l in context.Leave
-                                 join
-         lt in context.LeaveType on l.LeaveTypeId equals lt.LeaveTypeId
-                                 where l.UserId == UserID && l.Status == "A"
+                                 join lt in context.LeaveType on l.LeaveTypeId equals lt.LeaveTypeId
+                                 join ld in context.LeaveDetail on l.LeaveId equals ld.LeaveId
+                                 where l.UserId == UserID && l.Status == "A" && ld.IsDayOff == false
                                  select new EmployeeLeave
                                  {
                                      UserId = l.UserId,
-                                     StartDate = l.StartDate,
-                                     EndDate = l.EndDate,
+                                     StartDate = ld.LeaveDate,
+                                     EndDate = ld.LeaveDate,
                                      LeaveType = lt.Type
                                  }
                                  ).ToList();
+
+                    List<EmployeeLeave> PermissionList = (from l in context.Leave
+                                                          join lt in context.LeaveType on l.LeaveTypeId equals lt.LeaveTypeId
+                                                          join ld in context.PermissionDetail on l.LeaveId equals ld.LeaveId
+                                                          where l.UserId == UserID && l.Status == "A"
+                                                          select new EmployeeLeave
+                                                          {
+                                                              UserId = l.UserId,
+                                                              StartDate = ld.PermissionDate,
+                                                              EndDate = ld.PermissionDate,
+                                                              LeaveType = lt.Type
+                                                          }
+                                 ).ToList();
+
+                    if (PermissionList.Count > 0)
+                        leaveList.AddRange(PermissionList);
+
                 }
             }
             catch (Exception)
