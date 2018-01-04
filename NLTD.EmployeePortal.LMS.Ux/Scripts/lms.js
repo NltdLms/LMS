@@ -1179,11 +1179,16 @@ function loadTransactionLog() {
 
 function loadAttendenceRangeSummary() {
 
+    var myDirectEmployees = false;
+
+    if ($("#RequestLevelPerson").val() === "Team") {
+        myDirectEmployees = $("#mydirectemployeecheck").is(':checked');
+    }
     if ($("#RequestLevelPerson").val() === "My") {
-        URL = '/Admin/loadEmployeeAttendence?&FromDate=' + $('#FromDate').val() + '&ToDate=' + $('#ToDate').val() + '&requestLevelPerson=' + $('#RequestLevelPerson').val();
+        URL = '/Admin/loadEmployeeAttendence?&FromDate=' + $('#FromDate').val() + '&ToDate=' + $('#ToDate').val() + '&requestLevelPerson=' + $('#RequestLevelPerson').val() + '&myDirectEmployees=' + myDirectEmployees;
     }
     else {
-        URL = '/Admin/loadEmployeeAttendence?Name=' + $("#Name").val().replace(new RegExp(" ", "g"), '|') + '&FromDate=' + $('#FromDate').val() + '&ToDate=' + $('#ToDate').val() + '&requestLevelPerson=' + $('#RequestLevelPerson').val();
+        URL = '/Admin/loadEmployeeAttendence?Name=' + $("#Name").val().replace(new RegExp(" ", "g"), '|') + '&FromDate=' + $('#FromDate').val() + '&ToDate=' + $('#ToDate').val() + '&requestLevelPerson=' + $('#RequestLevelPerson').val() + '&myDirectEmployees=' + myDirectEmployees;
     }
     $("#divLoading").show();
     $("#divForEmployeeAttendence")
@@ -1207,15 +1212,22 @@ function loadAttendenceRangeSummary() {
 function loadTimeSheetSummary() {
     var URL = '/Admin/LoadMyTeamTimesheet';
     $("#divLoading").show();
+    var myDirectEmployees = false;
+
     if ($("#RequestLevelPerson").val() === "My") {
 
         URL = '/Admin/LoadMyTimesheet';
     }
+
+    if ($("#RequestLevelPerson").val() === "Team") {
+        myDirectEmployees = $("#mydirectemployeecheck").is(':checked');
+    }
+
     $("#divForTimesheet").html("");
     $("#alert_placeholder").html("");
 
     $("#divForTimesheet")
-        .load(URL, { TimeSheetQueryModelObj: { FromDate: $("#FromDate").val(), ToDate: $("#ToDate").val(), Name: $("#Name").val() } },
+        .load(URL, { TimeSheetQueryModelObj: { FromDate: $("#FromDate").val(), ToDate: $("#ToDate").val(), Name: $("#Name").val(), MyDirectEmployees:myDirectEmployees } },
         function (responseText, textStatus, req) {
             if (textStatus == "error") {
                 Clearshowalert("No Records Found", "alert alert-danger");

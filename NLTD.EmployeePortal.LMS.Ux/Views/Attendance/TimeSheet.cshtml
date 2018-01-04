@@ -106,8 +106,15 @@
             }
             else {
                 $("#divLoading").show();
+                var data = {};
+                if ($("#RequestLevelPerson").val() == "Team") 
+                {
+                    data =
+                        { TimeSheetQueryModelObj: { MyDirectEmployees: true } }
+                }
+                
                 $("#divForTimesheet")
-                    .load('/Admin/LoadMyTeamTimesheet',
+                    .load('/Admin/LoadMyTeamTimesheet', data,
                     function () {
                         $(".dtatable").dataTable({ "aaSorting": [] });
                         $("#divLoading").hide();
@@ -208,7 +215,16 @@
                                         @Html.TextBoxFor(m => m.Name, new { @class = "form-control" })
 
                                     </div>
-                                    <div class="col-sm-5" style="text-align:right">
+                                    <div class="col-sm-3" style="padding-top:10px">
+                                        @if ((string)ViewBag.RequestLevelPerson == "Team")
+                                        {
+                                            <br />
+                                            <input type="checkbox" id="mydirectemployeecheck" checked />
+                                            @Html.Label("Direct employees only")
+
+                                        }
+                                    </div>
+                                    <div class="col-sm-2" style="text-align:right">
                                         <br />
                                         <button type="button" class="btn btn-primary" onclick="loadTimeSheetSummary()">SEARCH</button>
 

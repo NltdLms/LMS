@@ -103,7 +103,7 @@ namespace NLTD.EmploeePortal.LMS.Dac.Dac
             return profile;
         }
 
-        public List<EmployeeProfile> GetReportingEmployeeProfile(Int64 userId, string role)
+        public List<EmployeeProfile> GetReportingEmployeeProfile(Int64 userId, string role,bool myDirectEmployees)
         {
             List<EmployeeProfile> employeeProfileList = new List<EmployeeProfile>();
             try
@@ -137,29 +137,57 @@ namespace NLTD.EmploeePortal.LMS.Dac.Dac
                     }
                     else//for Team Lead
                     {
-                        IList<Int64> reportingEmployeeList = GetEmployeesReporting(userId);
-                        employeeProfileList = (from employee in context.Employee
-                                               join rt in context.EmployeeRole on employee.EmployeeRoleId equals rt.RoleId
-                                               where employee.IsActive == true && reportingEmployeeList.Contains(employee.UserId)
-                                               select new EmployeeProfile
-                                               {
-                                                   EmailAddress = employee.EmailAddress,
-                                                   EmployeeId = employee.EmployeeId,
-                                                   FirstName = employee.FirstName,
-                                                   LastName = employee.LastName,
-                                                   Gender = employee.Gender,
-                                                   OfficeHolodayId = employee.OfficeHolodayId,
-                                                   OfficeId = employee.OfficeId,
-                                                   LocationText = "",
-                                                   MobileNumber = employee.MobileNumber,
-                                                   ReportedToId = employee.ReportingToId,
-                                                   RoleId = employee.EmployeeRoleId,
-                                                   RoleText = rt.Role,
-                                                   UserId = employee.UserId,
-                                                   Avatar = employee.AvatarUrl,
-                                                   LogonId = employee.LoginId,
-                                                   IsActive = employee.IsActive
-                                               }).ToList();
+                        if(myDirectEmployees)
+                        {
+                            employeeProfileList = (from employee in context.Employee
+                                                   join rt in context.EmployeeRole on employee.EmployeeRoleId equals rt.RoleId
+                                                   where employee.IsActive == true && employee.ReportingToId ==userId
+                                                   select new EmployeeProfile
+                                                   {
+                                                       EmailAddress = employee.EmailAddress,
+                                                       EmployeeId = employee.EmployeeId,
+                                                       FirstName = employee.FirstName,
+                                                       LastName = employee.LastName,
+                                                       Gender = employee.Gender,
+                                                       OfficeHolodayId = employee.OfficeHolodayId,
+                                                       OfficeId = employee.OfficeId,
+                                                       LocationText = "",
+                                                       MobileNumber = employee.MobileNumber,
+                                                       ReportedToId = employee.ReportingToId,
+                                                       RoleId = employee.EmployeeRoleId,
+                                                       RoleText = rt.Role,
+                                                       UserId = employee.UserId,
+                                                       Avatar = employee.AvatarUrl,
+                                                       LogonId = employee.LoginId,
+                                                       IsActive = employee.IsActive
+                                                   }).ToList();
+                        }
+                        else
+                        {
+                            IList<Int64> reportingEmployeeList = GetEmployeesReporting(userId);
+                            employeeProfileList = (from employee in context.Employee
+                                                   join rt in context.EmployeeRole on employee.EmployeeRoleId equals rt.RoleId
+                                                   where employee.IsActive == true && reportingEmployeeList.Contains(employee.UserId)
+                                                   select new EmployeeProfile
+                                                   {
+                                                       EmailAddress = employee.EmailAddress,
+                                                       EmployeeId = employee.EmployeeId,
+                                                       FirstName = employee.FirstName,
+                                                       LastName = employee.LastName,
+                                                       Gender = employee.Gender,
+                                                       OfficeHolodayId = employee.OfficeHolodayId,
+                                                       OfficeId = employee.OfficeId,
+                                                       LocationText = "",
+                                                       MobileNumber = employee.MobileNumber,
+                                                       ReportedToId = employee.ReportingToId,
+                                                       RoleId = employee.EmployeeRoleId,
+                                                       RoleText = rt.Role,
+                                                       UserId = employee.UserId,
+                                                       Avatar = employee.AvatarUrl,
+                                                       LogonId = employee.LoginId,
+                                                       IsActive = employee.IsActive
+                                                   }).ToList(); 
+                        }
                     }
                 }
             }
@@ -1108,6 +1136,23 @@ namespace NLTD.EmploeePortal.LMS.Dac.Dac
             }
         }
 
+        public List<Int64> GetDirectEmployees(Int64 userID)
+        {
+            List<Int64> userIDList = new List<Int64>();
+            try
+            {
+                using (var context = new NLTDDbContext())
+                {
+                    userIDList = (from e in context.Employee where e.ReportingToId == userID && e.IsActive select e.UserId).ToList();
+                }
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+            return userIDList;
+        }
 
     }
 }

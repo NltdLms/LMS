@@ -33,6 +33,7 @@ namespace NLTD.EmployeePortal.LMS.Ux.AppHelpers
                 string menu = string.Empty;
                 
                 var windowsLoginName = identity.Name;
+                //var windowsLoginName = "CORP\\UMAGESWARI";
                 if (Request.QueryString["Username"] != null)
                 {
                     windowsLoginName = Convert.ToString(Request.QueryString["Username"]).Replace(".", "\\");

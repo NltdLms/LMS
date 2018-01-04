@@ -29,9 +29,9 @@ namespace NLTD.EmploeePortal.LMS.Dac.DbHelper
         }
 
 
-        public List<EmployeeAttendanceModel> GetAttendenceForRange(Int64 UserID, DateTime FromDateTime,DateTime ToDateTime,string requestLevelUser)
+        public List<EmployeeAttendanceModel> GetAttendenceForRange(Int64 UserID, DateTime FromDateTime,DateTime ToDateTime,string requestLevelUser,bool IsDirectEmployees)
         {
-            return employeeAttendanceHelper.GetAttendenceForRange(UserID, FromDateTime, ToDateTime, requestLevelUser);
+            return employeeAttendanceHelper.GetAttendenceForRange(UserID, FromDateTime, ToDateTime, requestLevelUser, IsDirectEmployees);
         }
 
     }
