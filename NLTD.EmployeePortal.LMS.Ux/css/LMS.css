@@ -35,3 +35,7 @@ select {
     font-weight: bold;
     color: red !important;
 }
+.table-condensed th {
+    padding-left: 10px !important;
+}
+

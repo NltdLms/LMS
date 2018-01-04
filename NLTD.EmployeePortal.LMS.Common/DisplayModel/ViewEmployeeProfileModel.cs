@@ -21,14 +21,17 @@ namespace NLTD.EmployeePortal.LMS.Common.DisplayModel
         public String EmailAddress { get; set; }
 
         public String MobileNumber { get; set; }
-        public String Gender { get; set; }    
-        
-        public String RoleText { get; set; }     
+        public String Gender { get; set; }
+
+        public Int32 ShiftId { get; set; }
+        public String Shift { get; set; }
+        public Int64? CardId { get; set; }
+        public String RoleText { get; set; }
 
         public String ReportedToName { get; set; }
 
         public String OfficeName { get; set; }
-        public String HolidayOfficeName { get; set; }     
+        public String HolidayOfficeName { get; set; }
 
 
         public bool Sunday { get; set; }

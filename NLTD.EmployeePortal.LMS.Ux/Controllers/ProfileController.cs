@@ -34,6 +34,11 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
             using (var client = new EmployeeClient())
             {
                 profile = client.GetEmployeeProfile(userIdForProfile);
+                
+            }
+            using (var client = new ShiftClient())
+            {
+                ViewBag.ShiftList = client.GetShiftMaster();
             }
             using (var client = new OfficeLocationClient())
             {
@@ -92,7 +97,10 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
                 {
                     ViewBag.RoleList = client.GetAllRoles();
                 }
-
+                using (var client = new ShiftClient())
+                {
+                    ViewBag.ShiftList = client.GetShiftMaster();
+                }
                 using (var client = new EmployeeClient())
                 {
                     IList<DropDownItem> reptList = client.GetActiveEmpList(OfficeId,null);
@@ -237,6 +245,8 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
                             employee.ErrorMesage = "The employee Id already exists.";
                         else if (result == "DupCorp")
                             employee.ErrorMesage = "The logon id was already assigned to another employee.";
+                        else if (result == "DupCard")
+                            employee.ErrorMesage = "The card number was already assigned to another employee.";
                     }
                 }        
 
@@ -261,7 +271,10 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
             {
                 ViewBag.RoleList = client.GetAllRoles();
             }
-
+            using (var client = new ShiftClient())
+            {
+                ViewBag.ShiftList = client.GetShiftMaster();
+            }
             using (var client = new EmployeeClient())
             {
                 IList<DropDownItem> reptList = new List<DropDownItem>();
@@ -288,7 +301,8 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
         public ActionResult MyLmsProfile()
         {
             EmployeeProfileSearchModel mdl = new EmployeeProfileSearchModel();
-            mdl.RequestLevelPerson = "My";            
+            mdl.RequestLevelPerson = "My";
+            
             return View("SearchTeamLmsProfile", mdl);
         }
         public ActionResult TeamLmsProfile()
@@ -296,6 +310,10 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
             EmployeeProfileSearchModel mdl = new EmployeeProfileSearchModel();
             mdl.RequestLevelPerson = "Team";
             mdl.OnlyReportedToMe = true;
+            using (var client = new ShiftClient())
+            {
+                ViewBag.ShiftList = client.GetShiftMaster();
+            }
             return View("SearchTeamLmsProfile", mdl);
         }
         public ActionResult AdminLmsProfile()

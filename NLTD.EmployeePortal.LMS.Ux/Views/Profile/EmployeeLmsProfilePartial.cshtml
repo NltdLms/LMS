@@ -43,7 +43,7 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-sm-6">
+                        <div class="col-sm-3">
                             <div class="form-group">
 
                                 @Html.Label("Email Address")
@@ -62,9 +62,20 @@
                         <div class="col-sm-3">
                             <div class="form-group">
                                 <div class="form-group">
-                                    @Html.Label("Mobile Number")
-                                    @Html.TextBoxFor(e => e.MobileNumber, null, new { @class = "form-control", @readonly = true })
+                                    @Html.Label("Card Number")
+                                    @Html.TextBoxFor(e => e.CardId, null, new { @class = "form-control", @readonly = true })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="form-group">
+                                <div class="form-group">
 
+                                    <div class="form-group">
+                                        @Html.Label("Employee Shift")
+                                        @Html.TextBoxFor(e => e.Shift, null, new { @class = "form-control", @readonly = true })
+
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -106,7 +117,7 @@
                     </div>
                     <div class="row" style="padding-top:10px;padding-bottom:10px;">
                         <div class="col-sm-6">
-                            
+                           
                             <div class="col-sm-3">
                                 @Html.CheckBoxFor(e => e.Monday, new { @disabled = true })
                                 @Html.LabelFor(e => e.Monday, new { style = "font-weight:normal" })
@@ -125,7 +136,7 @@
                             </div>
                         </div>
                         <div class="col-sm-6">
-                           
+                            
                             <div class="col-sm-3">
                                 @Html.CheckBoxFor(e => e.Friday, new { @disabled = true })
                                 @Html.LabelFor(e => e.Friday, new { style = "font-weight:normal" })

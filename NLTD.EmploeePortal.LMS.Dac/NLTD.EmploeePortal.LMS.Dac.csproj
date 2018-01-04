@@ -52,6 +52,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -63,6 +64,7 @@
   <ItemGroup>
     <Compile Include="Context\NLTDDbContext.cs" />
     <Compile Include="Dac\BusinessHelper.cs" />
+    <Compile Include="Dac\EmployeeAttendanceDac.cs" />
     <Compile Include="Dac\EmployeeDac.cs" />
     <Compile Include="Dac\EmployeeLeaveBalanceDac.cs" />
     <Compile Include="Dac\EmployeeRoleDac.cs" />
@@ -70,8 +72,11 @@
     <Compile Include="Dac\LeaveTransactionHistoryDac.cs" />
     <Compile Include="Dac\OfficeHolidayDac.cs" />
     <Compile Include="Dac\OfficeLocationDac.cs" />
-    <Compile Include="Dac\OfficeWeekEndDac.cs" />
+    <Compile Include="Dac\OfficeWeekOffDac.cs" />
     <Compile Include="Dac\RoleDac.cs" />
+    <Compile Include="Dac\ShiftDac.cs" />
+    <Compile Include="Dac\TimeSheetDac.cs" />
+    <Compile Include="DbHelper\EmployeeAttendanceHelper.cs" />
     <Compile Include="DbHelper\EmployeeHelper.cs" />
     <Compile Include="DbHelper\EmployeeLeaveBalanceHelper.cs" />
     <Compile Include="DbHelper\EmployeeRoleHelper.cs" />
@@ -81,8 +86,11 @@
     <Compile Include="DbHelper\OfficeLocationHelper.cs" />
     <Compile Include="DbHelper\OfficeWeekEndHelper.cs" />
     <Compile Include="DbHelper\RoleHelper.cs" />
+    <Compile Include="DbHelper\ShiftHelper.cs" />
+    <Compile Include="DbHelper\TimesheetHelper.cs" />
     <Compile Include="DbModel\DaysOfWeek.cs" />
     <Compile Include="DbModel\Employee.cs" />
+    <Compile Include="DbModel\EmployeeAttendance.cs" />
     <Compile Include="DbModel\EmployeeLeaveBalance.cs" />
     <Compile Include="DbModel\EmployeeRole.cs" />
     <Compile Include="DbModel\EmployeeTransactionHistory.cs" />
@@ -95,6 +103,10 @@
     <Compile Include="DbModel\OfficeHoliday.cs" />
     <Compile Include="DbModel\OfficeLocation.cs" />
     <Compile Include="DbModel\PermissionDetail.cs" />
+    <Compile Include="DbModel\ShiftMapping.cs" />
+    <Compile Include="DbModel\ShiftMaster.cs" />
+    <Compile Include="DbModel\ShiftTransaction.cs" />
+    <Compile Include="DbModel\TimeSheetStatus.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

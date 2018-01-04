@@ -5,6 +5,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using NLTD.EmploeePortal.LMS.Dac.DbModel;
+
 
 namespace NLTD.EmploeePortal.LMS.Dac.Dac
 {
@@ -19,86 +21,102 @@ namespace NLTD.EmploeePortal.LMS.Dac.Dac
             IList<LeaveTransactionDetail> retModel = new List<LeaveTransactionDetail>();
             LeaveDac lv = new LeaveDac();
             IList<Int64> empList = lv.GetEmployeesReporting(LeaduserId);
-            using (var context = new NLTDDbContext())
+            try
             {
-                EmployeeDac employeeDac = new EmployeeDac();
-                long userId = 0;
-
-                if (RequestMenuUser != "My")
-                    userId = employeeDac.GetUserId(Name);
-
-
-                if (userId > 0 || (RequestMenuUser == "My" && LeaduserId > 0))
+                using (var context = new NLTDDbContext())
                 {
-                    string ReportingTo = (RequestMenuUser == "My" && LeaduserId > 0) ? employeeDac.ReportingToName(LeaduserId) : employeeDac.ReportingToName(userId);
+                    EmployeeDac employeeDac = new EmployeeDac();
+                    long userId = 0;
 
-                    List<LeaveTransactiontHistoryModel> transactionDetails = new List<LeaveTransactiontHistoryModel>();
-                    if (RequestMenuUser == "My")
-                    {
-                        transactionDetails = getTransactionDetails(context, LeaduserId);
-                    }
-                    else if (RequestMenuUser == "Admin")
-                    {
-                        var leadinfo = (from emp in context.Employee
-                                        join role in context.EmployeeRole on emp.EmployeeRoleId equals role.RoleId
-                                        where emp.UserId == LeaduserId
-                                        select new { RoleName = role.Role }).FirstOrDefault();
+                    if (RequestMenuUser != "My")
+                        userId = employeeDac.GetUserId(Name);
 
-                        if (leadinfo.RoleName.ToUpper() == "ADMIN" || leadinfo.RoleName.ToUpper() == "HR")
+
+                    if (userId > 0 || (RequestMenuUser == "My" && LeaduserId > 0))
+                    {
+                        string ReportingTo = (RequestMenuUser == "My" && LeaduserId > 0) ? employeeDac.ReportingToName(LeaduserId) : employeeDac.ReportingToName(userId);
+
+                        List<LeaveTransactiontHistoryModel> transactionDetails = new List<LeaveTransactiontHistoryModel>();
+                        if (RequestMenuUser == "My")
                         {
-                            transactionDetails = getTransactionDetails(context, userId);
+                            transactionDetails = getTransactionDetails(context, LeaduserId);
                         }
-                    }
-                    else if (RequestMenuUser == "Team")
-                    {
-                        //var user = (from e in context.Employee
-                        //            where e.ReportingToId == LeaduserId
-                        //            select e).ToList();
-
-                        var user = empList.Where(x => x == userId).FirstOrDefault();
-
-                        //var found = FindControlRecursively(user, userId);
-
-                        if (user != null)
+                        else if (RequestMenuUser == "Admin")
                         {
-                            transactionDetails = getTransactionDetails(context, userId);
+                            var leadinfo = (from emp in context.Employee
+                                            join role in context.EmployeeRole on emp.EmployeeRoleId equals role.RoleId
+                                            where emp.UserId == LeaduserId
+                                            select new { RoleName = role.Role }).FirstOrDefault();
+
+                            if (leadinfo.RoleName.ToUpper() == "ADMIN" || leadinfo.RoleName.ToUpper() == "HR")
+                            {
+                                transactionDetails = getTransactionDetails(context, userId);
+                            }
                         }
+                        else if (RequestMenuUser == "Team")
+                        {
+                            //var user = (from e in context.Employee
+                            //            where e.ReportingToId == LeaduserId
+                            //            select e).ToList();
+
+                            var user = empList.Where(x => x == userId).FirstOrDefault();
+
+                            //var found = FindControlRecursively(user, userId);
+
+                            if (user != null)
+                            {
+                                transactionDetails = getTransactionDetails(context, userId);
+                            }
+                        }
+
+                        IList<LeaveTransactionDetail> retList = new List<LeaveTransactionDetail>();
+                        var groupedLeaveList = transactionDetails.GroupBy(u => u.LeaveTypeId)
+                                                              .Select(grp => new { LeaveTypeId = grp.Key, LeaveTransactiontHistoryModel = grp.ToList() })
+                                                              .ToList();
+
+                        retModel = (from gv in groupedLeaveList
+                                    select new LeaveTransactionDetail
+                                    {
+                                        ReportingTo = ReportingTo,
+                                        LeaveTypeId = gv.LeaveTypeId,
+                                        LeaveType = gv.LeaveTransactiontHistoryModel[0].Type,
+                                        LeaveTransactiontHistoryModel = gv.LeaveTransactiontHistoryModel
+                                    }).ToList();
                     }
-
-                    IList<LeaveTransactionDetail> retList = new List<LeaveTransactionDetail>();
-                    var groupedLeaveList = transactionDetails.GroupBy(u => u.LeaveTypeId)
-                                                          .Select(grp => new { LeaveTypeId = grp.Key, LeaveTransactiontHistoryModel = grp.ToList() })
-                                                          .ToList();
-
-                    retModel = (from gv in groupedLeaveList
-                                select new LeaveTransactionDetail
-                                {
-                                    ReportingTo = ReportingTo,
-                                    LeaveTypeId = gv.LeaveTypeId,
-                                    LeaveType = gv.LeaveTransactiontHistoryModel[0].Type,
-                                    LeaveTransactiontHistoryModel = gv.LeaveTransactiontHistoryModel
-                                }).ToList();
                 }
+            }
+            catch (Exception)
+            {
+
+                throw;
             }
 
             return retModel;
         }
 		
-		public Employee FindControlRecursively(List<Employee> root, Int64 id)
+		public static Employee FindControlRecursively(List<Employee> root, Int64 id)
         {
-            foreach (Employee emp in root)
+            try
             {
-                if (emp.UserId == id)
-                    return emp;
-                using (var context = new NLTDDbContext())
+                foreach (Employee emp in root)
                 {
-                    var child = (from e in context.Employee
-                                 where e.ReportingToId == emp.UserId
-                                 select e).ToList();
-                    Employee found = FindControlRecursively(child, id);
-                    if (found != null)
-                        return found;
+                    if (emp.UserId == id)
+                        return emp;
+                    using (var context = new NLTDDbContext())
+                    {
+                        var child = (from e in context.Employee
+                                     where e.ReportingToId == emp.UserId
+                                     select e).ToList();
+                        Employee found = FindControlRecursively(child, id);
+                        if (found != null)
+                            return found;
+                    }
                 }
+            }
+            catch (Exception)
+            {
+
+                throw;
             }
             return null;
         }
@@ -147,12 +165,48 @@ namespace NLTD.EmploeePortal.LMS.Dac.Dac
             return transactionDetails;
         }
 
-        public List<Leave> GetLeaveForEmployee(Int64 UserID)
+        public List<EmployeeLeave> GetLeaveForEmployee(Int64 UserID)
         {
-            List<Leave> leaveList = new List<Leave>();
-            using (var context = new NLTDDbContext())
+            List<EmployeeLeave> leaveList = new List<EmployeeLeave>();
+            try
             {
-                leaveList = (from l in context.Leave where l.UserId == UserID select l).ToList();
+                using (var context = new NLTDDbContext())
+                {
+                    leaveList = (from l in context.Leave
+                                 join lt in context.LeaveType on l.LeaveTypeId equals lt.LeaveTypeId
+                                 join ld in context.LeaveDetail on l.LeaveId equals ld.LeaveId
+                                 where l.UserId == UserID && l.Status == "A" && ld.IsDayOff == false
+                                 select new EmployeeLeave
+                                 {
+                                     UserId = l.UserId,
+                                     StartDate = ld.LeaveDate,
+                                     EndDate = ld.LeaveDate,
+                                     LeaveType = lt.Type
+                                 }
+                                 ).ToList();
+
+                    List<EmployeeLeave> PermissionList = (from l in context.Leave
+                                                          join lt in context.LeaveType on l.LeaveTypeId equals lt.LeaveTypeId
+                                                          join ld in context.PermissionDetail on l.LeaveId equals ld.LeaveId
+                                                          where l.UserId == UserID && l.Status == "A"
+                                                          select new EmployeeLeave
+                                                          {
+                                                              UserId = l.UserId,
+                                                              StartDate = ld.PermissionDate,
+                                                              EndDate = ld.PermissionDate,
+                                                              LeaveType = lt.Type
+                                                          }
+                                 ).ToList();
+
+                    if (PermissionList.Count > 0)
+                        leaveList.AddRange(PermissionList);
+
+                }
+            }
+            catch (Exception)
+            {
+
+                throw;
             }
             return leaveList;
         }

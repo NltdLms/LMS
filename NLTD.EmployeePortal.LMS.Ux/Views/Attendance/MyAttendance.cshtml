@@ -1,0 +1,233 @@
+﻿@model NLTD.EmployeePortal.LMS.Common.QueryModel.EmployeeAttendenceQueryModel
+
+<style type="text/css">
+    .ui-autocomplete {
+        height: 220px;
+        overflow-y: scroll;
+        overflow-x: hidden;
+    }
+
+    th {
+        font-size: 11px;
+    }
+
+    td {
+        font-size: 12px;
+    }
+    form
+    {
+        margin-bottom:0px;
+    }
+    .box-body
+    {
+        padding:10px 10px 0px 10px;
+    }
+</style>
+
+<script src="~/Scripts/DataTables/jquery.dataTables.min.js"></script>
+<link href="~/Content/DataTables/css/jquery.dataTables.min.css" rel="stylesheet" />
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<script src="~/Scripts/daterangepicker.js"></script>
+<link href="~/Content/daterangepicker.css" rel="stylesheet" />
+
+@section scripts
+{
+    <script src="~/Scripts/jquery-2.2.4.js"></script>
+    <script src="~/Scripts/lms.js?v=1.03"></script>
+    <script type="text/javascript" src="~/Scripts/bootstrap.js"></script>
+    <script src="~/Scripts/bootstrap-datetimepicker.js"></script>
+    <link href="~/Content/bootstrap-datetimepicker.css" rel="stylesheet" />
+
+    <script src="~/Scripts/moment.js"></script>
+    <link href="~/Content/bootstrap.css" rel="stylesheet" />
+    <script type="text/JavaScript">
+        $(document).ready(function () {
+            $("#DateRange").daterangepicker({
+                locale: {
+                    format: 'DD-MM-YYYY'
+                },
+                "autoApply": true,
+                "showDropdowns": true,
+                ranges: {
+                    "Today": [moment(), moment()],
+                    "Yesterday": [moment().subtract(1, 'days'), moment()],
+                    "This Week": [moment().startOf('week'), moment().endOf('week')],
+                    "This Month": [moment().startOf('month'), moment().endOf('month')],
+                    "This Year": [moment().startOf('year'), moment().endOf('year')],
+                    "Last 30 days": [moment().subtract(29, 'days'), moment()],
+                    "Last 180 days": [moment().subtract(179, 'days'), moment()],
+                    "Last 1 Year": [moment().subtract(1, 'year').add(1, 'day'), moment()]
+                },
+                 startDate: '@DateTime.Now.AddDays(-29).ToString("dd-MM-yyyy")',
+                endDate: '@DateTime.Now.ToString("dd-MM-yyyy")'
+            });
+            var curdate = new Date();
+            $("#FromDate").val('@DateTime.Now.AddDays(-29).ToString("dd-MM-yyyy")');
+            $("#ToDate").val('@DateTime.Now.ToString("dd-MM-yyyy")');
+
+            $('#DateRange').on('apply.daterangepicker',
+                function (ev, picker) {
+                    $("#FromDate").val(picker.startDate.format('DD-MM-YYYY'));
+                    $("#ToDate").val(picker.endDate.format('DD-MM-YYYY'));
+                });
+
+            $("#Name").autocomplete({
+                source: function (request, response) {
+                    $.ajax({
+                        url: "/Admin/GetEmployeeList",
+                        type: "POST",
+                        dataType: "json",
+                        data: { term: request.term },
+                        success: function (data) {
+                            response($.map(data,
+                                function (item) {
+                                    return { label: item.Name, value: item.Name };
+                                }))
+
+
+                        }
+                    })
+                },
+                messages: {
+                    noResults: "",
+                    results: function () { }
+                }
+            });
+
+            $("#divLoading").show();
+            $("#divForEmployeeAttendence")
+                .load('/Admin/loadEmployeeAttendence?FromDate=Nodate&ToDate=Nodate&requestLevelPerson=' + $("#RequestLevelPerson").val(),
+                function () {
+
+                     $(".dtatable").dataTable({ "aaSorting": [] });
+                    $("#divLoading").hide();
+                    $('html, body').animate({
+                        scrollTop: 230 // Means Less header height
+                    },
+                        400);
+
+                });
+
+
+        });
+
+        function Validate() {
+            if ($("#RequestLevelPerson").val() === "Team") {
+                if ($("#Name").val() === "") {
+                    alert("Please enter the name");
+                    return false;
+                }
+            }
+        }
+    </script>
+
+}
+
+@{
+
+
+
+
+    if (@Model != null)
+    {
+        if (Model.ErrorMsg != "" && Model.ErrorMsg != null)
+        {
+            <div class="alert alert-danger">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">x</span>
+                </button>
+                @Model.ErrorMsg
+            </div>
+        }
+    }
+    string heading = string.Empty;
+    if((string)ViewBag.RequestLevelPerson == "Admin" || (string)ViewBag.RequestLevelPerson == "HR")
+    {
+        heading = "Employee Attendance";
+    }
+    else if((string)ViewBag.RequestLevelPerson == "My")
+    {
+        heading = "My Attendance";
+    }
+    else if ((string)ViewBag.RequestLevelPerson == "Team")
+    {
+        heading = "My Team Attendance";
+    }
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="box box-primary">
+                <div class="box-header with-border">
+                    <h3 class="box-title">@heading</h3>
+                </div>
+                <div class="box-body">
+                    <form id='your-range-form' action='@Url.Action("ExportAttendenceToExcel","Admin", new { RequestLevelPerson = (string)ViewBag.RequestLevelPerson })' method='post'>
+
+                        @{
+                            @Html.Hidden("RequestLevelPerson", (string)ViewBag.RequestLevelPerson)
+                            @Html.HiddenFor(x => x.FromDate)
+                            @Html.HiddenFor(x => x.ToDate)
+                            if ((string)ViewBag.RequestLevelPerson == "My")
+                            {
+                                <div class="row">
+                                    <div class="col-sm-3">
+
+                                        @Html.Label("Date Range")
+                                        @Html.TextBoxFor(m => m.DateRange, new { @class = "form-control" })
+
+
+                                    </div>
+                                    <div class="col-sm-6"></div>
+                                    <div class="col-sm-3" style="text-align:right">
+                                        <br />
+                                        <button type="button" class="btn btn-primary" onclick="loadAttendenceRangeSummary()">SEARCH</button>
+
+                                    </div>
+
+                                </div>
+
+
+                            }
+                            else
+                            {
+                                <div class="row">
+                                    <div class="col-sm-3">
+
+                                        @Html.Label("Date Range")
+                                        @Html.TextBoxFor(m => m.DateRange, new { @class = "form-control" })
+
+
+                                    </div>
+                                    <div class="col-sm-4">
+
+                                        @Html.LabelFor(x => x.Name)
+                                        @Html.TextBoxFor(m => m.Name, new { @class = "form-control" })
+
+                                    </div>
+                                    <div class="col-sm-3">
+                                    </div>
+                                    <div class="col-sm-2" style="text-align:right">
+                                        <br />
+                                        <button style="margin: 6px 12px "  type="button" class="btn btn-primary" onclick="loadAttendenceRangeSummary()">SEARCH</button>
+
+                                    </div>
+                                </div>
+
+                            }
+                        }
+                        <br />
+                        <div id="alert_placeholder">
+
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="divForEmployeeAttendence" ></div>
+
+}
+
+
+

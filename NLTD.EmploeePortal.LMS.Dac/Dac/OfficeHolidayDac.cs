@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using NLTD.EmploeePortal.LMS.Dac.DbModel;
 
 namespace NLTD.EmploeePortal.LMS.Dac.Dac
 {
@@ -11,6 +12,17 @@ namespace NLTD.EmploeePortal.LMS.Dac.Dac
         public void Dispose()
         {
             //Nothing to implement...
+        }
+        public List<OfficeHoliday> GetOfficeHoliday(Int64 userID=0)
+        {
+            List<OfficeHoliday> officeHolidayList = new List<OfficeHoliday>();
+            using (var context = new NLTDDbContext())
+            {
+                officeHolidayList = (from oh in context.OfficeHoliday join e in context.Employee on oh.OfficeId equals e.OfficeHolodayId
+                                     where e.UserId == userID  || userID ==0
+                                     select oh).ToList();
+            }
+            return officeHolidayList;
         }
     }
 }

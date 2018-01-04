@@ -25,13 +25,20 @@ namespace NLTD.EmployeePortal.LMS.Ux.AppHelpers
             switch (RoleText.ToUpper())
             {
                 case "ADMIN":
-                    path4 = "";                                
+                    path = path3;                             
                     break;
-                case "HR":                   
+                case "HR":
+                    path = path4;
                     break;
                 case "EMPLOYEE":                    
-                    path3 = "";
-                    path4 = "";
+                    if(IsHandlingTeam)
+                    {
+                        path = path2;
+                    }
+                    else
+                    {
+                        path = path1;
+                    }
                     break;
                 default://check and remove this   
                     break;
@@ -43,45 +50,13 @@ namespace NLTD.EmployeePortal.LMS.Ux.AppHelpers
                     Menu menuPerPath = null;
                     XmlSerializer serializer = new XmlSerializer(typeof(Menu));
 
-                    for (int i = 1; i <= 4; i++)
-                    {
-                        if (i == 1 && path1 != "")
-                        {
-                            using (var stream = new FileStream(path1, FileMode.Open,FileAccess.Read,FileShare.Read))
+                    
+                            using (var stream = new FileStream(path, FileMode.Open,FileAccess.Read,FileShare.Read))
                             {
                                 StreamReader reader = new StreamReader(stream);
                                 menuPerPath = (Menu)serializer.Deserialize(reader);
                                 menu.menuitem.AddRange(menuPerPath.menuitem);
                             }
-                            if (IsHandlingTeam)
-                            {
-                                using (var stream = new FileStream(path2, FileMode.Open, FileAccess.Read, FileShare.Read))
-                            {
-                                    StreamReader reader = new StreamReader(stream);
-                                    menuPerPath = (Menu)serializer.Deserialize(reader);
-                                    menu.menuitem.AddRange(menuPerPath.menuitem);
-                                }
-                            }
-                        }
-                        else if (i == 3 && path3 != "")
-                        {
-                            using (var stream = new FileStream(path3, FileMode.Open,FileAccess.Read, FileShare.Read))
-                        {
-                                StreamReader reader = new StreamReader(stream);
-                                menuPerPath = (Menu)serializer.Deserialize(reader);
-                                menu.menuitem.AddRange(menuPerPath.menuitem);
-                            }
-                        }
-                    else if (i == 4 && path4 != "")
-                    {
-                        using (var stream = new FileStream(path4, FileMode.Open, FileAccess.Read, FileShare.Read))
-                        {
-                            StreamReader reader = new StreamReader(stream);
-                            menuPerPath = (Menu)serializer.Deserialize(reader);
-                            menu.menuitem.AddRange(menuPerPath.menuitem);
-                        }
-                    }
-                }
 
 
                 using (var stream = new FileStream(path5, FileMode.Open, FileAccess.Read, FileShare.Read))
@@ -90,7 +65,7 @@ namespace NLTD.EmployeePortal.LMS.Ux.AppHelpers
                     menuPerPath = (Menu)serializer.Deserialize(reader);
                     menu.menuitem.AddRange(menuPerPath.menuitem);
                 }
-
+                //menu.menuitem=RemoveDublicates(menu.menuitem);
                 return FormatMenuForAdminLTE(menu);
             }
             else
@@ -157,5 +132,55 @@ namespace NLTD.EmployeePortal.LMS.Ux.AppHelpers
             MenuBuilder.Append("</a>");
             return MenuBuilder.ToString();
         }
+
+        //private static List<MenuItem> RemoveDublicates(List<MenuItem> menuItem)
+        //{
+        //    List<MenuItem> returnList = new List<MenuItem>();
+        //    List<string> dublicateTitleList = new List<string>();
+        //    var dublicateTitle = (from m in menuItem
+        //                                   group m by m.title into g
+        //                                   where g.Count() > 1
+        //                                   select  new { title = g.Key });
+        //    foreach (var item in dublicateTitle)
+        //    {
+        //        dublicateTitleList.Add(item.title);   
+        //    }
+        //    List<MenuItem> menuWithoutDublicate = (from m in menuItem where !(dublicateTitleList.Contains(m.title)) select m).ToList();
+        //    List < MenuItem > menuWithDublicate = (from m in menuItem where (dublicateTitleList.Contains(m.title)) select m).OrderBy(m=>m.title).ToList();
+        //    List<string> alreadyFound = new List<string>();
+        //    List<MenuItem> mergedDublicateList = new List<MenuItem>();
+        //    for (int i = 0; i < menuWithDublicate.Count(); i++)
+        //    {
+        //        bool alreadyFoundTitle = false;
+        //        string currentTittle = menuWithDublicate[i].title;
+        //        for (int k = 0; k < alreadyFound.Count; k++)
+        //        {
+        //            if (currentTittle == alreadyFound[k])
+        //            {
+        //                alreadyFoundTitle = true;
+        //                break;
+        //            }
+        //        }
+        //        if (alreadyFoundTitle)
+        //        {
+        //            i = i + 1;
+        //            continue;
+        //        }
+        //        mergedDublicateList.Add(menuWithDublicate[i]);
+        //        for (int j = i+1; j < menuWithDublicate.Count(); j++)
+        //        {
+        //                if(currentTittle== menuWithDublicate[j].title)
+        //                {
+        //                mergedDublicateList[mergedDublicateList.Count() - 1].level1item.AddRange(menuWithDublicate[j].level1item);
+        //                mergedDublicateList[mergedDublicateList.Count() - 1].level1item =
+        //                    mergedDublicateList[mergedDublicateList.Count() - 1].level1item.GroupBy(x => x.title).Select(y => y.FirstOrDefault()).OrderBy(m=>m.title).ToList(); 
+        //                    //mergedDublicateList[mergedDublicateList.Count() - 1].level1item.Distinct().ToList();
+        //                }
+        //        }
+        //        alreadyFound.Add(menuWithDublicate[i].title);
+        //    }
+        //    menuWithoutDublicate.AddRange(mergedDublicateList);
+        //    return menuWithoutDublicate;
+        //}
     }
 }

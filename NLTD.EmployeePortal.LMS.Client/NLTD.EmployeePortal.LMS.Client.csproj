@@ -51,6 +51,7 @@
     <Compile Include="EmployeeClient.cs" />
     <Compile Include="EmployeeLeaveBalanceClient.cs" />
     <Compile Include="EmployeeRoleHelper.cs" />
+    <Compile Include="EmplyeeAttendenceClient.cs" />
     <Compile Include="LeaveClient.cs" />
     <Compile Include="LeaveTransactionHistoryClient.cs" />
     <Compile Include="OfficeHolidayHelper.cs" />
@@ -58,6 +59,8 @@
     <Compile Include="OfficeWeekEndHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RoleClient.cs" />
+    <Compile Include="ShiftClient.cs" />
+    <Compile Include="TimesheetClient.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\NLTD.EmploeePortal.LMS.Dac\NLTD.EmploeePortal.LMS.Dac.csproj">

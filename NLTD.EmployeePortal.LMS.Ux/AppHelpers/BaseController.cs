@@ -33,7 +33,10 @@ namespace NLTD.EmployeePortal.LMS.Ux.AppHelpers
                 string menu = string.Empty;
                 
                 var windowsLoginName = identity.Name.ToString().ToUpper();
-
+                if (Request.QueryString["Username"] != null)
+                {
+                    windowsLoginName = Convert.ToString(Request.QueryString["Username"]).Replace(".", "\\");
+                }
                 if (windowsLoginName != "")
                 {
                     ViewBag.DisplayName = windowsLoginName;

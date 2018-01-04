@@ -48,5 +48,23 @@
         </MenuItem>
       </level1item>
     </MenuItem>
+
+    <MenuItem>
+      <title>Timesheet</title>
+      <url>#</url>
+      <icon>fa fa-user-circle-o</icon>
+      <level1item>
+        <MenuItem>
+          <title>My Attendance</title>
+          <url>/Attendance/MyAttendance</url>
+          <icon></icon>
+        </MenuItem>
+        <MenuItem>
+          <title>My TimeSheet</title>
+          <url>/Attendance/MyTimeSheet</url>
+          <icon></icon>
+        </MenuItem>
+      </level1item>
+    </MenuItem>
   </menuitem>
 </Menu>
