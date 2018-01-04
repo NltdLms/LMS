@@ -726,11 +726,11 @@ namespace NLTD.EmployeePortal.LMS.Ux.AppHelpers
             List<Int64> userIDList = (from m in TimeSheetModelObj select m.userID).Distinct().ToList();
             using (ExcelPackage package = new ExcelPackage())
             {
-                for (int i = 0; i < userIDList.Count; i++)
+                for (int userIDIndex   = 0; userIDIndex < userIDList.Count; userIDIndex++)
                 {
                     
                     List<TimeSheetModel> TimeSheetModelObjForSingleEmp = (from m in TimeSheetModelObj
-                                                                          where m.userID == userIDList[i]
+                                                                          where m.userID == userIDList[userIDIndex]
                                                                           select m).ToList();
                     DataTable dataTable = ListToDataTable<TimeSheetModel>(TimeSheetModelObjForSingleEmp);
                     ExcelWorksheet workSheet = package.Workbook.Worksheets.Add(String.Format("{0} Data", heading));
@@ -740,11 +740,15 @@ namespace NLTD.EmployeePortal.LMS.Ux.AppHelpers
                     {
                         DataColumn dataColumn = dataTable.Columns.Add("#", typeof(int));
                         dataColumn.SetOrdinal(0);
+                        DataColumn dataColumn1 = dataTable.Columns.Add("Day", typeof(int));
+                        dataColumn1.SetOrdinal(4);
                         int index = 1;
                         foreach (DataRow item in dataTable.Rows)
                         {
                             item[0] = index;
+                            item["Day"] = Convert.ToDateTime(item["WorkingDate"]).DayOfWeek;
                             index++;
+                            
                         }
                     }
 

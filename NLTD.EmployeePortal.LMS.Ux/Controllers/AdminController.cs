@@ -692,7 +692,7 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
             List<TimeSheetModel> excelData = timeSheetModelList.ToList();
             if (excelData.Count > 0)
             {
-                string[] columns = {  "WorkingDate", "Shift", "InTime", "OutTime","WorkingHours","Name", "Status" };
+                string[] columns = {  "WorkingDate", "Shift", "InTime", "OutTime","WorkingHours","Status", "LMSStatus" };
                 byte[] filecontent = ExcelExportHelper.ExportExcelTimeSheet(excelData, "", false, columns);
                 if(string.IsNullOrEmpty(TimeSheetQueryModelObj.Name))
                 {
@@ -712,7 +712,7 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
                 ViewBag.RequestLevelPerson = RequestLevelPerson;
                 EmployeeAttendenceQueryModel data = new EmployeeAttendenceQueryModel();
                 data.ErrorMsg = "Excel file is not generated as no data returned.";
-                return View("~/Views/Attendence/MyAttendance.cshtml", data);
+                return View("~/Views/Attendence/TimeSheet.cshtml", data);
             }
         }
     }

@@ -173,7 +173,7 @@
                     <h3 class="box-title">@heading</h3>
                 </div>
                 <div class="box-body">
-                    <form id='your-range-form'>
+                    <form id='your-range-form' action='@Url.Action("ExportTimeSheetToExcel","Admin")'>
 
                         @{
                             @Html.Hidden("RequestLevelPerson", (string)ViewBag.RequestLevelPerson)
