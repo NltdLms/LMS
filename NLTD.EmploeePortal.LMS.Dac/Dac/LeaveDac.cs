@@ -1360,6 +1360,7 @@ namespace NLTD.EmploeePortal.LMS.Dac
 
             IList<Int64> empList = GetEmployeesReporting(LeadId);
             IList<DaywiseLeaveDtlModel> retList;
+            int year = (ToDate ?? System.DateTime.Now).Year;
             using (var context = new NLTDDbContext())
             {
                 var dtlQry = (from emp in context.Employee
@@ -1367,7 +1368,7 @@ namespace NLTD.EmploeePortal.LMS.Dac
                               join lvd in context.LeaveDetail on lv.LeaveId equals lvd.LeaveId
                               join lvb in context.EmployeeLeaveBalance on new { A = emp.UserId, B = lv.LeaveTypeId } equals new { A = lvb.UserId, B = lvb.LeaveTypeId }
                               join lt in context.LeaveType on lv.LeaveTypeId equals lt.LeaveTypeId
-                              where lvd.IsDayOff == false && (lvd.LeaveDate >= FromDate && lvd.LeaveDate <= ToDate) && lt.IsTimeBased == false
+                              where lvd.IsDayOff == false && (lvd.LeaveDate >= FromDate && lvd.LeaveDate <= ToDate) && lt.IsTimeBased == false && lvb.Year == year
                               orderby emp.FirstName
                               select new DaywiseLeaveDtlModel
                               {

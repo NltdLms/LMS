@@ -176,7 +176,13 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
                         }
                     }
                 }
-                
+                if (data.LeaveFrom == data.LeaveUpto)
+                {
+                    if (data.LeaveFromTime == "F")
+                        data.LeaveUptoTime = "F";
+                    else if (data.LeaveFromTime == "S")
+                        data.LeaveUptoTime = "S";
+                }
                 using (var client = new LeaveClient())
                 {
                     data.UserId = userId;
