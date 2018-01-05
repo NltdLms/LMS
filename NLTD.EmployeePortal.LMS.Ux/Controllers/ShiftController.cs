@@ -102,9 +102,9 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
             string result = "";
             if (ModelState.IsValid)
             {
-                if (RequestMenuUser == "Team" && (FromDate <= DateTime.Now || ToDate <= DateTime.Now))
+                if (RequestMenuUser == "Team" && (FromDate <= DateTime.Now.AddDays(-7) || ToDate <= DateTime.Now.AddDays(-7)))
                 {
-                    result = "Leads are allowed to update the shift for future date only. Contact Admin/HR to modify it.";
+                    result = "The system restricts modifying shifts earlier than 7 days. Please contact HR for any changes.";
                 }
                 else
                 {
@@ -117,6 +117,7 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
 
             return Json(result);
         }
+
 
         public ActionResult SaveShiftMaster(int shiftId, string shiftName, TimeSpan fromTime, TimeSpan toTime)
         {
@@ -186,9 +187,9 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
             string result = "";
             if (ModelState.IsValid)
             {
-                if (RequestMenuUser == "Team" && (FromDate <= DateTime.Now || ToDate <= DateTime.Now))
+                if (RequestMenuUser == "Team" && (FromDate <= DateTime.Now.AddDays(-7) || ToDate <= DateTime.Now.AddDays(-7)))
                 {
-                    result = "Leads are allowed to update the shift for future date only. Contact Admin/HR to modify it.";
+                    result = "The system restricts modifying shifts earlier than 7 days. Please contact HR for any changes.";
                 }
                 else
                 {
@@ -201,5 +202,6 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
 
             return Json(result);
         }
+
     }
 }
