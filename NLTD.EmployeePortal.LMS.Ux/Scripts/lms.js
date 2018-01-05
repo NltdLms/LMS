@@ -67,10 +67,7 @@ function SubmitEmpForm(e) {
     $("#alert_placeholder").empty();
     var corpId = $("#LogonId").val()
 
-    if (corpId.trim().length < 7) {
-        showalert("", "Please enter valid Logon Id.", "alert alert-danger");
-        return;
-    }
+
     if ($("#ReportedToId option:selected").index() < 1) {
         showalert("", "Please select Reporting To person name.", "alert alert-danger");
         return;
@@ -1179,11 +1176,16 @@ function loadTransactionLog() {
 
 function loadAttendenceRangeSummary() {
 
+    var myDirectEmployees = false;
+
+    if ($("#RequestLevelPerson").val() === "Team") {
+        myDirectEmployees = $("#mydirectemployeecheck").is(':checked');
+    }
     if ($("#RequestLevelPerson").val() === "My") {
-        URL = '/Admin/loadEmployeeAttendence?&FromDate=' + $('#FromDate').val() + '&ToDate=' + $('#ToDate').val() + '&requestLevelPerson=' + $('#RequestLevelPerson').val();
+        URL = '/Admin/loadEmployeeAttendence?&FromDate=' + $('#FromDate').val() + '&ToDate=' + $('#ToDate').val() + '&requestLevelPerson=' + $('#RequestLevelPerson').val() + '&myDirectEmployees=' + myDirectEmployees;
     }
     else {
-        URL = '/Admin/loadEmployeeAttendence?Name=' + $("#Name").val().replace(new RegExp(" ", "g"), '|') + '&FromDate=' + $('#FromDate').val() + '&ToDate=' + $('#ToDate').val() + '&requestLevelPerson=' + $('#RequestLevelPerson').val();
+        URL = '/Admin/loadEmployeeAttendence?Name=' + $("#Name").val().replace(new RegExp(" ", "g"), '|') + '&FromDate=' + $('#FromDate').val() + '&ToDate=' + $('#ToDate').val() + '&requestLevelPerson=' + $('#RequestLevelPerson').val() + '&myDirectEmployees=' + myDirectEmployees;
     }
     $("#divLoading").show();
     $("#divForEmployeeAttendence")
@@ -1207,15 +1209,22 @@ function loadAttendenceRangeSummary() {
 function loadTimeSheetSummary() {
     var URL = '/Admin/LoadMyTeamTimesheet';
     $("#divLoading").show();
+    var myDirectEmployees = false;
+
     if ($("#RequestLevelPerson").val() === "My") {
 
         URL = '/Admin/LoadMyTimesheet';
     }
+
+    if ($("#RequestLevelPerson").val() === "Team") {
+        myDirectEmployees = $("#mydirectemployeecheck").is(':checked');
+    }
+
     $("#divForTimesheet").html("");
     $("#alert_placeholder").html("");
 
     $("#divForTimesheet")
-        .load(URL, { TimeSheetQueryModelObj: { FromDate: $("#FromDate").val(), ToDate: $("#ToDate").val(), Name: $("#Name").val() } },
+        .load(URL, { TimeSheetQueryModelObj: { FromDate: $("#FromDate").val(), ToDate: $("#ToDate").val(), Name: $("#Name").val(), MyDirectEmployees:myDirectEmployees } },
         function (responseText, textStatus, req) {
             if (textStatus == "error") {
                 Clearshowalert("No Records Found", "alert alert-danger");

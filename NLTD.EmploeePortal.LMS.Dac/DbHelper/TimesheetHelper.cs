@@ -26,10 +26,10 @@ namespace NLTD.EmployeePortal.LMS.DbHelper
             List<TimeSheetModel> timeSheetModelList=  TimesheetHelperObj.GetMyTimeSheet(UserID, FromDate, ToDate);
             return timeSheetModelList;
         }
-        public List<TimeSheetModel> GetMyTeamTimeSheet(Int64 UserID, DateTime FromDate, DateTime ToDate)
+        public List<TimeSheetModel> GetMyTeamTimeSheet(Int64 UserID, DateTime FromDate, DateTime ToDate, bool myDirectEmployees)
         {
             ITimesheetHelper TimesheetHelperObj = new TimeSheetDac();
-            List<TimeSheetModel> timeSheetModelList = TimesheetHelperObj.GetMyTeamTimeSheet(UserID, FromDate, ToDate);
+            List<TimeSheetModel> timeSheetModelList = TimesheetHelperObj.GetMyTeamTimeSheet(UserID, FromDate, ToDate,myDirectEmployees);
             return timeSheetModelList;
         }
 

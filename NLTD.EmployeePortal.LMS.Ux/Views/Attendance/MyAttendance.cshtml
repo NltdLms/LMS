@@ -96,8 +96,13 @@
             });
 
             $("#divLoading").show();
+            var myDirectEmployees = false;
+            if ($("#RequestLevelPerson").val() === "Team") 
+            {
+                myDirectEmployees = true;
+            }
             $("#divForEmployeeAttendence")
-                .load('/Admin/loadEmployeeAttendence?FromDate=Nodate&ToDate=Nodate&requestLevelPerson=' + $("#RequestLevelPerson").val(),
+                .load('/Admin/loadEmployeeAttendence?FromDate=Nodate&ToDate=Nodate&requestLevelPerson=' + $("#RequestLevelPerson").val() + '&myDirectEmployees=' + myDirectEmployees,
                 function () {
 
                      $(".dtatable").dataTable({ "aaSorting": [] });
@@ -170,8 +175,8 @@
                             if ((string)ViewBag.RequestLevelPerson == "My")
                             {
                                 <div class="row">
-                                    <div class="col-sm-3">
-
+                                    <div class="col-sm-3" >
+                                        
                                         @Html.Label("Date Range")
                                         @Html.TextBoxFor(m => m.DateRange, new { @class = "form-control" })
 
@@ -204,7 +209,14 @@
                                         @Html.TextBoxFor(m => m.Name, new { @class = "form-control" })
 
                                     </div>
-                                    <div class="col-sm-3">
+                                    <div class="col-sm-3" style="padding-top:10px">
+                                        @if((string)ViewBag.RequestLevelPerson == "Team")
+                                        {
+                                            <br />
+                                            <input type="checkbox" id="mydirectemployeecheck" checked /> 
+                                            @Html.Label("Direct employees only")
+
+                                        }
                                     </div>
                                     <div class="col-sm-2" style="text-align:right">
                                         <br />

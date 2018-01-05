@@ -106,8 +106,15 @@
             }
             else {
                 $("#divLoading").show();
+                var data = {};
+                if ($("#RequestLevelPerson").val() == "Team") 
+                {
+                    data =
+                        { TimeSheetQueryModelObj: { MyDirectEmployees: true } }
+                }
+                
                 $("#divForTimesheet")
-                    .load('/Admin/LoadMyTeamTimesheet',
+                    .load('/Admin/LoadMyTeamTimesheet', data,
                     function () {
                         $(".dtatable").dataTable({ "aaSorting": [] });
                         $("#divLoading").hide();
@@ -166,7 +173,7 @@
                     <h3 class="box-title">@heading</h3>
                 </div>
                 <div class="box-body">
-                    <form id='your-range-form'>
+                    <form id='your-range-form' action='@Url.Action("ExportTimeSheetToExcel","Admin")'>
 
                         @{
                             @Html.Hidden("RequestLevelPerson", (string)ViewBag.RequestLevelPerson)
@@ -186,7 +193,7 @@
                                     <div class="col-sm-3" style="text-align:right">
                                         <br />
                                         <button type="button" class="btn btn-primary" onclick="loadTimeSheetSummary()">SEARCH</button>
-
+                                        <button type="submit" class="btn btn-primary" >Export</button>
                                     </div>
                                 </div>
 
@@ -202,16 +209,25 @@
 
 
                                     </div>
-                                    <div class="col-sm-4">
+                                    <div class="col-sm-3">
 
                                         @Html.LabelFor(x => x.Name)
                                         @Html.TextBoxFor(m => m.Name, new { @class = "form-control" })
 
                                     </div>
-                                    <div class="col-sm-5" style="text-align:right">
+                                    <div class="col-sm-3" style="padding-top:10px">
+                                        @if ((string)ViewBag.RequestLevelPerson == "Team")
+                                        {
+                                            <br />
+                                            @Html.CheckBoxFor(m=>m.MyDirectEmployees,new {id= "mydirectemployeecheck", @checked = "checked" })
+                                            @Html.Label("Direct employees only")
+
+                                        }
+                                    </div>
+                                    <div class="col-sm-3" style="text-align:right">
                                         <br />
                                         <button type="button" class="btn btn-primary" onclick="loadTimeSheetSummary()">SEARCH</button>
-
+                                        <button type="submit" class="btn btn-primary">Export</button>
                                     </div>
                                 </div>
                             }
