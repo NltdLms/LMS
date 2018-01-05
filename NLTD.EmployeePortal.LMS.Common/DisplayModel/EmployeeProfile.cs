@@ -7,7 +7,7 @@ namespace NLTD.EmployeePortal.LMS.Common.DisplayModel
 {
     public class EmployeeProfile
     {
-        
+        [Required(ErrorMessage = "Enter Logon Id.")]
         [Display(Name = "Logon Id")]
         public String LogonId { get; set; }
 
@@ -25,7 +25,7 @@ namespace NLTD.EmployeePortal.LMS.Common.DisplayModel
         [Display(Name = "Last Name")]
         public String LastName { get; set; }
 
-        
+        [Required(ErrorMessage = "Enter Email Address.")]
         [Display(Name = "Email Address")]
         public String EmailAddress { get; set; }
 

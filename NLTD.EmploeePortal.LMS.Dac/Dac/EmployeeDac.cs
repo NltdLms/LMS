@@ -660,10 +660,7 @@ namespace NLTD.EmploeePortal.LMS.Dac.Dac
                             var isCorpIdExits = context.Employee.Where(e => e.LoginId == profile.LogonId.ToUpper()).FirstOrDefault();
                             if (isCorpIdExits != null)
                             {
-                                if (isCorpIdExits.LoginId.Trim().Length > 5)
-                                {
-                                    return "DupCorp";
-                                }
+                                return "DupCorp";
                             }
                             var isCardIdExits = context.Employee.Where(e => e.Cardid == profile.CardId && e.Cardid != null && e.IsActive).FirstOrDefault();
                             if (isCardIdExits != null)
@@ -677,11 +674,8 @@ namespace NLTD.EmploeePortal.LMS.Dac.Dac
                             var isCorpIdExits = context.Employee.Where(e => e.LoginId == profile.LogonId.ToUpper() && e.EmployeeId != employee.EmployeeId).FirstOrDefault();
                             if (isCorpIdExits != null)
                             {
-                                if (isCorpIdExits.LoginId.Trim().Length > 5)
-                                {
-                                    return "DupCorp";
-                                }
-                                
+
+                                return "DupCorp";
 
                             }
                             var isCardIdExits = context.Employee.Where(e => e.Cardid == profile.CardId && e.Cardid != null && e.EmployeeId != employee.EmployeeId && e.IsActive).FirstOrDefault();
@@ -709,7 +703,7 @@ namespace NLTD.EmploeePortal.LMS.Dac.Dac
                             remarks = remarks + "#CardId" + "^" + profile.CardId;
 
                             employee = new Employee();
-                            employee.LoginId = profile.LogonId.Trim().ToUpper();
+                            employee.LoginId = profile.LogonId.ToUpper();
                             employee.EmployeeId = profile.EmployeeId;
                             employee.OfficeId = profile.OfficeId;
                             employee.IsActive = profile.IsActive;
@@ -837,7 +831,7 @@ namespace NLTD.EmploeePortal.LMS.Dac.Dac
 
                             int? oldShiftid = oldEmpData.ShiftId;
                             employee.OfficeId = profile.OfficeId;
-                            employee.LoginId = profile.LogonId.Trim().ToUpper();
+                            employee.LoginId = profile.LogonId;
                             employee.EmployeeId = profile.EmployeeId;
                             employee.IsActive = profile.IsActive;
                             employee.ReportingToId = profile.ReportedToId;

@@ -81,7 +81,7 @@
                         </div>
                         <div class="col-sm-3">
                             <div class="form-group">
-                                @Html.LabelFor(e => e.LogonId)
+                                @Html.LabelFor(e => e.LogonId, new { @class = "required" })
                                 @Html.TextBoxFor(e => e.LogonId, null, new { @class = "form-control upper", autocomplete = "off" })
                                 @Html.ValidationMessageFor(e => e.LogonId, null, new { @class = "text-danger" })
                             </div>
@@ -106,7 +106,7 @@
                     <div class="row">
                         <div class="col-sm-3">
                             <div class="form-group">
-                                @Html.LabelFor(e => e.EmailAddress)
+                                @Html.LabelFor(e => e.EmailAddress, new { @class = "required" })
                                 @Html.TextBoxFor(e => e.EmailAddress, null, new { @class = "form-control lower", autocomplete = "off" })
                                 @Html.ValidationMessageFor(e => e.EmailAddress, null, new { @class = "text-danger" })
                             </div>

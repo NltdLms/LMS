@@ -205,7 +205,6 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
             bool isValid = true;
             if (ModelState.IsValid)
             {
-                /*Commented on 4 Jan 2018 as Email Address and Corp Id are not mandatory.
                 if (employee.LogonId.Trim().Length < 5) {
                     employee.ErrorMesage = "Logon Id should start with CORP\\";
                     isValid = false;
@@ -214,27 +213,22 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
                     employee.ErrorMesage = "Logon Id should start with CORP\\";
                     isValid = false;
                 }
-                */
+
                 
                 Regex regex = new Regex(@"^[\w!#$%&'*+\-/=?\^_`{|}~]+(\.[\w!#$%&'*+\-/=?\^_`{|}~]+)*"+ "@"+ @"((([\-\w]+\.)+[a-zA-Z]{2,4})|(([0-9]{1,3}\.){3}[0-9]{1,3}))$");
-                if (employee.EmailAddress != null)
+                
+                Match match = regex.Match(employee.EmailAddress);
+                if (!match.Success)
                 {
-                    if (employee.EmailAddress.Trim() != "")
-                    {
-                        Match match = regex.Match(employee.EmailAddress);
-                        if (!match.Success)
-                        {
-                            employee.ErrorMesage = "Invalid Email Address format.";
-                            isValid = false;
-                        }
-                    }
+                    employee.ErrorMesage = "Invalid Email Address format.";
+                    isValid = false;
                 }
                 if(isValid)
                 {
                     employee.LogonId = employee.LogonId.ToUpper();
                     employee.FirstName = System.Globalization.CultureInfo.CurrentCulture.TextInfo.ToTitleCase(employee.FirstName.ToLower());
                     employee.LastName = System.Globalization.CultureInfo.CurrentCulture.TextInfo.ToTitleCase(employee.LastName.ToLower());
-                    employee.EmailAddress = employee.EmailAddress == null ? null: employee.EmailAddress.ToLower();
+                    employee.EmailAddress = employee.EmailAddress.ToLower();
 
                     using (var client = new EmployeeClient())
                     {
