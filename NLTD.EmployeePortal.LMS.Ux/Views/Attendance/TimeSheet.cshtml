@@ -193,7 +193,7 @@
                                     <div class="col-sm-3" style="text-align:right">
                                         <br />
                                         <button type="button" class="btn btn-primary" onclick="loadTimeSheetSummary()">SEARCH</button>
-
+                                        <button type="submit" class="btn btn-primary" >Export</button>
                                     </div>
                                 </div>
 
@@ -209,7 +209,7 @@
 
 
                                     </div>
-                                    <div class="col-sm-4">
+                                    <div class="col-sm-3">
 
                                         @Html.LabelFor(x => x.Name)
                                         @Html.TextBoxFor(m => m.Name, new { @class = "form-control" })
@@ -219,15 +219,15 @@
                                         @if ((string)ViewBag.RequestLevelPerson == "Team")
                                         {
                                             <br />
-                                            <input type="checkbox" id="mydirectemployeecheck" checked />
+                                            @Html.CheckBoxFor(m=>m.MyDirectEmployees,new {id= "mydirectemployeecheck", @checked = "checked" })
                                             @Html.Label("Direct employees only")
 
                                         }
                                     </div>
-                                    <div class="col-sm-2" style="text-align:right">
+                                    <div class="col-sm-3" style="text-align:right">
                                         <br />
                                         <button type="button" class="btn btn-primary" onclick="loadTimeSheetSummary()">SEARCH</button>
-
+                                        <button type="submit" class="btn btn-primary">Export</button>
                                     </div>
                                 </div>
                             }

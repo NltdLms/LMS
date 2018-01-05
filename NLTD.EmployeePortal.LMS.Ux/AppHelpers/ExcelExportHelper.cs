@@ -723,17 +723,17 @@ namespace NLTD.EmployeePortal.LMS.Ux.AppHelpers
         {
 
             byte[] result = null;
-            List<Int64> userIDList = (from m in TimeSheetModelObj select m.userID).Distinct().ToList();
+            var userIDList = (from m in TimeSheetModelObj select new { m.userID,m.Name }).Distinct().ToList();
             using (ExcelPackage package = new ExcelPackage())
             {
                 for (int userIDIndex   = 0; userIDIndex < userIDList.Count; userIDIndex++)
                 {
                     
                     List<TimeSheetModel> TimeSheetModelObjForSingleEmp = (from m in TimeSheetModelObj
-                                                                          where m.userID == userIDList[userIDIndex]
+                                                                          where m.userID == userIDList[userIDIndex].userID
                                                                           select m).ToList();
                     DataTable dataTable = ListToDataTable<TimeSheetModel>(TimeSheetModelObjForSingleEmp);
-                    ExcelWorksheet workSheet = package.Workbook.Worksheets.Add(String.Format("{0} Data", heading));
+                    ExcelWorksheet workSheet = package.Workbook.Worksheets.Add(userIDList[userIDIndex].Name);
                     int startRowFrom = String.IsNullOrEmpty(heading) ? 1 : 3;
 
                     if (showSrNo)
@@ -793,7 +793,8 @@ namespace NLTD.EmployeePortal.LMS.Ux.AppHelpers
                         r.Style.Border.Left.Color.SetColor(System.Drawing.Color.Black);
                         r.Style.Border.Right.Color.SetColor(System.Drawing.Color.Black);
                     }
-
+                  
+                    //
                     // removed ignored columns  
                     for (int i = dataTable.Columns.Count - 1; i >= 0; i--)
                     {
@@ -807,7 +808,17 @@ namespace NLTD.EmployeePortal.LMS.Ux.AppHelpers
                         }
                     }
 
-
+                    //format the datetime field
+                    using (ExcelRange col = workSheet.Cells[2, 2, 2 + dataTable.Rows.Count - 1, 2])
+                    {
+                        col.Style.Numberformat.Format = "dd/MM/yyyy";
+                        col.Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
+                    }
+                    using (ExcelRange col = workSheet.Cells[2, 3, 1 + dataTable.Rows.Count, 5])
+                    {
+                        col.Style.Numberformat.Format = "hh:mm:ss";
+                        col.Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
+                    }
                     if (!String.IsNullOrEmpty(heading))
                     {
                         workSheet.Cells["A1"].Value = heading;

@@ -67,10 +67,7 @@ function SubmitEmpForm(e) {
     $("#alert_placeholder").empty();
     var corpId = $("#LogonId").val()
 
-    if (corpId.trim().length < 7) {
-        showalert("", "Please enter valid Logon Id.", "alert alert-danger");
-        return;
-    }
+
     if ($("#ReportedToId option:selected").index() < 1) {
         showalert("", "Please select Reporting To person name.", "alert alert-danger");
         return;

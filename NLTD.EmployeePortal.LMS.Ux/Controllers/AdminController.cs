@@ -692,15 +692,16 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
             List<TimeSheetModel> excelData = timeSheetModelList.ToList();
             if (excelData.Count > 0)
             {
-                string[] columns = {  "WorkingDate", "Shift", "InTime", "OutTime","WorkingHours","Status", "LMSStatus" };
-                byte[] filecontent = ExcelExportHelper.ExportExcelTimeSheet(excelData, "", false, columns);
+                string[] columns = {  "WorkingDate", "Shift", "InTime", "OutTime","WorkingHours","Status", "LMSStatus", "Day" };
+                byte[] filecontent = ExcelExportHelper.ExportTimesheetExcel(excelData, "", false, columns);
+                string fileName = string.Format("TimeSheet_{0}{1}", DateTime.Now.ToString("ddMMyyyyHHmmss"), ".xlsx");
                 if(string.IsNullOrEmpty(TimeSheetQueryModelObj.Name))
                 {
                     EmployeeProfile profile = (EmployeeProfile)Session["Profile"];
                     TimeSheetQueryModelObj.Name = profile.FirstName + " " + profile.LastName;
                 }
                
-                return File(filecontent, ExcelExportHelper.ExcelContentType, TimeSheetQueryModelObj.Name + "_" + System.DateTime.Now + ".xlsx");
+                return File(filecontent, ExcelExportHelper.ExcelContentType,fileName);
             }
             else
             {
