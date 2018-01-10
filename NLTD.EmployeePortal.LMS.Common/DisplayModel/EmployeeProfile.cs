@@ -54,6 +54,14 @@ namespace NLTD.EmployeePortal.LMS.Common.DisplayModel
 
         [Display(Name = "Is LMS Approver")]
         public Boolean IsHandleMembers { get; set; }
+
+        [Required(ErrorMessage = "Enter Joining Date.")]
+        public DateTime? DOJ { get; set; }
+       
+        public DateTime? ConfirmationDate { get; set; }
+
+       
+        public DateTime? RelievingDate { get; set; }
         public bool Sunday { get; set; }
 
         public bool Monday { get; set; }

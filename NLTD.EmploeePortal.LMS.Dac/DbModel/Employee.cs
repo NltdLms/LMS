@@ -34,5 +34,8 @@ namespace NLTD.EmploeePortal.LMS.Dac.DbModel
 
         public Int32? ShiftId { get; set; }
         public Int64? Cardid { get; set; }
+        public DateTime? DOJ { get; set; }
+       public DateTime? ConfirmationDate { get; set; }
+        public DateTime? RelievingDate { get; set; }
     }
 }

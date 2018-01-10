@@ -229,6 +229,15 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
                         }
                     }
                 }
+                if ((!employee.IsActive) && (employee.RelievingDate == null))
+                {
+                    employee.ErrorMesage = "Enter Relieving Date.";
+                    isValid = false;
+                }
+                else if(employee.IsActive)
+                {
+                    employee.RelievingDate = null;
+                }
                 if (isValid)
                 {
                     employee.LogonId = employee.LogonId.ToUpper();
