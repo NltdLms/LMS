@@ -317,6 +317,9 @@ namespace NLTD.EmploeePortal.LMS.Dac.Dac
                                        LogonId = employee.LoginId,
                                        IsActive = employee.IsActive,
                                        CardId = employee.Cardid,
+                                       DOJ = String.Format("{0:dd-MM-yyyy}", employee.DOJ)  ,
+                                       RelievingDate = String.Format("{0:dd-MM-yyyy}", employee.RelievingDate) ,
+                                       ConfirmationDate = String.Format("{0:dd-MM-yyyy}", employee.ConfirmationDate),
                                        Shift = string.Format("{0:hh\\:mm}", s.FromTime) + " - " + string.Format("{0:hh\\:mm}", s.ToTime)
 
                                    }).FirstOrDefault();
