@@ -113,6 +113,38 @@
 
                     </div>
                     <div class="row">
+
+                        <div class="col-sm-3">
+                            <div class="form-group">
+                                @Html.Label("Joining Date")
+                                @Html.TextBoxFor(e => e.DOJ, null, new { @class = "form-control", @readonly = true })
+
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="form-group">
+                                @Html.Label("Confirmation Date")
+                                @Html.TextBoxFor(e => e.ConfirmationDate, null, new { @class = "form-control", @readonly = true })
+
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="form-group">
+                                @Html.Label("Relieving Date")
+                                @Html.TextBoxFor(e => e.RelievingDate, null, new { @class = "form-control", @readonly = true })
+
+                            </div>
+                        </div>
+
+                        <div class="col-sm-3">
+                            @Html.Label("Mobile Number")
+                            @Html.TextBoxFor(e => e.MobileNumber, null, new { @class = "form-control", @readonly = true })
+
+                        </div>
+
+
+                    </div>
+                    <div class="row">
                         <div class="col-sm-12 pull-left"> @Html.Label("Weekly Off(s)")</div>
                     </div>
                     <div class="row" style="padding-top:10px;padding-bottom:10px;">

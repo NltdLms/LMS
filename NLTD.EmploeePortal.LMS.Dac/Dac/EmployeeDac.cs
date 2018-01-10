@@ -39,7 +39,9 @@ namespace NLTD.EmploeePortal.LMS.Dac.Dac
                                    Avatar = employee.AvatarUrl,
                                    CardId = employee.Cardid,
                                    ShiftId = employee.ShiftId,
-                                   //IsHandleMembers = employee.IsHandleMembers,                                   
+                                   ConfirmationDate = employee.ConfirmationDate,
+                                   DOJ = employee.DOJ,
+                                   RelievingDate = employee.RelievingDate,
                                    LogonId = employee.LoginId,
                                    IsActive = employee.IsActive
 
@@ -103,7 +105,7 @@ namespace NLTD.EmploeePortal.LMS.Dac.Dac
             return profile;
         }
 
-        public List<EmployeeProfile> GetReportingEmployeeProfile(Int64 userId, string role,bool myDirectEmployees)
+        public List<EmployeeProfile> GetReportingEmployeeProfile(Int64 userId, string role, bool myDirectEmployees)
         {
             List<EmployeeProfile> employeeProfileList = new List<EmployeeProfile>();
             try
@@ -137,11 +139,11 @@ namespace NLTD.EmploeePortal.LMS.Dac.Dac
                     }
                     else//for Team Lead
                     {
-                        if(myDirectEmployees)
+                        if (myDirectEmployees)
                         {
                             employeeProfileList = (from employee in context.Employee
                                                    join rt in context.EmployeeRole on employee.EmployeeRoleId equals rt.RoleId
-                                                   where employee.IsActive == true && employee.ReportingToId ==userId
+                                                   where employee.IsActive == true && employee.ReportingToId == userId
                                                    select new EmployeeProfile
                                                    {
                                                        EmailAddress = employee.EmailAddress,
@@ -186,7 +188,7 @@ namespace NLTD.EmploeePortal.LMS.Dac.Dac
                                                        Avatar = employee.AvatarUrl,
                                                        LogonId = employee.LoginId,
                                                        IsActive = employee.IsActive
-                                                   }).ToList(); 
+                                                   }).ToList();
                         }
                     }
                 }
@@ -735,6 +737,9 @@ namespace NLTD.EmploeePortal.LMS.Dac.Dac
                             remarks = remarks + "#OfficeHolodayId" + "^" + profile.OfficeHolodayId;
                             remarks = remarks + "#ShiftId" + "^" + profile.ShiftId;
                             remarks = remarks + "#CardId" + "^" + profile.CardId;
+                            remarks = remarks + "#DOJ" + "^" + profile.DOJ;
+                            remarks = remarks + "#ConfirmationDate" + "^" + profile.ConfirmationDate;
+                            remarks = remarks + "#RelievingDate" + "^" + profile.RelievingDate;
 
                             employee = new Employee();
                             employee.LoginId = profile.LogonId.Trim().ToUpper();
@@ -751,6 +756,9 @@ namespace NLTD.EmploeePortal.LMS.Dac.Dac
                             employee.OfficeHolodayId = profile.OfficeHolodayId;
                             employee.ShiftId = profile.ShiftId;
                             employee.Cardid = profile.CardId;
+                            employee.DOJ = profile.DOJ;
+                            employee.ConfirmationDate = profile.ConfirmationDate;
+                            employee.RelievingDate = profile.RelievingDate;
                             employee.ModifiedBy = -1;
                             employee.CreatedBy = ModifiedBy;
                             employee.CreatedOn = System.DateTime.Now;
@@ -863,6 +871,15 @@ namespace NLTD.EmploeePortal.LMS.Dac.Dac
                             if (profile.CardId != oldEmpData.Cardid)
                                 remarks = remarks + "#CardId" + "^" + profile.CardId;
 
+                            if (profile.DOJ != oldEmpData.DOJ)
+                                remarks = remarks + "#DOJ" + "^" + profile.DOJ;
+
+                            if (profile.ConfirmationDate != oldEmpData.ConfirmationDate)
+                                remarks = remarks + "#ConfirmationDate" + "^" + profile.ConfirmationDate;
+
+                            if (profile.RelievingDate != oldEmpData.RelievingDate)
+                                remarks = remarks + "#RelievingDate" + "^" + profile.RelievingDate;
+
                             int? oldShiftid = oldEmpData.ShiftId;
                             employee.OfficeId = profile.OfficeId;
                             employee.LoginId = profile.LogonId.Trim().ToUpper();
@@ -878,6 +895,10 @@ namespace NLTD.EmploeePortal.LMS.Dac.Dac
                             employee.Cardid = profile.CardId;
                             employee.OfficeHolodayId = profile.OfficeHolodayId;
                             employee.EmployeeRoleId = profile.RoleId;
+                            employee.DOJ = profile.DOJ;
+                            employee.ConfirmationDate = profile.ConfirmationDate;
+                            employee.RelievingDate = profile.RelievingDate;
+
                             if (remarks == "") { noChanges = true; }
                             else
                             {
