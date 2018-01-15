@@ -1,4 +1,5 @@
-﻿function LoadDashboardCalender() {
+﻿
+function LoadDashboardCalender() {
     $("#fullcalender").fullCalendar({
         selectable: true,
         selectHelper: true,
@@ -1175,6 +1176,8 @@ function loadTransactionLog() {
 }
 
 function loadAttendenceRangeSummary() {
+    $("#alert_placeholder").val();
+    
 
     var myDirectEmployees = false;
 
@@ -1185,7 +1188,11 @@ function loadAttendenceRangeSummary() {
         URL = '/Admin/loadEmployeeAttendence?&FromDate=' + $('#FromDate').val() + '&ToDate=' + $('#ToDate').val() + '&requestLevelPerson=' + $('#RequestLevelPerson').val() + '&myDirectEmployees=' + myDirectEmployees;
     }
     else {
-        URL = '/Admin/loadEmployeeAttendence?Name=' + $("#Name").val().replace(new RegExp(" ", "g"), '|') + '&FromDate=' + $('#FromDate').val() + '&ToDate=' + $('#ToDate').val() + '&requestLevelPerson=' + $('#RequestLevelPerson').val() + '&myDirectEmployees=' + myDirectEmployees;
+        URL = '/Admin/loadEmployeeAttendence?ID=' + $("#UserID").val() + '&FromDate=' + $('#FromDate').val() + '&ToDate=' + $('#ToDate').val() + '&requestLevelPerson=' + $('#RequestLevelPerson').val() + '&myDirectEmployees=' + myDirectEmployees;
+        if (!ValidateAutocompleteName($("#Name").val(), $("#UserID").val())) {
+            Clearshowalert("Please Choose a valid Username from the List. To Show all employee Clear the textbox.", "alert alert-danger");
+            return;
+        }
     }
     $("#divLoading").show();
     $("#divForEmployeeAttendence")
@@ -1342,7 +1349,7 @@ function SaveShiftMaster() {
     $("#divLoading").hide();
 }
 function loadShiftDetails() {
-
+   
     $("#divLoading").show();
     var RequestLevelPerson = $("#RequestLevelPerson").val();
 
@@ -1474,9 +1481,9 @@ function GetEmployeeShiftDetails(FromDate, ToDate, Shift) {
         Clearshowalert("Please enter the employee name", "alert alert-danger");
         return;
     }
-
+ 
     $("#divLoading").show();
-    $("#divForHistoryLeave").load('/Shift/GetEmployeeShiftDetails?Name=' + name + '&RequestMenuUser=' + $("#RequestLevelPerson").val() + '&FromDate=' + FromDate + '&ToDate=' + ToDate + '&Shift=' + Shift,
+    $("#divForHistoryLeave").load('/Shift/GetEmployeeShiftDetails?Name=' + name + '&RequestMenuUser=' + $("#RequestLevelPerson").val() + '&FromDate=' + FromDate + '&ToDate=' + ToDate + '&Shift=' + Shift + '&rnd=' + Math.round(Math.random() * 10000),
         function () {
             $(".shift").dataTable({ pageLength: 50, bPaginate: false, bInfo: false });
             $("#divLoading").hide();
@@ -1534,4 +1541,12 @@ function SaveIndividualEmployeeShift() {
             Clearshowalert(response.message, "alert alert-danger");
         }
     });
+}
+function ValidateAutocompleteName(name,userID) {
+    if (name != "") {
+        if (userID == "") {
+            return false;
+        }
+    }
+    return true;
 }

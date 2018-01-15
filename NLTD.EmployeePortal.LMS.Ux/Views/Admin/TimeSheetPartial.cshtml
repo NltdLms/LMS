@@ -94,6 +94,12 @@ else
                     <th>
                         @Html.DisplayName("LMS Status")
                     </th>
+                    <th>
+                        @Html.DisplayName("Late Entry")
+                    </th>
+                    <th>
+                        @Html.DisplayName("Early Leave")
+                    </th>
                 </tr>
             </thead>
 
@@ -126,7 +132,7 @@ else
                             </td>
                             <td>
 
-                                @item.WorkingDate.DayOfWeek.ToString()
+                                @item.WorkingDate.ToString("ddd")
 
                             </td>
                             <td>
@@ -172,6 +178,12 @@ else
                             </td>
                             <td>
                                 @item.LMSStatus
+                            </td>
+                            <td>
+                                @item.LateEntry
+                            </td>
+                            <td>
+                                @item.EarlyLeave
                             </td>
                         </tr>
                     }

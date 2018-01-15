@@ -14,13 +14,13 @@
     td {
         font-size: 12px;
     }
-    form
-    {
-        margin-bottom:0px;
+
+    form {
+        margin-bottom: 0px;
     }
-    .box-body
-    {
-        padding:10px 10px 0px 10px;
+
+    .box-body {
+        padding: 10px 10px 0px 10px;
     }
 </style>
 
@@ -42,6 +42,7 @@
     <script src="~/Scripts/moment.js"></script>
     <link href="~/Content/bootstrap.css" rel="stylesheet" />
     <script type="text/JavaScript">
+        var nameList = [];
         $(document).ready(function () {
             $("#DateRange").daterangepicker({
                 locale: {
@@ -80,18 +81,29 @@
                         dataType: "json",
                         data: { term: request.term },
                         success: function (data) {
-                            response($.map(data,
+                            nameList = $.map(data,
                                 function (item) {
-                                    return { label: item.Name, value: item.Name };
-                                }))
-
-
+                                    return { label: item.Name, value: item.UserId };
+                                });
+                            response(nameList);
                         }
                     })
                 },
                 messages: {
                     noResults: "",
                     results: function () { }
+                },
+                select: function (event, ui) {
+                    event.preventDefault();
+                    $("#UserID").val(ui.item.value);
+                    console.log("Select");
+                },
+                focus: function (event, ui) {
+                    event.preventDefault();
+                    $("#Name").val(ui.item.label);
+                },
+                search: function (event, ui) {
+                    $("#UserID").val("");
                 }
             });
 
@@ -125,15 +137,24 @@
                 }
             }
         }
-        function ClearAlert()
+        function ValidateName()
         {
-            Clearshowalert();
-        }
-        if (@Model != null) {
-           if (@Model.ErrorMsg != "" && @Model.ErrorMsg != null) {
-                showalert("", @Model.ErrorMsg , "alert alert-danger");
+
+            $("alert_placeholder").val();
+            if ($("#RequestLevelPerson").val() === "My") {
+            }
+            else
+            {
+
+
+            if (!ValidateAutocompleteName($("#Name").val(), $("#UserID").val())) {
+                Clearshowalert("Please Choose a valid Username from the List. To Export all employee Clear the textbox.", "alert alert-danger");
+                return false;
+                }
             }
         }
+
+
     </script>
 
 }
@@ -143,14 +164,14 @@
 
 
 
-   
+
     string heading = string.Empty;
     string exportExcel = string.Empty;
-    if((string)ViewBag.RequestLevelPerson == "Admin" || (string)ViewBag.RequestLevelPerson == "HR")
+    if ((string)ViewBag.RequestLevelPerson == "Admin" || (string)ViewBag.RequestLevelPerson == "HR")
     {
         heading = "Employee Attendance";
     }
-    else if((string)ViewBag.RequestLevelPerson == "My")
+    else if ((string)ViewBag.RequestLevelPerson == "My")
     {
         heading = "My Attendance";
     }
@@ -171,11 +192,12 @@
                             @Html.Hidden("RequestLevelPerson", (string)ViewBag.RequestLevelPerson)
                             @Html.HiddenFor(x => x.FromDate)
                             @Html.HiddenFor(x => x.ToDate)
+                            @Html.HiddenFor(x => x.UserID)
                             if ((string)ViewBag.RequestLevelPerson == "My")
                             {
                                 <div class="row">
-                                    <div class="col-sm-3" >
-                                        
+                                    <div class="col-sm-3">
+
                                         @Html.Label("Date Range")
                                         @Html.TextBoxFor(m => m.DateRange, new { @class = "form-control" })
 
@@ -185,9 +207,9 @@
                                     <div class="col-sm-3" style="text-align:right">
                                         <br />
                                         <button type="button" class="btn btn-primary" onclick="loadAttendenceRangeSummary()">SEARCH</button>
-                                        <button type="submit" class="btn btn-primary" onclick="ClearAlert()">Export</button>
+                                        <button type="submit" class="btn btn-primary" onclick="return ValidateName()">Export</button>
                                     </div>
-                                    
+
                                 </div>
 
 
@@ -209,7 +231,7 @@
 
                                     </div>
                                     <div class="col-sm-3" style="padding-top:10px">
-                                        @if((string)ViewBag.RequestLevelPerson == "Team")
+                                        @if ((string)ViewBag.RequestLevelPerson == "Team")
                                         {
                                             <br />
                                             @Html.CheckBoxFor(m => m.DirectEmployees, new { id = "mydirectemployeecheck", @checked = "checked" })
@@ -219,8 +241,8 @@
                                     </div>
                                     <div class="col-sm-3" style="text-align:right">
                                         <br />
-                                        <button style="margin: 6px 12px "  type="button" class="btn btn-primary" onclick="loadAttendenceRangeSummary()">SEARCH</button>
-                                        <button type="submit" class="btn btn-primary" onclick="ClearAlert()">Export</button>
+                                        <button style="margin: 6px 12px " type="button" class="btn btn-primary" onclick="loadAttendenceRangeSummary()">SEARCH</button>
+                                        <button type="submit" class="btn btn-primary" onclick="return ValidateName()">Export</button>
                                     </div>
                                 </div>
 
@@ -236,8 +258,8 @@
             </div>
         </div>
     </div>
-                           
-    <div id="divForEmployeeAttendence" ></div>
+
+    <div id="divForEmployeeAttendence"></div>
 
 }
 

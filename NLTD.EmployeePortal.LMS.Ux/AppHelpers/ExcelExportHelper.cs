@@ -745,17 +745,11 @@ namespace NLTD.EmployeePortal.LMS.Ux.AppHelpers
         {
 
             byte[] result = null;
-            var userIDList = (from m in data select new { m.UserID,m.Name }).Distinct().ToList();
+            
             using (ExcelPackage package = new ExcelPackage())
             {
-                for (int userIDIndex   = 0; userIDIndex < userIDList.Count; userIDIndex++)
-                {
-                    
-                    List<EmployeeAttendanceModel> TimeSheetModelObjForSingleEmp = (from m in data
-                                                                          where m.UserID == userIDList[userIDIndex].UserID
-                                                                          select m).ToList();
-                    DataTable dataTable = ListToDataTable<EmployeeAttendanceModel>(TimeSheetModelObjForSingleEmp);
-                    ExcelWorksheet workSheet = package.Workbook.Worksheets.Add(userIDList[userIDIndex].Name);
+                    DataTable dataTable = ListToDataTable<EmployeeAttendanceModel>(data);
+                    ExcelWorksheet workSheet = package.Workbook.Worksheets.Add("AttendanceDetails");
                     int startRowFrom = String.IsNullOrEmpty(heading) ? 1 : 3;
 
                     if (showSrNo)
@@ -772,7 +766,6 @@ namespace NLTD.EmployeePortal.LMS.Ux.AppHelpers
                             
                         }
                     }
-
 
                     // add the content into the Excel file  
                     workSheet.Cells["A" + startRowFrom].LoadFromDataTable(dataTable, true);
@@ -850,14 +843,12 @@ namespace NLTD.EmployeePortal.LMS.Ux.AppHelpers
                         workSheet.InsertRow(1, 1);
                         workSheet.Column(1).Width = 5;
                     }
-
-                }
                 result = package.GetAsByteArray();
             }
-
             return result;
+        }
+            
         }
 
 
-    }
 }  

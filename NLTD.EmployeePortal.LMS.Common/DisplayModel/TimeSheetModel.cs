@@ -18,5 +18,9 @@ namespace NLTD.EmployeePortal.LMS.Common.DisplayModel
         public string Status { get; set; }
 
         public string LMSStatus { get; set; }
+
+        public TimeSpan LateEntry { get; set; }
+        public TimeSpan EarlyLeave { get; set; }
+
     }
 }

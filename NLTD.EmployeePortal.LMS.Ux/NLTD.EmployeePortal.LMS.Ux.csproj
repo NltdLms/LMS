@@ -666,6 +666,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LeavesController.cs" />
     <Compile Include="Controllers\ProfileController.cs" />
+    <Compile Include="Controllers\ReportController.cs" />
     <Compile Include="Controllers\ShiftController.cs" />
     <Compile Include="Controllers\TimeSheetController.cs" />
     <Compile Include="Global.asax.cs">
@@ -732,6 +733,10 @@
     <Content Include="Views\Shift\EmployeeShiftAllocation.cshtml" />
     <Content Include="Views\Shift\EmpShiftAllocationPartial.cshtml" />
     <Content Include="Views\Shift\EmpShiftAllocationSubDetailPartial.cshtml" />
+    <Content Include="Views\Report\NoOfLateReportRpt.cshtml" />
+    <Content Include="Views\Report\NoOfLateReportRptPartial.cshtml" />
+    <Content Include="Views\Report\ShiftBasedLateAndEarlyRpt.cshtml" />
+    <Content Include="Views\Report\ShiftBasedLateAndEarlyRptPartial.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
