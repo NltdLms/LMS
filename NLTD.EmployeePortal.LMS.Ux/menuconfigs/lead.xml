@@ -113,6 +113,11 @@
           <icon></icon>
         </MenuItem>
         <MenuItem>
+          <title>My ShiftDetails</title>
+          <url>/Shift/MyShiftDetails</url>
+          <icon></icon>
+        </MenuItem>
+        <MenuItem>
           <title>My Team Attendance</title>
           <url>/Attendance/MyTeamAttendance</url>
           <icon></icon>

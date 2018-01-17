@@ -64,6 +64,11 @@
           <url>/Attendance/MyTimeSheet</url>
           <icon></icon>
         </MenuItem>
+        <MenuItem>
+          <title>My ShiftDetails</title>
+          <url>/Shift/MyShiftDetails</url>
+          <icon></icon>
+        </MenuItem>
       </level1item>
     </MenuItem>
   </menuitem>
