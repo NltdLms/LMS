@@ -379,17 +379,14 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
             }
         }
 
-        public ActionResult EmployeeLeaveBalanceDetails(string name)
+        public ActionResult EmployeeLeaveBalanceDetails(Int64 UserId)
         {
             IList<LeaveBalanceEmpProfile> lstProfile = new List<LeaveBalanceEmpProfile>();
-            if (name != "")
-            {
-                name = name.Replace("|", " ");
-            }
+
             using (var client = new EmployeeLeaveBalanceClient())
             {
                 long userid = this.UserId;
-                lstProfile = client.GetLeaveBalanceEmpProfile(name);
+                lstProfile = client.GetLeaveBalanceEmpProfile(UserId);
             }
 
             return PartialView("EmployeeLeaveBalanceProfilePartial", lstProfile);

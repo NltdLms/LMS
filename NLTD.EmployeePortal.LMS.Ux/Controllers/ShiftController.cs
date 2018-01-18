@@ -168,22 +168,16 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
             return View("EmployeeShiftAllocation", qyMdl);
         }
 
-        public ActionResult GetEmployeeShiftDetails(string Name, string RequestMenuUser, string FromDate, string ToDate, string Shift)
+        public ActionResult GetEmployeeShiftDetails(Int64 UserId, string RequestMenuUser, string FromDate, string ToDate, string Shift)
         {
             EmpShift shiftDetail = null;
             
-            if (Name != "")
-            {
-                Name = Name.Replace("|", " ");
-            }
-
-           
-
             using (var client = new ShiftClient())
             {
-                long Userid = this.UserId;
+                if(RequestMenuUser == "My" && UserId == 0)
+                    UserId = this.UserId;
               
-                shiftDetail = client.GetEmployeeShiftDetails(Name, RequestMenuUser, Userid);
+                shiftDetail = client.GetEmployeeShiftDetails(UserId, RequestMenuUser, this.UserId);
                 ViewBag.FromDate = FromDate;
                 ViewBag.ToDate = ToDate;
                 ViewBag.Shift = Shift;

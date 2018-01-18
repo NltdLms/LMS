@@ -55,11 +55,11 @@ namespace NLTD.EmployeePortal.LMS.Client
             }
         }
 
-        public EmpShift GetEmployeeShiftDetails(string Name, string RequestMenuUser, long LeaduserId)
+        public EmpShift GetEmployeeShiftDetails(Int64 UserId, string RequestMenuUser, long LeaduserId)
         {
             using (IShiftHelper helper = new ShiftHelper())
             {
-                return helper.GetEmployeeShiftDetails(Name, RequestMenuUser, LeaduserId);
+                return helper.GetEmployeeShiftDetails(UserId, RequestMenuUser, LeaduserId);
             }
         }
 

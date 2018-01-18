@@ -15,11 +15,11 @@ namespace NLTD.EmploeePortal.LMS.Dac.DbHelper
         {
             //Nothing to implement...
         }
-        public IList<LeaveBalanceEmpProfile> GetLeaveBalanceEmpProfile(string name)
+        public IList<LeaveBalanceEmpProfile> GetLeaveBalanceEmpProfile(Int64 UserId)
         {
             using (var dac = new EmployeeLeaveBalanceDac())
             {
-                return dac.GetLeaveBalanceEmpProfile(name);
+                return dac.GetLeaveBalanceEmpProfile(UserId);
             }
         }
 
