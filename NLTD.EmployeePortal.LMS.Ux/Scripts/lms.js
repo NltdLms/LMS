@@ -1476,7 +1476,12 @@ function SaveEmployeeShift() {
 }
 
 function GetEmployeeShiftDetails(FromDate, ToDate, Shift) {
-
+ 
+    
+    if($("#RequestLevelPerson").val() == "My")
+    {
+        $("#Name").val($("#DisplayName").val());
+    }
     if ($("#Name").val() == undefined) {
         var name = "";
     }

@@ -340,13 +340,26 @@ namespace NLTD.EmploeePortal.LMS.Dac
 
                     if (RequestMenuUser != "My")
                     {
-                        var empPrf = context.Employee.Where(x => string.Concat(x.FirstName, " ", x.LastName).ToUpper() == Name.ToUpper()).FirstOrDefault();
+                        var empPrf = context.Employee
+                            .Where(x => string.Concat(x.FirstName, " ", x.LastName).ToUpper() == Name.ToUpper())
+                            .FirstOrDefault();
                         if (empPrf != null)
                         {
                             userId = empPrf.UserId;
                             EmpId = empPrf.EmployeeId;
                         }
                     }
+                    else
+                    {
+                        var empPrf = context.Employee.Where(x => (x.UserId) == LeaduserId).FirstOrDefault();
+                        if (empPrf != null)
+                        {
+                            userId = empPrf.UserId;
+                            EmpId = empPrf.EmployeeId;
+                            Name = empPrf.FirstName + " " + empPrf.LastName;
+                        }
+                    }
+
 
                     if (userId > 0 || (RequestMenuUser == "My" && LeaduserId > 0))
                     {
