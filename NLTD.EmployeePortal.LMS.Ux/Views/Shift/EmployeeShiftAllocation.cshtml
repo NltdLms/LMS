@@ -30,6 +30,7 @@
     <script src="~/Scripts/moment.js"></script>
     <link href="~/Content/bootstrap.css" rel="stylesheet" />
     <script type="text/JavaScript">
+        var nameList = [];
         $(document).ready(function () {
             if ($("#RequestLevelPerson").val() === "My") {
                 //$("#Name").val();
@@ -44,16 +45,29 @@
                         dataType: "json",
                         data: { term: request.term },
                         success: function (data) {
-                            response($.map(data,
+                            nameList = $.map(data,
                                 function (item) {
-                                    return { label: item.Name, value: item.Name };
-                                }))
+                                    return { label: item.Name, value: item.UserId };
+                                });
+                            response(nameList);
                         }
                     })
                 },
                 messages: {
                     noResults: "",
-                    results: ""
+                    results: function () { }
+                },
+                select: function (event, ui) {
+                    event.preventDefault();
+                    $("#UserID").val(ui.item.value);
+                    console.log("Select");
+                },
+                focus: function (event, ui) {
+                    event.preventDefault();
+                    $("#Name").val(ui.item.label);
+                },
+                search: function (event, ui) {
+                    $("#UserID").val("");
                 }
             });
 
@@ -82,6 +96,7 @@
                         <div class="box-body">
                             <div class="row">
                                 <div class="col-sm-5">
+                                    <input type="hidden" id="UserID" />
                                     @Html.LabelFor(x => x.Name, new { @class = "required" })
                                     @Html.TextBoxFor(m => m.Name, new { @class = "form-control" })
                                 </div>

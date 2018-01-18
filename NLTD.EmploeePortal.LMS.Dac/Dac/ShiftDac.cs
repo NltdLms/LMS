@@ -327,7 +327,7 @@ namespace NLTD.EmploeePortal.LMS.Dac
 
 
 
-        public EmpShift GetEmployeeShiftDetails(string Name, string RequestMenuUser, long LeaduserId)
+        public EmpShift GetEmployeeShiftDetails(Int64 UserId, string RequestMenuUser, long LeaduserId)
         {
             EmpShift retModel = new EmpShift();
 
@@ -337,16 +337,18 @@ namespace NLTD.EmploeePortal.LMS.Dac
                 {
                     EmployeeDac employeeDac = new EmployeeDac();
                     long userId = 0; string EmpId = "";
+                    string Name = "";
 
                     if (RequestMenuUser != "My")
                     {
                         var empPrf = context.Employee
-                            .Where(x => string.Concat(x.FirstName, " ", x.LastName).ToUpper() == Name.ToUpper())
+                            .Where(x => x.UserId == UserId)
                             .FirstOrDefault();
                         if (empPrf != null)
                         {
                             userId = empPrf.UserId;
                             EmpId = empPrf.EmployeeId;
+                            Name = empPrf.FirstName + " " + empPrf.LastName;
                         }
                     }
                     else

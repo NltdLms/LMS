@@ -952,6 +952,7 @@ function hideElementsForHalfDay() {
 //Added by Tamil
 function loadLeaveBalanceProfile() {
 
+    SetUserIDForAutoCompleteName(nameList, $("#Name").val(), "UserID");
     if (!ValidateAutocompleteName($("#Name").val(), $("#UserID").val())) {
         Clearshowalert("Please Choose a valid Username from the List. To Show all employee Clear the textbox.", "alert alert-danger");
         return;
@@ -1508,24 +1509,18 @@ function SaveEmployeeShift() {
 
 function GetEmployeeShiftDetails(FromDate, ToDate, Shift) {
  
-    
-    if($("#RequestLevelPerson").val() == "My")
-    {
-        $("#Name").val($("#DisplayName").val());
-    }
-    if ($("#Name").val() == undefined) {
-        var name = "";
-    }
-    else {
-        if ($("#Name").val() != "") {
-            var name = $("#Name").val().replace(/ /g, "|");
-        }
-        else {
-            name = "";
+    var UserId = ($("#RequestLevelPerson").val() == "My") ? 0: $("#UserID").val();   
+
+    if (UserId > 0) {
+        SetUserIDForAutoCompleteName(nameList, $("#Name").val(), "UserID");
+        if (!ValidateAutocompleteName($("#Name").val(), $("#UserID").val())) {
+            Clearshowalert("Please Choose a valid Username from the List. To Show all employee Clear the textbox.", "alert alert-danger");
+            return;
         }
     }
+
     $("#alert_placeholder").empty();
-    if (name == "" && $("#RequestLevelPerson").val() != "My") {
+    if ($("#Name").val() == "" && $("#RequestLevelPerson").val() != "My") {
         if ($('#alert') != undefined && $('#alert') != "") {
             $('#alert').remove();
         }
@@ -1534,7 +1529,7 @@ function GetEmployeeShiftDetails(FromDate, ToDate, Shift) {
     }
  
     $("#divLoading").show();
-    $("#divForHistoryLeave").load('/Shift/GetEmployeeShiftDetails?Name=' + name + '&RequestMenuUser=' + $("#RequestLevelPerson").val() + '&FromDate=' + FromDate + '&ToDate=' + ToDate + '&Shift=' + Shift + '&rnd=' + Math.round(Math.random() * 10000),
+    $("#divForHistoryLeave").load('/Shift/GetEmployeeShiftDetails?UserId=' + UserId + '&RequestMenuUser=' + $("#RequestLevelPerson").val() + '&FromDate=' + FromDate + '&ToDate=' + ToDate + '&Shift=' + Shift + '&rnd=' + Math.round(Math.random() * 10000),
         function () {
             $(".shift").dataTable({ pageLength: 50, bPaginate: false, bInfo: false });
             $("#divLoading").hide();
