@@ -154,6 +154,13 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
             return View("EmployeeShiftAllocation", qyMdl);
         }
 
+        public ActionResult MyShiftDetails()
+        {
+            ViewBag.RequestLevelPerson = "My";
+            ManageTeamLeavesQueryModel qyMdl = new ManageTeamLeavesQueryModel();
+            return View("EmployeeShiftAllocation", qyMdl);
+        }
+
         public ActionResult TeamEmployeeShiftAllocation()
         {
             ViewBag.RequestLevelPerson = "Team";
@@ -161,22 +168,20 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
             return View("EmployeeShiftAllocation", qyMdl);
         }
 
-        public ActionResult GetEmployeeShiftDetails(string Name, string RequestMenuUser, string FromDate, string ToDate, string Shift)
+        public ActionResult GetEmployeeShiftDetails(Int64 UserId, string RequestMenuUser, string FromDate, string ToDate, string Shift)
         {
             EmpShift shiftDetail = null;
-
-            if (Name != "")
-            {
-                Name = Name.Replace("|", " ");
-            }
-
+            
             using (var client = new ShiftClient())
             {
-                long Userid = this.UserId;
-                shiftDetail = client.GetEmployeeShiftDetails(Name, RequestMenuUser, Userid);
+                if(RequestMenuUser == "My" && UserId == 0)
+                    UserId = this.UserId;
+              
+                shiftDetail = client.GetEmployeeShiftDetails(UserId, RequestMenuUser, this.UserId);
                 ViewBag.FromDate = FromDate;
                 ViewBag.ToDate = ToDate;
                 ViewBag.Shift = Shift;
+                ViewBag.RequestLevelPerson = RequestMenuUser;
             }
 
             return PartialView("EmpShiftAllocationPartial", shiftDetail);

@@ -494,85 +494,27 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
         }
 
 
-        public ActionResult loadEmployeeAttendence(string Name, string FromDate, string ToDate,string requestLevelPerson,bool myDirectEmployees)
+        public ActionResult loadEmployeeAttendence(string ID, string FromDate, string ToDate,string requestLevelPerson,bool myDirectEmployees)
         {
             string errorMessage = string.Empty;
-            IList<EmployeeAttendanceModel> employeeAttendanceModelList = GetEmployeeAttendenceList(Name,FromDate, ToDate, requestLevelPerson, myDirectEmployees);
+            IList<EmployeeAttendanceModel> employeeAttendanceModelList = GetEmployeeAttendenceList(ID,FromDate, ToDate, requestLevelPerson, myDirectEmployees);
             ViewBag.RequestLevelPerson = requestLevelPerson;
             return PartialView("EmployeeAttendenceDtlPartial", employeeAttendanceModelList);
         }
-        public ActionResult ExportAttendenceToExcel(EmployeeAttendenceQueryModel EmployeeAttendenceQueryModelObj, string RequestLevelPerson)
-        {
-            IEmployeeAttendanceHelper employeeAttendanceHelper = new EmplyeeAttendenceClient();
-            IList<EmployeeAttendanceModel> employeeAttendanceModelList = new List<EmployeeAttendanceModel>();
-            string name = "";
+       
 
-            if (EmployeeAttendenceQueryModelObj.Name == null && EmployeeAttendenceQueryModelObj.FromDate == null)
-            {
-                EmployeeProfile profile = (EmployeeProfile)Session["Profile"];
-                name = profile.FirstName + " " + profile.LastName;
-                employeeAttendanceModelList = employeeAttendanceHelper.GetAttendence(profile.UserId);
-            }
-            else if (EmployeeAttendenceQueryModelObj.Name != null && EmployeeAttendenceQueryModelObj.FromDate == null)
-            {
-                IEmployeeHelper EmployeeHelper = new EmployeeClient();
-                name = EmployeeAttendenceQueryModelObj.Name;
-                Int64 UserID = EmployeeHelper.GetUserId(EmployeeAttendenceQueryModelObj.Name);
-                employeeAttendanceModelList = employeeAttendanceHelper.GetAttendence(UserID);
-            }
-            else if (EmployeeAttendenceQueryModelObj.Name != null && EmployeeAttendenceQueryModelObj.FromDate != null)
-            {
-                IEmployeeHelper EmployeeHelper = new EmployeeClient();
-                Int64 UserID = EmployeeHelper.GetUserId(EmployeeAttendenceQueryModelObj.Name);
-                name = EmployeeAttendenceQueryModelObj.Name;
-                EmployeeAttendenceQueryModelObj.ToDate = ChangeTime(Convert.ToDateTime(EmployeeAttendenceQueryModelObj.ToDate), 23, 59, 59, 0);
-                //employeeAttendanceModelList = employeeAttendanceHelper.GetAttendenceForRange(UserID, Convert.ToDateTime(EmployeeAttendenceQueryModelObj.FromDate), Convert.ToDateTime(EmployeeAttendenceQueryModelObj.ToDate),RequestLevelPerson);
-            }
-            else if (EmployeeAttendenceQueryModelObj.Name == null && EmployeeAttendenceQueryModelObj.FromDate != null)
-            {
-                EmployeeProfile profile = (EmployeeProfile)Session["Profile"];
-                name = profile.FirstName + " " + profile.LastName;
-                EmployeeAttendenceQueryModelObj.ToDate = ChangeTime(Convert.ToDateTime(EmployeeAttendenceQueryModelObj.ToDate), 23, 59, 59, 0);
-               // employeeAttendanceModelList = employeeAttendanceHelper.GetAttendenceForRange(profile.UserId, Convert.ToDateTime(EmployeeAttendenceQueryModelObj.FromDate), Convert.ToDateTime(EmployeeAttendenceQueryModelObj.ToDate),RequestLevelPerson);
-            }
-            List<EmployeeAttendanceModel> excelData = employeeAttendanceModelList.ToList();
-
-            if (excelData.Count > 0)
-            {
-                string[] columns = { "AttendenceDate", "INOutTime", "InOut" };
-                byte[] filecontent = ExcelExportHelper.ExportExcelAttendence(excelData, "", false, columns);
-                return File(filecontent, ExcelExportHelper.ExcelContentType, name + "_" + System.DateTime.Now + ".xlsx");
-            }
-            else
-            {
-                using (var Client = new LeaveClient())
-                {
-                    var result = Client.GetYearsFromLeaveBalance();
-                    ViewBag.YearsInLeaveBal = result;
-                }
-                ViewBag.RequestLevelPerson = RequestLevelPerson;
-                EmployeeAttendenceQueryModel data = new EmployeeAttendenceQueryModel();
-                data.ErrorMsg = "Excel file is not generated as no data returned.";
-                return View("~/Views/Attendence/MyAttendance.cshtml", data);
-            }
-        }
-
-        private IList<EmployeeAttendanceModel> GetEmployeeAttendenceList(string Name,string FromDate, string ToDate,string requestLevelPerson,bool IsDirectEmployees)
+        private IList<EmployeeAttendanceModel> GetEmployeeAttendenceList(string ID,string FromDate, string ToDate,string requestLevelPerson,bool IsDirectEmployees)
         {
             IList<EmployeeAttendanceModel> employeeAttendanceModelList = null;
             DateTime startDateFormatted, endDateFormatted;
             string tempRequestLevelPerson = requestLevelPerson;
             EmployeeProfile profile = (EmployeeProfile)Session["Profile"];
             Int64 userID = profile.UserId;
-            if(!string.IsNullOrEmpty(Name) && Name.ToUpper()!="NONAME" )
+            if(!string.IsNullOrEmpty(ID) && ID!="0")
             {
-                IEmployeeHelper EmployeeHelperObj = new EmployeeClient();
-                userID= EmployeeHelperObj.GetUserId(Name.Replace("|"," "));
+
+                userID = Convert.ToInt32(ID);
                 requestLevelPerson = "My";// If we are not change the requst level person, If we pass any manager ID it will return all timesheet who are all under the manager
-                if(userID==0)
-                {
-                    return new List<EmployeeAttendanceModel>();
-                }
             }
             if (string.IsNullOrEmpty(FromDate)|| FromDate== "Nodate")
             {
@@ -615,9 +557,9 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
                 TimeSheetQueryModelObj.UserID = profile.UserId;
                 if (TimeSheetQueryModelObj.FromDate == DateTime.MinValue)
                 {
-                    // For Last 15 days Attendence
+                    // For Last 30 days Attendence
                     TimeSheetQueryModelObj.FromDate = currentDate.AddDays(-30);
-                    TimeSheetQueryModelObj.ToDate = currentDate.AddDays(-1);
+                    TimeSheetQueryModelObj.ToDate = currentDate;
                 }
                 else
                 {
@@ -626,19 +568,14 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
             }
             else if (!string.IsNullOrEmpty(TimeSheetQueryModelObj.Name))
             {
-                IEmployeeHelper EmployeeHelper = new EmployeeClient();
-                Int64 UserID = EmployeeHelper.GetUserId(TimeSheetQueryModelObj.Name);
-                if(UserID==0)
-                {
-                    errorMessage = "Employee name not exists";
-                }
+                //IEmployeeHelper EmployeeHelper = new EmployeeClient();
+               // Int64 UserID = TimeSheetQueryModelObj.UserID;
+                
                 if (TimeSheetQueryModelObj.FromDate == DateTime.MinValue)
                 {
-                  
-                    // For Last 15 days Attendence
                     TimeSheetQueryModelObj.FromDate = currentDate.AddDays(-30);
-                    TimeSheetQueryModelObj.ToDate = currentDate.AddDays(-1);
-                    
+                    TimeSheetQueryModelObj.ToDate = currentDate;
+
                 }
                 else
                 {
@@ -646,11 +583,11 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
                 }
                 requestLevelPerson = "My";
                 
-                TimeSheetQueryModelObj.UserID = UserID;
+                //TimeSheetQueryModelObj.UserID = UserID;
             }
-            if(TimeSheetQueryModelObj.ToDate>DateTime.Now)
+            if(TimeSheetQueryModelObj.ToDate>=DateTime.Now)
             {
-                TimeSheetQueryModelObj.ToDate = currentDate.AddDays(-1);
+                TimeSheetQueryModelObj.ToDate = DateTime.Now;
             }
             List<TimeSheetModel> timeSheetModelList = new List<TimeSheetModel>();
             if(requestLevelPerson=="My")
@@ -688,19 +625,39 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
         public ActionResult ExportTimeSheetToExcel(TimeSheetQueryModel TimeSheetQueryModelObj, string RequestLevelPerson)
         {
             string errorMessage = string.Empty;
+            string startDate = TimeSheetQueryModelObj.DateRange.Substring(0, 10);
+            string endDate = TimeSheetQueryModelObj.DateRange.Substring(12);
+            //TimeSheetQueryModelObj.FromDate = startDate;
+            if (startDate != "")
+            {
+                try
+                {
+                    TimeSheetQueryModelObj.FromDate = DateTime.Parse(startDate, new CultureInfo("en-GB", true));
+                    TimeSheetQueryModelObj.ToDate = DateTime.Parse(endDate, new CultureInfo("en-GB", true));
+                    
+                }
+                catch (Exception ex)
+                {
+                    throw ex;
+                }
+            }
+
             List<TimeSheetModel> timeSheetModelList = GetEmployeeTimeSheet(TimeSheetQueryModelObj,out errorMessage, RequestLevelPerson);
             List<TimeSheetModel> excelData = timeSheetModelList.ToList();
             if (excelData.Count > 0)
             {
-                string[] columns = {  "WorkingDate", "Shift", "InTime", "OutTime","WorkingHours","Status", "LMSStatus", "Day" };
-                byte[] filecontent = ExcelExportHelper.ExportTimesheetExcel(excelData, "", false, columns);
-                string fileName = string.Format("TimeSheet_{0}{1}", DateTime.Now.ToString("ddMMyyyyHHmmss"), ".xlsx");
-                if(string.IsNullOrEmpty(TimeSheetQueryModelObj.Name))
+                List<string> columns = new List<string>(){  "WorkingDate", "Shift", "InTime", "OutTime","WorkingHours","Status", "LMSStatus", "Day","LateEntry", "EarlyLeave","Name" };
+                string fileName = string.Empty;
+                if (RequestLevelPerson == "My")
                 {
                     EmployeeProfile profile = (EmployeeProfile)Session["Profile"];
-                    TimeSheetQueryModelObj.Name = profile.FirstName + " " + profile.LastName;
+                    fileName = string.Format("{0}{1}{2}{3}", profile.FirstName, profile.LastName, DateTime.Now.ToString("ddMMyyyyHHmmss"), ".xlsx");
                 }
-               
+                else
+                {
+                    fileName = string.Format("TimeSheet_{0}{1}", DateTime.Now.ToString("ddMMyyyyHHmmss"), ".xlsx");
+                }
+                byte[] filecontent = ExcelExportHelper.ExportTimesheetExcel(excelData, "", true, columns.ToArray());
                 return File(filecontent, ExcelExportHelper.ExcelContentType,fileName);
             }
             else
@@ -714,6 +671,36 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
                 EmployeeAttendenceQueryModel data = new EmployeeAttendenceQueryModel();
                 data.ErrorMsg = "Excel file is not generated as no data returned.";
                 return View("~/Views/Attendence/TimeSheet.cshtml", data);
+            }
+        }
+
+        public ActionResult ExportAttendenceToExcel(EmployeeAttendenceQueryModel EmployeeAttendenceQueryModelObj, string RequestLevelPerson)
+        {
+
+            List<EmployeeAttendanceModel> excelData = GetEmployeeAttendenceList(EmployeeAttendenceQueryModelObj.UserID.ToString(), (EmployeeAttendenceQueryModelObj.FromDate == DateTime.MinValue ? "" : EmployeeAttendenceQueryModelObj.FromDate.ToString()),
+                (EmployeeAttendenceQueryModelObj.ToDate == DateTime.MinValue ? "" : EmployeeAttendenceQueryModelObj.ToDate.ToString()), RequestLevelPerson, EmployeeAttendenceQueryModelObj.DirectEmployees).ToList();
+
+            if (excelData.Count > 0)
+            {
+                List<string>  columns = new List<string>(){"AttendenceDate", "INOutTime", "InOut","Name" };
+                string fileName = string.Format("Attendance_{0}{1}", DateTime.Now.ToString("ddMMyyyyHHmmss"), ".xlsx");
+                if (EmployeeAttendenceQueryModelObj.RequestLevelPerson=="My")
+                {
+                    columns = new List<string>() { "AttendenceDate", "INOutTime", "InOut"};
+                    EmployeeProfile profile = (EmployeeProfile)Session["Profile"];
+                    fileName = string.Format("{0} {1}{2}{3}", profile.FirstName , profile.LastName, DateTime.Now.ToString("ddMMyyyyHHmmss"), ".xlsx");
+                }
+                
+                byte[] filecontent = ExcelExportHelper.ExportExcelAttendence(excelData, "", false, columns.ToArray());
+                return File(filecontent, ExcelExportHelper.ExcelContentType, fileName);
+            }
+            else
+            {
+
+                ViewBag.RequestLevelPerson = RequestLevelPerson;
+                EmployeeAttendenceQueryModel data = new EmployeeAttendenceQueryModel();
+                data.ErrorMsg = "Excel file is not generated as no data returned.";
+                return View("~/Views/Attendance/MyAttendance.cshtml", data);
             }
         }
     }

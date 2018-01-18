@@ -21,7 +21,7 @@ namespace NLTD.EmployeePortal.LMS.Repository
         //List<LeaveItem> GetMyLeaveRequests(Int64 UserId);
 
         IList<LeaveSummary> GetLeaveSumary(Int64 UserId, Int32 summaryYear);
-
+        IList<HolidayModel> GetHolidaysDetails(long UserId, Int32 holidayYear, ref bool previousYear, ref bool nextYear);
         IList<HolidayModel> GetHolidays(long UserId, Int32 holidayYear);
         IList<DropDownItem> GetWeekOffs(Int64 UserId);
 
@@ -34,7 +34,7 @@ namespace NLTD.EmployeePortal.LMS.Repository
         IList<LeaveDtl> GetLeaveDetailCalculation(DateTime LeaveFrom, DateTime LeaveUpto, string LeaveFromTime, string LeaveUptoTime, Int64 UserId, Int64 LeaveTypText);
 
         string ReturnWeekOff(long UserId);
-        DashBoardModel GetDashboardData(Int64 UserId);
+        DashBoardModel GetDashboardData(Int64 UserId, Int64 OfficeId);
         IList<PermissionDetailsModel> GetPermissionDetail(string Name, string reqUsr, DateTime? startDate, DateTime? endDate, bool OnlyReportedToMe, Int64 LeadId);
         decimal ReturnDuration(DateTime LeaveFrom, DateTime LeaveUpto, string LeaveFromTime, string LeaveUptoTime, Int64 UserId);
 
@@ -42,7 +42,7 @@ namespace NLTD.EmployeePortal.LMS.Repository
         IList<LeaveDetailModel> ShowLeaveDetail(Int64 LeaveId);
 
         int GetPendingApprovalCount(Int64 userId);
-
+        List<TimeSheetModel> GetMyTeamTimeSheet(Int64 UserID);
         EmailDataModel GetEmailData(Int64 leaveId,string actionName);
 
         //string ChangeStatusFromEmail(Int64 leaveId, Int64 userId, string action);

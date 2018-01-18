@@ -170,6 +170,16 @@ namespace NLTD.EmploeePortal.LMS.Dac.Dac
                         TimeSheetModelObj.WorkingHours = TimeSheetModelObj.OutTime - TimeSheetModelObj.InTime;
                         TimeSheetModelObj.Status = "Present";
 
+                        if (TimeSheetModelObj.InTime.TimeOfDay > ShiftQueryModelList[i].ShiftFromtime)
+                        {
+                            TimeSheetModelObj.LateEntry = TimeSheetModelObj.InTime.TimeOfDay - ShiftQueryModelList[i].ShiftFromtime;
+                        }
+
+                        if (ShiftQueryModelList[i].ShiftTotime > TimeSheetModelObj.OutTime.TimeOfDay)
+                        {
+                            TimeSheetModelObj.EarlyLeave = ShiftQueryModelList[i].ShiftTotime-TimeSheetModelObj.OutTime.TimeOfDay;
+                        }
+
                     }
                     else// If no record found in the employee for the given date 
                     {

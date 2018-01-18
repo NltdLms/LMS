@@ -54,9 +54,9 @@ namespace NLTD.EmployeePortal.LMS.Common.DisplayModel
 
         public string Name { get; set; }
 
-        public DateTime? DOJ { get; set; }
-        public DateTime? ConfirmationDate { get; set; }
-        public DateTime? RelievingDate { get; set; }
+        public String DOJ { get; set; }
+        public String ConfirmationDate { get; set; }
+        public String RelievingDate { get; set; }
 
     }
 }

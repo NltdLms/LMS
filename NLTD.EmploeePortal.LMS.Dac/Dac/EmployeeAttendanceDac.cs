@@ -107,7 +107,7 @@ namespace NLTD.EmploeePortal.LMS.Dac.Dac
                                 
                                 employeeAttendanceModelList = (from ea in context.EmployeeAttendance
                                                                join e in context.Employee on ea.UserID equals e.UserId
-                                                               where employeeIDs.Contains(ea.UserID) && ea.InOutDate >= FromDateTime && ea.InOutDate <= ToDateTime
+                                                               where employeeIDs.Contains(ea.UserID??0) && ea.InOutDate >= FromDateTime && ea.InOutDate <= ToDateTime
                                                                select new EmployeeAttendanceModel
                                                                {
                                                                    UserID = ea.UserID,

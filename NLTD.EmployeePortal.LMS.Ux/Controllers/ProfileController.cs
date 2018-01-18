@@ -14,7 +14,7 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
     public class ProfileController : BaseController
     {
         public ActionResult Index()
-        {           
+        {
 
             return RedirectToAction("Index", "Dashboard");
         }
@@ -25,7 +25,8 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
             ViewBag.IsSelfProfile = true;
             Int64 userIdForProfile = 0;
             EmployeeProfile profile = null;
-            if (TempData["UserId"] == null) {
+            if (TempData["UserId"] == null)
+            {
                 userIdForProfile = UserId;
             }
             else
@@ -34,7 +35,7 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
             using (var client = new EmployeeClient())
             {
                 profile = client.GetEmployeeProfile(userIdForProfile);
-                
+
             }
             using (var client = new ShiftClient())
             {
@@ -58,7 +59,7 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
             {
                 using (var client = new EmployeeClient())
                 {
-                    IList<DropDownItem> reptList = client.GetActiveEmpList(profile.OfficeId,userIdForProfile);
+                    IList<DropDownItem> reptList = client.GetActiveEmpList(profile.OfficeId, userIdForProfile);
                     DropDownItem di = new DropDownItem();
                     di.Key = "";
                     di.Value = "";
@@ -103,7 +104,7 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
                 }
                 using (var client = new EmployeeClient())
                 {
-                    IList<DropDownItem> reptList = client.GetActiveEmpList(OfficeId,null);
+                    IList<DropDownItem> reptList = client.GetActiveEmpList(OfficeId, null);
                     DropDownItem di = new DropDownItem();
                     di.Key = "";
                     di.Value = "";
@@ -145,7 +146,7 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
             using (var Client = new EmployeeClient())
             {
                 var data = Client.GetUserId(name);
-                userId = data;           
+                userId = data;
             }
             if (userId == 0)
             {
@@ -176,7 +177,7 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
             }
             else
             {
-                TempData["UserId"] = userId;                
+                TempData["UserId"] = userId;
                 return Json(new { redirectToUrl = Url.Action("ViewEmployeeProfile", "Profile") });
             }
         }
@@ -234,7 +235,17 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
                     employee.ErrorMesage = "Enter Relieving Date.";
                     isValid = false;
                 }
-                else if(employee.IsActive)
+                else if (employee.DOJ > employee.RelievingDate)
+                {
+                    employee.ErrorMesage = "Relieving Date should be greater than Joining Date.";
+                    isValid = false;
+                }
+                else if (employee.DOJ > employee.ConfirmationDate)
+                {
+                    employee.ErrorMesage = "Confirmation Date should be greater than Joining Date.";
+                    isValid = false;
+                }
+                if (employee.IsActive)
                 {
                     employee.RelievingDate = null;
                 }
@@ -318,7 +329,7 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
         {
             EmployeeProfileSearchModel mdl = new EmployeeProfileSearchModel();
             mdl.RequestLevelPerson = "My";
-            
+
             return View("SearchTeamLmsProfile", mdl);
         }
         public ActionResult TeamLmsProfile()
@@ -346,12 +357,12 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
             {
                 name = name.Replace("|", " ");
             }
-            using (var client=new EmployeeClient())
+            using (var client = new EmployeeClient())
             {
                 lstProfile = client.GetTeamProfiles(this.UserId, onlyReportedToMe, name, requestMenuUser, hideInactiveEmp);
             }
 
-            return PartialView("EmployeeLmsProfileNamesPartial",lstProfile);
+            return PartialView("EmployeeLmsProfileNamesPartial", lstProfile);
         }
         //Added by Tamil
         public ActionResult SearchLeaveBalanceProfile()
@@ -368,17 +379,14 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
             }
         }
 
-        public ActionResult EmployeeLeaveBalanceDetails(string name)
+        public ActionResult EmployeeLeaveBalanceDetails(Int64 UserId)
         {
             IList<LeaveBalanceEmpProfile> lstProfile = new List<LeaveBalanceEmpProfile>();
-            if (name != "")
-            {
-                name = name.Replace("|", " ");
-            }
+
             using (var client = new EmployeeLeaveBalanceClient())
             {
                 long userid = this.UserId;
-                lstProfile = client.GetLeaveBalanceEmpProfile(name);
+                lstProfile = client.GetLeaveBalanceEmpProfile(UserId);
             }
 
             return PartialView("EmployeeLeaveBalanceProfilePartial", lstProfile);
@@ -386,7 +394,7 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
 
         public ActionResult SaveLeaveBalance(List<EmployeeLeaveBalanceDetails> lst, Int64 EmpUserid)
         {
-          
+
             string result = "";
             if (ModelState.IsValid)
             {

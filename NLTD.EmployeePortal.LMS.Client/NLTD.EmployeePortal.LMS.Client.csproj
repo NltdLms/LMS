@@ -58,6 +58,7 @@
     <Compile Include="OfficeLocationClient.cs" />
     <Compile Include="OfficeWeekEndHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ReportClient.cs" />
     <Compile Include="RoleClient.cs" />
     <Compile Include="ShiftClient.cs" />
     <Compile Include="TimesheetClient.cs" />

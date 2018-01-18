@@ -73,6 +73,7 @@
     <Compile Include="Dac\OfficeHolidayDac.cs" />
     <Compile Include="Dac\OfficeLocationDac.cs" />
     <Compile Include="Dac\OfficeWeekOffDac.cs" />
+    <Compile Include="Dac\ReportDac.cs" />
     <Compile Include="Dac\RoleDac.cs" />
     <Compile Include="Dac\ShiftDac.cs" />
     <Compile Include="Dac\TimeSheetDac.cs" />
@@ -85,6 +86,7 @@
     <Compile Include="DbHelper\OfficeHolidayHelper.cs" />
     <Compile Include="DbHelper\OfficeLocationHelper.cs" />
     <Compile Include="DbHelper\OfficeWeekEndHelper.cs" />
+    <Compile Include="DbHelper\ReportHelper.cs" />
     <Compile Include="DbHelper\RoleHelper.cs" />
     <Compile Include="DbHelper\ShiftHelper.cs" />
     <Compile Include="DbHelper\TimesheetHelper.cs" />

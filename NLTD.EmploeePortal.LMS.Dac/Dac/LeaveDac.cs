@@ -1,9 +1,11 @@
-﻿using NLTD.EmploeePortal.LMS.Dac.DbModel;
+﻿using NLTD.EmploeePortal.LMS.Dac.Dac;
+using NLTD.EmploeePortal.LMS.Dac.DbModel;
 using NLTD.EmployeePortal.LMS.Common.DisplayModel;
 using NLTD.EmployeePortal.LMS.Common.QueryModel;
 using NLTD.EmployeePortal.LMS.Repository;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Globalization;
 using System.Linq;
 using System.Text;
@@ -38,7 +40,7 @@ namespace NLTD.EmploeePortal.LMS.Dac
                                 leave.Comments = status.Comment;
                             }
                             leave.ApprovedBy = status.UserId;
-                            leave.ApprovedAt = System.DateTime.Now;
+                            leave.ApprovedAt = DateTime.Now;
                             leave.Status = status.Status;
 
                             isSaved = context.SaveChanges();
@@ -70,7 +72,7 @@ namespace NLTD.EmploeePortal.LMS.Dac
                                                 empLeaveBal.BalanceDays = (empLeaveBal.BalanceDays ?? 0) + leave.Duration;
                                         }
                                         empLeaveBal.ModifiedBy = status.UserId;
-                                        empLeaveBal.ModifiedOn = System.DateTime.Now;
+                                        empLeaveBal.ModifiedOn = DateTime.Now;
                                         isSaved = context.SaveChanges();
                                     }
                                 }
@@ -81,32 +83,32 @@ namespace NLTD.EmploeePortal.LMS.Dac
                                     {
                                         //if (adjustBal.IsLeave == true)
                                         //{
-                                            TransactionHistoryModel hist = new TransactionHistoryModel();
-                                            hist.EmployeeId = leave.UserId;
-                                            hist.LeaveTypeId = leave.LeaveTypeId;
-                                            hist.LeaveId = leave.LeaveId;
-                                            hist.NumberOfDays = leave.Duration;
-                                            hist.TransactionBy = status.UserId;
-                                            if (leave.Status == "A")
-                                            {
-                                                hist.Remarks = "Approved";
-                                                hist.TransactionType = "D";
-                                            }
+                                        TransactionHistoryModel hist = new TransactionHistoryModel();
+                                        hist.EmployeeId = leave.UserId;
+                                        hist.LeaveTypeId = leave.LeaveTypeId;
+                                        hist.LeaveId = leave.LeaveId;
+                                        hist.NumberOfDays = leave.Duration;
+                                        hist.TransactionBy = status.UserId;
+                                        if (leave.Status == "A")
+                                        {
+                                            hist.Remarks = "Approved";
+                                            hist.TransactionType = "D";
+                                        }
                                         else if (leave.Status == "C")
                                         {
                                             hist.Remarks = "Cancelled";
                                             hist.TransactionType = "C";
                                         }
                                         else
-                                            {
-                                                hist.Remarks = "Rejected";
-                                                hist.TransactionType = "C";
-                                            }
-                                            bool retRes = SaveTransactionLog(hist);
-                                            if (retRes)
-                                                retValue = "Saved";
-                                            else
-                                                retValue = "NotSaved";
+                                        {
+                                            hist.Remarks = "Rejected";
+                                            hist.TransactionType = "C";
+                                        }
+                                        bool retRes = SaveTransactionLog(hist);
+                                        if (retRes)
+                                            retValue = "Saved";
+                                        else
+                                            retValue = "NotSaved";
                                         //}
                                     }
 
@@ -142,7 +144,7 @@ namespace NLTD.EmploeePortal.LMS.Dac
                 }
             }
             return retValue;
-        }      
+        }
         public IList<LeaveSummary> GetLeaveSumary(long UserId, Int32 summaryYear)
         {
             IList<LeaveSummary> lstSummary;
@@ -274,6 +276,61 @@ namespace NLTD.EmploeePortal.LMS.Dac
                 }
             }
             return retCount;
+        }
+
+        public IList<HolidayModel> GetHolidaysDetails(long UserId, Int32 holidayYear, ref bool previousYear, ref bool nextYear)
+        {
+            IList<HolidayModel> holidays;
+            int previousYearCount = 0;
+            int nextYearCount = 0;
+            int previousHolidayYear = holidayYear - 1;
+            int nextHolidayYear = holidayYear + 1;
+            previousYear = false;
+            nextYear = false;
+            using (var context = new NLTDDbContext())
+            {
+                var holidayQry = (from emp in context.Employee
+                                  join h in context.OfficeHoliday on emp.OfficeHolodayId equals h.OfficeId
+                                  join o in context.OfficeLocation on h.OfficeId equals o.OfficeId
+                                  where emp.UserId == UserId && h.Year == holidayYear
+                                  orderby h.Holiday ascending
+                                  select new HolidayModel
+                                  {
+                                      HolidayDate = h.Holiday,
+                                      HolidayText = h.Title,
+                                      HolidayOfficeName = o.OfficeName
+                                  }).AsQueryable();
+                holidays = holidayQry.ToList();
+
+                var previousQry = (from emp in context.Employee
+                                   join h in context.OfficeHoliday on emp.OfficeHolodayId equals h.OfficeId
+                                   join o in context.OfficeLocation on h.OfficeId equals o.OfficeId
+                                   where emp.UserId == UserId && h.Year == previousHolidayYear
+                                   orderby h.Holiday ascending
+                                   select new
+                                   {
+                                       HolidayDate = h.Holiday
+                                   }).AsQueryable();
+
+                previousYearCount = previousQry.ToList().Count();
+
+                var nextQry = (from emp in context.Employee
+                               join h in context.OfficeHoliday on emp.OfficeHolodayId equals h.OfficeId
+                               join o in context.OfficeLocation on h.OfficeId equals o.OfficeId
+                               where emp.UserId == UserId && h.Year == nextHolidayYear
+                               orderby h.Holiday ascending
+                               select new
+                               {
+                                   HolidayDate = h.Holiday
+                               }).AsQueryable();
+
+                nextYearCount = nextQry.ToList().Count();
+            }
+
+            previousYear = previousYearCount > 0;
+            nextYear = nextYearCount > 0;
+
+            return holidays;
         }
         public IList<HolidayModel> GetHolidays(long userId, Int32 holYear)
         {
@@ -412,7 +469,7 @@ namespace NLTD.EmploeePortal.LMS.Dac
             return empList;
 
         }
-        
+
         public IList<Int64> GetEmployeesReporting(long leadId)
         {
             var result = new List<Int64>();
@@ -580,7 +637,7 @@ namespace NLTD.EmploeePortal.LMS.Dac
             {
                 var permissions = (from l in context.Leave
                                    join lp in context.PermissionDetail on l.LeaveId equals lp.LeaveId
-                                   where lp.PermissionDate.Month == month && l.UserId == userId && l.Status == "A" && l.StartDate.Year == System.DateTime.Now.Year
+                                   where lp.PermissionDate.Month == month && l.UserId == userId && l.Status == "A" && l.StartDate.Year == DateTime.Now.Year
                                    select new { TimeFrom = lp.TimeFrom, TimeTo = lp.TimeTo }
                                      )
                                      .ToList();
@@ -859,7 +916,7 @@ namespace NLTD.EmploeePortal.LMS.Dac
                         if (isTimeBased)
                             request.LeaveUpto = request.LeaveFrom;
                         string firstDayUptoTimeType = string.Empty;
-                       
+
                         var chkLeave = context.Leave
                         .Where(h => h.UserId == request.UserId && (h.Status == "A" || h.Status == "P") && ((request.LeaveFrom >= h.StartDate && request.LeaveFrom <= h.EndDate) || (request.LeaveUpto >= h.StartDate && request.LeaveUpto <= h.EndDate) || (request.LeaveFrom <= h.StartDate && request.LeaveUpto >= h.EndDate))).ToList();
                         if (chkLeave.Any())
@@ -966,7 +1023,7 @@ namespace NLTD.EmploeePortal.LMS.Dac
                             if (duplicateRequest == "Duplicate")
                                 return "Duplicate";
                         }
-                    
+
                         var empProfile = context.Employee.Where(x => x.UserId == request.UserId).FirstOrDefault();
 
                         if (adjustBal.AdjustLeaveBalance)
@@ -1079,7 +1136,7 @@ namespace NLTD.EmploeePortal.LMS.Dac
                         }
 
                         Leave leave = new Leave();
-                        leave.AppliedAt = System.DateTime.Now;
+                        leave.AppliedAt = DateTime.Now;
                         leave.AppliedBy = request.AppliedByUserId;
                         leave.ApprovedAt = null;
                         leave.ApprovedBy = null;
@@ -1113,7 +1170,7 @@ namespace NLTD.EmploeePortal.LMS.Dac
                         {
                             leave.Status = "A";
                             leave.Comments = "Auto Approved on Apply.";
-                            leave.ApprovedAt = System.DateTime.Now;
+                            leave.ApprovedAt = DateTime.Now;
                             leave.ApprovedBy = request.UserId;
                         }
                         else
@@ -1165,9 +1222,9 @@ namespace NLTD.EmploeePortal.LMS.Dac
                                         empBal.LeaveTypeId = request.LeaveType;
                                         empBal.PendingApprovalDays = leaveDuration;
                                         empBal.CreatedBy = request.AppliedByUserId;
-                                        empBal.CreatedOn = System.DateTime.Now;
+                                        empBal.CreatedOn = DateTime.Now;
                                         empBal.ModifiedBy = -1;
-                                        empBal.ModifiedOn = System.DateTime.Now;
+                                        empBal.ModifiedOn = DateTime.Now;
                                         context.EmployeeLeaveBalance.Add(empBal);
                                         isSaved = context.SaveChanges();
                                     }
@@ -1186,34 +1243,34 @@ namespace NLTD.EmploeePortal.LMS.Dac
                                             leaveBalRec.BalanceDays = (leaveBalRec.BalanceDays ?? 0) - leaveDuration;
                                         }
                                         leaveBalRec.ModifiedBy = request.AppliedByUserId;
-                                        leaveBalRec.ModifiedOn = System.DateTime.Now;
+                                        leaveBalRec.ModifiedOn = DateTime.Now;
                                         isSaved = context.SaveChanges();
                                     }
                                     //if (adjustBal.IsLeave == true)
                                     //{
-                                        if (isSaved > 0)
+                                    if (isSaved > 0)
+                                    {
+                                        TransactionHistoryModel hist = new TransactionHistoryModel();
+                                        hist.EmployeeId = request.UserId;
+                                        hist.LeaveTypeId = leave.LeaveTypeId;
+                                        hist.LeaveId = leave.LeaveId;
+                                        hist.TransactionType = "D";
+                                        hist.NumberOfDays = leaveDuration;
+                                        hist.TransactionBy = request.UserId;
+                                        if (empProfile.ReportingToId == null)
                                         {
-                                            TransactionHistoryModel hist = new TransactionHistoryModel();
-                                            hist.EmployeeId = request.UserId;
-                                            hist.LeaveTypeId = leave.LeaveTypeId;
-                                            hist.LeaveId = leave.LeaveId;
-                                            hist.TransactionType = "D";
-                                            hist.NumberOfDays = leaveDuration;
-                                            hist.TransactionBy = request.UserId;
-                                            if (empProfile.ReportingToId == null)
-                                            {
-                                                hist.Remarks = "Auto Approved";
-                                            }
-                                            else
-                                            {
-                                                hist.Remarks = "Pending";
-                                            }
-                                            bool retRes = SaveTransactionLog(hist);
-                                            if (retRes)
-                                                isSaved = 1;
-                                            else
-                                                isSaved = -1;
+                                            hist.Remarks = "Auto Approved";
                                         }
+                                        else
+                                        {
+                                            hist.Remarks = "Pending";
+                                        }
+                                        bool retRes = SaveTransactionLog(hist);
+                                        if (retRes)
+                                            isSaved = 1;
+                                        else
+                                            isSaved = -1;
+                                    }
                                     //}
                                 }
                             }
@@ -1342,7 +1399,7 @@ namespace NLTD.EmploeePortal.LMS.Dac
                 hist.UserId = histModel.EmployeeId;
                 hist.LeaveTypeId = histModel.LeaveTypeId;
                 hist.LeaveId = histModel.LeaveId;
-                hist.TransactionDate = System.DateTime.Now;
+                hist.TransactionDate = DateTime.Now;
                 hist.TransactionType = histModel.TransactionType;
                 hist.NumberOfDays = histModel.NumberOfDays;
                 hist.TransactionBy = histModel.TransactionBy;
@@ -1360,7 +1417,7 @@ namespace NLTD.EmploeePortal.LMS.Dac
 
             IList<Int64> empList = GetEmployeesReporting(LeadId);
             IList<DaywiseLeaveDtlModel> retList;
-            int year = (ToDate ?? System.DateTime.Now).Year;
+            int year = (ToDate ?? DateTime.Now).Year;
             using (var context = new NLTDDbContext())
             {
                 var dtlQry = (from emp in context.Employee
@@ -1585,7 +1642,7 @@ namespace NLTD.EmploeePortal.LMS.Dac
                            }
                              ).AsQueryable();
                 DateTime QryFromDate = startDate ?? new DateTime(DateTime.Now.Year, 1, 1);
-                DateTime QryToDate = endDate ?? System.DateTime.Now;
+                DateTime QryToDate = endDate ?? DateTime.Now;
                 qry = qry.Where(x => x.PermissionDate >= QryFromDate && x.PermissionDate <= QryToDate);
                 if (qry != null)
                 {
@@ -1752,23 +1809,73 @@ namespace NLTD.EmploeePortal.LMS.Dac
             while (addDays <= leaveDuration);
             return leaveCount;
         }
-        public DashBoardModel GetDashboardData(Int64 UserId)
+        public DashBoardModel GetDashboardData(Int64 UserId, Int64 OfficeId)
         {
+            bool previousYear = false, nextYear = false;
+
             DashBoardModel dshMdl = new DashBoardModel();
-            dshMdl.lstLeaveSummary = GetLeaveSumary(UserId, System.DateTime.Now.Year);
-            dshMdl.lstHolidayModel = GetHolidays(UserId, System.DateTime.Now.Year);
+            dshMdl.lstLeaveSummary = GetLeaveSumary(UserId, DateTime.Now.Year);
+            dshMdl.lstHolidayModel = GetHolidaysDetails(UserId, DateTime.Now.Year, ref previousYear, ref nextYear);
+            dshMdl.PreviousYear = previousYear;
+            dshMdl.NextYear = nextYear;
             dshMdl.lstWeekOffs = GetWeekOffs(UserId);
             dshMdl.PendingApprovalCount = GetPendingApprovalCount(UserId);
+            dshMdl.EmployeeCount = GetEmployeeCount(OfficeId);
+            //dshMdl.ListTimeSheetModel = GetMyTeamTimeSheet(UserId);
             return dshMdl;
         }
+
+        public List<TimeSheetModel> GetMyTeamTimeSheet(Int64 UserID)
+        {
+            List<TimeSheetModel> timeSheetModelList = new List<TimeSheetModel>();
+            // To Get all the employee profile under the manager or lead
+            string userRole = string.Empty;
+            using (NLTDDbContext context = new NLTDDbContext())
+            {
+                userRole = (from emp in context.Employee
+                            join role in context.EmployeeRole on emp.EmployeeRoleId equals role.RoleId
+                            where emp.UserId == UserID
+                            select role.Role).FirstOrDefault();
+            }
+            
+            List<EmployeeProfile> employeeProfileListUnderManager = new EmployeeDac().GetReportingEmployeeProfile(UserID, userRole, false).OrderBy(m => m.FirstName).ToList();
+
+            for (int i = 0; i < employeeProfileListUnderManager.Count; i++)
+            {
+                List<TimeSheetModel> timeSheetModelListTemp = new TimeSheetDac().GetMyTimeSheet(employeeProfileListUnderManager[i].UserId, DateTime.Now.Date, DateTime.Now.Date);
+                timeSheetModelList.AddRange(timeSheetModelListTemp);
+            }
+            return timeSheetModelList;
+        }
+
+        public int GetEmployeeCount(Int64 OfficeId)
+        {
+            int count = 0;
+            DateTime dateTime = DateTime.Now;
+            using (var context = new NLTDDbContext())
+            {
+                var qry = (from e in context.EmployeeAttendance
+                           join emp in context.Employee on e.UserID equals  emp.UserId
+                           join s in context.ShiftMapping on e.UserID equals s.UserID
+                           join sm in context.ShiftMaster on s.ShiftID equals sm.ShiftID
+                           where emp.OfficeId == OfficeId && DbFunctions.TruncateTime(e.InOutDate) == DbFunctions.TruncateTime(dateTime)
+                                 && DbFunctions.TruncateTime(s.ShiftDate) == DbFunctions.TruncateTime(dateTime)
+                                 && (DbFunctions.CreateTime(e.InOutDate.Hour + 3, e.InOutDate.Minute, e.InOutDate.Second) >= sm.FromTime
+                                 && DbFunctions.CreateTime(e.InOutDate.Hour, e.InOutDate.Minute, e.InOutDate.Second) <= sm.ToTime)
+                           select new { userID = e.UserID }
+                );
+
+                count = qry.ToList().Distinct().Count();
+            }
+            return count;
+        }
+
         public int GetPendingApprovalCount(Int64 userId)
         {
             int count = 0;
 
             using (var context = new NLTDDbContext())
             {
-
-
                 var qry = (from l in context.Leave
                            join emp in context.Employee on l.UserId equals emp.UserId
                            where l.Status == "P" && emp.ReportingToId == userId
@@ -1785,9 +1892,9 @@ namespace NLTD.EmploeePortal.LMS.Dac
         {
             LeaveRequestModel lrm = new LeaveRequestModel();
             lrm.lstLeavTypes = GetLeaveTypes(OfficeId, UserId);
-            lrm.lstSummary = GetLeaveSumary(UserId, System.DateTime.Now.Year);
+            lrm.lstSummary = GetLeaveSumary(UserId, DateTime.Now.Year);
             lrm.WeekOffs = ReturnWeekOff(UserId);
-            lrm.holidayDates = GetHolidayDates(UserId, System.DateTime.Now.Year);
+            lrm.holidayDates = GetHolidayDates(UserId, DateTime.Now.Year);
             lrm.TimebasedLeaveTypeIds = GetTimeBasedLeaveTypesString(OfficeId, UserId);
             return lrm;
         }
@@ -2033,7 +2140,7 @@ namespace NLTD.EmploeePortal.LMS.Dac
                 lstMdl = lstMdl.OrderBy(x => x.EmpId).ToList();
             return lstMdl;
         }
-        public string CheckIfAuthLeaveId(Int64 leaveId,Int64 userId)
+        public string CheckIfAuthLeaveId(Int64 leaveId, Int64 userId)
         {
             string retString = string.Empty;
             using (var context = new NLTDDbContext())
@@ -2064,7 +2171,7 @@ namespace NLTD.EmploeePortal.LMS.Dac
                 retString = "Valid";
             return retString;
         }
-        public EmailDataModel GetEmailData(Int64 leaveId,string actionName)
+        public EmailDataModel GetEmailData(Int64 leaveId, string actionName)
         {
             EmailDataModel retMdl = new EmailDataModel();
             try
@@ -2079,36 +2186,37 @@ namespace NLTD.EmploeePortal.LMS.Dac
                                select new EmailDataModel
                                {
                                    RequestFor = e.FirstName + " " + e.LastName,
-                                   EmpId=e.EmployeeId,
+                                   EmpId = e.EmployeeId,
                                    LeaveTypeText = lt.Type,
                                    DateFrom = l.StartDate,
                                    DateTo = l.EndDate,
                                    ReportingToId = e.ReportingToId,
                                    NoOfDays = l.Duration,
                                    IsTimeBased = lt.IsTimeBased,
-                                   RequestorEmailId=e.EmailAddress,
-                                   FromType=l.StartDateType,
-                                   ToType=l.EndDateType,
-                                   Reason=l.Remarks,
-                                   ApproverComments=l.Comments,
-                                   LeaveId=leaveId
+                                   RequestorEmailId = e.EmailAddress,
+                                   FromType = l.StartDateType,
+                                   ToType = l.EndDateType,
+                                   Reason = l.Remarks,
+                                   ApproverComments = l.Comments,
+                                   LeaveId = leaveId
                                }
                              ).FirstOrDefault();
-                   
-                        qry.CcEmailIds = GetHigherApproversEmailIds(qry.ReportingToId);
-                        var hrEmail = (from e in context.Employee
-                                       join er in context.EmployeeRole on e.EmployeeRoleId equals er.RoleId
-                                       where (er.Role == "HR" || er.Role == "Admin") && e.IsActive==true
-                                       select new { EmailId = e.EmailAddress }
-                                     ).ToList();
-                        foreach (var item in hrEmail)
-                        {
-                            qry.CcEmailIds.Add(item.EmailId);
-                        }
-                       
-                        
-                        var qryReportingTo = context.Employee.Where(x => x.UserId == qry.ReportingToId).FirstOrDefault();
-                    if (qryReportingTo == null) {
+
+                    qry.CcEmailIds = GetHigherApproversEmailIds(qry.ReportingToId);
+                    var hrEmail = (from e in context.Employee
+                                   join er in context.EmployeeRole on e.EmployeeRoleId equals er.RoleId
+                                   where (er.Role == "HR" || er.Role == "Admin") && e.IsActive == true
+                                   select new { EmailId = e.EmailAddress }
+                                 ).ToList();
+                    foreach (var item in hrEmail)
+                    {
+                        qry.CcEmailIds.Add(item.EmailId);
+                    }
+
+
+                    var qryReportingTo = context.Employee.Where(x => x.UserId == qry.ReportingToId).FirstOrDefault();
+                    if (qryReportingTo == null)
+                    {
                         qry.ToEmailId = "AutoApproved";
                     }
                     else
@@ -2116,16 +2224,16 @@ namespace NLTD.EmploeePortal.LMS.Dac
                         qry.ReportingToName = qryReportingTo.FirstName + " " + qryReportingTo.LastName;
                         qry.ToEmailId = qryReportingTo.EmailAddress;
                     }
-                        if (actionName == "Applied")
-                        {
-                            qry.CcEmailIds.Remove(qry.ToEmailId);
-                            qry.CcEmailIds.Add(qry.RequestorEmailId);
-                        }
-                        else
-                        {
-                            qry.ToEmailId = qry.RequestorEmailId;
-                        }
-                    
+                    if (actionName == "Applied")
+                    {
+                        qry.CcEmailIds.Remove(qry.ToEmailId);
+                        qry.CcEmailIds.Add(qry.RequestorEmailId);
+                    }
+                    else
+                    {
+                        qry.ToEmailId = qry.RequestorEmailId;
+                    }
+
                     if (qry.IsTimeBased)
                     {
 
@@ -2170,7 +2278,7 @@ namespace NLTD.EmploeePortal.LMS.Dac
                 return retMdl;
 
             }
-            catch(Exception ex) { throw ex; }
+            catch (Exception ex) { throw ex; }
         }
         public EmailDataModel ViewLeaveFromEmail(Int64 leaveId, Int64 userId)
         {
