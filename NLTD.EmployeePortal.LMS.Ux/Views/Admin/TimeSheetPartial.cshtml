@@ -1,8 +1,11 @@
-﻿
+﻿@using System;
+@using System.Web.Mvc;
+@using NLTD.EmployeePortal.LMS.Common.DisplayModel;
+
+@model IList<TimeSheetModel>
 
 
-@model IList<NLTD.EmployeePortal.LMS.Common.DisplayModel.TimeSheetModel>
-<script type="text/javascript" src="~/Scripts/lms.js?v=1.04"></script>
+<script type="text/javascript" src="~/Scripts/lms.js?v=1.03"></script>
 <style type="text/css">
     .panel-group .panel {
         border-radius: 0;
@@ -49,6 +52,13 @@
     .weekoff {
         color: dodgerblue;
     }
+
+    .weeklytotal {
+        background: #DFD5FD !important;
+    }
+    .monthlytotal {
+        background: #BBCDFD !important;
+    }
 </style>
 
 @if (Model.Count == 0)
@@ -60,11 +70,12 @@
         No matching records found.
     </div>
 
-}
-else
-{
-    if (ViewBag.RequestLevelPerson == "My")
-    {
+            }
+            else
+            {
+                TimeSheetConsolidate TimeSheetConsolidateObj = new TimeSheetConsolidate();
+                if (ViewBag.RequestLevelPerson == "My")
+                {
         <table id="TimesheetTable_id"
                class="table table-condensed table-striped table-hover dtatable">
             <thead>
@@ -105,87 +116,105 @@ else
 
             <tbody>
                 @if (Model != null)
+        {
+            for (int i = 0; i < Model.Count; i++)
+            {
+
+                string statusStyle = string.Empty;
+                if (Model[i].Status == "Week Off" || Model[i].Status == "Holiday")
                 {
-                    foreach (var item in Model)
-                    {
-                        string statusStyle = string.Empty;
-                        if (@item.Status == "Week Off" || @item.Status == "Holiday")
-                        {
-                            statusStyle = "weekoff";
-                        }
-                        else if (@item.WorkingHours < new TimeSpan(9, 0, 0) && item.Status == "Present")
-                        {
-                            statusStyle = "belowworkinghours";
-                        }
+                    statusStyle = "weekoff";
+                }
+                else if (Model[i].WorkingHours < new TimeSpan(9, 0, 0) && Model[i].Status == "Present")
+                {
+                    statusStyle = "belowworkinghours";
+                }
                         <tr>
 
 
                             <td>
-                                @if (item.WorkingDate != null)
-                            {
-                                    @item.WorkingDate.ToString("dd-MM-yyyy")
+                                @if (Model[i].WorkingDate != null)
+                                {
+                    @Model[i].WorkingDate.ToString("dd-MM-yyyy")
                                 }
                                 else
                                 {
-                                    @Html.DisplayName("-")
+                    @Html.DisplayName("-")
                                 }
                             </td>
                             <td>
 
-                                @item.WorkingDate.ToString("ddd")
+                                @Model[i].WorkingDate.ToString("ddd")
 
                             </td>
                             <td>
 
-                                @item.Shift
+                                @Model[i].Shift
 
                             </td>
                             <td>
-                                @if (item.InTime == DateTime.MinValue)
-                            {
-                                    @Html.DisplayName("-")
-                                }
-                                else if (@item.InTime != null)
+                                @if (Model[i].InTime == DateTime.MinValue)
                                 {
-                                    @item.InTime.ToString("HH:mm:ss");
-                            }
+                    @Html.DisplayName("-")
+                                }
+                                else if (@Model[i].InTime != null)
+                {
+                    @Model[i].InTime.ToString("HH:mm:ss");
+                }
 
-                            else
-                            {
-                                    @Html.DisplayName("-")
+                else
+                {
+                    @Html.DisplayName("-")
                                 }
                             </td>
                             <td>
 
-                                @if (item.OutTime == DateTime.MinValue)
-                            {
-                                    @Html.DisplayName("-")
-                                }
-                                else if (@item.OutTime != null)
+                                @if (Model[i].OutTime == DateTime.MinValue)
                                 {
-                                    @item.OutTime.ToString("HH:mm:ss")
+                    @Html.DisplayName("-")
                                 }
-                                else
-                                {
-                                    @Html.DisplayName("-")
+                                else if (@Model[i].OutTime != null)
+                {
+                    @Model[i].OutTime.ToString("HH:mm:ss")
+                                }
+                else
+                {
+                    @Html.DisplayName("-")
                                 }
                             </td>
                             <td class="@statusStyle">
-                                @item.WorkingHours
+                                @Model[i].WorkingHours
                             </td>
                             <td>
-                                @item.Status
+                                @Model[i].Status
                             </td>
                             <td>
-                                @item.LMSStatus
+                                @Model[i].LMSStatus
                             </td>
                             <td>
-                                @item.LateEntry
+                                @Model[i].LateEntry
                             </td>
                             <td>
-                                @item.EarlyLeave
+                                @Model[i].EarlyLeave
                             </td>
                         </tr>
+                        if (Model[i].WorkingDate.ToString("ddd") == "Mon" || i == Model.Count - 1)
+                        {
+                            TimeSheetConsolidateObj = CalculateTimeSheetConsolidation(Model[i], TimeSheetConsolidateObj);
+                            @GetWeeklyHoursHTML(TimeSheetConsolidateObj);
+                            TimeSheetConsolidateObj = ClearWeeklyTimeSheetConsolidation(TimeSheetConsolidateObj);
+
+
+                        }
+                        else
+                        {
+                            TimeSheetConsolidateObj = CalculateTimeSheetConsolidation(Model[i], TimeSheetConsolidateObj);
+                        }
+                        if (Model[i].WorkingDate.Day == 1 || i == Model.Count - 1)
+                        {
+                            @GetMonthlyHoursHTML(TimeSheetConsolidateObj);
+                            TimeSheetConsolidateObj = ClearMonthlyTimeSheetConsolidation(TimeSheetConsolidateObj);
+                        }
                     }
                 }
             </tbody>
@@ -194,6 +223,7 @@ else
     }
     else
     {
+        
         <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
             @for (int i = 0; i < Model.Count; i++)
             {
@@ -237,6 +267,12 @@ else
                                         <th>
                                             @Html.DisplayName("LMS Status")
                                         </th>
+                                        <th>
+                                            @Html.DisplayName("Late Entry")
+                                        </th>
+                                        <th>
+                                            @Html.DisplayName("Early Leave")
+                                        </th>
                                     </tr>
                                 </thead>
 
@@ -256,15 +292,25 @@ else
                                         {
                                             userID = Model[j].userID;
                                             i = j - 1;
+                                            if (TimeSheetConsolidateObj.isWeeklyHoursUpdate)
+                                            {
+                                                @GetWeeklyHoursHTML(TimeSheetConsolidateObj)
+                                                TimeSheetConsolidateObj=ClearWeeklyTimeSheetConsolidation(TimeSheetConsolidateObj);
+                                            }
+                                            if (TimeSheetConsolidateObj.isMonthlyHoursUpdate)
+                                            {
+                                                @GetMonthlyHoursHTML(TimeSheetConsolidateObj)
+                                                TimeSheetConsolidateObj = ClearMonthlyTimeSheetConsolidation(TimeSheetConsolidateObj);
+                                            }
                                             break;
                                         }
 
                                         <tr>
                                             <td>
                                                 @if (Model[j].WorkingDate != null)
-                                                {
-                                                    @Model[j].WorkingDate.ToString("dd-MM-yyyy");
-                                                }
+{
+    @Model[j].WorkingDate.ToString("dd-MM-yyyy");
+}
                                                 else
                                                 {
                                                     @Html.DisplayName("-")
@@ -282,8 +328,8 @@ else
                                             </td>
                                             <td>
                                                 @if (Model[j].InTime == DateTime.MinValue)
-                                                {
-                                                    @Html.DisplayName("-")
+{
+    @Html.DisplayName("-")
                                                 }
                                                 else if (Model[j].InTime != null)
                                                 {
@@ -298,8 +344,8 @@ else
                                             <td>
 
                                                 @if (Model[j].OutTime == DateTime.MinValue)
-                                                {
-                                                    @Html.DisplayName("-")
+{
+    @Html.DisplayName("-")
                                                 }
                                                 else if (Model[j].OutTime != null)
                                                 {
@@ -319,10 +365,42 @@ else
                                             <td>
                                                 @Model[j].LMSStatus
                                             </td>
+                                            <td>
+                                                @Model[j].LateEntry
+                                            </td>
+                                            <td>
+                                                @Model[j].EarlyLeave
+                                            </td>
                                         </tr>
+                                        if (Model[j].WorkingDate.ToString("ddd") == "Mon")
+                                        {
+                                            TimeSheetConsolidateObj = CalculateTimeSheetConsolidation(Model[j], TimeSheetConsolidateObj);
+                                            @GetWeeklyHoursHTML(TimeSheetConsolidateObj)
+                                            TimeSheetConsolidateObj = ClearWeeklyTimeSheetConsolidation(TimeSheetConsolidateObj);
+                                        }
+                                        else
+                                        {
+                                            TimeSheetConsolidateObj = CalculateTimeSheetConsolidation(Model[j], TimeSheetConsolidateObj);
+                                        }
+
+                                        if (Model[j].WorkingDate.Day == 1 )
+                                        {
+                                            @GetMonthlyHoursHTML(TimeSheetConsolidateObj);
+                                            TimeSheetConsolidateObj = ClearMonthlyTimeSheetConsolidation(TimeSheetConsolidateObj);
+                                        }
                                         if (j == Model.Count - 1)
                                         {
                                             i = Model.Count - 1;
+                                            if (TimeSheetConsolidateObj.isWeeklyHoursUpdate)
+                                            {
+                                                @GetWeeklyHoursHTML(TimeSheetConsolidateObj)
+                                                TimeSheetConsolidateObj = ClearWeeklyTimeSheetConsolidation(TimeSheetConsolidateObj);
+                                            }
+                                            if (TimeSheetConsolidateObj.isMonthlyHoursUpdate)
+                                            {
+                                            @GetMonthlyHoursHTML(TimeSheetConsolidateObj)
+                                              TimeSheetConsolidateObj = ClearMonthlyTimeSheetConsolidation(TimeSheetConsolidateObj);
+                                            }
                                             break;
                                         }
                                     }
@@ -335,4 +413,129 @@ else
         </div>
     }
 
+}
+
+@functions
+{
+    public string GetWeeklyWorkingHours(TimeSpan t)
+    {
+        string totalHours = Math.Floor(t.TotalHours).ToString();
+        if (totalHours.Length == 1)
+        {
+            totalHours = "0" + totalHours;
+        }
+        return string.Format("{0}:{1}", totalHours, t.ToString("mm\\:ss"));
+    }
+
+    public TimeSheetConsolidate CalculateTimeSheetConsolidation(TimeSheetModel TimeSheetModelObj, TimeSheetConsolidate TimeSheetConsolidateObj)
+    {
+        TimeSheetConsolidateObj.weeklyHours = TimeSheetConsolidateObj.weeklyHours + TimeSheetModelObj.WorkingHours;
+        TimeSheetConsolidateObj.monthlyHours = TimeSheetConsolidateObj.monthlyHours + TimeSheetModelObj.WorkingHours;
+        if(TimeSheetModelObj.LateEntry.Seconds>0)
+        {
+            TimeSheetConsolidateObj.weeklyLateCount = TimeSheetConsolidateObj.weeklyLateCount + 1;
+            TimeSheetConsolidateObj.monthlyLateCount = TimeSheetConsolidateObj.monthlyLateCount +1;
+        }
+        if (TimeSheetModelObj.EarlyLeave.Seconds > 0)
+        {
+            TimeSheetConsolidateObj.weeklyEarlyCount = TimeSheetConsolidateObj.weeklyEarlyCount + 1;
+            TimeSheetConsolidateObj.monthlyEarlyCount = TimeSheetConsolidateObj.monthlyEarlyCount +1;
+        }
+        if (!string.IsNullOrEmpty(TimeSheetModelObj.LMSStatus) &&
+                TimeSheetModelObj.LMSStatus.Contains("Permission"))
+        {
+            TimeSheetConsolidateObj.weeklyPermissionCount = TimeSheetConsolidateObj.weeklyPermissionCount + 1;
+            TimeSheetConsolidateObj.monthlyPermissionCount = TimeSheetConsolidateObj.monthlyPermissionCount + 1;
+        }
+        if (!string.IsNullOrEmpty(TimeSheetModelObj.LMSStatus) && TimeSheetModelObj.LMSStatus.Contains("Leave"))
+        {
+            TimeSheetConsolidateObj.weeklyLeaveCount = TimeSheetConsolidateObj.weeklyLeaveCount + 1;
+            TimeSheetConsolidateObj.monthlyLeaveCount = TimeSheetConsolidateObj.monthlyLeaveCount + 1;
+        }
+        TimeSheetConsolidateObj.isWeeklyHoursUpdate = true;
+        TimeSheetConsolidateObj.isMonthlyHoursUpdate = true;
+        return TimeSheetConsolidateObj;
+    }
+    public TimeSheetConsolidate ClearWeeklyTimeSheetConsolidation( TimeSheetConsolidate TimeSheetConsolidateObj)
+    {
+        TimeSheetConsolidateObj.weeklyEarlyCount = 0;
+        TimeSheetConsolidateObj.weeklyLateCount = 0;
+        TimeSheetConsolidateObj.weeklyPermissionCount = 0;
+        TimeSheetConsolidateObj.weeklyLeaveCount = 0;
+        TimeSheetConsolidateObj.weeklyHours =new TimeSpan();
+        TimeSheetConsolidateObj.isWeeklyHoursUpdate = false;
+
+        return TimeSheetConsolidateObj;
+    }
+    public TimeSheetConsolidate ClearMonthlyTimeSheetConsolidation(TimeSheetConsolidate TimeSheetConsolidateObj)
+    {
+        TimeSheetConsolidateObj.monthlyEarlyCount = 0;
+        TimeSheetConsolidateObj.monthlyLateCount = 0;
+        TimeSheetConsolidateObj.monthlyPermissionCount = 0;
+        TimeSheetConsolidateObj.monthlyLeaveCount = 0;
+        TimeSheetConsolidateObj.monthlyHours = new TimeSpan();
+        TimeSheetConsolidateObj.isMonthlyHoursUpdate = false;
+        return TimeSheetConsolidateObj;
+    }
+}
+
+@helper GetWeeklyHoursHTML(TimeSheetConsolidate TimeSheetConsolidateObj)
+{
+    <tr class="weeklytotal">
+        <td>
+            @Html.DisplayName("Weekly Hours")
+            @Html.DisplayName(@GetWeeklyWorkingHours(TimeSheetConsolidateObj.weeklyHours))
+        </td>
+        <td></td>
+        <td>
+            @Html.DisplayName("No of Late")
+            @Html.DisplayName(Convert.ToString(TimeSheetConsolidateObj.weeklyLateCount))
+        </td>
+        <td></td>
+        <td>
+            @Html.DisplayName("No Of Early")
+            @Html.DisplayName(Convert.ToString(TimeSheetConsolidateObj.weeklyEarlyCount))
+        </td>
+        <td></td>
+        <td>
+            @Html.DisplayName("No of Permission")
+            @Html.DisplayName(Convert.ToString(TimeSheetConsolidateObj.weeklyPermissionCount))
+        </td>
+        <td></td>
+        <td>
+            @Html.DisplayName("No of Leave")
+            @Html.DisplayName(Convert.ToString(TimeSheetConsolidateObj.weeklyLeaveCount))
+        </td>
+        <td></td>
+    </tr>
+}
+@helper GetMonthlyHoursHTML(TimeSheetConsolidate TimeSheetConsolidateObj)
+{
+    <tr class="monthlytotal">
+        <td>
+            @Html.DisplayName("Monthly Hours")
+            @Html.DisplayName(@GetWeeklyWorkingHours(TimeSheetConsolidateObj.monthlyHours))
+        </td>
+        <td></td>
+        <td>
+            @Html.DisplayName("No of Late")
+            @Html.DisplayName(Convert.ToString(TimeSheetConsolidateObj.monthlyLateCount))
+        </td>
+        <td></td>
+        <td>
+            @Html.DisplayName("No Of Early")
+            @Html.DisplayName(Convert.ToString(TimeSheetConsolidateObj.monthlyEarlyCount))
+        </td>
+        <td></td>
+        <td>
+            @Html.DisplayName("No of Permission")
+            @Html.DisplayName(Convert.ToString(TimeSheetConsolidateObj.monthlyPermissionCount))
+        </td>
+        <td></td>
+        <td>
+            @Html.DisplayName("No of Leave")
+            @Html.DisplayName(Convert.ToString(TimeSheetConsolidateObj.monthlyLeaveCount))
+        </td>
+        <td></td>
+    </tr>
 }

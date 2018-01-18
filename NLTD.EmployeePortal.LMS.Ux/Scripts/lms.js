@@ -1,5 +1,4 @@
-﻿
-function LoadDashboardCalender() {
+﻿function LoadDashboardCalender() {
     $("#fullcalender").fullCalendar({
         selectable: true,
         selectHelper: true,
@@ -1245,13 +1244,22 @@ function loadAttendenceRangeSummary() {
         });
 }
 function loadTimeSheetSummary() {
+    debugger;
     var URL = '/Admin/LoadMyTeamTimesheet';
-    $("#divLoading").show();
+   
     var myDirectEmployees = false;
 
     if ($("#RequestLevelPerson").val() === "My") {
 
         URL = '/Admin/LoadMyTimesheet';
+    }
+    else {
+        SetUserIDForAutoCompleteName(nameList, $("#Name").val(), "UserID");
+        if (!ValidateAutocompleteName($("#Name").val(), $("#UserID").val())) {
+            $("#divForTimesheet").html("");
+            Clearshowalert("Invalid Username. Please choose the Username from the List.", "alert alert-danger");
+            return;
+        }
     }
 
     if ($("#RequestLevelPerson").val() === "Team") {
@@ -1261,15 +1269,22 @@ function loadTimeSheetSummary() {
     $("#divForTimesheet").html("");
     $("#alert_placeholder").html("");
 
+    $("#divLoading").show();
     $("#divForTimesheet")
-        .load(URL, { TimeSheetQueryModelObj: { FromDate: $("#FromDate").val(), ToDate: $("#ToDate").val(), Name: $("#Name").val(), MyDirectEmployees:myDirectEmployees } },
+        .load(URL, {
+            TimeSheetQueryModelObj: {
+                FromDate: $("#FromDate").val(), ToDate: $("#ToDate").val(),
+                Name: $("#Name").val(), MyDirectEmployees: myDirectEmployees,
+                UserID: $("#UserID").val()
+            }
+        },
         function (responseText, textStatus, req) {
             if (textStatus == "error") {
                 Clearshowalert("No Records Found", "alert alert-danger");
                 $('.dtatable').DataTable().clear().destroy();
             }
             else {
-                $(".dtatable").dataTable({ "aaSorting": [] });
+                $(".dtatable").dataTable({ "aaSorting": [], "pageLength": 50 });
                 $('html, body').animate({
                     scrollTop: 230  // Means Less header height
                 }, 400);
@@ -1585,4 +1600,15 @@ function ValidateAutocompleteName(name,userID) {
         }
     }
     return true;
+}
+
+function SetUserIDForAutoCompleteName(userList, name, hiddenFieldID) {
+    var user= $.grep(userList, function (user) {
+        if (user.label.trim() == name.trim()) {
+            return user.value;
+        }
+    });
+    if (user.length > 0) {
+        $("#" + hiddenFieldID).val(user[0].value);
+    }
 }
