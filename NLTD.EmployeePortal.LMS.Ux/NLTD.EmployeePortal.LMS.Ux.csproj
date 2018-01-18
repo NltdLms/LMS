@@ -19,8 +19,10 @@
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <UseIISExpress>true</UseIISExpress>
     <IISExpressSSLPort />
-    <IISExpressAnonymousAuthentication>disabled</IISExpressAnonymousAuthentication>
-    <IISExpressWindowsAuthentication>enabled</IISExpressWindowsAuthentication>
+    <IISExpressAnonymousAuthentication>
+    </IISExpressAnonymousAuthentication>
+    <IISExpressWindowsAuthentication>
+    </IISExpressWindowsAuthentication>
     <IISExpressUseClassicPipelineMode />
     <UseGlobalApplicationHostFile />
     <NuGetPackageImportStamp>
@@ -732,6 +734,7 @@
     <Content Include="Views\Shift\EmployeeShiftAllocation.cshtml" />
     <Content Include="Views\Shift\EmpShiftAllocationPartial.cshtml" />
     <Content Include="Views\Shift\EmpShiftAllocationSubDetailPartial.cshtml" />
+    <Content Include="Views\Dashboard\DashboardAttendancePartial.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

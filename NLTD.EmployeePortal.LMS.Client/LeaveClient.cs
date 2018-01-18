@@ -102,6 +102,13 @@ namespace NLTD.EmployeePortal.LMS.Client
                 return helper.GetHolidays(UserId, holYear);
             }
         }
+        public IList<HolidayModel> GetHolidaysDetails(long UserId, Int32 holYear, ref bool previousYear, ref bool nextYear)
+        {
+            using (ILeaveHelper helper = new LeaveHelper())
+            {
+                return helper.GetHolidaysDetails(UserId, holYear, ref previousYear, ref nextYear);
+            }
+        }
         public IList<EmployeeWiseLeaveSummaryModel> GetEmployeeWiseLeaveSumary(Int64 UserId, int Year, string reqUsr,string Name, bool OnlyReportedToMe)
         {
             using (ILeaveHelper helper = new LeaveHelper())
@@ -166,11 +173,11 @@ namespace NLTD.EmployeePortal.LMS.Client
             }
 
         }
-        public DashBoardModel GetDashboardData(Int64 UserId)
+        public DashBoardModel GetDashboardData(Int64 UserId, Int64 OfficeId)
         {
             using (ILeaveHelper helper = new LeaveHelper())
             {
-                return helper.GetDashboardData(UserId);
+                return helper.GetDashboardData(UserId, OfficeId);
             }
         }
         public LeaveRequestModel ApplyLeaveCommonData(Int64 UserId, Int64 OfficeId)
@@ -192,6 +199,14 @@ namespace NLTD.EmployeePortal.LMS.Client
             using (ILeaveHelper helper = new LeaveHelper())
             {
                 return helper.GetEmployeeList(param, userId);
+            }
+        }
+
+        public List<TimeSheetModel> GetMyTeamTimeSheet(Int64 UserID)
+        {
+            using (ILeaveHelper helper = new LeaveHelper())
+            {
+                return helper.GetMyTeamTimeSheet(UserID);
             }
         }
         public int GetPendingApprovalCount(Int64 userId)

@@ -539,6 +539,40 @@ function loadPendingCount() {
         });
     }
 }
+
+function LoadTeamStatus() {
+    if ($("#hdnIsMLSApprvr").val() == "True" || $("#hdnUserRole").val() == "HR" ) {
+        //var htmlContent = "<center><img src=\"/images/ajax-loading.gif\" /></center>";
+        //$("#divTeamStatus").html(htmlContent);
+        $.ajax({
+            method: "GET",
+            url: '/DashBoard/LoadTeamStatus',
+            cache: false,
+            success: function (response) {
+                $('#divTeamStatus').html(response);
+
+
+                $("#TeamTimeSheetID").dataTable({
+                    "bLengthChange": false,
+                    "bInfo": false,
+                    searching: false,
+                    //"scrollY": "350px",
+                    //"scrollCollapse": true,
+                    "paging": false
+                });
+            },
+            complete: function () {
+
+            },
+            error: function () {
+
+            }
+
+        });
+    }
+}
+
+
 function loadDaywiseLeaves() {
 
     if ($("#OnlyReportedToMe").val() == undefined) {

@@ -97,6 +97,15 @@ namespace NLTD.EmploeePortal.LMS.Dac.DbHelper
                 return dac.GetLeaveSumary(UserId, summaryYear);
             }
         }
+
+        public IList<HolidayModel> GetHolidaysDetails(long UserId, int holidayYear, ref bool previousYear, ref bool nextYear)
+        {
+            using (var dac = new LeaveDac())
+            {
+                return dac.GetHolidaysDetails(UserId, holidayYear, ref previousYear, ref nextYear);
+            }
+        }
+
         public IList<HolidayModel> GetHolidays(long UserId, Int32 holidayYear)
         {
             using (var dac = new LeaveDac())
@@ -157,11 +166,11 @@ namespace NLTD.EmploeePortal.LMS.Dac.DbHelper
                 return dac.GetPermissionDetail(Name, reqUsr, startDate, endDate, OnlyReportedToMe, LeadId);
             }
         }
-        public DashBoardModel GetDashboardData(Int64 UserId)
+        public DashBoardModel GetDashboardData(Int64 UserId, Int64 OfficeId)
         {
             using (var dac = new LeaveDac())
             {
-                return dac.GetDashboardData(UserId);
+                return dac.GetDashboardData(UserId, OfficeId);
             }
         }
         public LeaveRequestModel ApplyLeaveCommonData(Int64 UserId, Int64 OfficeId)
@@ -185,6 +194,15 @@ namespace NLTD.EmploeePortal.LMS.Dac.DbHelper
                 return dac.GetEmployeeList(param, userId);
             }
         }
+
+        public List<TimeSheetModel> GetMyTeamTimeSheet(Int64 UserID)
+        {
+            using (var dac = new LeaveDac())
+            {
+                return dac.GetMyTeamTimeSheet(UserID);
+            }
+        }
+
         public int GetPendingApprovalCount(Int64 userId)
         {
             using (var dac = new LeaveDac())
