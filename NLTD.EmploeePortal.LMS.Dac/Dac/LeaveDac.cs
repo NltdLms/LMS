@@ -1838,7 +1838,7 @@ namespace NLTD.EmploeePortal.LMS.Dac
                             select role.Role).FirstOrDefault();
             }
             
-            List<EmployeeProfile> employeeProfileListUnderManager = new EmployeeDac().GetReportingEmployeeProfile(UserID, userRole).OrderBy(m => m.FirstName).ToList();
+            List<EmployeeProfile> employeeProfileListUnderManager = new EmployeeDac().GetReportingEmployeeProfile(UserID, userRole, false).OrderBy(m => m.FirstName).ToList();
 
             for (int i = 0; i < employeeProfileListUnderManager.Count; i++)
             {
