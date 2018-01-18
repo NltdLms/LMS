@@ -1164,7 +1164,7 @@ function loadTransactionLog() {
     $("#divLoading").show();
     $("#divForHistoryLeave").load('/Admin/GetTransactionLog?OnlyReportedToMe=' + showTeam + '&Name=' + name + '&RequestMenuUser=' + $("#RequestLevelPerson").val(),
         function () {
-            $(".transaction").dataTable({ "paging": false, "bFilter": false, "bInfo": false });
+            $(".transaction").dataTable({ "paging": false, "bFilter": false, "bInfo": false, "aaSorting": [] });
             $("#divLoading").hide();
             $('html, body').animate({
                 scrollTop: 210  // Means Less header height
@@ -1253,7 +1253,9 @@ function loadTimeSheetSummary() {
                 $('.dtatable').DataTable().clear().destroy();
             }
             else {
-                $(".dtatable").dataTable({ "aaSorting": [], "pageLength": 50 });
+                $(".dtatable").dataTable({
+                    "aaSorting": [], "pageLength": 50
+                    });
                 $('html, body').animate({
                     scrollTop: 230  // Means Less header height
                 }, 400);

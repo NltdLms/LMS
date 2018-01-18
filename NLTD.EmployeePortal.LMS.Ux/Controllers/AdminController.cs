@@ -510,7 +510,7 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
             string tempRequestLevelPerson = requestLevelPerson;
             EmployeeProfile profile = (EmployeeProfile)Session["Profile"];
             Int64 userID = profile.UserId;
-            if(!string.IsNullOrEmpty(ID) )
+            if(!string.IsNullOrEmpty(ID) && ID!="0")
             {
 
                 userID = Convert.ToInt32(ID);
