@@ -38,6 +38,7 @@
     <script src="~/Scripts/moment.js"></script>
     <link href="~/Content/bootstrap.css" rel="stylesheet" />
     <script type="text/JavaScript">
+        var nameList = [];
         $(document).ready(function() {
             $("#DateRange").daterangepicker({
                 locale: {
@@ -74,19 +75,31 @@
                         type: "POST",
                         dataType: "json",
                         data: { term: request.term },
-                        success: function(data) {
-                            response($.map(data,
-                                function(item) {
-                                    return { label: item.Name, value: item.Name };
-                                }))
-
-
+                        cache: false,
+                        success: function (data) {
+                            nameList = $.map(data,
+                                function (item) {
+                                    return { label: item.Name, value: item.UserId };
+                                });
+                            response(nameList);
                         }
                     })
                 },
                 messages: {
                     noResults: "",
                     results: function() {}
+                },
+                select: function (event, ui) {
+                    event.preventDefault();
+                    $("#UserID").val(ui.item.value);
+                    
+                },
+                focus: function (event, ui) {
+                    event.preventDefault();
+                    $("#Name").val(ui.item.label);
+                },
+                search: function (event, ui) {
+                    $("#UserID").val("");
                 }
             });
             if ($("#RequestLevelPerson").val() == "My") {
@@ -94,7 +107,7 @@
                 $("#divForTimesheet")
                     .load('/Admin/LoadMyTimesheet',
                         function() {
-                            $(".dtatable").dataTable({ "aaSorting": [] });
+                            $(".dtatable").dataTable({ "aaSorting": [], "pageLength": 50  });
                             $("#divLoading").hide();
                             $('html, body').animate({
                                     scrollTop: 230 // Means Less header height
@@ -116,7 +129,7 @@
                 $("#divForTimesheet")
                     .load('/Admin/LoadMyTeamTimesheet', data,
                     function () {
-                        $(".dtatable").dataTable({ "aaSorting": [] });
+                        $(".dtatable").dataTable({ "aaSorting": [], "pageLength": 50 });
                         $("#divLoading").hide();
                         $('html, body').animate({
                             scrollTop: 230 // Means Less header height
@@ -130,6 +143,16 @@
 
         });
 
+        function CheckAutoCompleteName()
+        {
+            if ($("#UserID").val() == "") {
+                SetUserIDForAutoCompleteName(nameList, $("#Name").val(), "UserID");
+                if (!ValidateAutocompleteName($("#Name").val(), $("#UserID").val())) {
+                    return false;
+                }
+            }
+            return true;
+        }
 
     </script>
 
@@ -179,6 +202,7 @@
                             @Html.Hidden("RequestLevelPerson", (string)ViewBag.RequestLevelPerson)
                             @Html.HiddenFor(x=>x.FromDate)
                             @Html.HiddenFor(x => x.ToDate)
+                            @Html.HiddenFor(x => x.UserID)
                             if ((string)ViewBag.RequestLevelPerson == "My")
                             {
                                 <div class="row">
@@ -193,7 +217,7 @@
                                     <div class="col-sm-3" style="text-align:right">
                                         <br />
                                         <button type="button" class="btn btn-primary" onclick="loadTimeSheetSummary()">SEARCH</button>
-                                        <button type="submit" class="btn btn-primary" >EXPORT</button>
+                                        <button type="submit" class="btn btn-primary"  >EXPORT</button>
                                     </div>
                                 </div>
 
@@ -227,7 +251,7 @@
                                     <div class="col-sm-3" style="text-align:right">
                                         <br />
                                         <button type="button" class="btn btn-primary" onclick="loadTimeSheetSummary()">SEARCH</button>
-                                        <button type="submit" class="btn btn-primary">EXPORT</button>
+                                        <button type="submit" class="btn btn-primary" click="return CheckAutoCompleteName()">EXPORT</button>
                                     </div>
                                 </div>
                             }

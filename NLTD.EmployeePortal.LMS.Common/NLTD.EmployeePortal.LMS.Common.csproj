@@ -73,6 +73,7 @@
     <Compile Include="DisplayModel\PermissionDetailsModel.cs" />
     <Compile Include="DisplayModel\ReportModel.cs" />
     <Compile Include="DisplayModel\ShiftAllocation.cs" />
+    <Compile Include="DisplayModel\TimeSheetConsolidate.cs" />
     <Compile Include="DisplayModel\TimeSheetModel.cs" />
     <Compile Include="DisplayModel\ViewEmployeeProfileModel.cs" />
     <Compile Include="DisplayModel\WeekOffDayModel.cs" />

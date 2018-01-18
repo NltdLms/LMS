@@ -557,7 +557,7 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
                 TimeSheetQueryModelObj.UserID = profile.UserId;
                 if (TimeSheetQueryModelObj.FromDate == DateTime.MinValue)
                 {
-                    // For Last 15 days Attendence
+                    // For Last 30 days Attendence
                     TimeSheetQueryModelObj.FromDate = currentDate.AddDays(-30);
                     TimeSheetQueryModelObj.ToDate = currentDate;
                 }
@@ -568,16 +568,11 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
             }
             else if (!string.IsNullOrEmpty(TimeSheetQueryModelObj.Name))
             {
-                IEmployeeHelper EmployeeHelper = new EmployeeClient();
-                Int64 UserID = EmployeeHelper.GetUserId(TimeSheetQueryModelObj.Name);
-                if(UserID==0)
-                {
-                    errorMessage = "Employee name not exists";
-                }
+                //IEmployeeHelper EmployeeHelper = new EmployeeClient();
+               // Int64 UserID = TimeSheetQueryModelObj.UserID;
+                
                 if (TimeSheetQueryModelObj.FromDate == DateTime.MinValue)
                 {
-                  
-                    // For Last 15 days Attendence
                     TimeSheetQueryModelObj.FromDate = currentDate.AddDays(-30);
                     TimeSheetQueryModelObj.ToDate = currentDate;
 
@@ -588,7 +583,7 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
                 }
                 requestLevelPerson = "My";
                 
-                TimeSheetQueryModelObj.UserID = UserID;
+                //TimeSheetQueryModelObj.UserID = UserID;
             }
             if(TimeSheetQueryModelObj.ToDate>=DateTime.Now)
             {
@@ -651,15 +646,18 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
             List<TimeSheetModel> excelData = timeSheetModelList.ToList();
             if (excelData.Count > 0)
             {
-                string[] columns = {  "WorkingDate", "Shift", "InTime", "OutTime","WorkingHours","Status", "LMSStatus", "Day" };
-                byte[] filecontent = ExcelExportHelper.ExportTimesheetExcel(excelData, "", true, columns);
-                string fileName = string.Format("TimeSheet_{0}{1}", DateTime.Now.ToString("ddMMyyyyHHmmss"), ".xlsx");
-                if(string.IsNullOrEmpty(TimeSheetQueryModelObj.Name))
+                List<string> columns = new List<string>(){  "WorkingDate", "Shift", "InTime", "OutTime","WorkingHours","Status", "LMSStatus", "Day","LateEntry", "EarlyLeave","Name" };
+                string fileName = string.Empty;
+                if (RequestLevelPerson == "My")
                 {
                     EmployeeProfile profile = (EmployeeProfile)Session["Profile"];
-                    TimeSheetQueryModelObj.Name = profile.FirstName + " " + profile.LastName;
+                    fileName = string.Format("{0}{1}{2}{3}", profile.FirstName, profile.LastName, DateTime.Now.ToString("ddMMyyyyHHmmss"), ".xlsx");
                 }
-               
+                else
+                {
+                    fileName = string.Format("TimeSheet_{0}{1}", DateTime.Now.ToString("ddMMyyyyHHmmss"), ".xlsx");
+                }
+                byte[] filecontent = ExcelExportHelper.ExportTimesheetExcel(excelData, "", true, columns.ToArray());
                 return File(filecontent, ExcelExportHelper.ExcelContentType,fileName);
             }
             else
