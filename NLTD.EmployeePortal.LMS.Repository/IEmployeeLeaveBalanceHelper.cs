@@ -9,7 +9,7 @@ namespace NLTD.EmployeePortal.LMS.Repository
 {
     public interface IEmployeeLeaveBalanceHelper : IDisposable
     {
-        IList<LeaveBalanceEmpProfile> GetLeaveBalanceEmpProfile(string name);
+        IList<LeaveBalanceEmpProfile> GetLeaveBalanceEmpProfile(Int64 UserId);
 
         string UpdateLeaveBalance(List<EmployeeLeaveBalanceDetails> empLeaveBalanceDetails, Int64 UserId, Int64 LoginUserId);
     }

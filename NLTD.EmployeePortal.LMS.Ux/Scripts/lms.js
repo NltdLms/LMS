@@ -953,20 +953,13 @@ function hideElementsForHalfDay() {
 //Added by Tamil
 function loadLeaveBalanceProfile() {
 
-    if ($("#Name").val() == undefined) {
-        var name = "";
-    }
-    else {
-        if ($("#Name").val() != "") {
-            var name = $("#Name").val().replace(/ /g, "|");
-        }
-        else {
-            name = "";
-        }
+    if (!ValidateAutocompleteName($("#Name").val(), $("#UserID").val())) {
+        Clearshowalert("Please Choose a valid Username from the List. To Show all employee Clear the textbox.", "alert alert-danger");
+        return;
     }
 
     $("#alert_placeholder").empty();
-    if (name == "") {
+    if ($("#Name").val() == "") {
         if ($('#alert') != undefined && $('#alert') != "") {
             $('#alert').remove();
         }
@@ -982,7 +975,7 @@ function loadLeaveBalanceProfile() {
         url: "/Profile/EmployeeLeaveBalanceDetails",
         data: {
             //"onlyReportedToMe": showTeam,
-            "name": name
+            "UserId": $("#UserID").val()
             //"requestMenuUser": $("#RequestLevelPerson").val(),
             //"hideInactiveEmp": hideInactive
 
@@ -1020,6 +1013,15 @@ function AddTotalDays(index) {
     }
 
     if (NoOfDays > 0) {
+
+        var decPart = (NoOfDays + "").split(".")[1];
+
+        if (decPart != "0" && decPart != "5") {
+            Clearshowalert("No of days value after decimal point should be 0 or 5", "alert alert-danger");
+            $("#NoOfDays" + index).focus();
+            return;
+        }
+
         if (CreditOrDebit == 'D' && parseFloat(BalanceDays) < parseFloat(NoOfDays)) {
             Clearshowalert("No of days should be less than Existing Balance days", "alert alert-danger");
             $("#NoOfDays" + index).focus();
@@ -1052,6 +1054,28 @@ function isNumber(evt) {
     return true;
 }
 
+function isNumberKey(evt, element) {
+    var charCode = (evt.which) ? evt.which : event.keyCode;
+    
+    if (charCode > 31 && (charCode < 48 || charCode > 57) && !(charCode == 46))
+        return false;
+    else {
+       // var len = $(element).val().length;
+        var index = $(element).val().indexOf('.');
+       // alert($(element).val());
+        if (index > 0 && charCode == 46) {
+            return false;
+        }
+        //if (index > 0) {
+        //    var CharAfterdot = (len + 1) - index;
+        //    if (CharAfterdot > 3) {
+        //        return false;
+        //    }
+        //}
+    }
+    return true;
+}
+
 function SubmitLeaveBalanceForm(count) {
     var things = [];
     var valid = false;
@@ -1074,6 +1098,13 @@ function SubmitLeaveBalanceForm(count) {
         if (NoOfDays > 0) {
             valid = true;
 
+            var decPart = (NoOfDays + "").split(".")[1];
+
+            if (decPart != "0" && decPart != "5") {
+                Clearshowalert("No of days value after decimal point should be 0 or 5", "alert alert-danger");
+                $("#NoOfDays" + i).focus();
+                return;
+            }
 
             if (CreditOrDebit == 'D' && parseFloat(balanceDays) < parseFloat(NoOfDays)) {
                 Clearshowalert("No of days should be less than Existing Balance days.", "alert alert-danger");

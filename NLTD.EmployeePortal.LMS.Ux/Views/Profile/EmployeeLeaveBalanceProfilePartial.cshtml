@@ -112,7 +112,7 @@
                                                                @onchange = "AddTotalDays(" + j + ")",
                                                                @id = "NoOfDays" + j,
                                                                @style = "float:right;width: 55%",
-                                                               @onkeypress = "return isNumber(event)",
+                                                               @onkeypress = "return isNumberKey(event,this)",
                                                                autocomplete = "off"
                                                            })
                                                                 @Html.ValidationMessageFor(e => Model[i].lstEmployeeLeaveBalance[j].NoOfDays, null, new { @class = "text-danger" })
