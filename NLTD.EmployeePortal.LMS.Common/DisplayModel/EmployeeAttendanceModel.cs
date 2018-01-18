@@ -8,7 +8,7 @@ namespace NLTD.EmployeePortal.LMS.Common.DisplayModel
 {
     public class EmployeeAttendanceModel
     {
-        public Int64 UserID { get; set; }
+        public Int64? UserID { get; set; }
 
         public Int64 CardID { get; set; }
         public DateTime InOutDate { get; set; }

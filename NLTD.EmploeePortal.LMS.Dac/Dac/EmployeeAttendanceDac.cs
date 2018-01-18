@@ -42,7 +42,7 @@ namespace NLTD.EmploeePortal.LMS.Dac.Dac
         }
 
 
-        public List<EmployeeAttendanceModel> GetAttendenceForRange(Int64 UserID, DateTime FromDateTime, DateTime ToDateTime, string requestLevelPerson)
+        public List<EmployeeAttendanceModel> GetAttendenceForRange(Int64 UserID, DateTime FromDateTime, DateTime ToDateTime, string requestLevelPerson,bool isDirectEmployees)
         {
             List<EmployeeAttendanceModel> employeeAttendanceModelList = new List<EmployeeAttendanceModel>();
             try
@@ -93,11 +93,21 @@ namespace NLTD.EmploeePortal.LMS.Dac.Dac
                             }
                             else
                             {
+                                IList<Int64> employeeIDs = null;
                                 EmployeeDac EmployeeHelperObj = new EmployeeDac();
-                                IList<Int64> employeeIDs = EmployeeHelperObj.GetEmployeesReporting(UserID); // to get the employee Under the manager
+                                if(isDirectEmployees)
+                                {
+                                    employeeIDs = EmployeeHelperObj.GetDirectEmployees(UserID);
+                                }
+                                else
+                                {
+                                    employeeIDs = EmployeeHelperObj.GetEmployeesReporting(UserID); // to get the employee Under the manager
+                                }
+                                
+                                
                                 employeeAttendanceModelList = (from ea in context.EmployeeAttendance
                                                                join e in context.Employee on ea.UserID equals e.UserId
-                                                               where employeeIDs.Contains(ea.UserID) && ea.InOutDate >= FromDateTime && ea.InOutDate <= ToDateTime
+                                                               where employeeIDs.Contains(ea.UserID??0) && ea.InOutDate >= FromDateTime && ea.InOutDate <= ToDateTime
                                                                select new EmployeeAttendanceModel
                                                                {
                                                                    UserID = ea.UserID,

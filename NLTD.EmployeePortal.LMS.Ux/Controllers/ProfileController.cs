@@ -14,7 +14,7 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
     public class ProfileController : BaseController
     {
         public ActionResult Index()
-        {           
+        {
 
             return RedirectToAction("Index", "Dashboard");
         }
@@ -25,7 +25,8 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
             ViewBag.IsSelfProfile = true;
             Int64 userIdForProfile = 0;
             EmployeeProfile profile = null;
-            if (TempData["UserId"] == null) {
+            if (TempData["UserId"] == null)
+            {
                 userIdForProfile = UserId;
             }
             else
@@ -34,7 +35,7 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
             using (var client = new EmployeeClient())
             {
                 profile = client.GetEmployeeProfile(userIdForProfile);
-                
+
             }
             using (var client = new ShiftClient())
             {
@@ -58,7 +59,7 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
             {
                 using (var client = new EmployeeClient())
                 {
-                    IList<DropDownItem> reptList = client.GetActiveEmpList(profile.OfficeId,userIdForProfile);
+                    IList<DropDownItem> reptList = client.GetActiveEmpList(profile.OfficeId, userIdForProfile);
                     DropDownItem di = new DropDownItem();
                     di.Key = "";
                     di.Value = "";
@@ -103,7 +104,7 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
                 }
                 using (var client = new EmployeeClient())
                 {
-                    IList<DropDownItem> reptList = client.GetActiveEmpList(OfficeId,null);
+                    IList<DropDownItem> reptList = client.GetActiveEmpList(OfficeId, null);
                     DropDownItem di = new DropDownItem();
                     di.Key = "";
                     di.Value = "";
@@ -145,7 +146,7 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
             using (var Client = new EmployeeClient())
             {
                 var data = Client.GetUserId(name);
-                userId = data;           
+                userId = data;
             }
             if (userId == 0)
             {
@@ -176,7 +177,7 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
             }
             else
             {
-                TempData["UserId"] = userId;                
+                TempData["UserId"] = userId;
                 return Json(new { redirectToUrl = Url.Action("ViewEmployeeProfile", "Profile") });
             }
         }
@@ -205,6 +206,7 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
             bool isValid = true;
             if (ModelState.IsValid)
             {
+                /*Commented on 4 Jan 2018 as Email Address and Corp Id are not mandatory.
                 if (employee.LogonId.Trim().Length < 5) {
                     employee.ErrorMesage = "Logon Id should start with CORP\\";
                     isValid = false;
@@ -213,22 +215,46 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
                     employee.ErrorMesage = "Logon Id should start with CORP\\";
                     isValid = false;
                 }
+                */
 
-                
-                Regex regex = new Regex(@"^[\w!#$%&'*+\-/=?\^_`{|}~]+(\.[\w!#$%&'*+\-/=?\^_`{|}~]+)*"+ "@"+ @"((([\-\w]+\.)+[a-zA-Z]{2,4})|(([0-9]{1,3}\.){3}[0-9]{1,3}))$");
-                
-                Match match = regex.Match(employee.EmailAddress);
-                if (!match.Success)
+                Regex regex = new Regex(@"^[\w!#$%&'*+\-/=?\^_`{|}~]+(\.[\w!#$%&'*+\-/=?\^_`{|}~]+)*" + "@" + @"((([\-\w]+\.)+[a-zA-Z]{2,4})|(([0-9]{1,3}\.){3}[0-9]{1,3}))$");
+                if (employee.EmailAddress != null)
                 {
-                    employee.ErrorMesage = "Invalid Email Address format.";
+                    if (employee.EmailAddress.Trim() != "")
+                    {
+                        Match match = regex.Match(employee.EmailAddress);
+                        if (!match.Success)
+                        {
+                            employee.ErrorMesage = "Invalid Email Address format.";
+                            isValid = false;
+                        }
+                    }
+                }
+                if ((!employee.IsActive) && (employee.RelievingDate == null))
+                {
+                    employee.ErrorMesage = "Enter Relieving Date.";
                     isValid = false;
                 }
-                if(isValid)
+                else if (employee.DOJ > employee.RelievingDate)
+                {
+                    employee.ErrorMesage = "Relieving Date should be greater than Joining Date.";
+                    isValid = false;
+                }
+                else if (employee.DOJ > employee.ConfirmationDate)
+                {
+                    employee.ErrorMesage = "Confirmation Date should be greater than Joining Date.";
+                    isValid = false;
+                }
+                if (employee.IsActive)
+                {
+                    employee.RelievingDate = null;
+                }
+                if (isValid)
                 {
                     employee.LogonId = employee.LogonId.ToUpper();
                     employee.FirstName = System.Globalization.CultureInfo.CurrentCulture.TextInfo.ToTitleCase(employee.FirstName.ToLower());
                     employee.LastName = System.Globalization.CultureInfo.CurrentCulture.TextInfo.ToTitleCase(employee.LastName.ToLower());
-                    employee.EmailAddress = employee.EmailAddress.ToLower();
+                    employee.EmailAddress = employee.EmailAddress == null ? null : employee.EmailAddress.ToLower();
 
                     using (var client = new EmployeeClient())
                     {
@@ -248,7 +274,7 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
                         else if (result == "DupCard")
                             employee.ErrorMesage = "The card number was already assigned to another employee.";
                     }
-                }        
+                }
 
             }
             else
@@ -259,7 +285,7 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
             using (var client = new OfficeLocationClient())
             {
                 var lstOfc = client.GetAllOfficeLocations();
-                
+
                 ViewBag.EmpOffice = lstOfc.Where(x => x.Key == Convert.ToString(OfficeId)).ToList();
                 DropDownItem di = new DropDownItem();
                 di.Key = "";
@@ -286,23 +312,24 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
                 {
                     ViewBag.ReportToList = client.GetActiveEmpList(employee.OfficeId, employee.UserId);
                 }
-               
+
 
                 DropDownItem di = new DropDownItem();
                 di.Key = "";
                 di.Value = "";
                 reptList.Insert(0, di);
-                
+
             }
             return View("EmployeeProfile", employee);
 
         }
-        
+
+
         public ActionResult MyLmsProfile()
         {
             EmployeeProfileSearchModel mdl = new EmployeeProfileSearchModel();
             mdl.RequestLevelPerson = "My";
-            
+
             return View("SearchTeamLmsProfile", mdl);
         }
         public ActionResult TeamLmsProfile()
@@ -330,12 +357,12 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
             {
                 name = name.Replace("|", " ");
             }
-            using (var client=new EmployeeClient())
+            using (var client = new EmployeeClient())
             {
                 lstProfile = client.GetTeamProfiles(this.UserId, onlyReportedToMe, name, requestMenuUser, hideInactiveEmp);
             }
 
-            return PartialView("EmployeeLmsProfileNamesPartial",lstProfile);
+            return PartialView("EmployeeLmsProfileNamesPartial", lstProfile);
         }
         //Added by Tamil
         public ActionResult SearchLeaveBalanceProfile()
@@ -352,17 +379,14 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
             }
         }
 
-        public ActionResult EmployeeLeaveBalanceDetails(string name)
+        public ActionResult EmployeeLeaveBalanceDetails(Int64 UserId)
         {
             IList<LeaveBalanceEmpProfile> lstProfile = new List<LeaveBalanceEmpProfile>();
-            if (name != "")
-            {
-                name = name.Replace("|", " ");
-            }
+
             using (var client = new EmployeeLeaveBalanceClient())
             {
                 long userid = this.UserId;
-                lstProfile = client.GetLeaveBalanceEmpProfile(name);
+                lstProfile = client.GetLeaveBalanceEmpProfile(UserId);
             }
 
             return PartialView("EmployeeLeaveBalanceProfilePartial", lstProfile);
@@ -370,7 +394,7 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
 
         public ActionResult SaveLeaveBalance(List<EmployeeLeaveBalanceDetails> lst, Int64 EmpUserid)
         {
-          
+
             string result = "";
             if (ModelState.IsValid)
             {

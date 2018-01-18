@@ -1,4 +1,8 @@
-﻿@model NLTD.EmployeePortal.LMS.Common.DisplayModel.EmployeeProfile
+﻿@using OfficeOpenXml.FormulaParsing.Excel.Functions.Math
+@model NLTD.EmployeePortal.LMS.Common.DisplayModel.EmployeeProfile
+<script type="text/javascript" src="~/Scripts/lms.js?v=1.03"></script>
+<script src="~/Scripts/bootstrap-datetimepicker.js"></script>
+<link href="~/Content/bootstrap-datetimepicker.css" rel="stylesheet" />
 <div id="@("alert_placeholder")"></div>
 <style type="text/css">
     ::-ms-clear {
@@ -11,7 +15,7 @@
 
     .upper {
         text-transform: uppercase;
-    }   
+    }
 
     .lower {
         text-transform: lowercase;
@@ -44,6 +48,15 @@
 
 
 }
+<script>
+    $(function () {
+        $('.DateControl').datetimepicker(
+            {
+                viewMode: "days",
+                format: 'DD-MM-YYYY'
+            });
+    });
+</script>
 <div class="row">
     <div class="col-sm-12">
         <div class="box box-primary">
@@ -53,13 +66,14 @@
             <form role="form" method="post" id="frmEmployee" enctype="multipart/form-data" action="/Profile/SaveProfile">
                 @Html.HiddenFor(model => model.Mode)
                 @Html.HiddenFor(m => m.UserId)
+                <input type="hidden" id="HiddenReliving" />
                 <div class="box-body">
                     <div class="row">
                         <div class="col-sm-9">
                         </div>
                         <div class="col-sm-3">
                             <div class="form-group">
-                                @Html.CheckBoxFor(e => e.IsActive)
+                                @Html.CheckBoxFor(e => e.IsActive, new { @onchange = "return IsActiveChange(event)" })
                                 @Html.Label("Is Active")
                             </div>
                         </div>
@@ -68,21 +82,21 @@
                         <div class="col-sm-3">
                             <div class="form-group">
                                 @Html.LabelFor(e => e.FirstName, new { @class = "required" })
-                                @Html.TextBoxFor(e => e.FirstName, null, new { @class = "form-control capital", autocomplete = "off" })
+                                @Html.TextBoxFor(e => e.FirstName, null, new { @class = "form-control capital", autocomplete = "off", maxlength = 200 })
                                 @Html.ValidationMessageFor(e => e.FirstName, null, new { @class = "text-danger" })
                             </div>
                         </div>
                         <div class="col-sm-3">
                             <div class="form-group">
                                 @Html.LabelFor(e => e.LastName, new { @class = "required" })
-                                @Html.TextBoxFor(e => e.LastName, null, new { @class = "form-control capital", autocomplete = "off" })
+                                @Html.TextBoxFor(e => e.LastName, null, new { @class = "form-control capital", autocomplete = "off", maxlength = 200 })
                                 @Html.ValidationMessageFor(e => e.LastName, null, new { @class = "text-danger" })
                             </div>
                         </div>
                         <div class="col-sm-3">
                             <div class="form-group">
-                                @Html.LabelFor(e => e.LogonId, new { @class = "required" })
-                                @Html.TextBoxFor(e => e.LogonId, null, new { @class = "form-control upper", autocomplete = "off" })
+                                @Html.LabelFor(e => e.LogonId)
+                                @Html.TextBoxFor(e => e.LogonId, null, new { @class = "form-control upper", autocomplete = "off", maxlength = 100 })
                                 @Html.ValidationMessageFor(e => e.LogonId, null, new { @class = "text-danger" })
                             </div>
                         </div>
@@ -92,12 +106,12 @@
                                 @{
                                     if (Model.Mode == "Add")
                                     {
-                                        @Html.TextBoxFor(e => e.EmployeeId, null, new { @class = "form-control", autocomplete = "off", @onkeypress = "return isNumber(event)" })
+                                        @Html.TextBoxFor(e => e.EmployeeId, null, new { @class = "form-control", autocomplete = "off", maxlength = 100, @onkeypress = "return isNumber(event)" })
                                         @Html.ValidationMessageFor(e => e.EmployeeId, null, new { @class = "text-danger" })
                                     }
                                     else
                                     {
-                                        @Html.TextBoxFor(e => e.EmployeeId, null, new { @class = "form-control", @readonly = true })
+                                        @Html.TextBoxFor(e => e.EmployeeId, null, new { @class = "form-control", maxlength = 100,@readonly = true })
                                     }
                                 }
                             </div>
@@ -106,8 +120,8 @@
                     <div class="row">
                         <div class="col-sm-3">
                             <div class="form-group">
-                                @Html.LabelFor(e => e.EmailAddress, new { @class = "required" })
-                                @Html.TextBoxFor(e => e.EmailAddress, null, new { @class = "form-control lower", autocomplete = "off" })
+                                @Html.LabelFor(e => e.EmailAddress)
+                                @Html.TextBoxFor(e => e.EmailAddress, null, new { @class = "form-control lower", autocomplete = "off", maxlength = 200 })
                                 @Html.ValidationMessageFor(e => e.EmailAddress, null, new { @class = "text-danger" })
                             </div>
                         </div>
@@ -116,8 +130,8 @@
                                 @Html.LabelFor(e => e.Gender, new { @class = "required" })
                                 <select id="Gender" name="Gender" class="form-control">
                                     <option value=""></option>
-                                    <option value="M" @if (Model.Gender == "M") { @Html.Raw("selected=\"selected\"")                     }>Male</option>
-                                    <option value="F" @if (Model.Gender == "F") { @Html.Raw("selected=\"selected\"")                     }>Female</option>
+                                    <option value="M" @if (Model.Gender == "M") { @Html.Raw("selected=\"selected\"")                                    }>Male</option>
+                                    <option value="F" @if (Model.Gender == "F") { @Html.Raw("selected=\"selected\"")                                    }>Female</option>
                                 </select>
                                 @Html.ValidationMessageFor(e => e.Gender, null, new { @class = "text-danger" })
                             </div>
@@ -126,7 +140,7 @@
                             <div class="form-group">
                                 <div class="form-group">
                                     @Html.Label("Card Number")
-                                    @Html.TextBoxFor(e => e.CardId, null, new { @class = "form-control", autocomplete = "off", @onkeypress = "return isNumber(event)" })
+                                    @Html.TextBoxFor(e => e.CardId, null, new { @class = "form-control", autocomplete = "off", maxlength = 8, @onkeypress = "return isNumber(event)" })
                                 </div>
                             </div>
                         </div>
@@ -258,94 +272,151 @@
 
                     </div>
                     <div class="row">
-                        <div class="col-sm-12 pull-left"> @Html.Label("Select Weekly Off(s)")</div>
-                    </div>
-                    <div class="row" style="padding-top:10px;padding-bottom:10px;">
-                        <div class="col-sm-6">
-                            <div class="col-sm-3">
-                                @Html.CheckBoxFor(e => e.Monday)
-                                @Html.LabelFor(e => e.Monday, new { style = "font-weight:normal" })
-                            </div>
-                            <div class="col-sm-3">
-                                @Html.CheckBoxFor(e => e.Tuesday)
-                                @Html.LabelFor(e => e.Tuesday, new { style = "font-weight:normal" })
-                            </div>
-                            <div class="col-sm-3">
-                                @Html.CheckBoxFor(e => e.Wednesday)
-                                @Html.LabelFor(e => e.Wednesday, new { style = "font-weight:normal" })
-                            </div>
-                            <div class="col-sm-3">
-                                @Html.CheckBoxFor(e => e.Thursday)
-                                @Html.LabelFor(e => e.Thursday, new { style = "font-weight:normal" })
+                        <div class="col-sm-3">
+                            <div class="form-group">
+                                @Html.LabelFor(e => e.DOJ, "Joining Date", new { @class = "required" })
+                                @Html.TextBoxFor(e => e.DOJ, new { @class = "form-control DateControl" })
+                                @Html.ValidationMessageFor(e => e.DOJ, null, new { @class = "text-danger" })
                             </div>
                         </div>
-                        <div class="col-sm-6">
-                            <div class="col-sm-3">
-                                @Html.CheckBoxFor(e => e.Friday)
-                                @Html.LabelFor(e => e.Friday, new { style = "font-weight:normal" })
-                            </div>
-                            <div class="col-sm-3">
-                                @Html.CheckBoxFor(e => e.Saturday)
-                                @Html.LabelFor(e => e.Saturday, new { style = "font-weight:normal" })
-                            </div>
-                            <div class="col-sm-3">
-                                @Html.CheckBoxFor(e => e.Sunday)
-                                @Html.LabelFor(e => e.Sunday, new { style = "font-weight:normal" })
-                            </div>
-                            <div class="col-sm-3">
+                        <div class="col-sm-3">
+                            <div class="form-group">
+                                @Html.LabelFor(e => e.ConfirmationDate, "Confirmation Date")
+                                @Html.TextBoxFor(e => e.ConfirmationDate, new { @class = "form-control DateControl" })
                             </div>
                         </div>
-                    </div>
-                    @{ if (Model.Mode == "Update")
-                        {
-                            <div class="box-footer">
-                                <div class="col-sm-10">
-                                </div>
-                                <div class="col-sm-2" style="right:-25px;">
-                                    <button type="button" class="btn btn-primary" onclick="location.href='@Url.Action("UpdateEmployee", "Profile")'">CANCEL</button>
-                                    <button type="submit" class="btn btn-primary pull-right">SAVE</button>
-                                </div>
-                            </div>
-                        }
-                        else if (Model.Mode == "Add")
-                        {
-                            <div class="box-footer">
-                                <div class="col-sm-10">
-                                </div>
-                                <div class="col-sm-2" style="right:-25px;">
-                                    <button type="button" class="btn btn-primary" onclick="location.href='@Url.Action("AddNewEmployee", "Profile")'">CLEAR</button>
-                                    @{
-                                        if (Model.ErrorMesage == "Saved")
-                                        {
-                                            <button type="button" class="btn btn-primary pull-right" disabled="disabled">SAVE</button>
-                                        }
-                                        else
-                                        {
-                                            <button type="button" class="btn btn-primary pull-right" onclick="SubmitEmpForm(this)">SAVE</button>
-                                        }
+                        <div class="col-sm-3">
+                            <div class="form-group">
+                                @Html.LabelFor(e => e.RelievingDate, "Relieving Date")
+                                @{
+                                    if (!Model.IsActive)
+                                    {
+                                        @Html.TextBoxFor(e => e.RelievingDate, null, new { @class = "form-control DateControl" })
                                     }
-                                </div>
+                                    else
+                                    {
+                                        @Html.TextBoxFor(e => e.RelievingDate, null, new { @class = "form-control DateControl", @readonly = true, autocomplete = "off" })
+                                    }
+                                }
                             </div>
-                                        }
-                    }
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="form-group">
+                                @Html.LabelFor(e => e.RoleId, "Mobile Number")
+                                @Html.TextBoxFor(e => e.MobileNumber, null, new { @class = "form-control", autocomplete = "off", maxlength = 10, @onkeypress = "return isNumber(event)" })
+                            </div>
+                        </div>
+                    </div>
+
+
                 </div>
+                <div class="row">
+                    <div class="col-sm-12 pull-left"> @Html.Label("Select Weekly Off(s)")</div>
+                </div>
+                <div class="row" style="padding-top:10px;padding-bottom:10px;">
+                    <div class="col-sm-6">
+                        <div class="col-sm-3">
+                            @Html.CheckBoxFor(e => e.Monday)
+                            @Html.LabelFor(e => e.Monday, new { style = "font-weight:normal" })
+                        </div>
+                        <div class="col-sm-3">
+                            @Html.CheckBoxFor(e => e.Tuesday)
+                            @Html.LabelFor(e => e.Tuesday, new { style = "font-weight:normal" })
+                        </div>
+                        <div class="col-sm-3">
+                            @Html.CheckBoxFor(e => e.Wednesday)
+                            @Html.LabelFor(e => e.Wednesday, new { style = "font-weight:normal" })
+                        </div>
+                        <div class="col-sm-3">
+                            @Html.CheckBoxFor(e => e.Thursday)
+                            @Html.LabelFor(e => e.Thursday, new { style = "font-weight:normal" })
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="col-sm-3">
+                            @Html.CheckBoxFor(e => e.Friday)
+                            @Html.LabelFor(e => e.Friday, new { style = "font-weight:normal" })
+                        </div>
+                        <div class="col-sm-3">
+                            @Html.CheckBoxFor(e => e.Saturday)
+                            @Html.LabelFor(e => e.Saturday, new { style = "font-weight:normal" })
+                        </div>
+                        <div class="col-sm-3">
+                            @Html.CheckBoxFor(e => e.Sunday)
+                            @Html.LabelFor(e => e.Sunday, new { style = "font-weight:normal" })
+                        </div>
+                        <div class="col-sm-3">
+                        </div>
+                    </div>
+                </div>
+                @{ if (Model.Mode == "Update")
+                    {
+                        <div class="box-footer">
+                            <div class="col-sm-10">
+                            </div>
+                            <div class="col-sm-2" style="right:-25px;">
+                                <button type="button" class="btn btn-primary" onclick="location.href='@Url.Action("UpdateEmployee", "Profile")'">CANCEL</button>
+                                <button type="submit" class="btn btn-primary pull-right">SAVE</button>
+                            </div>
+                        </div>
+                    }
+                    else if (Model.Mode == "Add")
+                    {
+                        <div class="box-footer">
+                            <div class="col-sm-10">
+                            </div>
+                            <div class="col-sm-2" style="right:-25px;">
+                                <button type="button" class="btn btn-primary" onclick="location.href='@Url.Action("AddNewEmployee", "Profile")'">CLEAR</button>
+                                @{
+                                    if (Model.ErrorMesage == "Saved")
+                                    {
+                                        <button type="button" class="btn btn-primary pull-right" disabled="disabled">SAVE</button>
+                                    }
+                                    else
+                                    {
+                                        <button type="button" class="btn btn-primary pull-right" onclick="SubmitEmpForm(this)">SAVE</button>
+                                    }
+                                }
+                            </div>
+                        </div>
+                                    }
+                }
             </form>
         </div>
     </div>
-</div>
-@section readyscript{
-    <script>
-        $("document").ready(function () {
-            var readOnlyLength = 5;
 
-            $('#LogonId').on('keypress, keydown', function (event) {
-                var $field = $(this);
-                if ((event.which != 37 && (event.which != 39)) &&
-                    ((this.selectionStart < readOnlyLength) ||
-                        ((this.selectionStart == readOnlyLength) && (event.which == 8)))) {
-                    return false;
+    @section readyscript{
+        <script>
+
+            function IsActiveChange() {
+                if ($("#IsActive").prop('checked') === true) {
+                    $('#RelievingDate').attr('readonly', true);
+                    $("#RelievingDate").val("");
+                } else {
+                    var exrelivingdate = $("#HiddenReliving").val();
+                    if (exrelivingdate.length > 0) {
+                        exrelivingdate = exrelivingdate.split(' ')[0];
+                        exrelivingdate = exrelivingdate.replace('/', '-');
+                        exrelivingdate = exrelivingdate.replace('/', '-');
+                        $("#RelievingDate").val(exrelivingdate);
+                    }
+                    $('#RelievingDate').attr('readonly', false);
                 }
+            }
+
+            $("document").ready(function() {
+                var readOnlyLength = 5;
+
+                $('#LogonId').on('keypress, keydown',
+                    function(event) {
+                        var $field = $(this);
+                        if ((event.which != 37 && (event.which != 39)) &&
+                        ((this.selectionStart < readOnlyLength) ||
+                            ((this.selectionStart == readOnlyLength) && (event.which == 8)))) {
+                            return false;
+                        }
+                    });
+                $("#HiddenReliving").val('@Model.RelievingDate');
             });
-        });
-    </script>
-}
+        </script>
+    }

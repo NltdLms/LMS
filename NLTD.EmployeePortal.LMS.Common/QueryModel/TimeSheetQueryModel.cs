@@ -14,5 +14,7 @@ namespace NLTD.EmployeePortal.LMS.Common.QueryModel
         public string ErrorMsg { get; set; }
         public string Name { get; set; }
         public string DateRange { get; set; }
+
+        public bool MyDirectEmployees { get; set; }
     }
 }

@@ -107,6 +107,11 @@
           <icon></icon>
         </MenuItem>
         <MenuItem>
+          <title>My ShiftDetails</title>
+          <url>/Shift/MyShiftDetails</url>
+          <icon></icon>
+        </MenuItem>
+        <MenuItem>
           <title>Employee Attendance</title>
           <url>/Attendance/EmployeeAttendance</url>
           <icon></icon>
@@ -152,6 +157,18 @@
         <MenuItem>
           <title>Add Leave Balance</title>
           <url>/Profile/SearchLeaveBalanceProfile</url>
+          <icon></icon>
+        </MenuItem>
+      </level1item>
+    </MenuItem>
+      <MenuItem>
+      <title>Reports</title>
+      <url>#</url>
+      <icon>fa fa-asterisk</icon>
+      <level1item>
+        <MenuItem>
+          <title>Late Report Count</title>
+          <url>Report/NoOfLateReportRpt</url>
           <icon></icon>
         </MenuItem>
       </level1item>

@@ -10,6 +10,6 @@ namespace NLTD.EmployeePortal.LMS.Repository
     public interface IEmployeeAttendanceHelper : IDisposable
     {
         List<EmployeeAttendanceModel> GetAttendence(Int64 UserID);
-        List<EmployeeAttendanceModel> GetAttendenceForRange(Int64 UserID, DateTime FromDateTime, DateTime ToDateTime,string requestLevelUser);
+        List<EmployeeAttendanceModel> GetAttendenceForRange(Int64 UserID, DateTime FromDateTime, DateTime ToDateTime,string requestLevelUser,bool IsDirectEmployees);
     }
 }

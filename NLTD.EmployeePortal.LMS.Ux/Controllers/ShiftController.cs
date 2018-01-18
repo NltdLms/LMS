@@ -102,9 +102,9 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
             string result = "";
             if (ModelState.IsValid)
             {
-                if (RequestMenuUser == "Team" && (FromDate <= DateTime.Now || ToDate <= DateTime.Now))
+                if (RequestMenuUser == "Team" && (FromDate <= DateTime.Now.AddDays(-7) || ToDate <= DateTime.Now.AddDays(-7)))
                 {
-                    result = "Leads are allowed to update the shift for future date only. Contact Admin/HR to modify it.";
+                    result = "The system restricts modifying shifts earlier than 7 days. Please contact HR for any changes.";
                 }
                 else
                 {
@@ -117,6 +117,7 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
 
             return Json(result);
         }
+
 
         public ActionResult SaveShiftMaster(int shiftId, string shiftName, TimeSpan fromTime, TimeSpan toTime)
         {
@@ -153,6 +154,13 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
             return View("EmployeeShiftAllocation", qyMdl);
         }
 
+        public ActionResult MyShiftDetails()
+        {
+            ViewBag.RequestLevelPerson = "My";
+            ManageTeamLeavesQueryModel qyMdl = new ManageTeamLeavesQueryModel();
+            return View("EmployeeShiftAllocation", qyMdl);
+        }
+
         public ActionResult TeamEmployeeShiftAllocation()
         {
             ViewBag.RequestLevelPerson = "Team";
@@ -160,22 +168,20 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
             return View("EmployeeShiftAllocation", qyMdl);
         }
 
-        public ActionResult GetEmployeeShiftDetails(string Name, string RequestMenuUser, string FromDate, string ToDate, string Shift)
+        public ActionResult GetEmployeeShiftDetails(Int64 UserId, string RequestMenuUser, string FromDate, string ToDate, string Shift)
         {
             EmpShift shiftDetail = null;
-
-            if (Name != "")
-            {
-                Name = Name.Replace("|", " ");
-            }
-
+            
             using (var client = new ShiftClient())
             {
-                long Userid = this.UserId;
-                shiftDetail = client.GetEmployeeShiftDetails(Name, RequestMenuUser, Userid);
+                if(RequestMenuUser == "My" && UserId == 0)
+                    UserId = this.UserId;
+              
+                shiftDetail = client.GetEmployeeShiftDetails(UserId, RequestMenuUser, this.UserId);
                 ViewBag.FromDate = FromDate;
                 ViewBag.ToDate = ToDate;
                 ViewBag.Shift = Shift;
+                ViewBag.RequestLevelPerson = RequestMenuUser;
             }
 
             return PartialView("EmpShiftAllocationPartial", shiftDetail);
@@ -186,9 +192,9 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
             string result = "";
             if (ModelState.IsValid)
             {
-                if (RequestMenuUser == "Team" && (FromDate <= DateTime.Now || ToDate <= DateTime.Now))
+                if (RequestMenuUser == "Team" && (FromDate <= DateTime.Now.AddDays(-7) || ToDate <= DateTime.Now.AddDays(-7)))
                 {
-                    result = "Leads are allowed to update the shift for future date only. Contact Admin/HR to modify it.";
+                    result = "The system restricts modifying shifts earlier than 7 days. Please contact HR for any changes.";
                 }
                 else
                 {
@@ -201,5 +207,6 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
 
             return Json(result);
         }
+
     }
 }

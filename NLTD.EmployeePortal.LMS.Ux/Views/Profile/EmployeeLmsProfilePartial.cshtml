@@ -1,5 +1,6 @@
 ﻿@model NLTD.EmployeePortal.LMS.Common.DisplayModel.ViewEmployeeProfileModel
-
+<script src="~/Scripts/daterangepicker.js"></script>
+<link href="~/Content/daterangepicker.css" rel="stylesheet" />
 <div class="row">
     <div class="col-sm-12">
         <div class="box box-primary">
@@ -107,6 +108,38 @@
                         <div class="col-sm-3">
                             @Html.Label("Holiday Office")
                             @Html.TextBoxFor(e => e.HolidayOfficeName, null, new { @class = "form-control", @readonly = true })
+
+                        </div>
+
+
+                    </div>
+                    <div class="row">
+
+                        <div class="col-sm-3">
+                            <div class="form-group">
+                                @Html.Label("Joining Date")
+                                @Html.TextBoxFor(e => e.DOJ, null, new { @class = "form-control", @readonly = true })
+
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="form-group">
+                                @Html.Label("Confirmation Date")
+                                @Html.TextBoxFor(e => e.ConfirmationDate, null, new { @class = "form-control", @readonly = true })
+
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="form-group">
+                                @Html.Label("Relieving Date")
+                                @Html.TextBoxFor(e => e.RelievingDate, null, new { @class = "form-control", @readonly = true })
+
+                            </div>
+                        </div>
+
+                        <div class="col-sm-3">
+                            @Html.Label("Mobile Number")
+                            @Html.TextBoxFor(e => e.MobileNumber, null, new { @class = "form-control", @readonly = true })
 
                         </div>
 

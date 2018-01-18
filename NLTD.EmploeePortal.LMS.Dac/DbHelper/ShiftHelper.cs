@@ -61,11 +61,11 @@ namespace NLTD.EmploeePortal.LMS.Dac.DbHelper
             }
         }
 
-        public EmpShift GetEmployeeShiftDetails(string Name, string RequestMenuUser, long LeaduserId)
+        public EmpShift GetEmployeeShiftDetails(Int64 UserId, string RequestMenuUser, long LeaduserId)
         {
             using (var dac = new ShiftDac())
             {
-                return dac.GetEmployeeShiftDetails(Name, RequestMenuUser, LeaduserId);
+                return dac.GetEmployeeShiftDetails(UserId, RequestMenuUser, LeaduserId);
             }
         }
 

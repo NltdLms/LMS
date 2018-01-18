@@ -7,7 +7,7 @@ namespace NLTD.EmployeePortal.LMS.Common.DisplayModel
 {
     public class EmployeeProfile
     {
-        [Required(ErrorMessage = "Enter Logon Id.")]
+
         [Display(Name = "Logon Id")]
         public String LogonId { get; set; }
 
@@ -25,7 +25,7 @@ namespace NLTD.EmployeePortal.LMS.Common.DisplayModel
         [Display(Name = "Last Name")]
         public String LastName { get; set; }
 
-        [Required(ErrorMessage = "Enter Email Address.")]
+
         [Display(Name = "Email Address")]
         public String EmailAddress { get; set; }
 
@@ -48,12 +48,20 @@ namespace NLTD.EmployeePortal.LMS.Common.DisplayModel
         public String LocationText { get; set; }
         [Required(ErrorMessage = "Select Emplye Shift.")]
         public Int32? ShiftId { get; set; }
-        
+
         public Int64? CardId { get; set; }
         public String Avatar { get; set; }
 
         [Display(Name = "Is LMS Approver")]
         public Boolean IsHandleMembers { get; set; }
+
+        [Required(ErrorMessage = "Enter Joining Date.")]
+        public DateTime? DOJ { get; set; }
+       
+        public DateTime? ConfirmationDate { get; set; }
+
+       
+        public DateTime? RelievingDate { get; set; }
         public bool Sunday { get; set; }
 
         public bool Monday { get; set; }

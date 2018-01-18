@@ -15,14 +15,12 @@ namespace NLTD.EmploeePortal.LMS.Dac.Dac
             //Nothing to implement...
         }
         //Added by Tamil
-        public IList<LeaveBalanceEmpProfile> GetLeaveBalanceEmpProfile(string name)
+        public IList<LeaveBalanceEmpProfile> GetLeaveBalanceEmpProfile(Int64 userId)
         {
             IList<LeaveBalanceEmpProfile> retModel = new List<LeaveBalanceEmpProfile>();
 
             using (var context = new NLTDDbContext())
             {
-                EmployeeDac employeeDac = new EmployeeDac();
-                long userId = employeeDac.GetUserId(name);
 
                 if (userId > 0)
                 {
@@ -65,7 +63,7 @@ namespace NLTD.EmploeePortal.LMS.Dac.Dac
                     {
                         employeeLeaveBalanceProfile = employeeLeaveBalanceProfile,
                         lstEmployeeLeaveBalance = employeeLeaveBalance,
-                        Name = name
+                        Name = employeeLeaveBalanceProfile.FirstName + " " + employeeLeaveBalanceProfile.LastName
                     });
                 }
             }

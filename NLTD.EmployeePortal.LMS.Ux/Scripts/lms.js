@@ -67,10 +67,7 @@ function SubmitEmpForm(e) {
     $("#alert_placeholder").empty();
     var corpId = $("#LogonId").val()
 
-    if (corpId.trim().length < 7) {
-        showalert("", "Please enter valid Logon Id.", "alert alert-danger");
-        return;
-    }
+
     if ($("#ReportedToId option:selected").index() < 1) {
         showalert("", "Please select Reporting To person name.", "alert alert-danger");
         return;
@@ -989,20 +986,14 @@ function hideElementsForHalfDay() {
 //Added by Tamil
 function loadLeaveBalanceProfile() {
 
-    if ($("#Name").val() == undefined) {
-        var name = "";
-    }
-    else {
-        if ($("#Name").val() != "") {
-            var name = $("#Name").val().replace(/ /g, "|");
-        }
-        else {
-            name = "";
-        }
+    SetUserIDForAutoCompleteName(nameList, $("#Name").val(), "UserID");
+    if (!ValidateAutocompleteName($("#Name").val(), $("#UserID").val())) {
+        Clearshowalert("Please Choose a valid Username from the List. To Show all employee Clear the textbox.", "alert alert-danger");
+        return;
     }
 
     $("#alert_placeholder").empty();
-    if (name == "") {
+    if ($("#Name").val() == "") {
         if ($('#alert') != undefined && $('#alert') != "") {
             $('#alert').remove();
         }
@@ -1018,7 +1009,7 @@ function loadLeaveBalanceProfile() {
         url: "/Profile/EmployeeLeaveBalanceDetails",
         data: {
             //"onlyReportedToMe": showTeam,
-            "name": name
+            "UserId": $("#UserID").val()
             //"requestMenuUser": $("#RequestLevelPerson").val(),
             //"hideInactiveEmp": hideInactive
 
@@ -1056,6 +1047,15 @@ function AddTotalDays(index) {
     }
 
     if (NoOfDays > 0) {
+
+        var decPart = (NoOfDays + "").split(".")[1];
+
+        if (decPart != "0" && decPart != "5") {
+            Clearshowalert("No of days value after decimal point should be 0 or 5", "alert alert-danger");
+            $("#NoOfDays" + index).focus();
+            return;
+        }
+
         if (CreditOrDebit == 'D' && parseFloat(BalanceDays) < parseFloat(NoOfDays)) {
             Clearshowalert("No of days should be less than Existing Balance days", "alert alert-danger");
             $("#NoOfDays" + index).focus();
@@ -1088,6 +1088,28 @@ function isNumber(evt) {
     return true;
 }
 
+function isNumberKey(evt, element) {
+    var charCode = (evt.which) ? evt.which : event.keyCode;
+    
+    if (charCode > 31 && (charCode < 48 || charCode > 57) && !(charCode == 46))
+        return false;
+    else {
+       // var len = $(element).val().length;
+        var index = $(element).val().indexOf('.');
+       // alert($(element).val());
+        if (index > 0 && charCode == 46) {
+            return false;
+        }
+        //if (index > 0) {
+        //    var CharAfterdot = (len + 1) - index;
+        //    if (CharAfterdot > 3) {
+        //        return false;
+        //    }
+        //}
+    }
+    return true;
+}
+
 function SubmitLeaveBalanceForm(count) {
     var things = [];
     var valid = false;
@@ -1110,6 +1132,13 @@ function SubmitLeaveBalanceForm(count) {
         if (NoOfDays > 0) {
             valid = true;
 
+            var decPart = (NoOfDays + "").split(".")[1];
+
+            if (decPart != "0" && decPart != "5") {
+                Clearshowalert("No of days value after decimal point should be 0 or 5", "alert alert-danger");
+                $("#NoOfDays" + i).focus();
+                return;
+            }
 
             if (CreditOrDebit == 'D' && parseFloat(balanceDays) < parseFloat(NoOfDays)) {
                 Clearshowalert("No of days should be less than Existing Balance days.", "alert alert-danger");
@@ -1201,7 +1230,7 @@ function loadTransactionLog() {
     $("#divLoading").show();
     $("#divForHistoryLeave").load('/Admin/GetTransactionLog?OnlyReportedToMe=' + showTeam + '&Name=' + name + '&RequestMenuUser=' + $("#RequestLevelPerson").val(),
         function () {
-            $(".transaction").dataTable({ "paging": false, "bFilter": false, "bInfo": false });
+            $(".transaction").dataTable({ "paging": false, "bFilter": false, "bInfo": false, "aaSorting": [] });
             $("#divLoading").hide();
             $('html, body').animate({
                 scrollTop: 210  // Means Less header height
@@ -1212,12 +1241,23 @@ function loadTransactionLog() {
 }
 
 function loadAttendenceRangeSummary() {
+    $("#alert_placeholder").val();
+    
 
+    var myDirectEmployees = false;
+
+    if ($("#RequestLevelPerson").val() === "Team") {
+        myDirectEmployees = $("#mydirectemployeecheck").is(':checked');
+    }
     if ($("#RequestLevelPerson").val() === "My") {
-        URL = '/Admin/loadEmployeeAttendence?&FromDate=' + $('#FromDate').val() + '&ToDate=' + $('#ToDate').val() + '&requestLevelPerson=' + $('#RequestLevelPerson').val();
+        URL = '/Admin/loadEmployeeAttendence?&FromDate=' + $('#FromDate').val() + '&ToDate=' + $('#ToDate').val() + '&requestLevelPerson=' + $('#RequestLevelPerson').val() + '&myDirectEmployees=' + myDirectEmployees;
     }
     else {
-        URL = '/Admin/loadEmployeeAttendence?Name=' + $("#Name").val().replace(new RegExp(" ", "g"), '|') + '&FromDate=' + $('#FromDate').val() + '&ToDate=' + $('#ToDate').val() + '&requestLevelPerson=' + $('#RequestLevelPerson').val();
+        URL = '/Admin/loadEmployeeAttendence?ID=' + $("#UserID").val() + '&FromDate=' + $('#FromDate').val() + '&ToDate=' + $('#ToDate').val() + '&requestLevelPerson=' + $('#RequestLevelPerson').val() + '&myDirectEmployees=' + myDirectEmployees;
+        if (!ValidateAutocompleteName($("#Name").val(), $("#UserID").val())) {
+            Clearshowalert("Please Choose a valid Username from the List. To Show all employee Clear the textbox.", "alert alert-danger");
+            return;
+        }
     }
     $("#divLoading").show();
     $("#divForEmployeeAttendence")
@@ -1239,24 +1279,49 @@ function loadAttendenceRangeSummary() {
         });
 }
 function loadTimeSheetSummary() {
+    debugger;
     var URL = '/Admin/LoadMyTeamTimesheet';
-    $("#divLoading").show();
+   
+    var myDirectEmployees = false;
+
     if ($("#RequestLevelPerson").val() === "My") {
 
         URL = '/Admin/LoadMyTimesheet';
     }
+    else {
+        SetUserIDForAutoCompleteName(nameList, $("#Name").val(), "UserID");
+        if (!ValidateAutocompleteName($("#Name").val(), $("#UserID").val())) {
+            $("#divForTimesheet").html("");
+            Clearshowalert("Invalid Username. Please choose the Username from the List.", "alert alert-danger");
+            return;
+        }
+    }
+
+    if ($("#RequestLevelPerson").val() === "Team") {
+        myDirectEmployees = $("#mydirectemployeecheck").is(':checked');
+    }
+
     $("#divForTimesheet").html("");
     $("#alert_placeholder").html("");
 
+    $("#divLoading").show();
     $("#divForTimesheet")
-        .load(URL, { TimeSheetQueryModelObj: { FromDate: $("#FromDate").val(), ToDate: $("#ToDate").val(), Name: $("#Name").val() } },
+        .load(URL, {
+            TimeSheetQueryModelObj: {
+                FromDate: $("#FromDate").val(), ToDate: $("#ToDate").val(),
+                Name: $("#Name").val(), MyDirectEmployees: myDirectEmployees,
+                UserID: $("#UserID").val()
+            }
+        },
         function (responseText, textStatus, req) {
             if (textStatus == "error") {
                 Clearshowalert("No Records Found", "alert alert-danger");
                 $('.dtatable').DataTable().clear().destroy();
             }
             else {
-                $(".dtatable").dataTable({ "aaSorting": [] });
+                $(".dtatable").dataTable({
+                    "aaSorting": [], "pageLength": 50
+                    });
                 $('html, body').animate({
                     scrollTop: 230  // Means Less header height
                 }, 400);
@@ -1367,7 +1432,7 @@ function SaveShiftMaster() {
     $("#divLoading").hide();
 }
 function loadShiftDetails() {
-
+   
     $("#divLoading").show();
     var RequestLevelPerson = $("#RequestLevelPerson").val();
 
@@ -1479,29 +1544,28 @@ function SaveEmployeeShift() {
 }
 
 function GetEmployeeShiftDetails(FromDate, ToDate, Shift) {
+ 
+    var UserId = ($("#RequestLevelPerson").val() == "My") ? 0: $("#UserID").val();   
 
-    if ($("#Name").val() == undefined) {
-        var name = "";
-    }
-    else {
-        if ($("#Name").val() != "") {
-            var name = $("#Name").val().replace(/ /g, "|");
-        }
-        else {
-            name = "";
+    if (UserId > 0) {
+        SetUserIDForAutoCompleteName(nameList, $("#Name").val(), "UserID");
+        if (!ValidateAutocompleteName($("#Name").val(), $("#UserID").val())) {
+            Clearshowalert("Please Choose a valid Username from the List. To Show all employee Clear the textbox.", "alert alert-danger");
+            return;
         }
     }
+
     $("#alert_placeholder").empty();
-    if (name == "" && $("#RequestLevelPerson").val() != "My") {
+    if ($("#Name").val() == "" && $("#RequestLevelPerson").val() != "My") {
         if ($('#alert') != undefined && $('#alert') != "") {
             $('#alert').remove();
         }
         Clearshowalert("Please enter the employee name", "alert alert-danger");
         return;
     }
-
+ 
     $("#divLoading").show();
-    $("#divForHistoryLeave").load('/Shift/GetEmployeeShiftDetails?Name=' + name + '&RequestMenuUser=' + $("#RequestLevelPerson").val() + '&FromDate=' + FromDate + '&ToDate=' + ToDate + '&Shift=' + Shift,
+    $("#divForHistoryLeave").load('/Shift/GetEmployeeShiftDetails?UserId=' + UserId + '&RequestMenuUser=' + $("#RequestLevelPerson").val() + '&FromDate=' + FromDate + '&ToDate=' + ToDate + '&Shift=' + Shift + '&rnd=' + Math.round(Math.random() * 10000),
         function () {
             $(".shift").dataTable({ pageLength: 50, bPaginate: false, bInfo: false });
             $("#divLoading").hide();
@@ -1559,4 +1623,23 @@ function SaveIndividualEmployeeShift() {
             Clearshowalert(response.message, "alert alert-danger");
         }
     });
+}
+function ValidateAutocompleteName(name,userID) {
+    if (name != "") {
+        if (userID == "") {
+            return false;
+        }
+    }
+    return true;
+}
+
+function SetUserIDForAutoCompleteName(userList, name, hiddenFieldID) {
+    var user= $.grep(userList, function (user) {
+        if (user.label.trim() == name.trim()) {
+            return user.value;
+        }
+    });
+    if (user.length > 0) {
+        $("#" + hiddenFieldID).val(user[0].value);
+    }
 }

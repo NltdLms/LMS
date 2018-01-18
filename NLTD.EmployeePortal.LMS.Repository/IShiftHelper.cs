@@ -19,7 +19,7 @@ namespace NLTD.EmployeePortal.LMS.Repository
         List<ShiftAllocation> GetShiftAllocation(Int64 userId, string RequestMenuUser);
         List<ShiftEmployees> GetShiftDetailsForUsers(Int64 userId, string RequestMenuUser);
         string SaveEmployeeShift(List<Int64> UserId, int Shift, DateTime FromDate, DateTime ToDate, Int64 MgrId);
-        EmpShift GetEmployeeShiftDetails(string Name, string RequestMenuUser, long LeaduserId);
+        EmpShift GetEmployeeShiftDetails(Int64 UserId, string RequestMenuUser, long LeaduserId);
         string SaveIndividualEmployeeShift(Int64 UserId, int Shift, DateTime FromDate, DateTime ToDate, Int64 MgrId);
     }
 }

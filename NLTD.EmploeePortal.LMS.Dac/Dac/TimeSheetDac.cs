@@ -117,7 +117,7 @@ namespace NLTD.EmploeePortal.LMS.Dac.Dac
             }
             IEmployeeAttendanceHelper EmployeeAttendanceDacObj = new EmployeeAttendanceDac();
             //To Retrive the Employee Attendence for the given date.
-            List<EmployeeAttendanceModel> EmployeeAttendenceList = EmployeeAttendanceDacObj.GetAttendenceForRange(UserID, FromDate, ToDate, "My");
+            List<EmployeeAttendanceModel> EmployeeAttendenceList = EmployeeAttendanceDacObj.GetAttendenceForRange(UserID, FromDate, ToDate, "My",true);
 
             // To Get the Employee name
             EmployeeProfile EmployeeProfileObj = new EmployeeDac().GetEmployeeProfile(UserID);
@@ -170,6 +170,16 @@ namespace NLTD.EmploeePortal.LMS.Dac.Dac
                         TimeSheetModelObj.WorkingHours = TimeSheetModelObj.OutTime - TimeSheetModelObj.InTime;
                         TimeSheetModelObj.Status = "Present";
 
+                        if (TimeSheetModelObj.InTime.TimeOfDay > ShiftQueryModelList[i].ShiftFromtime)
+                        {
+                            TimeSheetModelObj.LateEntry = TimeSheetModelObj.InTime.TimeOfDay - ShiftQueryModelList[i].ShiftFromtime;
+                        }
+
+                        if (ShiftQueryModelList[i].ShiftTotime > TimeSheetModelObj.OutTime.TimeOfDay)
+                        {
+                            TimeSheetModelObj.EarlyLeave = ShiftQueryModelList[i].ShiftTotime-TimeSheetModelObj.OutTime.TimeOfDay;
+                        }
+
                     }
                     else// If no record found in the employee for the given date 
                     {
@@ -190,7 +200,7 @@ namespace NLTD.EmploeePortal.LMS.Dac.Dac
             return timeSheetModelList.OrderByDescending(m=>m.WorkingDate).ToList();
         }
 
-        public List<TimeSheetModel> GetMyTeamTimeSheet(Int64 UserID, DateTime FromDate, DateTime ToDate)
+        public List<TimeSheetModel> GetMyTeamTimeSheet(Int64 UserID, DateTime FromDate, DateTime ToDate,bool myDirectEmployees)
         {
             List<TimeSheetModel> timeSheetModelList = new List<TimeSheetModel>();
             // To Get all the employee profile under the manager or lead
@@ -206,7 +216,7 @@ namespace NLTD.EmploeePortal.LMS.Dac.Dac
                                 where emp.UserId == UserID
                                 select role.Role).FirstOrDefault();
                 }
-                List<EmployeeProfile> employeeProfileListUnderManager = EmployeeDacObj.GetReportingEmployeeProfile(UserID, userRole).OrderBy(m => m.FirstName).ToList();
+                List<EmployeeProfile> employeeProfileListUnderManager = EmployeeDacObj.GetReportingEmployeeProfile(UserID, userRole,myDirectEmployees).OrderBy(m => m.FirstName).ToList();
                 for (int i = 0; i < employeeProfileListUnderManager.Count; i++)
                 {
                     List<TimeSheetModel> timeSheetModelListTemp = GetMyTimeSheet(employeeProfileListUnderManager[i].UserId, FromDate, ToDate);
