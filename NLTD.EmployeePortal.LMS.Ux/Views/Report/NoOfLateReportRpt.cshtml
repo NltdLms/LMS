@@ -19,6 +19,7 @@
 {
     <script src="~/Scripts/jquery-2.2.4.js"></script>
     <script src="~/Scripts/lms.js?v=1.04"></script>
+    <script src="~/Scripts/report.js"></script>
     <script type="text/javascript" src="~/Scripts/bootstrap.js"></script>
     <script type="text/javascript" src="~/Scripts/bootstrap.js"></script>
     <script src="~/Scripts/bootstrap-datetimepicker.js"></script>
@@ -99,37 +100,11 @@
         <div class="col-sm-12">
             <div class="box box-primary">
                 <div class="box-header with-border">
-                    <h3 class="box-title">@((string)ViewBag.RequestLevelPerson + " Day Wise Report")</h3>
+                    <h3 class="box-title">No. Of Late Based on Month</h3>
                 </div>
                 <div class="box-body">
                     <form id='your-range-form' action='@Url.Action("ExportToExcel", new { RequestLevelPerson = (string)ViewBag.RequestLevelPerson })' method='post'>
-
-                        @{
-                            if ((string)ViewBag.RequestLevelPerson == "My")
-                            {
-                                <div class="row">
-                                    <div class="col-sm-3">
-
-                                        @Html.Label("Date Range")
-                                        @Html.TextBoxFor(m => m.DateRange, new { @class = "form-control" })
-
-
-                                    </div>
-                                    <div class="col-sm-6"></div>
-                                    <div class="col-sm-1" style="padding-top:23px;">
-
-                                        <button type="button" class="btn btn-primary" onclick="loadDaywiseLeaves()">SEARCH</button>
-
-                                    </div>
-                                    <div class="col-sm-2" style="padding-top:23px;">
-                                        <input type='submit' class="btn btn-primary  pull-right" value='EXPORT TO EXCEL' />
-                                    </div>
-                                </div>
-
-
-                            }
-                            else
-                            {
+                           
                                 <div class="row">
                                     <div class="col-sm-3">
 
@@ -163,15 +138,13 @@
                                         <div class="col-sm-9"></div>
                                         <div class="col-sm-1">
 
-                                            <button type="button" class="btn btn-primary" onclick="loadDaywiseLeaves()">SEARCH</button>
+                                            <button type="button" class="btn btn-primary" onclick="LoadNoOfLateReport()">SEARCH</button>
 
                                         </div>
                                         <div class="col-sm-2">
                                             <input type='submit' class="btn btn-primary  pull-right" value='EXPORT TO EXCEL' />
                                         </div>
                                     </div>
-                                            }
-                        }
                     </form>
 
                 </div>
@@ -179,7 +152,7 @@
         </div>
     </div>
 
-    <div id="divForDaywiseLeave" class="col-sm-12"></div>
+    <div id="divForNoOfLateRpt"></div>
 
 }
 
