@@ -23,8 +23,8 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
         {
             EmployeeProfile employeeProfileObj = (EmployeeProfile) Session["Profile"];
             ViewBag.RequestLevelPerson = "My";
-            List<EmployeeAttendanceModel> employeeAttendanceModelObj =
-                EmployeeAttendanceHelper.GetAttendence(employeeProfileObj.UserId);
+           // List<EmployeeAttendanceModel> employeeAttendanceModelObj =
+             //   EmployeeAttendanceHelper.GetAttendence(employeeProfileObj.UserId);
             return View();
         }
         public ActionResult MyTeamAttendance()
