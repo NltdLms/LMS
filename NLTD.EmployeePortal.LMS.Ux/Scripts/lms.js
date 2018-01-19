@@ -234,9 +234,11 @@ function loadViewHistoryLeaves() {
         var leaveOnly = $("#IsLeaveOnly").prop('checked');
     }
 
-    if (!ValidateAutocompleteName($("#Name").val(), $("#SearchUserID").val())) {
-        Clearshowalert("Please Choose a valid Username from the List. To Show all employee Clear the textbox.", "alert alert-danger");
-        return;
+    if ($("#Name").val() != undefined) {
+        if (!ValidateAutocompleteName($("#Name").val(), $("#SearchUserID").val())) {
+            Clearshowalert("Please Choose a valid Username from the List. To Show all employee Clear the textbox.", "alert alert-danger");
+            return;
+        }
     }
 
     $.ajax({
@@ -286,9 +288,11 @@ function loadTeamProfiles() {
         var hideInactive = $("#HideInactiveEmp").prop('checked');
     }
 
-    if (!ValidateAutocompleteName($("#Name").val(), $("#SearchUserID").val())) {
-        Clearshowalert("Please Choose a valid Username from the List. To Show all employee Clear the textbox.", "alert alert-danger");
-        return;
+    if ($("#Name").val() != undefined) {
+        if (!ValidateAutocompleteName($("#Name").val(), $("#SearchUserID").val())) {
+            Clearshowalert("Please Choose a valid Username from the List. To Show all employee Clear the textbox.", "alert alert-danger");
+            return;
+        }
     }
 
     $.ajax({
@@ -325,9 +329,11 @@ function loadTeamProfiles() {
 
 function loadYearwiseLeaveSummary() {
     $("#alert_placeholder").empty();
-    if (!ValidateAutocompleteName($("#Name").val(), $("#SearchUserID").val())) {
-        Clearshowalert("Please Choose a valid Username from the List. To Show all employee Clear the textbox.", "alert alert-danger");
-        return;
+    if ($("#Name").val() != undefined) {
+        if (!ValidateAutocompleteName($("#Name").val(), $("#SearchUserID").val())) {
+            Clearshowalert("Please Choose a valid Username from the List. To Show all employee Clear the textbox.", "alert alert-danger");
+            return;
+        }
     }
    
     if ($("#OnlyReportedToMe").val() == undefined) {
@@ -572,9 +578,11 @@ function loadDaywiseLeaves() {
     else {
         var donotshowRejected = $("#DonotShowRejected").prop('checked');
     }
-    if (!ValidateAutocompleteName($("#Name").val(), $("#SearchUserID").val())) {
-        Clearshowalert("Please Choose a valid Username from the List. To Show all employee Clear the textbox.", "alert alert-danger");
-        return;
+    if ($("#Name").val() != undefined) {
+        if (!ValidateAutocompleteName($("#Name").val(), $("#SearchUserID").val())) {
+            Clearshowalert("Please Choose a valid Username from the List. To Show all employee Clear the textbox.", "alert alert-danger");
+            return;
+        }
     }
 
 
@@ -598,10 +606,13 @@ function loadPermissionDetail() {
     else {
         var showTeam = $("#OnlyReportedToMe").prop('checked');
     }
-    if (!ValidateAutocompleteName($("#Name").val(), $("#SearchUserID").val())) {
-        Clearshowalert("Please Choose a valid Username from the List. To Show all employee Clear the textbox.", "alert alert-danger");
-        return;
+    if ($("#Name").val() != undefined) {
+        if (!ValidateAutocompleteName($("#Name").val(), $("#SearchUserID").val())) {
+            Clearshowalert("Please Choose a valid Username from the List. To Show all employee Clear the textbox.", "alert alert-danger");
+            return;
+        }
     }
+    
     $("#divLoading").show();
     $("#divForPermissionDetail")
         .load('/Admin/GetPermissionDetail?paramUserId=' + $("#SearchUserID").val() + '&reqUsr=' + $("#RequestLevelPerson").val() + '&startDate=' + $("#FromDate").val() + '&endDate=' + $("#ToDate").val() + '&OnlyReportedToMe=' + showTeam,
@@ -1603,6 +1614,7 @@ function ValidateAutocompleteName(name,userID) {
     if (name == "") {
         if (userID != "") {
             $("#SearchUserID").val("");
+            $("#UserID").val("");
         }
     }
     return true;
