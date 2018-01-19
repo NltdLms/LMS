@@ -1,4 +1,5 @@
-﻿function LoadDashboardCalender() {
+﻿$.ajaxSetup({ cache: false });
+function LoadDashboardCalender() {
     $("#fullcalender").fullCalendar({
         selectable: true,
         selectHelper: true,
@@ -1220,8 +1221,12 @@ function loadTransactionLog() {
 }
 
 function loadAttendenceRangeSummary() {
-    $("#alert_placeholder").val();
-    
+    $("#alert_placeholder").empty();
+    try {
+        $("#showalert").empty();
+    }
+    catch (e) {
+    }
 
     var myDirectEmployees = false;
 
@@ -1234,6 +1239,7 @@ function loadAttendenceRangeSummary() {
     else {
         URL = '/Admin/loadEmployeeAttendence?ID=' + $("#UserID").val() + '&FromDate=' + $('#FromDate').val() + '&ToDate=' + $('#ToDate').val() + '&requestLevelPerson=' + $('#RequestLevelPerson').val() + '&myDirectEmployees=' + myDirectEmployees;
         if (!ValidateAutocompleteName($("#Name").val(), $("#UserID").val())) {
+            
             Clearshowalert("Please Choose a valid Username from the List. To Show all employee Clear the textbox.", "alert alert-danger");
             return;
         }
@@ -1258,7 +1264,7 @@ function loadAttendenceRangeSummary() {
         });
 }
 function loadTimeSheetSummary() {
-    debugger;
+    $("#alert_placeholder").empty();
     var URL = '/Admin/LoadMyTeamTimesheet';
    
     var myDirectEmployees = false;
@@ -1271,6 +1277,7 @@ function loadTimeSheetSummary() {
         SetUserIDForAutoCompleteName(nameList, $("#Name").val(), "UserID");
         if (!ValidateAutocompleteName($("#Name").val(), $("#UserID").val())) {
             $("#divForTimesheet").html("");
+            $("#showalert").empty();
             Clearshowalert("Invalid Username. Please choose the Username from the List.", "alert alert-danger");
             return;
         }

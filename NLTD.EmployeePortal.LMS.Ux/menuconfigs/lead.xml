@@ -139,17 +139,5 @@
         </MenuItem>
       </level1item>
     </MenuItem>
-    <MenuItem>
-      <title>Reports</title>
-      <url>#</url>
-      <icon>fa fa-asterisk</icon>
-      <level1item>
-        <MenuItem>
-          <title>Late Report Count</title>
-          <url>Report/NoOfLateReportRpt</url>
-          <icon></icon>
-        </MenuItem>
-      </level1item>
-    </MenuItem>
   </menuitem>
 </Menu>
