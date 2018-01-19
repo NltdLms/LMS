@@ -553,6 +553,7 @@ function LoadTeamStatus() {
 
 function loadDaywiseLeaves() {
     $("#alert_placeholder").empty();
+    
     if ($("#OnlyReportedToMe").val() == undefined) {
         var showTeam = false;
     }

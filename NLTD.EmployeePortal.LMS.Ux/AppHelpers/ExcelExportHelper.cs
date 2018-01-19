@@ -119,7 +119,7 @@ namespace NLTD.EmployeePortal.LMS.Ux.AppHelpers
                     }
                 }
                 //custom code for this excel
-                using (ExcelRange col = workSheet.Cells[2, 5, 2 + dataTable.Rows.Count, 5])
+                using (ExcelRange col = workSheet.Cells[2, 4, 2 + dataTable.Rows.Count, 4])
                 {
                     col.Style.Numberformat.Format = "dd/MM/yyyy";
                     col.Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;

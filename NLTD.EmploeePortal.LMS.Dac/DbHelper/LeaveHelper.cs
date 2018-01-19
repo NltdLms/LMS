@@ -129,11 +129,11 @@ namespace NLTD.EmploeePortal.LMS.Dac.DbHelper
                 return dac.GetDaywiseLeaveDtl(FromDate, ToDate, IsLeaveOnly, LeadId, OnlyReportedToMe, paramUserId, reqUsr,DonotShowRejected);
             }
         }
-        public IList<MonthwiseLeavesCountModel> GetMonthwiseLeavesCount(Int32 year, Int64 LeadId, bool OnlyReportedToMe, string Name, string reqUsr) {
+        public IList<MonthwiseLeavesCountModel> GetMonthwiseLeavesCount(Int32 year, Int64 LeadId, bool OnlyReportedToMe, Int64? paramUserId, string reqUsr) {
             using (var dac = new LeaveDac())
             {
 
-                return dac.GetMonthwiseLeavesCount(year,  LeadId, OnlyReportedToMe, Name, reqUsr);
+                return dac.GetMonthwiseLeavesCount(year,  LeadId, OnlyReportedToMe, paramUserId, reqUsr);
             }
         }
         public IList<LeaveDtl> GetLeaveDetailCalculation(DateTime LeaveFrom, DateTime LeaveUpto, string LeaveFromTime, string LeaveUptoTime, Int64 UserId, Int64 LeaveTypText)
