@@ -335,7 +335,7 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
             }
             return PartialView("ManageLeaveDetailPartial", LeaveRequests);
         }
-        public ActionResult ViewLeaveHistory(bool OnlyReportedToMe, string FromDate,string ToDate, bool IsLeaveOnly,Int64 paramUserId, string RequestMenuUser)
+        public ActionResult ViewLeaveHistory(bool OnlyReportedToMe, string FromDate,string ToDate, bool IsLeaveOnly,Int64? paramUserId, string RequestMenuUser)
         {
             DateTime? startDateFormatted = null;
             DateTime? endDateFormatted = null;

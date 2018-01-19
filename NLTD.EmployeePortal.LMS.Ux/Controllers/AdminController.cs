@@ -137,7 +137,7 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
             qryMdl.OnlyReportedToMe = true;
             return View("MonthwiseLeaveCount", qryMdl);
         }
-        public ActionResult LoadMonthWiseLeaveCount(int Year, string reqUsr, Int64 paramUserId, bool OnlyReportedToMe)
+        public ActionResult LoadMonthWiseLeaveCount(int Year, string reqUsr, Int64? paramUserId, bool OnlyReportedToMe)
         {
             IList<MonthwiseLeavesCountModel> LeaveRequests = null;
            
@@ -201,7 +201,7 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
             mdl.DonotShowRejected = true;
             return View("DaywiseLeaveDateRangeView", mdl);
         }
-        public ActionResult loadDaywiseLeaves(Int64 paramUserId, string FromDate, string ToDate, bool IsLeaveOnly, bool OnlyReportedToMe, string reqUsr, bool DonotShowRejected)
+        public ActionResult loadDaywiseLeaves(Int64? paramUserId, string FromDate, string ToDate, bool IsLeaveOnly, bool OnlyReportedToMe, string reqUsr, bool DonotShowRejected)
         {
             DateTime? startDateFormatted = null;
             DateTime? endDateFormatted = null;
@@ -326,7 +326,7 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
             mdl.OnlyReportedToMe = true;
             return View("DatewisePermissions", mdl);
         }
-        public ActionResult GetPermissionDetail(Int64 paramUserId, string reqUsr, string startDate, string endDate, bool OnlyReportedToMe)
+        public ActionResult GetPermissionDetail(Int64? paramUserId, string reqUsr, string startDate, string endDate, bool OnlyReportedToMe)
         {
             IList<PermissionDetailsModel> LeaveRequests = null;
             DateTime? startDateFormatted = null;
