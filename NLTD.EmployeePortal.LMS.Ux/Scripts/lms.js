@@ -1514,12 +1514,14 @@ function GetEmployeeShiftDetails(FromDate, ToDate, Shift) {
  
     var UserId = ($("#RequestLevelPerson").val() == "My") ? 0: $("#UserID").val();   
 
-    if (UserId > 0) {
+    if ($("#RequestLevelPerson").val() != "My") {
         SetUserIDForAutoCompleteName(nameList, $("#Name").val(), "UserID");
         if (!ValidateAutocompleteName($("#Name").val(), $("#UserID").val())) {
             Clearshowalert("Please Choose a valid Username from the List. To Show all employee Clear the textbox.", "alert alert-danger");
             return;
         }
+
+        UserId = $("#UserID").val();
     }
 
     $("#alert_placeholder").empty();
