@@ -173,7 +173,7 @@ namespace NLTD.EmploeePortal.LMS.Dac
             }
             return lstSummary;
         }
-        public IList<EmployeeWiseLeaveSummaryModel> GetEmployeeWiseLeaveSumary(Int64 UserId, int Year, string reqUsr, string Name, bool OnlyReportedToMe)
+        public IList<EmployeeWiseLeaveSummaryModel> GetEmployeeWiseLeaveSumary(Int64 UserId, int Year, string reqUsr, Int64? paramUserId, bool OnlyReportedToMe)
         {
             IList<Int64> empList = GetEmployeesReporting(UserId);
             IList<EmployeeWiseLeaveSummaryModel> lstSummary = new List<EmployeeWiseLeaveSummaryModel>();
@@ -234,15 +234,14 @@ namespace NLTD.EmploeePortal.LMS.Dac
                             }
                         }
                     }
-                    if (Name != null)
+                    if (paramUserId != null && paramUserId != 0)
                     {
-                        if (Name.Trim() != "")
-                        {
+                       
                             if (lstSummary.Count > 0)
                             {
-                                lstSummary = lstSummary.Where(x => x.Name.ToUpper().Trim() == Name.ToUpper().Trim()).ToList();
+                                lstSummary = lstSummary.Where(x => x.UserId == paramUserId).ToList();
                             }
-                        }
+                        
                     }
 
                     lstSummary = lstSummary.OrderBy(x => x.Name).ToList();
@@ -763,15 +762,14 @@ namespace NLTD.EmploeePortal.LMS.Dac
                 {
                     LeaveItems = LeaveItems.Where(x => x.Status == "A").ToList();
                 }
-                if (qryMdl.Name != null)
+                if (qryMdl.SearchUserID != null && qryMdl.SearchUserID !=0)
                 {
-                    if (qryMdl.Name.Trim() != "")
-                    {
+                   
                         if (LeaveItems.Count > 0)
                         {
-                            LeaveItems = LeaveItems.Where(x => x.RequesterName.ToUpper().Trim() == qryMdl.Name.ToUpper().Trim()).ToList();
+                            LeaveItems = LeaveItems.Where(x => x.UserId == qryMdl.SearchUserID).ToList();
                         }
-                    }
+                    
                 }
                 LeaveItems = (from l in LeaveItems
                               join e in context.Employee on l.AppliedById equals e.UserId
@@ -1412,7 +1410,7 @@ namespace NLTD.EmploeePortal.LMS.Dac
             else
                 return false;
         }
-        public IList<DaywiseLeaveDtlModel> GetDaywiseLeaveDtl(DateTime? FromDate, DateTime? ToDate, bool IsLeaveOnly, Int64 LeadId, bool OnlyReportedToMe, string Name, string reqUsr, bool DonotShowRejected)
+        public IList<DaywiseLeaveDtlModel> GetDaywiseLeaveDtl(DateTime? FromDate, DateTime? ToDate, bool IsLeaveOnly, Int64 LeadId, bool OnlyReportedToMe, Int64? paramUserId, string reqUsr, bool DonotShowRejected)
         {
 
             IList<Int64> empList = GetEmployeesReporting(LeadId);
@@ -1489,15 +1487,14 @@ namespace NLTD.EmploeePortal.LMS.Dac
                         }
                     }
                 }
-                if (Name != null)
+                if (paramUserId != null && paramUserId != 0)
                 {
-                    if (Name.Trim() != "")
-                    {
+                    
                         if (retList.Count > 0)
                         {
-                            retList = retList.Where(x => x.Name.ToUpper().Trim() == Name.ToUpper().Trim()).ToList();
+                            retList = retList.Where(x => x.UserId == paramUserId).ToList();
                         }
-                    }
+                    
                 }
 
                 for (int i = 0; i < retList.Count; i++)
@@ -1611,7 +1608,7 @@ namespace NLTD.EmploeePortal.LMS.Dac
             }
             return lstDayOff;
         }
-        public IList<PermissionDetailsModel> GetPermissionDetail(string Name, string reqUsr, DateTime? startDate, DateTime? endDate, bool OnlyReportedToMe, Int64 LeadId)
+        public IList<PermissionDetailsModel> GetPermissionDetail(Int64? paramUserId, string reqUsr, DateTime? startDate, DateTime? endDate, bool OnlyReportedToMe, Int64 LeadId)
         {
             IList<PermissionDetailsModel> permissions = new List<PermissionDetailsModel>();
             IList<Int64> empList = GetEmployeesReporting(LeadId);
@@ -1678,13 +1675,12 @@ namespace NLTD.EmploeePortal.LMS.Dac
 
                 }
             }
-            if (Name != null)
+            if (paramUserId != null && paramUserId != 0)
             {
-                if (Name.Trim() != "")
-                {
+                
                     if (permissions.Count > 0)
-                        permissions = permissions.Where(x => x.Name.ToUpper().Trim() == Name.ToUpper().Trim()).ToList();
-                }
+                        permissions = permissions.Where(x => x.UserId == paramUserId).ToList();
+                
             }
             if (permissions != null)
             {

@@ -27,5 +27,7 @@ namespace NLTD.EmployeePortal.LMS.Common.QueryModel
         public string Name { get; set; }
 
         public string IsAuthorized { get; set; }
+
+        public Int64? SearchUserID { get; set; }
     }
 }

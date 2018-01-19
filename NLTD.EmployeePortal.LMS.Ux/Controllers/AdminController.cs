@@ -61,16 +61,13 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
             qryMdl.OnlyReportedToMe = true;
             return View("ViewEmployeeWiseLeaveSummary", qryMdl);
         }
-        public ActionResult loadYearwiseLeaveSummary(int Year, string reqUsr, string Name, bool OnlyReportedToMe)
+        public ActionResult loadYearwiseLeaveSummary(int Year, string reqUsr, Int64? paramUserId, bool OnlyReportedToMe)
         {
             IList<EmployeeWiseLeaveSummaryModel> LeaveRequests = null;
-            if (Name != "")
-            {
-                Name = Name.Replace("|", " ");
-            }
+            
             using (var client = new LeaveClient())
             {
-                LeaveRequests = client.GetEmployeeWiseLeaveSumary(UserId, Year, reqUsr, Name, OnlyReportedToMe);
+                LeaveRequests = client.GetEmployeeWiseLeaveSumary(UserId, Year, reqUsr, paramUserId, OnlyReportedToMe);
             }
             return PartialView("YearwiseSummaryPartial", LeaveRequests);
         }
@@ -79,7 +76,7 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
             IList<EmployeeWiseLeaveSummaryModel> LeaveRequests = null;
             using (var client = new LeaveClient())
             {
-                LeaveRequests = client.GetEmployeeWiseLeaveSumary(UserId, data.Year, RequestLevelPerson, data.Name, data.OnlyReportedToMe);
+                LeaveRequests = client.GetEmployeeWiseLeaveSumary(UserId, data.Year, RequestLevelPerson, data.SearchUserID, data.OnlyReportedToMe);
             }
             List<EmployeeWiseLeaveSummaryModel> excelData = new List<EmployeeWiseLeaveSummaryModel>();
             excelData = LeaveRequests.ToList();
@@ -207,14 +204,11 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
             mdl.DonotShowRejected = true;
             return View("DaywiseLeaveDateRangeView", mdl);
         }
-        public ActionResult loadDaywiseLeaves(string Name, string FromDate, string ToDate, bool IsLeaveOnly, bool OnlyReportedToMe, string reqUsr, bool DonotShowRejected)
+        public ActionResult loadDaywiseLeaves(Int64 paramUserId, string FromDate, string ToDate, bool IsLeaveOnly, bool OnlyReportedToMe, string reqUsr, bool DonotShowRejected)
         {
             DateTime? startDateFormatted = null;
             DateTime? endDateFormatted = null;
-            if (Name != "")
-            {
-                Name = Name.Replace("|", " ");
-            }
+            
             if (FromDate != null)
             {
                 if (FromDate.Trim() != "")
@@ -231,7 +225,7 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
             IList<DaywiseLeaveDtlModel> LeaveRequests = null;
             using (var client = new LeaveClient())
             {
-                LeaveRequests = client.GetDaywiseLeaveDtl(startDateFormatted, endDateFormatted, IsLeaveOnly, UserId, OnlyReportedToMe, Name, reqUsr, DonotShowRejected);
+                LeaveRequests = client.GetDaywiseLeaveDtl(startDateFormatted, endDateFormatted, IsLeaveOnly, UserId, OnlyReportedToMe, paramUserId, reqUsr, DonotShowRejected);
             }
             for (int i = 0; i < LeaveRequests.Count; i++)
             {
@@ -282,7 +276,7 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
             }
             using (var client = new LeaveClient())
             {
-                LeaveRequests = client.GetDaywiseLeaveDtl(startDateFormatted, endDateFormatted, data.IsLeaveOnly, UserId, data.OnlyReportedToMe, data.Name, RequestLevelPerson, data.DonotShowRejected);
+                LeaveRequests = client.GetDaywiseLeaveDtl(startDateFormatted, endDateFormatted, data.IsLeaveOnly, UserId, data.OnlyReportedToMe, data.SearchUserID, RequestLevelPerson, data.DonotShowRejected);
             }
             List<DaywiseLeaveDtlModel> excelData = new List<DaywiseLeaveDtlModel>();
             excelData = LeaveRequests.ToList();
@@ -335,15 +329,12 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
             mdl.OnlyReportedToMe = true;
             return View("DatewisePermissions", mdl);
         }
-        public ActionResult GetPermissionDetail(string Name, string reqUsr, string startDate, string endDate, bool OnlyReportedToMe)
+        public ActionResult GetPermissionDetail(Int64 paramUserId, string reqUsr, string startDate, string endDate, bool OnlyReportedToMe)
         {
             IList<PermissionDetailsModel> LeaveRequests = null;
             DateTime? startDateFormatted = null;
             DateTime? endDateFormatted = null;
-            if (Name != "")
-            {
-                Name = Name.Replace("|", " ");
-            }
+            
             if (startDate != "")
             {
                 try
@@ -363,7 +354,7 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
             }
             using (var client = new LeaveClient())
             {
-                LeaveRequests = client.GetPermissionDetail(Name, reqUsr, startDateFormatted, endDateFormatted, OnlyReportedToMe, UserId);
+                LeaveRequests = client.GetPermissionDetail(paramUserId, reqUsr, startDateFormatted, endDateFormatted, OnlyReportedToMe, UserId);
             }
             for (int i = 0; i < LeaveRequests.Count; i++)
             {
@@ -418,7 +409,7 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
             }
             using (var client = new LeaveClient())
             {
-                LeaveRequests = client.GetPermissionDetail(qryMdl.Name, RequestLevelPerson, startDateFormatted, endDateFormatted, qryMdl.OnlyReportedToMe, UserId);
+                LeaveRequests = client.GetPermissionDetail(qryMdl.SearchUserID, RequestLevelPerson, startDateFormatted, endDateFormatted, qryMdl.OnlyReportedToMe, UserId);
             }
             List<PermissionDetailsModel> excelData = new List<PermissionDetailsModel>();
             excelData = LeaveRequests.ToList();

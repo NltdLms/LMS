@@ -29,5 +29,7 @@ namespace NLTD.EmployeePortal.LMS.Common.QueryModel
 
         public string ErrorMsg { get; set; }
 
+        public Int64? SearchUserID { get; set; }
+
     }
 }
