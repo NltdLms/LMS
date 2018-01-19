@@ -80,11 +80,11 @@ namespace NLTD.EmploeePortal.LMS.Dac.DbHelper
                 return dac.GetActiveEmpList(OfficeId, exceptUserId);
             }
         }
-        public IList<ViewEmployeeProfileModel> GetTeamProfiles(Int64 userId, bool onlyReportedToMe, string name, string requestMenuUser, bool hideInactiveEmp)
+        public IList<ViewEmployeeProfileModel> GetTeamProfiles(Int64 userId, bool onlyReportedToMe, Int64? paramUserId, string requestMenuUser, bool hideInactiveEmp)
         {
             using (var dac = new EmployeeDac())
             {
-                return dac.GetTeamProfiles(userId, onlyReportedToMe, name, requestMenuUser, hideInactiveEmp);
+                return dac.GetTeamProfiles(userId, onlyReportedToMe, paramUserId, requestMenuUser, hideInactiveEmp);
             }
         }
         public string UpdateEmployeeProfile(EmployeeProfile profile, Int64 ModifiedBy)

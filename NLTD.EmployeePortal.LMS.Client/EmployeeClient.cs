@@ -90,11 +90,11 @@ namespace NLTD.EmployeePortal.LMS.Client
             }
         }
 
-        public IList<ViewEmployeeProfileModel> GetTeamProfiles(Int64 userId, bool onlyReportedToMe, string name, string requestMenuUser,bool hideInactiveEmp)
+        public IList<ViewEmployeeProfileModel> GetTeamProfiles(Int64 userId, bool onlyReportedToMe, Int64? paramUserId, string requestMenuUser,bool hideInactiveEmp)
         {
             using (IEmployeeHelper helper = new EmployeeHelper())
             {
-                return helper.GetTeamProfiles(userId, onlyReportedToMe, name,  requestMenuUser, hideInactiveEmp);
+                return helper.GetTeamProfiles(userId, onlyReportedToMe, paramUserId,  requestMenuUser, hideInactiveEmp);
             }
         }
 

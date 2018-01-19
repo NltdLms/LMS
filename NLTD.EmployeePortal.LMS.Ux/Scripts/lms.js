@@ -286,16 +286,9 @@ function loadTeamProfiles() {
         var hideInactive = $("#HideInactiveEmp").prop('checked');
     }
 
-    if ($("#Name").val() == undefined) {
-        var name = "";
-    }
-    else {
-        if ($("#Name").val() != "") {
-            var name = $("#Name").val().replace(/ /g, "|");
-        }
-        else {
-            name = "";
-        }
+    if (!ValidateAutocompleteName($("#Name").val(), $("#SearchUserID").val())) {
+        Clearshowalert("Please Choose a valid Username from the List. To Show all employee Clear the textbox.", "alert alert-danger");
+        return;
     }
 
     $.ajax({
@@ -307,7 +300,7 @@ function loadTeamProfiles() {
         url: "/Profile/TeamProfileData",
         data: {
             "onlyReportedToMe": showTeam,
-            "name": name,
+            "paramUserId": $("#SearchUserID").val(),
             "requestMenuUser": $("#RequestLevelPerson").val(),
             "hideInactiveEmp": hideInactive
 

@@ -223,7 +223,7 @@ namespace NLTD.EmploeePortal.LMS.Dac.Dac
             }
             return result;
         }
-        public IList<ViewEmployeeProfileModel> GetTeamProfiles(Int64 userId, bool onlyReportedToMe, string name, string requestMenuUser, bool hideInactiveEmp)
+        public IList<ViewEmployeeProfileModel> GetTeamProfiles(Int64 userId, bool onlyReportedToMe, Int64? paramUserId, string requestMenuUser, bool hideInactiveEmp)
         {
             IList<ViewEmployeeProfileModel> retModel = new List<ViewEmployeeProfileModel>();
             IList<Int64> empList = GetEmployeesReporting(userId);
@@ -280,15 +280,13 @@ namespace NLTD.EmploeePortal.LMS.Dac.Dac
                         }
                     }
 
-                    if (name != null)
+                    if (paramUserId != null && paramUserId != 0)
                     {
-                        if (name.Trim() != "")
-                        {
-                            if (ids.Count > 0)
+                        if (ids.Count > 0)
                             {
-                                ids = ids.Where(x => x.name.ToUpper().Trim() == name.ToUpper().Trim()).ToList();
+                                ids = ids.Where(x => x.userId == paramUserId).ToList();
                             }
-                        }
+                        
                     }
 
                     foreach (var memId in ids)
