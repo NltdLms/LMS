@@ -137,16 +137,13 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
             qryMdl.OnlyReportedToMe = true;
             return View("MonthwiseLeaveCount", qryMdl);
         }
-        public ActionResult LoadMonthWiseLeaveCount(int Year, string reqUsr, string Name, bool OnlyReportedToMe)
+        public ActionResult LoadMonthWiseLeaveCount(int Year, string reqUsr, Int64 paramUserId, bool OnlyReportedToMe)
         {
             IList<MonthwiseLeavesCountModel> LeaveRequests = null;
-            if (Name != "")
-            {
-                Name = Name.Replace("|", " ");
-            }
+           
             using (var client = new LeaveClient())
             {
-                LeaveRequests = client.GetMonthwiseLeavesCount(Year, UserId, OnlyReportedToMe, Name, reqUsr);
+                LeaveRequests = client.GetMonthwiseLeavesCount(Year, UserId, OnlyReportedToMe, paramUserId, reqUsr);
             }
             return PartialView("MonthwiseLeaveCountPartial", LeaveRequests);
         }
@@ -156,7 +153,7 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
             IList<MonthwiseLeavesCountModel> LeaveRequests = null;
             using (var client = new LeaveClient())
             {
-                LeaveRequests = client.GetMonthwiseLeavesCount(data.Year, UserId, data.OnlyReportedToMe, data.Name, RequestLevelPerson);
+                LeaveRequests = client.GetMonthwiseLeavesCount(data.Year, UserId, data.OnlyReportedToMe, data.SearchUserID, RequestLevelPerson);
 
             }
             List<MonthwiseLeavesCountModel> excelData = new List<MonthwiseLeavesCountModel>();

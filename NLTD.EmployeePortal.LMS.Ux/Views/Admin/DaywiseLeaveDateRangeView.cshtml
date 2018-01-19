@@ -117,7 +117,7 @@
     @Html.Hidden("RequestLevelPerson", (string)ViewBag.RequestLevelPerson)
     @Html.HiddenFor(x => x.FromDate)
     @Html.HiddenFor(x => x.ToDate)
-    @Html.HiddenFor(x => x.SearchUserID)
+    
     <div class="row">
         <div class="col-sm-12">
             <div class="box box-primary">
@@ -126,7 +126,7 @@
                 </div>
                 <div class="box-body">
                     <form id='your-range-form' action='@Url.Action("ExportToExcel", new { RequestLevelPerson = (string)ViewBag.RequestLevelPerson })' method='post'>
-
+                        @Html.HiddenFor(x => x.SearchUserID)
                         @{
                             if ((string)ViewBag.RequestLevelPerson == "My")
                             {
