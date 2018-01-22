@@ -575,7 +575,7 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
             }
             if(TimeSheetQueryModelObj.ToDate>=DateTime.Now)
             {
-                TimeSheetQueryModelObj.ToDate = DateTime.Now;
+                TimeSheetQueryModelObj.ToDate = currentDate;
             }
             List<TimeSheetModel> timeSheetModelList = new List<TimeSheetModel>();
             if(requestLevelPerson=="My")
