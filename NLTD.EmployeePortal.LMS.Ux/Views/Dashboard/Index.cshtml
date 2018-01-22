@@ -87,28 +87,28 @@
             //Applicable only for Spervisors.
             if (Model.IsLMSApprover || Model.UserRole == "HR")
             {
-                    <div class="row">
-                        <div class="col-sm-12">
-                            <div class="box box-danger">
-                                <div class="box-header with-border">
-                                    <h3 class="box-title">Team Status - Today</h3>
-                                </div>
-                                <div class="box-body">
-                                    <div id="divTeamStatus">
-                                        <div id="divTeamStatusLoading" style="margin: 0px; padding: 0px; right: 0px;
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="box box-danger">
+                            <div class="box-header with-border">
+                                <h3 class="box-title">Team Status - Today</h3>
+                            </div>
+                            <div class="box-body">
+                                <div id="divTeamStatus">
+                                    <div id="divTeamStatusLoading" style="margin: 0px; padding: 0px; right: 0px;
                                                                                                    top: 0px; width: 100%; background-color: #666666;;
                                                                                                    opacity: .6; filter: alpha(opacity=70);">
-                                            <p style="position:relative; color: White; text-align: center; padding: 20px;">
-                                                Loading, please wait...
-                                                <img src="~/images/ajax-loading.gif">
-                                            </p>
-                                        </div>
+                                        <p style="position:relative; color: White; text-align: center; padding: 20px;">
+                                            Loading, please wait...
+                                            <img src="~/images/ajax-loading.gif">
+                                        </p>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                }
+                </div>
+            }
         }
 
 
@@ -134,11 +134,20 @@
 
 @section readyscript{
     <script>
-        $("document").ready(function() {
-
+        
+        $("document").ready(function () {
+            
             LoadDashboardCalender();
             loadPendingCount();
             LoadTeamStatus();
+            //cancel the long proces ajax call.
+            $(window).bind('beforeunload', function () {
+                if (ajaxVar) {
+                    ajaxVar.abort();
+                }
+            });
+
         });
+
     </script>
 }
