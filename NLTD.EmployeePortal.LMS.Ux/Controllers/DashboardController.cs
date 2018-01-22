@@ -5,9 +5,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
+using System.Web.SessionState;
 
 namespace NLTD.EmployeePortal.LMS.Ux.Controllers
 {
+    [SessionState(SessionStateBehavior.ReadOnly)]
     public class DashboardController : BaseController
     {
         public ActionResult Index()

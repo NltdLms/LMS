@@ -532,7 +532,7 @@ function LoadTeamStatus() {
 
         //var htmlContent = "<center><img src=\"/images/ajax-loading.gif\" /></center>";
         //$("#divTeamStatus").html(htmlContent);
-        ajaxVar = $.ajax({
+        $.ajax({
             method: "GET",
             url: '/DashBoard/LoadTeamStatus',
             //cache: false,
@@ -550,7 +550,7 @@ function LoadTeamStatus() {
                 });
             },
             complete: function () {
-                ajaxVar = false;
+                
             },
             error: function () {
 
