@@ -11,6 +11,7 @@
         border-radius: 0;
         box-shadow: none;
         border-color: #EEEEEE;
+        font-weight:bold;
     }
 
     .panel-default > .panel-heading {
@@ -19,6 +20,7 @@
         color: #FFFFFF;
         background-color: #4894B3;
         border-color: #EEEEEE;
+        font-weight: bold;
     }
 
     .panel-title {
@@ -485,59 +487,69 @@ else
 {
     <tr class="weeklytotal">
         <td>
-            @Html.DisplayName("Weekly Hours")
+          @Html.DisplayName("Weekly hours")
+        </td>
+        <td></td>
+        <td>
+          
+        </td>
+        <td></td>
+        <td>
+          
+        </td>
+        <td>
             @Html.DisplayName(@GetWeeklyWorkingHours(TimeSheetConsolidateObj.weeklyHours))
+            
         </td>
-        <td></td>
-        <td>
-            @Html.DisplayName("No of Late")
-            @Html.DisplayName(Convert.ToString(TimeSheetConsolidateObj.weeklyLateCount))
-        </td>
-        <td></td>
-        <td>
-            @Html.DisplayName("No Of Early")
-            @Html.DisplayName(Convert.ToString(TimeSheetConsolidateObj.weeklyEarlyCount))
-        </td>
-        <td></td>
         <td>
             @Html.DisplayName("No of Permission")
             @Html.DisplayName(Convert.ToString(TimeSheetConsolidateObj.weeklyPermissionCount))
         </td>
-        <td></td>
+        <td>@Html.DisplayName("Leave")
+        @Html.DisplayName(Convert.ToString(TimeSheetConsolidateObj.weeklyLeaveCount))</td>
         <td>
-            @Html.DisplayName("No of Leave")
-            @Html.DisplayName(Convert.ToString(TimeSheetConsolidateObj.weeklyLeaveCount))
+            @Html.DisplayName("Late In")
+            @Html.DisplayName(Convert.ToString(TimeSheetConsolidateObj.weeklyLateCount))
+           
         </td>
-        <td></td>
+        <td>
+            @Html.DisplayName("Early out")
+            @Html.DisplayName(Convert.ToString(TimeSheetConsolidateObj.weeklyEarlyCount))
+        </td>
     </tr>
 }
 @helper GetMonthlyHoursHTML(TimeSheetConsolidate TimeSheetConsolidateObj)
 {
+
     <tr class="monthlytotal">
         <td>
-            @Html.DisplayName("Monthly Hours")
+            @Html.DisplayName("Monthly hours")
+        </td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td>
             @Html.DisplayName(@GetWeeklyWorkingHours(TimeSheetConsolidateObj.monthlyHours))
+
         </td>
-        <td></td>
-        <td>
-            @Html.DisplayName("No of Late")
-            @Html.DisplayName(Convert.ToString(TimeSheetConsolidateObj.monthlyLateCount))
-        </td>
-        <td></td>
-        <td>
-            @Html.DisplayName("No Of Early")
-            @Html.DisplayName(Convert.ToString(TimeSheetConsolidateObj.monthlyEarlyCount))
-        </td>
-        <td></td>
         <td>
             @Html.DisplayName("No of Permission")
             @Html.DisplayName(Convert.ToString(TimeSheetConsolidateObj.monthlyPermissionCount))
         </td>
-        <td></td>
         <td>
-            @Html.DisplayName("No of Leave")
-            @Html.DisplayName(Convert.ToString(TimeSheetConsolidateObj.monthlyLeaveCount))
-        </td>
-        <td></td>
-    </tr>
+            @Html.DisplayName("Leave")
+        @Html.DisplayName(Convert.ToString(TimeSheetConsolidateObj.monthlyLeaveCount))
+    </td>
+    <td>
+        @Html.DisplayName("Late In")
+        @Html.DisplayName(Convert.ToString(TimeSheetConsolidateObj.monthlyLateCount))
+
+    </td>
+    <td>
+        @Html.DisplayName("Early out")
+        @Html.DisplayName(Convert.ToString(TimeSheetConsolidateObj.monthlyEarlyCount))
+    </td>
+</tr>
+ 
 }
