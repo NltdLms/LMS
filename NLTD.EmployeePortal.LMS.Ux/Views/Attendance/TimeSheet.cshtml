@@ -30,7 +30,7 @@
 @section scripts
 {
     <script src="~/Scripts/jquery-2.2.4.js"></script>
-    <script src="~/Scripts/lms.js?v=1.03"></script>
+    <script src="~/Scripts/lms.js?v=1.04"></script>
     <script type="text/javascript" src="~/Scripts/bootstrap.js"></script>
     <script src="~/Scripts/bootstrap-datetimepicker.js"></script>
     <link href="~/Content/bootstrap-datetimepicker.css" rel="stylesheet" />
@@ -145,12 +145,15 @@
 
         function CheckAutoCompleteName()
         {
+            $("#alert_placeholder").empty();
             if ($("#UserID").val() == "") {
                 SetUserIDForAutoCompleteName(nameList, $("#Name").val(), "UserID");
                 if (!ValidateAutocompleteName($("#Name").val(), $("#UserID").val())) {
+                    Clearshowalert("Please choose a username from List", "alert alert-danger");
                     return false;
                 }
             }
+            
             return true;
         }
 

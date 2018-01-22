@@ -20,7 +20,7 @@ namespace NLTD.EmployeePortal.LMS.Repository
         long GetUserId(string name);
 
         string ReportingToName(Int64 userId);
-        IList<ViewEmployeeProfileModel> GetTeamProfiles(Int64 userId, bool onlyReportedToMe, string name, string requestMenuUser, bool hideInactiveEmp);
+        IList<ViewEmployeeProfileModel> GetTeamProfiles(Int64 userId, bool onlyReportedToMe, Int64? paramUserId, string requestMenuUser, bool hideInactiveEmp);
 
     }
 }

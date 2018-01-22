@@ -350,16 +350,13 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
             mdl.HideInactiveEmp = true;
             return View("SearchTeamLmsProfile", mdl);
         }
-        public ActionResult TeamProfileData(bool onlyReportedToMe, string name, string requestMenuUser, bool hideInactiveEmp)
+        public ActionResult TeamProfileData(bool onlyReportedToMe, Int64? paramUserId, string requestMenuUser, bool hideInactiveEmp)
         {
             IList<ViewEmployeeProfileModel> lstProfile = new List<ViewEmployeeProfileModel>();
-            if (name != "")
-            {
-                name = name.Replace("|", " ");
-            }
+           
             using (var client = new EmployeeClient())
             {
-                lstProfile = client.GetTeamProfiles(this.UserId, onlyReportedToMe, name, requestMenuUser, hideInactiveEmp);
+                lstProfile = client.GetTeamProfiles(this.UserId, onlyReportedToMe, paramUserId, requestMenuUser, hideInactiveEmp);
             }
 
             return PartialView("EmployeeLmsProfileNamesPartial", lstProfile);

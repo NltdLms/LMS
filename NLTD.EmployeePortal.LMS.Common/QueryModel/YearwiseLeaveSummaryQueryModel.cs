@@ -15,5 +15,7 @@ namespace NLTD.EmployeePortal.LMS.Common.QueryModel
         public int Year { get; set; }
 
         public bool OnlyReportedToMe { get; set; }
+
+        public Int64? SearchUserID { get; set; }
     }
 }

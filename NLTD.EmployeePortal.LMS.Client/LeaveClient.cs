@@ -109,11 +109,11 @@ namespace NLTD.EmployeePortal.LMS.Client
                 return helper.GetHolidaysDetails(UserId, holYear, ref previousYear, ref nextYear);
             }
         }
-        public IList<EmployeeWiseLeaveSummaryModel> GetEmployeeWiseLeaveSumary(Int64 UserId, int Year, string reqUsr,string Name, bool OnlyReportedToMe)
+        public IList<EmployeeWiseLeaveSummaryModel> GetEmployeeWiseLeaveSumary(Int64 UserId, int Year, string reqUsr,Int64? paramUserId, bool OnlyReportedToMe)
         {
             using (ILeaveHelper helper = new LeaveHelper())
             {
-                return helper.GetEmployeeWiseLeaveSumary(UserId, Year,  reqUsr, Name,OnlyReportedToMe);
+                return helper.GetEmployeeWiseLeaveSumary(UserId, Year,  reqUsr, paramUserId, OnlyReportedToMe);
             }
         }
         public int GetHolidayCount(DateTime startDate, DateTime endDate, long UserId)
@@ -123,18 +123,18 @@ namespace NLTD.EmployeePortal.LMS.Client
                 return helper.GetHolidayCount(startDate, endDate, UserId);
             }
         }
-        public IList<DaywiseLeaveDtlModel> GetDaywiseLeaveDtl(DateTime? FromDate, DateTime? ToDate, bool IsLeaveOnly, Int64 LeadId, bool OnlyReportedToMe,string Name, string reqUsr, bool DonotShowRejected)
+        public IList<DaywiseLeaveDtlModel> GetDaywiseLeaveDtl(DateTime? FromDate, DateTime? ToDate, bool IsLeaveOnly, Int64 LeadId, bool OnlyReportedToMe,Int64? paramUserId, string reqUsr, bool DonotShowRejected)
         {
             using (ILeaveHelper helper = new LeaveHelper())
             {
-                return helper.GetDaywiseLeaveDtl(FromDate, ToDate, IsLeaveOnly, LeadId, OnlyReportedToMe,Name, reqUsr,DonotShowRejected);
+                return helper.GetDaywiseLeaveDtl(FromDate, ToDate, IsLeaveOnly, LeadId, OnlyReportedToMe, paramUserId, reqUsr,DonotShowRejected);
             }
         }
-        public IList<MonthwiseLeavesCountModel> GetMonthwiseLeavesCount(Int32 year, Int64 LeadId, bool OnlyReportedToMe, string Name, string reqUsr)
+        public IList<MonthwiseLeavesCountModel> GetMonthwiseLeavesCount(Int32 year, Int64 LeadId, bool OnlyReportedToMe, Int64? paramUserId, string reqUsr)
         {
             using (ILeaveHelper helper = new LeaveHelper())
             {
-                return helper.GetMonthwiseLeavesCount(year, LeadId, OnlyReportedToMe, Name, reqUsr);
+                return helper.GetMonthwiseLeavesCount(year, LeadId, OnlyReportedToMe, paramUserId, reqUsr);
             }
         }
         public IList<LeaveDtl> GetLeaveDetailCalculation(DateTime LeaveFrom, DateTime LeaveUpto, string LeaveFromTime, string LeaveUptoTime, Int64 UserId, Int64 LeaveTypText)
@@ -158,11 +158,11 @@ namespace NLTD.EmployeePortal.LMS.Client
                 return helper.ReturnWeekOff(UserId);
             }
         }
-        public IList<PermissionDetailsModel> GetPermissionDetail(string Name, string reqUsr, DateTime? startDate, DateTime? endDate, bool OnlyReportedToMe, Int64 LeadId)
+        public IList<PermissionDetailsModel> GetPermissionDetail(Int64? paramUserId, string reqUsr, DateTime? startDate, DateTime? endDate, bool OnlyReportedToMe, Int64 LeadId)
         {
             using (ILeaveHelper helper = new LeaveHelper())
             {
-                return helper.GetPermissionDetail(Name, reqUsr, startDate, endDate, OnlyReportedToMe, LeadId);
+                return helper.GetPermissionDetail(paramUserId, reqUsr, startDate, endDate, OnlyReportedToMe, LeadId);
             }
         }
         public IList<DropDownItem> GetWeekOffs(long UserId)

@@ -172,12 +172,12 @@ namespace NLTD.EmploeePortal.LMS.Dac.Dac
 
                         if (TimeSheetModelObj.InTime.TimeOfDay > ShiftQueryModelList[i].ShiftFromtime)
                         {
-                            TimeSheetModelObj.LateEntry = TimeSheetModelObj.InTime.TimeOfDay - ShiftQueryModelList[i].ShiftFromtime;
+                            TimeSheetModelObj.LateIn = TimeSheetModelObj.InTime.TimeOfDay - ShiftQueryModelList[i].ShiftFromtime;
                         }
 
                         if (ShiftQueryModelList[i].ShiftTotime > TimeSheetModelObj.OutTime.TimeOfDay)
                         {
-                            TimeSheetModelObj.EarlyLeave = ShiftQueryModelList[i].ShiftTotime-TimeSheetModelObj.OutTime.TimeOfDay;
+                            TimeSheetModelObj.EarlyOut = ShiftQueryModelList[i].ShiftTotime-TimeSheetModelObj.OutTime.TimeOfDay;
                         }
 
                     }

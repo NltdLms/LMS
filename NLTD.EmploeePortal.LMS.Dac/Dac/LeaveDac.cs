@@ -173,7 +173,7 @@ namespace NLTD.EmploeePortal.LMS.Dac
             }
             return lstSummary;
         }
-        public IList<EmployeeWiseLeaveSummaryModel> GetEmployeeWiseLeaveSumary(Int64 UserId, int Year, string reqUsr, string Name, bool OnlyReportedToMe)
+        public IList<EmployeeWiseLeaveSummaryModel> GetEmployeeWiseLeaveSumary(Int64 UserId, int Year, string reqUsr, Int64? paramUserId, bool OnlyReportedToMe)
         {
             IList<Int64> empList = GetEmployeesReporting(UserId);
             IList<EmployeeWiseLeaveSummaryModel> lstSummary = new List<EmployeeWiseLeaveSummaryModel>();
@@ -234,15 +234,14 @@ namespace NLTD.EmploeePortal.LMS.Dac
                             }
                         }
                     }
-                    if (Name != null)
+                    if (paramUserId != null && paramUserId != 0)
                     {
-                        if (Name.Trim() != "")
-                        {
+                       
                             if (lstSummary.Count > 0)
                             {
-                                lstSummary = lstSummary.Where(x => x.Name.ToUpper().Trim() == Name.ToUpper().Trim()).ToList();
+                                lstSummary = lstSummary.Where(x => x.UserId == paramUserId).ToList();
                             }
-                        }
+                        
                     }
 
                     lstSummary = lstSummary.OrderBy(x => x.Name).ToList();
@@ -763,15 +762,14 @@ namespace NLTD.EmploeePortal.LMS.Dac
                 {
                     LeaveItems = LeaveItems.Where(x => x.Status == "A").ToList();
                 }
-                if (qryMdl.Name != null)
+                if (qryMdl.SearchUserID != null && qryMdl.SearchUserID !=0)
                 {
-                    if (qryMdl.Name.Trim() != "")
-                    {
+                   
                         if (LeaveItems.Count > 0)
                         {
-                            LeaveItems = LeaveItems.Where(x => x.RequesterName.ToUpper().Trim() == qryMdl.Name.ToUpper().Trim()).ToList();
+                            LeaveItems = LeaveItems.Where(x => x.UserId == qryMdl.SearchUserID).ToList();
                         }
-                    }
+                    
                 }
                 LeaveItems = (from l in LeaveItems
                               join e in context.Employee on l.AppliedById equals e.UserId
@@ -1412,7 +1410,7 @@ namespace NLTD.EmploeePortal.LMS.Dac
             else
                 return false;
         }
-        public IList<DaywiseLeaveDtlModel> GetDaywiseLeaveDtl(DateTime? FromDate, DateTime? ToDate, bool IsLeaveOnly, Int64 LeadId, bool OnlyReportedToMe, string Name, string reqUsr, bool DonotShowRejected)
+        public IList<DaywiseLeaveDtlModel> GetDaywiseLeaveDtl(DateTime? FromDate, DateTime? ToDate, bool IsLeaveOnly, Int64 LeadId, bool OnlyReportedToMe, Int64? paramUserId, string reqUsr, bool DonotShowRejected)
         {
 
             IList<Int64> empList = GetEmployeesReporting(LeadId);
@@ -1489,15 +1487,14 @@ namespace NLTD.EmploeePortal.LMS.Dac
                         }
                     }
                 }
-                if (Name != null)
+                if (paramUserId != null && paramUserId != 0)
                 {
-                    if (Name.Trim() != "")
-                    {
+                    
                         if (retList.Count > 0)
                         {
-                            retList = retList.Where(x => x.Name.ToUpper().Trim() == Name.ToUpper().Trim()).ToList();
+                            retList = retList.Where(x => x.UserId == paramUserId).ToList();
                         }
-                    }
+                    
                 }
 
                 for (int i = 0; i < retList.Count; i++)
@@ -1611,7 +1608,7 @@ namespace NLTD.EmploeePortal.LMS.Dac
             }
             return lstDayOff;
         }
-        public IList<PermissionDetailsModel> GetPermissionDetail(string Name, string reqUsr, DateTime? startDate, DateTime? endDate, bool OnlyReportedToMe, Int64 LeadId)
+        public IList<PermissionDetailsModel> GetPermissionDetail(Int64? paramUserId, string reqUsr, DateTime? startDate, DateTime? endDate, bool OnlyReportedToMe, Int64 LeadId)
         {
             IList<PermissionDetailsModel> permissions = new List<PermissionDetailsModel>();
             IList<Int64> empList = GetEmployeesReporting(LeadId);
@@ -1678,13 +1675,12 @@ namespace NLTD.EmploeePortal.LMS.Dac
 
                 }
             }
-            if (Name != null)
+            if (paramUserId != null && paramUserId != 0)
             {
-                if (Name.Trim() != "")
-                {
+                
                     if (permissions.Count > 0)
-                        permissions = permissions.Where(x => x.Name.ToUpper().Trim() == Name.ToUpper().Trim()).ToList();
-                }
+                        permissions = permissions.Where(x => x.UserId == paramUserId).ToList();
+                
             }
             if (permissions != null)
             {
@@ -1918,7 +1914,7 @@ namespace NLTD.EmploeePortal.LMS.Dac
 
             return lstDtl;
         }
-        public IList<MonthwiseLeavesCountModel> GetMonthwiseLeavesCount(Int32 year, Int64 LeadId, bool OnlyReportedToMe, string Name, string reqUsr)
+        public IList<MonthwiseLeavesCountModel> GetMonthwiseLeavesCount(Int32 year, Int64 LeadId, bool OnlyReportedToMe, Int64? paramUserId, string reqUsr)
         {
             IList<Int64> empList = GetEmployeesReporting(LeadId);
             IList<MonthwiseLeavesCountModel> lstMdl = new List<MonthwiseLeavesCountModel>();
@@ -1977,30 +1973,43 @@ namespace NLTD.EmploeePortal.LMS.Dac
                         }
                     }
                 }
-                if (Name != null)
+
+                IList<MonthwiseCountEmp> newList = new List<MonthwiseCountEmp>();
+                
+                if (paramUserId != null && paramUserId != 0)
                 {
-                    if (Name.Trim() != "")
+                    if (retList.Count > 0)
                     {
-                        if (retList.Count > 0)
-                        {
-                            retList = retList.Where(x => x.Name.ToUpper().Trim() == Name.ToUpper().Trim()).ToList();
-                        }
+                        retList = retList.Where(x => x.UserId == paramUserId).ToList();
+
+                        newList = retList.GroupBy(x => new { x.EmpId, x.Name, x.LeaveType, x.LeaveDate.Month })
+                             .Select(y => new MonthwiseCountEmp
+                             {
+                                 EmpId = y.Key.EmpId,
+                                 Name = y.Key.Name,
+                                 LeaveType = y.Key.LeaveType,
+                                 Month = y.Key.Month,
+                                 Duration = y.Sum(x => x.Duration)
+                             }
+                             ).ToList();
                     }
+
+                    
                 }
-
-                var newList = retList.GroupBy(x => new { x.EmpId, x.Name, x.LeaveType, x.LeaveDate.Month })
-                    .Select(y => new MonthwiseCountEmp
-                    {
-                        EmpId = y.Key.EmpId,
-                        Name = y.Key.Name,
-                        LeaveType = y.Key.LeaveType,
-                        Month = y.Key.Month,
-                        Duration = y.Sum(x => x.Duration)
-                    }
-                    ).ToList();
-
-                if (Name == null || Name.Trim() == "")
+                else
                 {
+
+                    newList = retList.GroupBy(x => new { x.EmpId, x.Name, x.LeaveType, x.LeaveDate.Month })
+                 .Select(y => new MonthwiseCountEmp
+                 {
+                     EmpId = y.Key.EmpId,
+                     Name = y.Key.Name,
+                     LeaveType = y.Key.LeaveType,
+                     Month = y.Key.Month,
+                     Duration = y.Sum(x => x.Duration)
+                 }
+                 ).ToList();
+
                     MonthwiseCountEmp emp;
                     var leadinfo = (from em in context.Employee
                                     join role in context.EmployeeRole on em.EmployeeRoleId equals role.RoleId
@@ -2063,75 +2072,78 @@ namespace NLTD.EmploeePortal.LMS.Dac
                     }
 
                 }
-                var empIds = newList.GroupBy(x => new { x.EmpId }).Select(y => y.First()).ToList();
-                MonthwiseLeavesCountModel mdl;
-
-                foreach (var item in empIds)
+                if (newList.Count > 0)
                 {
-                    mdl = new MonthwiseLeavesCountModel();
-                    mdl.EmpId = item.EmpId;
-                    mdl.Name = item.Name;
-                    mdl.CL1 = newList.Where(x => x.Month == 1 && x.LeaveType == "Casual/Sick Leave" && x.EmpId == item.EmpId).FirstOrDefault() == null ? 0 : newList.Where(x => x.Month == 1 && x.EmpId == item.EmpId).FirstOrDefault().Duration;
-                    mdl.PL1 = newList.Where(x => x.Month == 1 && x.LeaveType == "Earned Leave" && x.EmpId == item.EmpId).FirstOrDefault() == null ? 0 : newList.Where(x => x.Month == 1 && x.EmpId == item.EmpId).FirstOrDefault().Duration;
-                    mdl.LWP1 = newList.Where(x => x.Month == 1 && x.LeaveType == "Leave Without Pay" && x.EmpId == item.EmpId).FirstOrDefault() == null ? 0 : newList.Where(x => x.Month == 1 && x.EmpId == item.EmpId).FirstOrDefault().Duration;
-                    mdl.CO1 = newList.Where(x => x.Month == 1 && x.LeaveType == "Compensatory Off" && x.EmpId == item.EmpId).FirstOrDefault() == null ? 0 : newList.Where(x => x.Month == 1 && x.EmpId == item.EmpId).FirstOrDefault().Duration;
+                    var empIds = newList.GroupBy(x => new { x.EmpId }).Select(y => y.First()).ToList();
+                    MonthwiseLeavesCountModel mdl;
 
-                    mdl.CL2 = newList.Where(x => x.Month == 2 && x.LeaveType == "Casual/Sick Leave" && x.EmpId == item.EmpId).FirstOrDefault() == null ? 0 : newList.Where(x => x.Month == 2 && x.EmpId == item.EmpId).FirstOrDefault().Duration;
-                    mdl.PL2 = newList.Where(x => x.Month == 2 && x.LeaveType == "Earned Leave" && x.EmpId == item.EmpId).FirstOrDefault() == null ? 0 : newList.Where(x => x.Month == 2 && x.EmpId == item.EmpId).FirstOrDefault().Duration;
-                    mdl.LWP2 = newList.Where(x => x.Month == 2 && x.LeaveType == "Leave Without Pay" && x.EmpId == item.EmpId).FirstOrDefault() == null ? 0 : newList.Where(x => x.Month == 2 && x.EmpId == item.EmpId).FirstOrDefault().Duration;
-                    mdl.CO2 = newList.Where(x => x.Month == 2 && x.LeaveType == "Compensatory Off" && x.EmpId == item.EmpId).FirstOrDefault() == null ? 0 : newList.Where(x => x.Month == 2 && x.EmpId == item.EmpId).FirstOrDefault().Duration;
+                    foreach (var item in empIds)
+                    {
+                        mdl = new MonthwiseLeavesCountModel();
+                        mdl.EmpId = item.EmpId;
+                        mdl.Name = item.Name;
+                        mdl.CL1 = newList.Where(x => x.Month == 1 && x.LeaveType == "Casual/Sick Leave" && x.EmpId == item.EmpId).FirstOrDefault() == null ? 0 : newList.Where(x => x.Month == 1 && x.EmpId == item.EmpId).FirstOrDefault().Duration;
+                        mdl.PL1 = newList.Where(x => x.Month == 1 && x.LeaveType == "Earned Leave" && x.EmpId == item.EmpId).FirstOrDefault() == null ? 0 : newList.Where(x => x.Month == 1 && x.EmpId == item.EmpId).FirstOrDefault().Duration;
+                        mdl.LWP1 = newList.Where(x => x.Month == 1 && x.LeaveType == "Leave Without Pay" && x.EmpId == item.EmpId).FirstOrDefault() == null ? 0 : newList.Where(x => x.Month == 1 && x.EmpId == item.EmpId).FirstOrDefault().Duration;
+                        mdl.CO1 = newList.Where(x => x.Month == 1 && x.LeaveType == "Compensatory Off" && x.EmpId == item.EmpId).FirstOrDefault() == null ? 0 : newList.Where(x => x.Month == 1 && x.EmpId == item.EmpId).FirstOrDefault().Duration;
 
-                    mdl.CL3 = newList.Where(x => x.Month == 3 && x.LeaveType == "Casual/Sick Leave" && x.EmpId == item.EmpId).FirstOrDefault() == null ? 0 : newList.Where(x => x.Month == 3 && x.EmpId == item.EmpId).FirstOrDefault().Duration;
-                    mdl.PL3 = newList.Where(x => x.Month == 3 && x.LeaveType == "Earned Leave" && x.EmpId == item.EmpId).FirstOrDefault() == null ? 0 : newList.Where(x => x.Month == 3 && x.EmpId == item.EmpId).FirstOrDefault().Duration;
-                    mdl.LWP3 = newList.Where(x => x.Month == 3 && x.LeaveType == "Leave Without Pay" && x.EmpId == item.EmpId).FirstOrDefault() == null ? 0 : newList.Where(x => x.Month == 3 && x.EmpId == item.EmpId).FirstOrDefault().Duration;
-                    mdl.CO3 = newList.Where(x => x.Month == 3 && x.LeaveType == "Compensatory Off" && x.EmpId == item.EmpId).FirstOrDefault() == null ? 0 : newList.Where(x => x.Month == 3 && x.EmpId == item.EmpId).FirstOrDefault().Duration;
+                        mdl.CL2 = newList.Where(x => x.Month == 2 && x.LeaveType == "Casual/Sick Leave" && x.EmpId == item.EmpId).FirstOrDefault() == null ? 0 : newList.Where(x => x.Month == 2 && x.EmpId == item.EmpId).FirstOrDefault().Duration;
+                        mdl.PL2 = newList.Where(x => x.Month == 2 && x.LeaveType == "Earned Leave" && x.EmpId == item.EmpId).FirstOrDefault() == null ? 0 : newList.Where(x => x.Month == 2 && x.EmpId == item.EmpId).FirstOrDefault().Duration;
+                        mdl.LWP2 = newList.Where(x => x.Month == 2 && x.LeaveType == "Leave Without Pay" && x.EmpId == item.EmpId).FirstOrDefault() == null ? 0 : newList.Where(x => x.Month == 2 && x.EmpId == item.EmpId).FirstOrDefault().Duration;
+                        mdl.CO2 = newList.Where(x => x.Month == 2 && x.LeaveType == "Compensatory Off" && x.EmpId == item.EmpId).FirstOrDefault() == null ? 0 : newList.Where(x => x.Month == 2 && x.EmpId == item.EmpId).FirstOrDefault().Duration;
 
-                    mdl.CL4 = newList.Where(x => x.Month == 4 && x.LeaveType == "Casual/Sick Leave" && x.EmpId == item.EmpId).FirstOrDefault() == null ? 0 : newList.Where(x => x.Month == 4 && x.EmpId == item.EmpId).FirstOrDefault().Duration;
-                    mdl.PL4 = newList.Where(x => x.Month == 4 && x.LeaveType == "Earned Leave" && x.EmpId == item.EmpId).FirstOrDefault() == null ? 0 : newList.Where(x => x.Month == 4 && x.EmpId == item.EmpId).FirstOrDefault().Duration;
-                    mdl.LWP4 = newList.Where(x => x.Month == 4 && x.LeaveType == "Leave Without Pay" && x.EmpId == item.EmpId).FirstOrDefault() == null ? 0 : newList.Where(x => x.Month == 4 && x.EmpId == item.EmpId).FirstOrDefault().Duration;
-                    mdl.CO4 = newList.Where(x => x.Month == 4 && x.LeaveType == "Compensatory Off" && x.EmpId == item.EmpId).FirstOrDefault() == null ? 0 : newList.Where(x => x.Month == 4 && x.EmpId == item.EmpId).FirstOrDefault().Duration;
+                        mdl.CL3 = newList.Where(x => x.Month == 3 && x.LeaveType == "Casual/Sick Leave" && x.EmpId == item.EmpId).FirstOrDefault() == null ? 0 : newList.Where(x => x.Month == 3 && x.EmpId == item.EmpId).FirstOrDefault().Duration;
+                        mdl.PL3 = newList.Where(x => x.Month == 3 && x.LeaveType == "Earned Leave" && x.EmpId == item.EmpId).FirstOrDefault() == null ? 0 : newList.Where(x => x.Month == 3 && x.EmpId == item.EmpId).FirstOrDefault().Duration;
+                        mdl.LWP3 = newList.Where(x => x.Month == 3 && x.LeaveType == "Leave Without Pay" && x.EmpId == item.EmpId).FirstOrDefault() == null ? 0 : newList.Where(x => x.Month == 3 && x.EmpId == item.EmpId).FirstOrDefault().Duration;
+                        mdl.CO3 = newList.Where(x => x.Month == 3 && x.LeaveType == "Compensatory Off" && x.EmpId == item.EmpId).FirstOrDefault() == null ? 0 : newList.Where(x => x.Month == 3 && x.EmpId == item.EmpId).FirstOrDefault().Duration;
 
-                    mdl.CL5 = newList.Where(x => x.Month == 5 && x.LeaveType == "Casual/Sick Leave" && x.EmpId == item.EmpId).FirstOrDefault() == null ? 0 : newList.Where(x => x.Month == 5 && x.EmpId == item.EmpId).FirstOrDefault().Duration;
-                    mdl.PL5 = newList.Where(x => x.Month == 5 && x.LeaveType == "Earned Leave" && x.EmpId == item.EmpId).FirstOrDefault() == null ? 0 : newList.Where(x => x.Month == 5 && x.EmpId == item.EmpId).FirstOrDefault().Duration;
-                    mdl.LWP5 = newList.Where(x => x.Month == 5 && x.LeaveType == "Leave Without Pay" && x.EmpId == item.EmpId).FirstOrDefault() == null ? 0 : newList.Where(x => x.Month == 5 && x.EmpId == item.EmpId).FirstOrDefault().Duration;
-                    mdl.CO5 = newList.Where(x => x.Month == 5 && x.LeaveType == "Compensatory Off" && x.EmpId == item.EmpId).FirstOrDefault() == null ? 0 : newList.Where(x => x.Month == 5 && x.EmpId == item.EmpId).FirstOrDefault().Duration;
+                        mdl.CL4 = newList.Where(x => x.Month == 4 && x.LeaveType == "Casual/Sick Leave" && x.EmpId == item.EmpId).FirstOrDefault() == null ? 0 : newList.Where(x => x.Month == 4 && x.EmpId == item.EmpId).FirstOrDefault().Duration;
+                        mdl.PL4 = newList.Where(x => x.Month == 4 && x.LeaveType == "Earned Leave" && x.EmpId == item.EmpId).FirstOrDefault() == null ? 0 : newList.Where(x => x.Month == 4 && x.EmpId == item.EmpId).FirstOrDefault().Duration;
+                        mdl.LWP4 = newList.Where(x => x.Month == 4 && x.LeaveType == "Leave Without Pay" && x.EmpId == item.EmpId).FirstOrDefault() == null ? 0 : newList.Where(x => x.Month == 4 && x.EmpId == item.EmpId).FirstOrDefault().Duration;
+                        mdl.CO4 = newList.Where(x => x.Month == 4 && x.LeaveType == "Compensatory Off" && x.EmpId == item.EmpId).FirstOrDefault() == null ? 0 : newList.Where(x => x.Month == 4 && x.EmpId == item.EmpId).FirstOrDefault().Duration;
 
-                    mdl.CL6 = newList.Where(x => x.Month == 6 && x.LeaveType == "Casual/Sick Leave" && x.EmpId == item.EmpId).FirstOrDefault() == null ? 0 : newList.Where(x => x.Month == 6 && x.EmpId == item.EmpId).FirstOrDefault().Duration;
-                    mdl.PL6 = newList.Where(x => x.Month == 6 && x.LeaveType == "Earned Leave" && x.EmpId == item.EmpId).FirstOrDefault() == null ? 0 : newList.Where(x => x.Month == 6 && x.EmpId == item.EmpId).FirstOrDefault().Duration;
-                    mdl.LWP6 = newList.Where(x => x.Month == 6 && x.LeaveType == "Leave Without Pay" && x.EmpId == item.EmpId).FirstOrDefault() == null ? 0 : newList.Where(x => x.Month == 6 && x.EmpId == item.EmpId).FirstOrDefault().Duration;
-                    mdl.CO6 = newList.Where(x => x.Month == 6 && x.LeaveType == "Compensatory Off" && x.EmpId == item.EmpId).FirstOrDefault() == null ? 0 : newList.Where(x => x.Month == 6 && x.EmpId == item.EmpId).FirstOrDefault().Duration;
+                        mdl.CL5 = newList.Where(x => x.Month == 5 && x.LeaveType == "Casual/Sick Leave" && x.EmpId == item.EmpId).FirstOrDefault() == null ? 0 : newList.Where(x => x.Month == 5 && x.EmpId == item.EmpId).FirstOrDefault().Duration;
+                        mdl.PL5 = newList.Where(x => x.Month == 5 && x.LeaveType == "Earned Leave" && x.EmpId == item.EmpId).FirstOrDefault() == null ? 0 : newList.Where(x => x.Month == 5 && x.EmpId == item.EmpId).FirstOrDefault().Duration;
+                        mdl.LWP5 = newList.Where(x => x.Month == 5 && x.LeaveType == "Leave Without Pay" && x.EmpId == item.EmpId).FirstOrDefault() == null ? 0 : newList.Where(x => x.Month == 5 && x.EmpId == item.EmpId).FirstOrDefault().Duration;
+                        mdl.CO5 = newList.Where(x => x.Month == 5 && x.LeaveType == "Compensatory Off" && x.EmpId == item.EmpId).FirstOrDefault() == null ? 0 : newList.Where(x => x.Month == 5 && x.EmpId == item.EmpId).FirstOrDefault().Duration;
 
-                    mdl.CL7 = newList.Where(x => x.Month == 7 && x.LeaveType == "Casual/Sick Leave" && x.EmpId == item.EmpId).FirstOrDefault() == null ? 0 : newList.Where(x => x.Month == 7 && x.EmpId == item.EmpId).FirstOrDefault().Duration;
-                    mdl.PL7 = newList.Where(x => x.Month == 7 && x.LeaveType == "Earned Leave" && x.EmpId == item.EmpId).FirstOrDefault() == null ? 0 : newList.Where(x => x.Month == 7 && x.EmpId == item.EmpId).FirstOrDefault().Duration;
-                    mdl.LWP7 = newList.Where(x => x.Month == 7 && x.LeaveType == "Leave Without Pay" && x.EmpId == item.EmpId).FirstOrDefault() == null ? 0 : newList.Where(x => x.Month == 7 && x.EmpId == item.EmpId).FirstOrDefault().Duration;
-                    mdl.CO7 = newList.Where(x => x.Month == 7 && x.LeaveType == "Compensatory Off" && x.EmpId == item.EmpId).FirstOrDefault() == null ? 0 : newList.Where(x => x.Month == 7 && x.EmpId == item.EmpId).FirstOrDefault().Duration;
+                        mdl.CL6 = newList.Where(x => x.Month == 6 && x.LeaveType == "Casual/Sick Leave" && x.EmpId == item.EmpId).FirstOrDefault() == null ? 0 : newList.Where(x => x.Month == 6 && x.EmpId == item.EmpId).FirstOrDefault().Duration;
+                        mdl.PL6 = newList.Where(x => x.Month == 6 && x.LeaveType == "Earned Leave" && x.EmpId == item.EmpId).FirstOrDefault() == null ? 0 : newList.Where(x => x.Month == 6 && x.EmpId == item.EmpId).FirstOrDefault().Duration;
+                        mdl.LWP6 = newList.Where(x => x.Month == 6 && x.LeaveType == "Leave Without Pay" && x.EmpId == item.EmpId).FirstOrDefault() == null ? 0 : newList.Where(x => x.Month == 6 && x.EmpId == item.EmpId).FirstOrDefault().Duration;
+                        mdl.CO6 = newList.Where(x => x.Month == 6 && x.LeaveType == "Compensatory Off" && x.EmpId == item.EmpId).FirstOrDefault() == null ? 0 : newList.Where(x => x.Month == 6 && x.EmpId == item.EmpId).FirstOrDefault().Duration;
 
-                    mdl.CL8 = newList.Where(x => x.Month == 8 && x.LeaveType == "Casual/Sick Leave" && x.EmpId == item.EmpId).FirstOrDefault() == null ? 0 : newList.Where(x => x.Month == 8 && x.EmpId == item.EmpId).FirstOrDefault().Duration;
-                    mdl.PL8 = newList.Where(x => x.Month == 8 && x.LeaveType == "Earned Leave" && x.EmpId == item.EmpId).FirstOrDefault() == null ? 0 : newList.Where(x => x.Month == 8 && x.EmpId == item.EmpId).FirstOrDefault().Duration;
-                    mdl.LWP8 = newList.Where(x => x.Month == 8 && x.LeaveType == "Leave Without Pay" && x.EmpId == item.EmpId).FirstOrDefault() == null ? 0 : newList.Where(x => x.Month == 8 && x.EmpId == item.EmpId).FirstOrDefault().Duration;
-                    mdl.CO8 = newList.Where(x => x.Month == 8 && x.LeaveType == "Compensatory Off" && x.EmpId == item.EmpId).FirstOrDefault() == null ? 0 : newList.Where(x => x.Month == 8 && x.EmpId == item.EmpId).FirstOrDefault().Duration;
+                        mdl.CL7 = newList.Where(x => x.Month == 7 && x.LeaveType == "Casual/Sick Leave" && x.EmpId == item.EmpId).FirstOrDefault() == null ? 0 : newList.Where(x => x.Month == 7 && x.EmpId == item.EmpId).FirstOrDefault().Duration;
+                        mdl.PL7 = newList.Where(x => x.Month == 7 && x.LeaveType == "Earned Leave" && x.EmpId == item.EmpId).FirstOrDefault() == null ? 0 : newList.Where(x => x.Month == 7 && x.EmpId == item.EmpId).FirstOrDefault().Duration;
+                        mdl.LWP7 = newList.Where(x => x.Month == 7 && x.LeaveType == "Leave Without Pay" && x.EmpId == item.EmpId).FirstOrDefault() == null ? 0 : newList.Where(x => x.Month == 7 && x.EmpId == item.EmpId).FirstOrDefault().Duration;
+                        mdl.CO7 = newList.Where(x => x.Month == 7 && x.LeaveType == "Compensatory Off" && x.EmpId == item.EmpId).FirstOrDefault() == null ? 0 : newList.Where(x => x.Month == 7 && x.EmpId == item.EmpId).FirstOrDefault().Duration;
 
-                    mdl.CL9 = newList.Where(x => x.Month == 9 && x.LeaveType == "Casual/Sick Leave" && x.EmpId == item.EmpId).FirstOrDefault() == null ? 0 : newList.Where(x => x.Month == 9 && x.EmpId == item.EmpId).FirstOrDefault().Duration;
-                    mdl.PL9 = newList.Where(x => x.Month == 9 && x.LeaveType == "Earned Leave" && x.EmpId == item.EmpId).FirstOrDefault() == null ? 0 : newList.Where(x => x.Month == 9 && x.EmpId == item.EmpId).FirstOrDefault().Duration;
-                    mdl.LWP9 = newList.Where(x => x.Month == 9 && x.LeaveType == "Leave Without Pay" && x.EmpId == item.EmpId).FirstOrDefault() == null ? 0 : newList.Where(x => x.Month == 9 && x.EmpId == item.EmpId).FirstOrDefault().Duration;
-                    mdl.CO9 = newList.Where(x => x.Month == 9 && x.LeaveType == "Compensatory Off" && x.EmpId == item.EmpId).FirstOrDefault() == null ? 0 : newList.Where(x => x.Month == 9 && x.EmpId == item.EmpId).FirstOrDefault().Duration;
+                        mdl.CL8 = newList.Where(x => x.Month == 8 && x.LeaveType == "Casual/Sick Leave" && x.EmpId == item.EmpId).FirstOrDefault() == null ? 0 : newList.Where(x => x.Month == 8 && x.EmpId == item.EmpId).FirstOrDefault().Duration;
+                        mdl.PL8 = newList.Where(x => x.Month == 8 && x.LeaveType == "Earned Leave" && x.EmpId == item.EmpId).FirstOrDefault() == null ? 0 : newList.Where(x => x.Month == 8 && x.EmpId == item.EmpId).FirstOrDefault().Duration;
+                        mdl.LWP8 = newList.Where(x => x.Month == 8 && x.LeaveType == "Leave Without Pay" && x.EmpId == item.EmpId).FirstOrDefault() == null ? 0 : newList.Where(x => x.Month == 8 && x.EmpId == item.EmpId).FirstOrDefault().Duration;
+                        mdl.CO8 = newList.Where(x => x.Month == 8 && x.LeaveType == "Compensatory Off" && x.EmpId == item.EmpId).FirstOrDefault() == null ? 0 : newList.Where(x => x.Month == 8 && x.EmpId == item.EmpId).FirstOrDefault().Duration;
 
-                    mdl.CL10 = newList.Where(x => x.Month == 10 && x.LeaveType == "Casual/Sick Leave" && x.EmpId == item.EmpId).FirstOrDefault() == null ? 0 : newList.Where(x => x.Month == 10 && x.EmpId == item.EmpId).FirstOrDefault().Duration;
-                    mdl.PL10 = newList.Where(x => x.Month == 10 && x.LeaveType == "Earned Leave" && x.EmpId == item.EmpId).FirstOrDefault() == null ? 0 : newList.Where(x => x.Month == 10 && x.EmpId == item.EmpId).FirstOrDefault().Duration;
-                    mdl.LWP10 = newList.Where(x => x.Month == 10 && x.LeaveType == "Leave Without Pay" && x.EmpId == item.EmpId).FirstOrDefault() == null ? 0 : newList.Where(x => x.Month == 10 && x.EmpId == item.EmpId).FirstOrDefault().Duration;
-                    mdl.CO10 = newList.Where(x => x.Month == 10 && x.LeaveType == "Compensatory Off" && x.EmpId == item.EmpId).FirstOrDefault() == null ? 0 : newList.Where(x => x.Month == 10 && x.EmpId == item.EmpId).FirstOrDefault().Duration;
+                        mdl.CL9 = newList.Where(x => x.Month == 9 && x.LeaveType == "Casual/Sick Leave" && x.EmpId == item.EmpId).FirstOrDefault() == null ? 0 : newList.Where(x => x.Month == 9 && x.EmpId == item.EmpId).FirstOrDefault().Duration;
+                        mdl.PL9 = newList.Where(x => x.Month == 9 && x.LeaveType == "Earned Leave" && x.EmpId == item.EmpId).FirstOrDefault() == null ? 0 : newList.Where(x => x.Month == 9 && x.EmpId == item.EmpId).FirstOrDefault().Duration;
+                        mdl.LWP9 = newList.Where(x => x.Month == 9 && x.LeaveType == "Leave Without Pay" && x.EmpId == item.EmpId).FirstOrDefault() == null ? 0 : newList.Where(x => x.Month == 9 && x.EmpId == item.EmpId).FirstOrDefault().Duration;
+                        mdl.CO9 = newList.Where(x => x.Month == 9 && x.LeaveType == "Compensatory Off" && x.EmpId == item.EmpId).FirstOrDefault() == null ? 0 : newList.Where(x => x.Month == 9 && x.EmpId == item.EmpId).FirstOrDefault().Duration;
 
-                    mdl.CL11 = newList.Where(x => x.Month == 11 && x.LeaveType == "Casual/Sick Leave" && x.EmpId == item.EmpId).FirstOrDefault() == null ? 0 : newList.Where(x => x.Month == 11 && x.EmpId == item.EmpId).FirstOrDefault().Duration;
-                    mdl.PL11 = newList.Where(x => x.Month == 11 && x.LeaveType == "Earned Leave" && x.EmpId == item.EmpId).FirstOrDefault() == null ? 0 : newList.Where(x => x.Month == 11 && x.EmpId == item.EmpId).FirstOrDefault().Duration;
-                    mdl.LWP11 = newList.Where(x => x.Month == 11 && x.LeaveType == "Leave Without Pay" && x.EmpId == item.EmpId).FirstOrDefault() == null ? 0 : newList.Where(x => x.Month == 11 && x.EmpId == item.EmpId).FirstOrDefault().Duration;
-                    mdl.CO11 = newList.Where(x => x.Month == 11 && x.LeaveType == "Compensatory Off" && x.EmpId == item.EmpId).FirstOrDefault() == null ? 0 : newList.Where(x => x.Month == 11 && x.EmpId == item.EmpId).FirstOrDefault().Duration;
+                        mdl.CL10 = newList.Where(x => x.Month == 10 && x.LeaveType == "Casual/Sick Leave" && x.EmpId == item.EmpId).FirstOrDefault() == null ? 0 : newList.Where(x => x.Month == 10 && x.EmpId == item.EmpId).FirstOrDefault().Duration;
+                        mdl.PL10 = newList.Where(x => x.Month == 10 && x.LeaveType == "Earned Leave" && x.EmpId == item.EmpId).FirstOrDefault() == null ? 0 : newList.Where(x => x.Month == 10 && x.EmpId == item.EmpId).FirstOrDefault().Duration;
+                        mdl.LWP10 = newList.Where(x => x.Month == 10 && x.LeaveType == "Leave Without Pay" && x.EmpId == item.EmpId).FirstOrDefault() == null ? 0 : newList.Where(x => x.Month == 10 && x.EmpId == item.EmpId).FirstOrDefault().Duration;
+                        mdl.CO10 = newList.Where(x => x.Month == 10 && x.LeaveType == "Compensatory Off" && x.EmpId == item.EmpId).FirstOrDefault() == null ? 0 : newList.Where(x => x.Month == 10 && x.EmpId == item.EmpId).FirstOrDefault().Duration;
 
-                    mdl.CL12 = newList.Where(x => x.Month == 12 && x.LeaveType == "Casual/Sick Leave" && x.EmpId == item.EmpId).FirstOrDefault() == null ? 0 : newList.Where(x => x.Month == 12 && x.EmpId == item.EmpId).FirstOrDefault().Duration;
-                    mdl.PL12 = newList.Where(x => x.Month == 12 && x.LeaveType == "Earned Leave" && x.EmpId == item.EmpId).FirstOrDefault() == null ? 0 : newList.Where(x => x.Month == 12 && x.EmpId == item.EmpId).FirstOrDefault().Duration;
-                    mdl.LWP12 = newList.Where(x => x.Month == 12 && x.LeaveType == "Leave Without Pay" && x.EmpId == item.EmpId).FirstOrDefault() == null ? 0 : newList.Where(x => x.Month == 12 && x.EmpId == item.EmpId).FirstOrDefault().Duration;
-                    mdl.CO12 = newList.Where(x => x.Month == 12 && x.LeaveType == "Compensatory Off" && x.EmpId == item.EmpId).FirstOrDefault() == null ? 0 : newList.Where(x => x.Month == 12 && x.EmpId == item.EmpId).FirstOrDefault().Duration;
+                        mdl.CL11 = newList.Where(x => x.Month == 11 && x.LeaveType == "Casual/Sick Leave" && x.EmpId == item.EmpId).FirstOrDefault() == null ? 0 : newList.Where(x => x.Month == 11 && x.EmpId == item.EmpId).FirstOrDefault().Duration;
+                        mdl.PL11 = newList.Where(x => x.Month == 11 && x.LeaveType == "Earned Leave" && x.EmpId == item.EmpId).FirstOrDefault() == null ? 0 : newList.Where(x => x.Month == 11 && x.EmpId == item.EmpId).FirstOrDefault().Duration;
+                        mdl.LWP11 = newList.Where(x => x.Month == 11 && x.LeaveType == "Leave Without Pay" && x.EmpId == item.EmpId).FirstOrDefault() == null ? 0 : newList.Where(x => x.Month == 11 && x.EmpId == item.EmpId).FirstOrDefault().Duration;
+                        mdl.CO11 = newList.Where(x => x.Month == 11 && x.LeaveType == "Compensatory Off" && x.EmpId == item.EmpId).FirstOrDefault() == null ? 0 : newList.Where(x => x.Month == 11 && x.EmpId == item.EmpId).FirstOrDefault().Duration;
 
-                    lstMdl.Add(mdl);
+                        mdl.CL12 = newList.Where(x => x.Month == 12 && x.LeaveType == "Casual/Sick Leave" && x.EmpId == item.EmpId).FirstOrDefault() == null ? 0 : newList.Where(x => x.Month == 12 && x.EmpId == item.EmpId).FirstOrDefault().Duration;
+                        mdl.PL12 = newList.Where(x => x.Month == 12 && x.LeaveType == "Earned Leave" && x.EmpId == item.EmpId).FirstOrDefault() == null ? 0 : newList.Where(x => x.Month == 12 && x.EmpId == item.EmpId).FirstOrDefault().Duration;
+                        mdl.LWP12 = newList.Where(x => x.Month == 12 && x.LeaveType == "Leave Without Pay" && x.EmpId == item.EmpId).FirstOrDefault() == null ? 0 : newList.Where(x => x.Month == 12 && x.EmpId == item.EmpId).FirstOrDefault().Duration;
+                        mdl.CO12 = newList.Where(x => x.Month == 12 && x.LeaveType == "Compensatory Off" && x.EmpId == item.EmpId).FirstOrDefault() == null ? 0 : newList.Where(x => x.Month == 12 && x.EmpId == item.EmpId).FirstOrDefault().Duration;
+
+                        lstMdl.Add(mdl);
+                    }
                 }
 
 

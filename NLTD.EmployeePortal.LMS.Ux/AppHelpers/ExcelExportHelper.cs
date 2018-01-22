@@ -119,7 +119,7 @@ namespace NLTD.EmployeePortal.LMS.Ux.AppHelpers
                     }
                 }
                 //custom code for this excel
-                using (ExcelRange col = workSheet.Cells[2, 5, 2 + dataTable.Rows.Count, 5])
+                using (ExcelRange col = workSheet.Cells[2, 4, 2 + dataTable.Rows.Count, 4])
                 {
                     col.Style.Numberformat.Format = "dd/MM/yyyy";
                     col.Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
@@ -898,11 +898,11 @@ namespace NLTD.EmployeePortal.LMS.Ux.AppHelpers
         public static ConsolidateReport CalculateTimeSheetConsolidation(TimeSheetModel TimeSheetModelObj, ConsolidateReport TimeSheetConsolidateObj)
         {
             TimeSheetConsolidateObj.WorkingHours = TimeSheetConsolidateObj.WorkingHours + TimeSheetModelObj.WorkingHours;
-            if (TimeSheetModelObj.LateEntry.Seconds > 0)
+            if (TimeSheetModelObj.LateIn.Seconds > 0)
             {
                 TimeSheetConsolidateObj.LateCount = TimeSheetConsolidateObj.LateCount + 1;
             }
-            if (TimeSheetModelObj.EarlyLeave.Seconds > 0)
+            if (TimeSheetModelObj.EarlyOut.Seconds > 0)
             {
                 TimeSheetConsolidateObj.EarlyCount = TimeSheetConsolidateObj.EarlyCount + 1;
             }

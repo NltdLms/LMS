@@ -63,19 +63,21 @@
 
 @if (Model.Count == 0)
 {
-    <div class="alert alert-danger">
-        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-            <span aria-hidden="true">x</span>
-        </button>
-        No matching records found.
+    <div id="showalert">
+        <div class="alert alert-danger">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">x</span>
+            </button>
+            No matching records found.
+        </div>
     </div>
 
-            }
-            else
-            {
-                TimeSheetConsolidate TimeSheetConsolidateObj = new TimeSheetConsolidate();
-                if (ViewBag.RequestLevelPerson == "My")
-                {
+}
+else
+{
+    TimeSheetConsolidate TimeSheetConsolidateObj = new TimeSheetConsolidate();
+    if (ViewBag.RequestLevelPerson == "My")
+    {
         <table id="TimesheetTable_id"
                class="table table-condensed table-striped table-hover dtatable">
             <thead>
@@ -106,10 +108,10 @@
                         @Html.DisplayName("LMS Status")
                     </th>
                     <th>
-                        @Html.DisplayName("Late Entry")
+                        @Html.DisplayName("Late IN")
                     </th>
                     <th>
-                        @Html.DisplayName("Early Leave")
+                        @Html.DisplayName("Early Out")
                     </th>
                 </tr>
             </thead>
@@ -192,10 +194,10 @@
                                 @Model[i].LMSStatus
                             </td>
                             <td>
-                                @Model[i].LateEntry
+                                @Model[i].LateIn
                             </td>
                             <td>
-                                @Model[i].EarlyLeave
+                                @Model[i].EarlyOut
                             </td>
                         </tr>
                         if (Model[i].WorkingDate.ToString("ddd") == "Mon" || i == Model.Count - 1)
@@ -268,10 +270,10 @@
                                             @Html.DisplayName("LMS Status")
                                         </th>
                                         <th>
-                                            @Html.DisplayName("Late Entry")
+                                            @Html.DisplayName("Late In")
                                         </th>
                                         <th>
-                                            @Html.DisplayName("Early Leave")
+                                            @Html.DisplayName("Early Out")
                                         </th>
                                     </tr>
                                 </thead>
@@ -366,10 +368,10 @@
                                                 @Model[j].LMSStatus
                                             </td>
                                             <td>
-                                                @Model[j].LateEntry
+                                                @Model[j].LateIn
                                             </td>
                                             <td>
-                                                @Model[j].EarlyLeave
+                                                @Model[j].EarlyOut
                                             </td>
                                         </tr>
                                         if (Model[j].WorkingDate.ToString("ddd") == "Mon")
@@ -431,12 +433,12 @@
     {
         TimeSheetConsolidateObj.weeklyHours = TimeSheetConsolidateObj.weeklyHours + TimeSheetModelObj.WorkingHours;
         TimeSheetConsolidateObj.monthlyHours = TimeSheetConsolidateObj.monthlyHours + TimeSheetModelObj.WorkingHours;
-        if(TimeSheetModelObj.LateEntry.Seconds>0)
+        if(TimeSheetModelObj.LateIn.Seconds>0)
         {
             TimeSheetConsolidateObj.weeklyLateCount = TimeSheetConsolidateObj.weeklyLateCount + 1;
             TimeSheetConsolidateObj.monthlyLateCount = TimeSheetConsolidateObj.monthlyLateCount +1;
         }
-        if (TimeSheetModelObj.EarlyLeave.Seconds > 0)
+        if (TimeSheetModelObj.EarlyOut.Seconds > 0)
         {
             TimeSheetConsolidateObj.weeklyEarlyCount = TimeSheetConsolidateObj.weeklyEarlyCount + 1;
             TimeSheetConsolidateObj.monthlyEarlyCount = TimeSheetConsolidateObj.monthlyEarlyCount +1;

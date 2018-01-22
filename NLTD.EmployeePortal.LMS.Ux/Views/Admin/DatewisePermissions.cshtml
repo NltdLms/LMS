@@ -68,18 +68,40 @@ $(function() {
                 data: { term: request.term },
                 success: function (data) {
                     response($.map(data, function (item) {
-                        return { label: item.Name, value: item.Name };
+                        return { label: item.Name, value: item.UserId };
                     }))
 
 
                 }
             })
         },
-        messages: {
-            noResults: "", results: ""
+        
+        select: function (event, ui) {
+            event.preventDefault();
+            $("#SearchUserID").val(ui.item.value);
+
+        },
+        focus: function (event, ui) {
+            event.preventDefault();
+            $("#Name").val(ui.item.label);
+        },
+        search: function (event, ui) {
+            $("#SearchUserID").val("");
         }
     });
-});
+
+
+    });
+
+    function CheckAutoCompleteName() {
+        if ($("#SearchUserID").val() == "") {
+            SetUserIDForAutoCompleteName(nameList, $("#Name").val(), "SearchUserID");
+            if (!ValidateAutocompleteName($("#Name").val(), $("#SearchUserID").val())) {
+                return false;
+            }
+        }
+        return true;
+    }
 </script>
 }
 
@@ -93,12 +115,14 @@ $(function() {
             @Model.ErrorMsg
         </div>
     }
+    <div id="alert_placeholder" class="col-sm-12">
 
+    </div>
     @Html.Hidden("RequestLevelPerson", (string)ViewBag.RequestLevelPerson)
 
     @Html.HiddenFor(x => x.FromDate)       
     @Html.HiddenFor(x => x.ToDate)
-
+    
     <div class="row">
         <div class="col-sm-12">
             <div class="box box-primary">
@@ -108,6 +132,7 @@ $(function() {
                 <div class="box-body">
                     <div class="row">
                         <form id='your-range-form' action='@Url.Action("ExportPermissionsExcel", new { RequestLevelPerson = (string)ViewBag.RequestLevelPerson })' method='post'>
+                            @Html.HiddenFor(x => x.SearchUserID)
                             <div class="col-sm-3">
 
                                 @Html.Label("Date Range")

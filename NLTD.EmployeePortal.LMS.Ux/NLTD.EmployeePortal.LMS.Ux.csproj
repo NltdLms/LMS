@@ -19,11 +19,10 @@
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <UseIISExpress>true</UseIISExpress>
     <IISExpressSSLPort />
-    <IISExpressAnonymousAuthentication>
-    </IISExpressAnonymousAuthentication>
-    <IISExpressWindowsAuthentication>
-    </IISExpressWindowsAuthentication>
-    <IISExpressUseClassicPipelineMode />
+    <IISExpressAnonymousAuthentication>disabled</IISExpressAnonymousAuthentication>
+    <IISExpressWindowsAuthentication>enabled</IISExpressWindowsAuthentication>
+    <IISExpressUseClassicPipelineMode>
+    </IISExpressUseClassicPipelineMode>
     <UseGlobalApplicationHostFile />
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
@@ -735,6 +734,11 @@
     <Content Include="Views\Shift\EmployeeShiftAllocation.cshtml" />
     <Content Include="Views\Shift\EmpShiftAllocationPartial.cshtml" />
     <Content Include="Views\Shift\EmpShiftAllocationSubDetailPartial.cshtml" />
+    <Content Include="Views\Report\NoOfLateReportRpt.cshtml" />
+    <Content Include="Views\Report\NoOfLateReportRptPartial.cshtml" />
+    <Content Include="Views\Report\ShiftBasedLateAndEarlyRpt.cshtml" />
+    <Content Include="Views\Report\ShiftBasedLateAndEarlyRptPartial.cshtml" />
+    <Content Include="Views\Dashboard\DashboardAttendancePartial.cshtml" />
     <Content Include="Views\Dashboard\DashboardAttendancePartial.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>

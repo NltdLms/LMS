@@ -25,17 +25,17 @@ namespace NLTD.EmployeePortal.LMS.Repository
         IList<HolidayModel> GetHolidays(long UserId, Int32 holidayYear);
         IList<DropDownItem> GetWeekOffs(Int64 UserId);
 
-        IList<EmployeeWiseLeaveSummaryModel> GetEmployeeWiseLeaveSumary(Int64 UserId, int Year, string reqUsr, string Name, bool OnlyReportedToMe);
+        IList<EmployeeWiseLeaveSummaryModel> GetEmployeeWiseLeaveSumary(Int64 UserId, int Year, string reqUsr, Int64? paramUserId, bool OnlyReportedToMe);
         int GetHolidayCount(DateTime startDate, DateTime endDate, Int64 UserId);
 
-        IList<DaywiseLeaveDtlModel> GetDaywiseLeaveDtl(DateTime? FromDate, DateTime? ToDate, bool IsLeaveOnly, Int64 LeadId, bool OnlyReportedToMe,string Name, string reqUsr, bool DonotShowRejected);
+        IList<DaywiseLeaveDtlModel> GetDaywiseLeaveDtl(DateTime? FromDate, DateTime? ToDate, bool IsLeaveOnly, Int64 LeadId, bool OnlyReportedToMe,Int64? paramUserId, string reqUsr, bool DonotShowRejected);
 
-        IList<MonthwiseLeavesCountModel> GetMonthwiseLeavesCount(Int32 year, Int64 LeadId, bool OnlyReportedToMe, string Name, string reqUsr);
+        IList<MonthwiseLeavesCountModel> GetMonthwiseLeavesCount(Int32 year, Int64 LeadId, bool OnlyReportedToMe, Int64? paramUserId, string reqUsr);
         IList<LeaveDtl> GetLeaveDetailCalculation(DateTime LeaveFrom, DateTime LeaveUpto, string LeaveFromTime, string LeaveUptoTime, Int64 UserId, Int64 LeaveTypText);
 
         string ReturnWeekOff(long UserId);
         DashBoardModel GetDashboardData(Int64 UserId, Int64 OfficeId);
-        IList<PermissionDetailsModel> GetPermissionDetail(string Name, string reqUsr, DateTime? startDate, DateTime? endDate, bool OnlyReportedToMe, Int64 LeadId);
+        IList<PermissionDetailsModel> GetPermissionDetail(Int64? paramUserId, string reqUsr, DateTime? startDate, DateTime? endDate, bool OnlyReportedToMe, Int64 LeadId);
         decimal ReturnDuration(DateTime LeaveFrom, DateTime LeaveUpto, string LeaveFromTime, string LeaveUptoTime, Int64 UserId);
 
         LeaveRequestModel ApplyLeaveCommonData(Int64 UserId, Int64 OfficeId);
