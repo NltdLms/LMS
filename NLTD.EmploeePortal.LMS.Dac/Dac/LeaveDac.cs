@@ -2072,7 +2072,7 @@ namespace NLTD.EmploeePortal.LMS.Dac
                     }
 
                 }
-                if (newList.Count > 1)
+                if (newList.Count > 0)
                 {
                     var empIds = newList.GroupBy(x => new { x.EmpId }).Select(y => y.First()).ToList();
                     MonthwiseLeavesCountModel mdl;
