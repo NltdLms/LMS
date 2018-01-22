@@ -8,6 +8,7 @@ namespace NLTD.EmployeePortal.LMS.Common.DisplayModel
 {
     public class EmployeeAttendanceModel
     {
+        public string Name { get; set; }
         public Int64? UserID { get; set; }
 
         public Int64 CardID { get; set; }
@@ -20,7 +21,7 @@ namespace NLTD.EmployeePortal.LMS.Common.DisplayModel
 
         public string ErrorMessage { get; set; }
 
-        public string Name { get; set; }
+       
 
         public string requestLevelPerson { get; set; }
     }
