@@ -526,13 +526,16 @@ function loadPendingCount() {
 }
 
 function LoadTeamStatus() {
-    if ($("#hdnIsMLSApprvr").val() == "True" || $("#hdnUserRole").val() == "HR" ) {
+    if ($("#hdnIsMLSApprvr").val() == "True" ||
+        $("#hdnUserRole").val() == "HR" ||
+        $("#hdnUserRole").val().toUpperCase() == "ADMIN") {
+
         //var htmlContent = "<center><img src=\"/images/ajax-loading.gif\" /></center>";
         //$("#divTeamStatus").html(htmlContent);
-        $.ajax({
+        ajaxVar = $.ajax({
             method: "GET",
             url: '/DashBoard/LoadTeamStatus',
-            cache: false,
+            //cache: false,
             success: function (response) {
                 $('#divTeamStatus').html(response);
 
@@ -547,13 +550,14 @@ function LoadTeamStatus() {
                 });
             },
             complete: function () {
-
+                ajaxVar = false;
             },
             error: function () {
 
             }
 
         });
+
     }
 }
 
@@ -1070,13 +1074,13 @@ function isNumber(evt) {
 
 function isNumberKey(evt, element) {
     var charCode = (evt.which) ? evt.which : event.keyCode;
-    
+
     if (charCode > 31 && (charCode < 48 || charCode > 57) && !(charCode == 46))
         return false;
     else {
-       // var len = $(element).val().length;
+        // var len = $(element).val().length;
         var index = $(element).val().indexOf('.');
-       // alert($(element).val());
+        // alert($(element).val());
         if (index > 0 && charCode == 46) {
             return false;
         }
@@ -1266,7 +1270,7 @@ function loadAttendenceRangeSummary() {
 function loadTimeSheetSummary() {
     $("#alert_placeholder").empty();
     var URL = '/Admin/LoadMyTeamTimesheet';
-   
+
     var myDirectEmployees = false;
 
     if ($("#RequestLevelPerson").val() === "My") {
@@ -1307,7 +1311,7 @@ function loadTimeSheetSummary() {
             else {
                 $(".dtatable").dataTable({
                     "aaSorting": [], "pageLength": 50
-                    });
+                });
                 $('html, body').animate({
                     scrollTop: 230  // Means Less header height
                 }, 400);
@@ -1418,7 +1422,7 @@ function SaveShiftMaster() {
     $("#divLoading").hide();
 }
 function loadShiftDetails() {
-   
+
     $("#divLoading").show();
     var RequestLevelPerson = $("#RequestLevelPerson").val();
 
@@ -1530,8 +1534,8 @@ function SaveEmployeeShift() {
 }
 
 function GetEmployeeShiftDetails(FromDate, ToDate, Shift) {
- 
-    var UserId = ($("#RequestLevelPerson").val() == "My") ? 0: $("#UserID").val();   
+
+    var UserId = ($("#RequestLevelPerson").val() == "My") ? 0 : $("#UserID").val();
 
     if ($("#RequestLevelPerson").val() != "My") {
         SetUserIDForAutoCompleteName(nameList, $("#Name").val(), "UserID");
@@ -1551,7 +1555,7 @@ function GetEmployeeShiftDetails(FromDate, ToDate, Shift) {
         Clearshowalert("Please enter the employee name", "alert alert-danger");
         return;
     }
- 
+
     $("#divLoading").show();
     $("#divForHistoryLeave").load('/Shift/GetEmployeeShiftDetails?UserId=' + UserId + '&RequestMenuUser=' + $("#RequestLevelPerson").val() + '&FromDate=' + FromDate + '&ToDate=' + ToDate + '&Shift=' + Shift + '&rnd=' + Math.round(Math.random() * 10000),
         function () {
@@ -1612,7 +1616,7 @@ function SaveIndividualEmployeeShift() {
         }
     });
 }
-function ValidateAutocompleteName(name,userID) {
+function ValidateAutocompleteName(name, userID) {
     if (name != "") {
         if (userID == "") {
             return false;
@@ -1628,7 +1632,7 @@ function ValidateAutocompleteName(name,userID) {
 }
 
 function SetUserIDForAutoCompleteName(userList, name, hiddenFieldID) {
-    var user= $.grep(userList, function (user) {
+    var user = $.grep(userList, function (user) {
         if (user.label.trim() == name.trim()) {
             return user.value;
         }

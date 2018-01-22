@@ -739,6 +739,7 @@
     <Content Include="Views\Report\ShiftBasedLateAndEarlyRpt.cshtml" />
     <Content Include="Views\Report\ShiftBasedLateAndEarlyRptPartial.cshtml" />
     <Content Include="Views\Dashboard\DashboardAttendancePartial.cshtml" />
+    <Content Include="Views\Dashboard\DashboardAttendancePartial.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
