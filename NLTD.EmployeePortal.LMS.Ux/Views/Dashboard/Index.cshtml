@@ -140,12 +140,6 @@
             LoadDashboardCalender();
             loadPendingCount();
             LoadTeamStatus();
-            //cancel the long proces ajax call.
-            $(window).bind('beforeunload', function () {
-                if (ajaxVar) {
-                    ajaxVar.abort();
-                }
-            });
 
         });
 
