@@ -144,13 +144,14 @@ namespace NLTD.EmploeePortal.LMS.Dac.Dac
             //transactionDetails = transactionDetails.Union
             var transactionDetails = (from lth in context.LeaveTransactionHistory
                                       join lt in context.LeaveType on lth.LeaveTypeId equals lt.LeaveTypeId
-                                      //join l in context.Leave on lth.LeaveId equals l.LeaveId
+                                      join l in context.Leave on lth.LeaveId equals l.LeaveId into ps
+                                      from p in ps.DefaultIfEmpty()
                                       join e in context.Employee on lth.UserId equals e.UserId
                                       where lth.UserId == userId && lt.IsTimeBased == false
                                       // myInClause.Contains(lth.Remarks) &&
                                       select new LeaveTransactiontHistoryModel
                                       {
-										  LeaveId= lth.LeaveId,
+                                          LeaveId = lth.LeaveId,
                                           LeaveTypeId = lth.LeaveTypeId,
                                           TransactionType = lth.TransactionType == "C" ? "Credit" : "Debit",
                                           NumberOfDays = lth.NumberOfDays,
@@ -160,7 +161,9 @@ namespace NLTD.EmploeePortal.LMS.Dac.Dac
                                           Type = lt.Type,
                                           FirstName = e.FirstName,
                                           LastName = e.LastName,
-                                          EmployeeId = e.EmployeeId
+                                          EmployeeId = e.EmployeeId,
+                                          StartDate = p.StartDate,
+                                          EndDate = p.EndDate
                                       }).ToList().OrderByDescending(x => x.TransactionDate).ToList();
             return transactionDetails;
         }

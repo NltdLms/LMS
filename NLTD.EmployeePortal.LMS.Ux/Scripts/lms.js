@@ -1028,10 +1028,11 @@ function AddTotalDays(index) {
         NoOfDays = 0;
     } else {
         NoOfDays = $("#NoOfDays" + index).val();
+        NoOfDays = (NoOfDays * 1).toString();
+        $("#NoOfDays" + index).val(NoOfDays);
     }
 
     if (NoOfDays > 0) {
-
         if (NoOfDays.indexOf(".") > -1) {
             var decPart = (NoOfDays + "").split(".")[1];
             if (decPart != "0" && decPart != "5") {
@@ -1105,6 +1106,8 @@ function SubmitLeaveBalanceForm(count) {
             NoOfDays = 0;
         } else {
             NoOfDays = $("#NoOfDays" + i).val();
+            NoOfDays = (NoOfDays * 1).toString();
+            $("#NoOfDays" + i).val(NoOfDays);
         }
 
         var balanceDays = 0;
