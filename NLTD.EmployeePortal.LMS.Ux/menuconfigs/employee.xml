@@ -65,7 +65,7 @@
           <icon></icon>
         </MenuItem>
         <MenuItem>
-          <title>My ShiftDetails</title>
+          <title>My Shifts</title>
           <url>/Shift/MyShiftDetails</url>
           <icon></icon>
         </MenuItem>
