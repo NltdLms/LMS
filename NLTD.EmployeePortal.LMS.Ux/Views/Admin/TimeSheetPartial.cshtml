@@ -299,10 +299,23 @@ else
                                         }
                                         if (i == j)
                                         {
-                                            TimeSheetConsolidateObj = GetWeeklyHoursConsolidation(Model.ToList(), Model[i].WorkingDate, Model[i].userID, "Weekly");
-                                            @GetWeeklyHoursHTML(TimeSheetConsolidateObj);
                                             TimeSheetConsolidateObj = GetWeeklyHoursConsolidation(Model.ToList(), Model[i].WorkingDate, Model[i].userID, "Monthly");
                                             @GetMonthlyHoursHTML(TimeSheetConsolidateObj);
+                                            TimeSheetConsolidateObj = GetWeeklyHoursConsolidation(Model.ToList(), Model[i].WorkingDate, Model[i].userID, "Weekly");
+                                            @GetWeeklyHoursHTML(TimeSheetConsolidateObj);
+                                            
+                                        }
+                                       
+
+                                        if (Model[j].WorkingDate.Day == DateTime.DaysInMonth(Model[j].WorkingDate.Year, Model[j].WorkingDate.Month) && j != i)
+                                        {
+                                            TimeSheetConsolidateObj = GetWeeklyHoursConsolidation(Model.ToList(), Model[j].WorkingDate, Model[j].userID, "Monthly");
+                                            @GetMonthlyHoursHTML(TimeSheetConsolidateObj);
+                                        }
+                                        if (Model[j].WorkingDate.ToString("ddd") == "Sun" && j != i)
+                                        {
+                                            TimeSheetConsolidateObj = GetWeeklyHoursConsolidation(Model.ToList(), Model[j].WorkingDate, Model[j].userID, "Weekly");
+                                            @GetWeeklyHoursHTML(TimeSheetConsolidateObj);
                                         }
                                         <tr>
                                             <td>
@@ -371,17 +384,7 @@ else
                                                 @Model[j].EarlyOut
                                             </td>
                                         </tr>
-                                        if (Model[j].WorkingDate.ToString("ddd") == "Sun")
-                                        {
-                                            TimeSheetConsolidateObj = GetWeeklyHoursConsolidation(Model.ToList(), Model[i].WorkingDate, Model[i].userID, "Weekly");
-                                            @GetWeeklyHoursHTML(TimeSheetConsolidateObj);
-                                        }
-
-                                        if (Model[j].WorkingDate.Day == DateTime.DaysInMonth(Model[j].WorkingDate.Year, Model[j].WorkingDate.Month))
-                                        {
-                                            TimeSheetConsolidateObj = GetWeeklyHoursConsolidation(Model.ToList(), Model[i].WorkingDate, Model[i].userID, "Monthly");
-                                            @GetMonthlyHoursHTML(TimeSheetConsolidateObj);
-                                        }
+                                       
                                         if (j == Model.Count-1)
                                         {
                                             i = j;
