@@ -57,9 +57,11 @@
 
     .weeklytotal {
         background: #DFD5FD !important;
+        font-weight :bold;
     }
     .monthlytotal {
         background: #BBCDFD !important;
+        font-weight: bold;
     }
 </style>
 
@@ -502,18 +504,18 @@ else
             
         </td>
         <td>
-            @Html.DisplayName("No of Permission")
+            @Html.DisplayName("Permission : ")
             @Html.DisplayName(Convert.ToString(TimeSheetConsolidateObj.weeklyPermissionCount))
         </td>
-        <td>@Html.DisplayName("Leave")
+        <td>@Html.DisplayName("Leave : ")
         @Html.DisplayName(Convert.ToString(TimeSheetConsolidateObj.weeklyLeaveCount))</td>
         <td>
-            @Html.DisplayName("Late In")
+            @Html.DisplayName("Late In : ")
             @Html.DisplayName(Convert.ToString(TimeSheetConsolidateObj.weeklyLateCount))
            
         </td>
         <td>
-            @Html.DisplayName("Early out")
+            @Html.DisplayName("Early out : ")
             @Html.DisplayName(Convert.ToString(TimeSheetConsolidateObj.weeklyEarlyCount))
         </td>
     </tr>
@@ -534,15 +536,15 @@ else
 
         </td>
         <td>
-            @Html.DisplayName("No of Permission")
+            @Html.DisplayName("Permission : ")
             @Html.DisplayName(Convert.ToString(TimeSheetConsolidateObj.monthlyPermissionCount))
         </td>
         <td>
-            @Html.DisplayName("Leave")
+            @Html.DisplayName("Leave : ")
         @Html.DisplayName(Convert.ToString(TimeSheetConsolidateObj.monthlyLeaveCount))
     </td>
     <td>
-        @Html.DisplayName("Late In")
+        @Html.DisplayName("Late In : ")
         @Html.DisplayName(Convert.ToString(TimeSheetConsolidateObj.monthlyLateCount))
 
     </td>
