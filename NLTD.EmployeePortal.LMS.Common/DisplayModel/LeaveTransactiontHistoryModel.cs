@@ -21,6 +21,8 @@ namespace NLTD.EmployeePortal.LMS.Common.DisplayModel
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string EmployeeId { get; set; }
+        public DateTime? StartDate { get; set; }
+        public DateTime? EndDate { get; set; }
     }
 
     public class LeaveTransactionDetail
