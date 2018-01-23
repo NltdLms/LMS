@@ -9,20 +9,15 @@ namespace NLTD.EmployeePortal.LMS.Common.DisplayModel
     public class TimeSheetConsolidate
     {
         public string name { get; set; }
-        public TimeSpan weeklyHours { get; set; }
-        public TimeSpan monthlyHours { get; set; }
-        public int weeklyPermissionCount { get; set; }
-        public int monthlyPermissionCount { get; set; }
-        public int weeklyLeaveCount { get; set; }
-        public int monthlyLeaveCount { get; set; }
-        public int weeklyLateCount { get; set; }
-        public int monthlyLateCount { get; set; }
-        public int weeklyEarlyCount { get; set; }
-        public int monthlyEarlyCount { get; set; }
-
-        public bool isWeeklyHoursUpdate { get; set; }
-        public bool isMonthlyHoursUpdate { get; set; }
-
-        public string dateRange { get; set; }
+        public TimeSpan hours { get; set; }
+        
+        public int permissionCount { get; set; }
+        public int leaveCount { get; set; }
+        public int lateCount { get; set; }
+        public int earlyCount { get; set; }
+        
+       public DateTime fromDatetime { get; set; }
+        public DateTime toDatetime { get; set; }
+        public int WFHCount { get; set; }
     }
 }
