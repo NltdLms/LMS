@@ -238,7 +238,8 @@ namespace NLTD.EmploeePortal.LMS.Dac.Dac
             {
                 if (employeeLeaveList.Count > 0)
                 {
-                    LMSStatus = (from e in employeeLeaveList where statusDate >= e.StartDate && statusDate <= e.EndDate select e.LeaveType).FirstOrDefault();
+                    LMSStatus = (from e in employeeLeaveList where statusDate >= e.StartDate && statusDate <= e.EndDate select e.LeaveType).FirstOrDefault()??string.Empty;
+                    
                 }
             }
             catch (Exception)

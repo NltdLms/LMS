@@ -928,6 +928,22 @@ namespace NLTD.EmploeePortal.LMS.Dac
                                         if (isTimeBased == false)
                                             duplicateRequest = "Duplicate";
                                     }
+                                    //else
+                                    //{
+                                    //    var chkTime = context.PermissionDetail.Where(x => x.LeaveId == item.LeaveId).FirstOrDefault();
+                                    //    DateTime PermisionFrom = DateTime.Parse(chkTime.TimeFrom);
+                                    //    DateTime PermisionTo = DateTime.Parse(chkTime.TimeTo);                                        
+
+                                    //    DateTime existingStartTime = new DateTime(chkTime.PermissionDate.Year, chkTime.PermissionDate.Month, chkTime.PermissionDate.Day, PermisionFrom.Hour, PermisionFrom.Minute,0);
+                                    //     DateTime existingEndTime = new DateTime(chkTime.PermissionDate.Year, chkTime.PermissionDate.Month, chkTime.PermissionDate.Day, PermisionTo.Hour, PermisionTo.Minute, 0);
+
+                                    //    PermisionFrom = DateTime.Parse(request.PermissionTimeFrom);
+                                    //    PermisionTo = DateTime.Parse(request.PermissionTimeTo);
+
+                                    //    DateTime NewStartTime = new DateTime(request.LeaveFrom.Year, request.LeaveFrom.Month, request.LeaveFrom.Day, PermisionFrom.Hour, PermisionFrom.Minute, 0);
+                                    //    DateTime NewEndTime = new DateTime(request.LeaveFrom.Year, request.LeaveFrom.Month, request.LeaveFrom.Day, PermisionTo.Hour, PermisionTo.Minute, 0);
+
+                                    //}
                                 }
                                 else
                                 {
@@ -1009,6 +1025,7 @@ namespace NLTD.EmploeePortal.LMS.Dac
                                             duplicateRequest = "Duplicate";
                                         }
                                     }
+                                    
                                 }
                                 if (duplicateRequest == "Duplicate")
                                 {
