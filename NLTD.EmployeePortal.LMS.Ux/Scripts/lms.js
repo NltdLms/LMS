@@ -1038,7 +1038,7 @@ function AddTotalDays(index) {
         if (NoOfDays.indexOf(".") > -1) {
             var decPart = (NoOfDays + "").split(".")[1];
             if (decPart != "0" && decPart != "5") {
-                Clearshowalert("No of days value after decimal point should be 0 or 5", "alert alert-danger");
+                Clearshowalert("No of days after decimal point should be 0 or 5", "alert alert-danger");
                 $("#NoOfDays" + index).focus();
                 return;
             }
@@ -1125,7 +1125,7 @@ function SubmitLeaveBalanceForm(count) {
             if (NoOfDays.indexOf(".") > -1) {
                 var decPart = (NoOfDays + "").split(".")[1];
                 if (decPart != "0" && decPart != "5") {
-                    Clearshowalert("No of days value after decimal point should be 0 or 5", "alert alert-danger");
+                    Clearshowalert("No of days after decimal point should be 0 or 5", "alert alert-danger");
                     $("#NoOfDays" + i).focus();
                     return;
                 }
@@ -1177,7 +1177,7 @@ function SubmitLeaveBalanceForm(count) {
         });
     }
     else {
-        Clearshowalert("No of Days value should be more than 0", "alert alert-danger");
+        Clearshowalert("No of Days should be greater than 0", "alert alert-danger");
         return;
     }
 }

@@ -56,12 +56,13 @@
     </script>
 }
 @{
+    string title = (string)ViewBag.RequestLevelPerson == "My" ? "My Transaction Log" : (string)ViewBag.RequestLevelPerson + " - Transaction Log";
     @Html.Hidden("RequestLevelPerson", (string)ViewBag.RequestLevelPerson)
     <div class="row">
         <div class="col-sm-12">
             <div class="box box-primary">
                 <div class="box-header with-border">
-                    <h3 class="box-title">@((string)ViewBag.RequestLevelPerson + " Transaction Log")</h3>
+                    <h3 class="box-title">@title</h3>
                 </div>
                 @{ if ((string)ViewBag.RequestLevelPerson != "My")
                     {

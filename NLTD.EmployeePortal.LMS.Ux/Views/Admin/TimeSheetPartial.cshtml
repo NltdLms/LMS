@@ -110,7 +110,7 @@ else
                         @Html.DisplayName("Status")
                     </th>
                     <th>
-                        @Html.DisplayName("LMS Status")
+                        @Html.DisplayName("Requests")
                     </th>
                     <th>
                         @Html.DisplayName("Late In")
@@ -208,7 +208,7 @@ else
                                 @Model[i].Status
                             </td>
                             <td>
-                                @Model[i].LMSStatus
+                                @Model[i].Requests
                             </td>
                             <td>
                                 @Model[i].LateIn
@@ -268,7 +268,7 @@ else
                                             @Html.DisplayName("Status")
                                         </th>
                                         <th>
-                                            @Html.DisplayName("LMS Status")
+                                            @Html.DisplayName("Requests")
                                         </th>
                                         <th>
                                             @Html.DisplayName("Late In")
@@ -375,7 +375,7 @@ else
                                                 @Model[j].Status
                                             </td>
                                             <td>
-                                                @Model[j].LMSStatus
+                                                @Model[j].Requests
                                             </td>
                                             <td>
                                                 @Model[j].LateIn
@@ -484,13 +484,13 @@ else
                                                         select new TimeSheetConsolidate
                                                         {
                                                             hours = new TimeSpan(g.Sum(r => r.WorkingHours.Ticks)),
-                                                            permissionCount = g.Count(k => k.LMSStatus.Contains("Permission")),
-                                                            leaveCount = g.Count(k => k.LMSStatus.Contains("Leave")),
+                                                            permissionCount = g.Count(k => k.Requests.Contains("Permission")),
+                                                            leaveCount = g.Count(k => k.Requests.Contains("Leave")),
                                                             lateCount = g.Count(k => k.LateIn > new TimeSpan()),
                                                             earlyCount = g.Count(k => k.EarlyOut > new TimeSpan()),
                                                             fromDatetime = g.Min(k => k.WorkingDate),
                                                             toDatetime = g.Max(k => k.WorkingDate),
-                                                            WFHCount = g.Count(k=> k.LMSStatus.Contains("Work From Home"))
+                                                            WFHCount = g.Count(k=> k.Requests.Contains("Work From Home"))
                                                         }).FirstOrDefault();
 
         return TimeSheetConsolidateObj;

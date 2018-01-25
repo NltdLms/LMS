@@ -187,7 +187,7 @@ namespace NLTD.EmploeePortal.LMS.Dac.Dac
                         TimeSheetModelObj.Status = GetAbsentStatus(ShiftQueryModelList[i].ShiftDate, officeWeekOffDayList,
                officeHolidayList, employeeLeaveList);
                     }
-                    TimeSheetModelObj.LMSStatus = GetLMSStatus(employeeLeaveList, ShiftQueryModelList[i].ShiftDate);
+                    TimeSheetModelObj.Requests = GetLMSStatus(employeeLeaveList, ShiftQueryModelList[i].ShiftDate);
                     timeSheetModelList.Add(TimeSheetModelObj);
 
                 }

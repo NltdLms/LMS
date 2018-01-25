@@ -921,12 +921,12 @@ namespace NLTD.EmployeePortal.LMS.Ux.AppHelpers
             {
                 TimeSheetConsolidateObj.EarlyCount = TimeSheetConsolidateObj.EarlyCount + 1;
             }
-            if (!string.IsNullOrEmpty(TimeSheetModelObj.LMSStatus) &&
-                    TimeSheetModelObj.LMSStatus.Contains("Permission"))
+            if (!string.IsNullOrEmpty(TimeSheetModelObj.Requests) &&
+                    TimeSheetModelObj.Requests.Contains("Permission"))
             {
                 TimeSheetConsolidateObj.PermissionCount = TimeSheetConsolidateObj.PermissionCount + 1;
             }
-            if (!string.IsNullOrEmpty(TimeSheetModelObj.LMSStatus) && TimeSheetModelObj.LMSStatus.Contains("Leave"))
+            if (!string.IsNullOrEmpty(TimeSheetModelObj.Requests) && TimeSheetModelObj.Requests.Contains("Leave"))
             {
                 TimeSheetConsolidateObj.LeaveCount = TimeSheetConsolidateObj.LeaveCount + 1;
             }
