@@ -884,9 +884,11 @@ function hourEntryLayout() {
 function hideRuleText() {
 
     if ($('#LeaveType :selected').text().indexOf("Sick") != -1)
-        $('#divSickLeaveMsg > p').html("* If sick leave is more than 3 days, submit medical certificate.");
+        $('#divSickLeaveMsg > p').html("* Please submit a medical certificate to your manager for sick leaves greater than 3 days.");
     else if ($('#LeaveType :selected').text().indexOf("Compensatory Off") != -1)
-        $('#divSickLeaveMsg > p').html("* In Reason box, enter the date against which the Compensatory Off is to be availed.");
+        $('#divSickLeaveMsg > p').html("* Please provide the date against which the Compensatory Off is to be availed in the Reason.");
+    else if ($('#LeaveType :selected').text().indexOf("Debit Leave") != -1)
+        $('#divSickLeaveMsg > p').html("* This leave will be debited from your leave balance when leaves are added to your account.");
     else
         $('#divSickLeaveMsg > p').html("");
 }
