@@ -100,11 +100,11 @@
     string title = string.Empty;
     if(ViewBag.RequestLevelPerson=="My")
     {
-        title = ViewBag.RequestLevelPerson + " Requests History";
+        title = ViewBag.RequestLevelPerson + " Request History";
     }
     else
     {
-        title = ViewBag.RequestLevelPerson + " - Requests History";
+        title = ViewBag.RequestLevelPerson + " - Request History";
     }
 
     @Html.Hidden("RequestLevelPerson", (string)ViewBag.RequestLevelPerson)
