@@ -41,7 +41,7 @@ namespace NLTD.EmploeePortal.LMS.Dac.Dac
                         {
                             transactionDetails = getTransactionDetails(context, LeaduserId);
                         }
-                        else if (RequestMenuUser == "Admin")
+                        if (RequestMenuUser == "Team")
                         {
                             var leadinfo = (from emp in context.Employee
                                             join role in context.EmployeeRole on emp.EmployeeRoleId equals role.RoleId
@@ -52,20 +52,16 @@ namespace NLTD.EmploeePortal.LMS.Dac.Dac
                             {
                                 transactionDetails = getTransactionDetails(context, userId);
                             }
-                        }
-                        else if (RequestMenuUser == "Team")
-                        {
-                            //var user = (from e in context.Employee
-                            //            where e.ReportingToId == LeaduserId
-                            //            select e).ToList();
-
-                            var user = empList.Where(x => x == userId).FirstOrDefault();
-
-                            //var found = FindControlRecursively(user, userId);
-
-                            if (user != null)
+                            else
                             {
-                                transactionDetails = getTransactionDetails(context, userId);
+                                var user = empList.Where(x => x == userId).FirstOrDefault();
+
+                                //var found = FindControlRecursively(user, userId);
+
+                                if (user>0)
+                                {
+                                    transactionDetails = getTransactionDetails(context, userId);
+                                }
                             }
                         }
 

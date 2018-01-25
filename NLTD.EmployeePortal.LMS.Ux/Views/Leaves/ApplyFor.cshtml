@@ -129,7 +129,7 @@
                         </div>
                         <div class="col-sm-2 duration">
                             <div class="form-group">
-                                @Html.Label("Part of Day")
+                                @Html.Label("Part Of Day")
                                 <select id="LeaveFromTime" name="LeaveFromTime" class="form-control" onchange="CountLeaveDays()">
 
                                     <option value="A">Full Day</option>
@@ -150,7 +150,7 @@
                         </div>
                         <div class="col-sm-2 duration halfday">
                             <div class="form-group">
-                                @Html.Label("Part of Day")
+                                @Html.Label("Part Of Day")
                                 <select id="LeaveUptoTime" name="LeaveUptoTime" class="form-control" onchange="CountLeaveDays()">
                                     <option value="A">Full Day</option>
                                     <option value="F">First Half</option>
@@ -169,7 +169,7 @@
                     </div>
                     <div class="row" style="padding-bottom:1em">
                         <div class="col-sm-2 duration">
-                            @Html.Label("", "No. of Days")
+                            @Html.Label("", "No. of Day(s)")
                             @Html.TextBoxFor(e => e.NumberOfDays, null, new { @class = "form-control", @readonly = "true" })
                         </div>
                         <div class="col-sm-2 duration">

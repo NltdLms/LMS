@@ -49,47 +49,52 @@
       </level1item>
     </MenuItem>
     <MenuItem>
-      <title>Admin</title>
+      <title>My Team Requests</title>
       <url>#</url>
-      <icon>fa fa-calculator</icon>
+      <icon>fa fa-users</icon>
       <level1item>
         <MenuItem>
+          <title>Manage Requests</title>
+          <url>/Leaves/ManageLeaveRequest</url>
+          <icon></icon>
+        </MenuItem>
+        <MenuItem>
           <title>Request History</title>
-          <url>/Leaves/AdminLeaveHistory</url>
+          <url>/Leaves/TeamLeaveHistory</url>
           <icon></icon>
         </MenuItem>
         <MenuItem>
           <title>Day wise Report</title>
-          <url>/Admin/AdminDaywiseLeaves</url>
+          <url>/Admin/TeamDaywiseLeaves</url>
           <icon></icon>
         </MenuItem>
         <MenuItem>
           <title>Month wise Report</title>
-          <url>/Admin/AdminMonthWiseLeaves</url>
+          <url>/Admin/TeamMonthWiseLeaves</url>
           <icon></icon>
         </MenuItem>
         <MenuItem>
-          <title>Year wise Report</title>
-          <url>/Admin/AdminYearWiseLeaveSumary</url>
+          <title>Leave Balance Report</title>
+          <url>/Admin/TeamYearWiseLeaveSumary</url>
           <icon></icon>
         </MenuItem>
         <MenuItem>
           <title>Permissions Report</title>
-          <url>/Admin/AdminPermissions</url>
+          <url>/Admin/TeamPermissions</url>
           <icon></icon>
         </MenuItem>
         <MenuItem>
           <title>View Employee Profile</title>
-          <url>/Profile/AdminLmsProfile</url>
+          <url>/Profile/TeamLmsProfile</url>
           <icon></icon>
         </MenuItem>
         <MenuItem>
           <title>View Transaction Log</title>
-          <url>/Admin/ViewTransactionLog</url>
+          <url>/Admin/TeamTransactionLogs</url>
           <icon></icon>
         </MenuItem>
+
       </level1item>
-     
     </MenuItem>
     <MenuItem>
       <title>Timesheet</title>
@@ -106,7 +111,7 @@
           <url>/Attendance/MyTimeSheet</url>
           <icon></icon>
         </MenuItem>
-         <MenuItem>
+        <MenuItem>
           <title>My Shifts</title>
           <url>/Shift/MyShiftDetails</url>
           <icon></icon>
