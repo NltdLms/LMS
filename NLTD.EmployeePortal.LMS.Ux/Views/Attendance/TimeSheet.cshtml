@@ -220,7 +220,7 @@
                                     <div class="col-sm-3" style="text-align:right">
                                         <br />
                                         <button type="button" class="btn btn-primary" onclick="loadTimeSheetSummary()">SEARCH</button>
-                                        <button type="submit" class="btn btn-primary"  >EXPORT</button>
+                                        <button type="submit" class="btn btn-primary"  >EXPORT TO EXCEL</button>
                                     </div>
                                 </div>
 
@@ -247,14 +247,14 @@
                                         {
                                             <br />
                                             @Html.CheckBoxFor(m=>m.MyDirectEmployees,new {id= "mydirectemployeecheck", @checked = "checked" })
-                                            @Html.Label("Direct employees only")
+                                            @Html.Label("My Direct Reportees")
 
                                         }
                                     </div>
                                     <div class="col-sm-3" style="text-align:right">
                                         <br />
                                         <button type="button" class="btn btn-primary" onclick="loadTimeSheetSummary()">SEARCH</button>
-                                        <button type="submit" class="btn btn-primary" click="return CheckAutoCompleteName()">EXPORT</button>
+                                        <button type="submit" class="btn btn-primary" click="return CheckAutoCompleteName()">EXPORT TO EXCEL</button>
                                     </div>
                                 </div>
                             }

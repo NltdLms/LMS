@@ -82,9 +82,9 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
             excelData = LeaveRequests.ToList();
             if (excelData.Count > 0)
             {
-                string[] columns = { "EmpID", "Name", "LeaveType", "TotalLeaves", "UsedLeaves", "PendingApproval", "BalanceLeaves" };
-                byte[] filecontent = ExcelExportHelper.ExportExcelYearSummary(excelData, "", false, columns);
-                return File(filecontent, ExcelExportHelper.ExcelContentType, "YearwiseSummaryLeaveReport_" + System.DateTime.Now + ".xlsx");
+                string[] columns = { "Emp Id", "Name", "Request Type", "Total Leaves", "Used Leaves", "Pending Approval", "Balance Leaves" };
+                byte[] filecontent = ExcelExportHelper.ExportExcelYearSummary(excelData,  "", false, columns);
+                return File(filecontent, ExcelExportHelper.ExcelContentType, "LeaveBalanceReport_" + System.DateTime.Now + ".xlsx");
             }
             else
             {
@@ -161,8 +161,8 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
             if (excelData.Count > 0)
             {
                 string[] columns = { "EmpId", "Name", "CL1", "PL1", "LWP1", "CO1", "CL2", "PL2", "LWP2", "CO2", "CL3", "PL3", "LWP3", "CO3", "CL4", "PL4", "LWP4", "CO4", "CL5", "PL5", "LWP5", "CO5", "CL6", "PL6", "LWP6", "CO6", "CL7", "PL7", "LWP7", "CO7", "CL8", "PL8", "LWP8", "CO8", "CL9", "PL9", "LWP9", "CO9", "CL10", "PL10", "LWP10", "CO10", "CL11", "PL11", "LWP11", "CO11", "CL12", "PL12", "LWP12", "CO12" };
-                byte[] filecontent = ExcelExportHelper.ExportExcelMonthSummary(excelData, "", false, columns);
-                return File(filecontent, ExcelExportHelper.ExcelContentType, "MonthwiseSummaryLeaveReport_" + System.DateTime.Now + ".xlsx");
+                byte[] filecontent = ExcelExportHelper.ExportExcelMonthSummary(excelData,data.Year, "", false, columns);
+                return File(filecontent, ExcelExportHelper.ExcelContentType, "MonthwiseReport_" + System.DateTime.Now + ".xlsx");
             }
             else
             {
@@ -176,6 +176,7 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
                 return View("MonthwiseLeaveCount", data);
             }
         }
+
 
         public ActionResult MyDaywiseLeaves()
         {
@@ -279,7 +280,7 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
             excelData = LeaveRequests.ToList();
             if (excelData.Count > 0)
             {
-                string[] columns = { "EmpId", "Name", "LeaveType", "LeaveBalance", "LeaveDate", "PartOfDay", "Duration", "LeaveStatus", "LeaveReason", "ApproverComments" };
+                string[] columns = { "Emp Id", "Name", "Request Type", "Leave Balance", "Request Date", "Part Of Day", "Duration", "Status", "Reason", "Approver Comments" };
                 byte[] filecontent = ExcelExportHelper.ExportExcel(excelData, "", false, columns);
                 return File(filecontent, ExcelExportHelper.ExcelContentType, "DaywiseReport_" + System.DateTime.Now + ".xlsx");
             }
@@ -290,6 +291,7 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
                 return View("DaywiseLeaveDateRangeView", data);
             }
         }
+
         public ActionResult MyPermissions()
         {
             PermissionQueryModel mdl = new PermissionQueryModel();
