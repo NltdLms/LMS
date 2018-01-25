@@ -209,40 +209,66 @@ namespace NLTD.EmploeePortal.LMS.Dac
                                         join role in context.EmployeeRole on emp.EmployeeRoleId equals role.RoleId
                                         where emp.UserId == UserId
                                         select new { RoleName = role.Role }).FirstOrDefault();
+
+
                         if (leadinfo != null)
                         {
-                            if (reqUsr == "Admin")
+                            if (reqUsr == "Team")
                             {
+                                //lstSummary = LeaveItemsquery.Where(t => empList.Contains(t.UserId)).ToList();
                                 if (leadinfo.RoleName.ToUpper() == "ADMIN" || leadinfo.RoleName.ToUpper() == "HR")
                                 {
-                                    lstSummary = LeaveItemsquery.ToList();
-                                }
-                            }
-                            else if (reqUsr == "Team")
-                            {
-                                lstSummary = LeaveItemsquery.Where(t => empList.Contains(t.UserId)).ToList();
-                                if (OnlyReportedToMe)
-                                {
-                                    lstSummary = LeaveItemsquery.Where(x => x.ReportingToId == UserId).ToList();
+                                    if (paramUserId>0) {
 
+                                        lstSummary = LeaveItemsquery.Where(x => x.UserId == paramUserId).ToList();
+                                    }
+                                    else
+                                    {
+                                        if (OnlyReportedToMe)
+                                        {
+                                            lstSummary = LeaveItemsquery.Where(x => x.ReportingToId == UserId).ToList();
+
+                                        }
+                                        else
+                                        {
+                                            lstSummary = LeaveItemsquery.ToList();
+
+                                        }
+                                    }
                                 }
                                 else
                                 {
-                                    lstSummary = LeaveItemsquery.Where(t => empList.Contains(t.UserId)).ToList();
+                                    if (paramUserId > 0) {
+                                        lstSummary = LeaveItemsquery.Where(t => empList.Contains(t.UserId)).ToList();
+                                        if(lstSummary.Count>0)
+                                            lstSummary = lstSummary.Where(x => x.UserId == paramUserId).ToList();
+                                    }
+                                    else
+                                    {
+                                        if (OnlyReportedToMe)
+                                        {
+                                            lstSummary = LeaveItemsquery.Where(x => x.ReportingToId == UserId).ToList();
 
+                                        }
+                                        else
+                                        {
+                                            lstSummary = LeaveItemsquery.Where(t => empList.Contains(t.UserId)).ToList();
+
+                                        }
+                                    }
                                 }
                             }
                         }
                     }
-                    if (paramUserId != null && paramUserId != 0)
-                    {
+                    //if (paramUserId != null && paramUserId != 0)
+                    //{
                        
-                            if (lstSummary.Count > 0)
-                            {
-                                lstSummary = lstSummary.Where(x => x.UserId == paramUserId).ToList();
-                            }
+                    //        if (lstSummary.Count > 0)
+                    //        {
+                    //            lstSummary = lstSummary.Where(x => x.UserId == paramUserId).ToList();
+                    //        }
                         
-                    }
+                    //}
 
                     lstSummary = lstSummary.OrderBy(x => x.Name).ToList();
                 }
@@ -738,24 +764,46 @@ namespace NLTD.EmploeePortal.LMS.Dac
                                     select new { RoleName = role.Role }).FirstOrDefault();
                     if (leadinfo != null)
                     {
-                        if (qryMdl.RequestMenuUser == "Admin")
+
+                        if (leadinfo.RoleName.ToUpper() == "ADMIN" || leadinfo.RoleName.ToUpper() == "HR")
                         {
-                            if (leadinfo.RoleName.ToUpper() == "ADMIN" || leadinfo.RoleName.ToUpper() == "HR")
+                            if (qryMdl.SearchUserID > 0)
                             {
-                                LeaveItems = LeaveItemsquery.ToList();
-                            }
-                        }
-                        else if (qryMdl.RequestMenuUser == "Team")
-                        {
-                            if (qryMdl.OnlyReportedToMe)
-                            {
-                                LeaveItems = LeaveItemsquery.Where(t => t.ReportingToId == qryMdl.LeadId).ToList();
+                                LeaveItems = LeaveItemsquery.Where(x => x.UserId == qryMdl.SearchUserID).ToList();
                             }
                             else
                             {
-                                LeaveItems = LeaveItemsquery.Where(t => empList.Contains(t.UserId)).ToList();
+                                if (qryMdl.OnlyReportedToMe)
+                                {
+                                    LeaveItems = LeaveItemsquery.Where(t => t.ReportingToId == qryMdl.LeadId).ToList();
+                                }
+                                else
+                                {
+                                    LeaveItems = LeaveItemsquery.ToList();
+                                }
                             }
                         }
+                        else
+                        {
+                            if (qryMdl.SearchUserID > 0)
+                            {
+                                LeaveItems = LeaveItemsquery.Where(t => empList.Contains(t.UserId)).ToList();
+                                if(LeaveItems.Count>0)
+                                LeaveItems = LeaveItems.Where(x => x.UserId == qryMdl.SearchUserID).ToList();
+                            }
+                            else
+                            {
+                                if (qryMdl.OnlyReportedToMe)
+                                {
+                                    LeaveItems = LeaveItemsquery.Where(t => t.ReportingToId == qryMdl.LeadId).ToList();
+                                }
+                                else
+                                {
+                                    LeaveItems = LeaveItemsquery.Where(t => empList.Contains(t.UserId)).ToList();
+                                }
+                            }
+                        }
+                        
                     }
                 }
                 if (qryMdl.ShowApprovedLeaves)
@@ -1482,37 +1530,52 @@ namespace NLTD.EmploeePortal.LMS.Dac
 
                     if (leadinfo != null)
                     {
-                        if (reqUsr == "Admin")
+                         if (reqUsr == "Team")
                         {
                             if (leadinfo.RoleName.ToUpper() == "ADMIN" || leadinfo.RoleName.ToUpper() == "HR")
                             {
-                                retList = retList.ToList();
-                                if (DonotShowRejected)
-                                    retList = retList.Where(x => x.LeaveStatus != "R" && x.LeaveStatus != "C").ToList();
-                            }
-                        }
-                        else if (reqUsr == "Team")
-                        {
-                            if (OnlyReportedToMe)
-                            {
-                                retList = retList.Where(x => x.ReportingToId == LeadId).ToList();
+                                if (paramUserId > 0) {
+
+                                    retList = retList.Where(x => x.UserId == paramUserId).ToList();
+                                }
+                                else
+                                {
+                                    if (OnlyReportedToMe)
+                                    {
+                                        retList = retList.Where(x => x.ReportingToId == LeadId).ToList();
+                                    }
+                                    else
+                                    {
+                                        //retList = retList.ToList();
+                                        if (DonotShowRejected)
+                                            retList = retList.Where(x => x.LeaveStatus != "R" && x.LeaveStatus != "C").ToList();
+                                    }
+                                }
                             }
                             else
                             {
-                                retList = retList.Where(t => empList.Contains(t.UserId)).OrderBy(t => t.Name).ToList();
+                                if (paramUserId > 0)
+                                {
+                                    retList = retList.Where(t => empList.Contains(t.UserId)).OrderBy(t => t.Name).ToList();
+                                    if(retList.Count>0)
+                                    retList = retList.Where(x => x.UserId == paramUserId).ToList();
+                                }
+                                else
+                                {
+                                    if (OnlyReportedToMe)
+                                    {
+                                        retList = retList.Where(x => x.ReportingToId == LeadId).ToList();
+                                    }
+                                    else
+                                    {
+                                        retList = retList.Where(t => empList.Contains(t.UserId)).OrderBy(t => t.Name).ToList();
+                                    }
+                                }
                             }
                         }
                     }
                 }
-                if (paramUserId != null && paramUserId != 0)
-                {
-                    
-                        if (retList.Count > 0)
-                        {
-                            retList = retList.Where(x => x.UserId == paramUserId).ToList();
-                        }
-                    
-                }
+                
 
                 for (int i = 0; i < retList.Count; i++)
                 {
@@ -1670,36 +1733,53 @@ namespace NLTD.EmploeePortal.LMS.Dac
                                     select new { RoleName = role.Role }).FirstOrDefault();
                     if (leadinfo != null)
                     {
-                        if (reqUsr == "Admin")
+                       if (reqUsr == "Team")
                         {
                             if (leadinfo.RoleName.ToUpper() == "ADMIN" || leadinfo.RoleName.ToUpper() == "HR")
                             {
-                                permissions = qry.ToList();
-                            }
-                        }
-                        else if (reqUsr == "Team")
-                        {
-                            if (OnlyReportedToMe)
-                            {
-                                permissions = qry.Where(x => x.ReportingToId == LeadId).ToList();
+                                if (paramUserId > 0)
+                                {
+                                    permissions = qry.Where(x => x.UserId == paramUserId).ToList();
+                                }
+                                else
+                                {
+                                    if (OnlyReportedToMe)
+                                    {
+                                        permissions = qry.Where(x => x.ReportingToId == LeadId).ToList();
+                                    }
+                                    else
+                                    {
+                                        permissions = qry.ToList();
+                                    }
+                                }
                             }
                             else
                             {
-                                permissions = qry.Where(t => empList.Contains(t.UserId)).ToList();
+                                if (paramUserId > 0)
+                                {
+                                    permissions = qry.Where(t => empList.Contains(t.UserId)).ToList();
+                                    if(permissions.Count>0)
+                                    permissions = permissions.Where(x => x.UserId == paramUserId).ToList();
+                                }
+                                else
+                                {
+                                    if (OnlyReportedToMe)
+                                    {
+                                        permissions = qry.Where(x => x.ReportingToId == LeadId).ToList();
+                                    }
+                                    else
+                                    {
+                                        permissions = qry.Where(t => empList.Contains(t.UserId)).ToList();
+                                    }
+                                }
                             }
                         }
                     }
 
                 }
             }
-            if (paramUserId != null && paramUserId != 0)
-            {
-                
-                    if (permissions.Count > 0)
-                        permissions = permissions.Where(x => x.UserId == paramUserId).ToList();
-                
-            }
-            if (permissions != null)
+            
+            if (permissions.Count>0)
             {
                 TimeSpan timeFrom;
                 DateTime permissionDateFromTime;
@@ -1970,22 +2050,44 @@ namespace NLTD.EmploeePortal.LMS.Dac
 
                     if (leadinfo != null)
                     {
-                        if (reqUsr == "Admin")
+                        if (reqUsr == "Team")
                         {
                             if (leadinfo.RoleName.ToUpper() == "ADMIN" || leadinfo.RoleName.ToUpper() == "HR")
                             {
-                                retList = retList.ToList();
-                            }
-                        }
-                        else if (reqUsr == "Team")
-                        {
-                            if (OnlyReportedToMe)
-                            {
-                                retList = retList.Where(x => x.ReportingToId == LeadId).ToList();
+                                if (paramUserId > 0) {
+                                    retList = retList.Where(x => x.UserId == paramUserId).ToList();
+                                }
+                                else
+                                {
+                                    if (OnlyReportedToMe)
+                                    {
+                                        retList = retList.Where(x => x.ReportingToId == LeadId).ToList();
+                                    }
+                                    else
+                                    {
+                                        retList = retList.ToList();
+                                    }
+                                }
                             }
                             else
                             {
-                                retList = retList.Where(t => empList.Contains(t.UserId)).OrderBy(t => t.Name).ToList();
+                                if (paramUserId > 0)
+                                {
+                                    retList = retList.Where(t => empList.Contains(t.UserId)).OrderBy(t => t.Name).ToList();
+                                    if(retList.Count>0)
+                                    retList = retList.Where(x => x.UserId == paramUserId).ToList();
+                                }
+                                else
+                                {
+                                    if (OnlyReportedToMe)
+                                    {
+                                        retList = retList.Where(x => x.ReportingToId == LeadId).ToList();
+                                    }
+                                    else
+                                    {
+                                        retList = retList.Where(t => empList.Contains(t.UserId)).OrderBy(t => t.Name).ToList();
+                                    }
+                                }
                             }
                         }
                     }
@@ -2035,54 +2137,72 @@ namespace NLTD.EmploeePortal.LMS.Dac
 
                     if (leadinfo != null)
                     {
-                        if (reqUsr == "Admin")
+                        if (reqUsr == "Team")
                         {
                             if (leadinfo.RoleName.ToUpper() == "ADMIN" || leadinfo.RoleName.ToUpper() == "HR")
                             {
-                                var allEmp = context.Employee.Where(x => x.IsActive == true).ToList();
-                                foreach (var item in allEmp)
+                                if (OnlyReportedToMe)
                                 {
-                                    if (retList.Where(x => x.EmpId == item.EmployeeId).FirstOrDefault() == null)//This employee didn't take leaves, we have to show zero.
+                                    var allEmp = context.Employee.Where(x => x.ReportingToId == LeadId).ToList();
+                                    foreach (var item in allEmp)
                                     {
-                                        emp = new MonthwiseCountEmp();
-                                        emp.EmpId = item.EmployeeId;
-                                        emp.Name = item.FirstName + " " + item.LastName;
-                                        newList.Add(emp);
-                                    }
+                                        if (retList.Where(x => x.EmpId == item.EmployeeId).FirstOrDefault() == null)//This employee didn't take leaves, we have to show zero.
+                                        {
+                                            emp = new MonthwiseCountEmp();
+                                            emp.EmpId = item.EmployeeId;
+                                            emp.Name = item.FirstName + " " + item.LastName;
+                                            newList.Add(emp);
+                                        }
 
+                                    }
                                 }
-                            }
-                        }
-                        else if (reqUsr == "Team")
-                        {
-                            if (OnlyReportedToMe)
-                            {
-                                var allEmp = context.Employee.Where(x => x.ReportingToId == LeadId).ToList();
-                                foreach (var item in allEmp)
+                                else
                                 {
-                                    if (retList.Where(x => x.EmpId == item.EmployeeId).FirstOrDefault() == null)//This employee didn't take leaves, we have to show zero.
+                                    var allEmp = context.Employee.Where(x => x.IsActive == true).ToList();
+                                    foreach (var item in allEmp)
                                     {
-                                        emp = new MonthwiseCountEmp();
-                                        emp.EmpId = item.EmployeeId;
-                                        emp.Name = item.FirstName + " " + item.LastName;
-                                        newList.Add(emp);
-                                    }
+                                        if (retList.Where(x => x.EmpId == item.EmployeeId).FirstOrDefault() == null)//This employee didn't take leaves, we have to show zero.
+                                        {
+                                            emp = new MonthwiseCountEmp();
+                                            emp.EmpId = item.EmployeeId;
+                                            emp.Name = item.FirstName + " " + item.LastName;
+                                            newList.Add(emp);
+                                        }
 
+                                    }
                                 }
                             }
                             else
                             {
-                                var allEmp = context.Employee.Where(t => empList.Contains(t.UserId)).ToList();
-                                foreach (var item in allEmp)
+                                if (OnlyReportedToMe)
                                 {
-                                    if (retList.Where(x => x.EmpId == item.EmployeeId).FirstOrDefault() == null)//This employee didn't take leaves, we have to show zero.
+                                    var allEmp = context.Employee.Where(x => x.ReportingToId == LeadId).ToList();
+                                    foreach (var item in allEmp)
                                     {
-                                        emp = new MonthwiseCountEmp();
-                                        emp.EmpId = item.EmployeeId;
-                                        emp.Name = item.FirstName + " " + item.LastName;
-                                        newList.Add(emp);
-                                    }
+                                        if (retList.Where(x => x.EmpId == item.EmployeeId).FirstOrDefault() == null)//This employee didn't take leaves, we have to show zero.
+                                        {
+                                            emp = new MonthwiseCountEmp();
+                                            emp.EmpId = item.EmployeeId;
+                                            emp.Name = item.FirstName + " " + item.LastName;
+                                            newList.Add(emp);
+                                        }
 
+                                    }
+                                }
+                                else
+                                {
+                                    var allEmp = context.Employee.Where(t => empList.Contains(t.UserId)).ToList();
+                                    foreach (var item in allEmp)
+                                    {
+                                        if (retList.Where(x => x.EmpId == item.EmployeeId).FirstOrDefault() == null)//This employee didn't take leaves, we have to show zero.
+                                        {
+                                            emp = new MonthwiseCountEmp();
+                                            emp.EmpId = item.EmployeeId;
+                                            emp.Name = item.FirstName + " " + item.LastName;
+                                            newList.Add(emp);
+                                        }
+
+                                    }
                                 }
                             }
                         }

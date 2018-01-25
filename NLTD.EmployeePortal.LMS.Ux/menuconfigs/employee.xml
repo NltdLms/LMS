@@ -32,7 +32,7 @@
           <icon></icon>
         </MenuItem>
         <MenuItem>
-          <title>Year wise Report</title>
+          <title>Leave Balance Report</title>
           <url>/Admin/MyYearWiseLeaveSumary</url>
           <icon></icon>
         </MenuItem>
@@ -50,22 +50,22 @@
     </MenuItem>
 
     <MenuItem>
-      <title>Timesheet</title>
+      <title>My Timesheet</title>
       <url>#</url>
       <icon>fa fa-user-circle-o</icon>
       <level1item>
         <MenuItem>
-          <title>My Attendance</title>
+          <title>Attendance</title>
           <url>/Attendance/MyAttendance</url>
           <icon></icon>
         </MenuItem>
         <MenuItem>
-          <title>My TimeSheet</title>
+          <title>TimeSheet</title>
           <url>/Attendance/MyTimeSheet</url>
           <icon></icon>
         </MenuItem>
         <MenuItem>
-          <title>My Shifts</title>
+          <title>Shift</title>
           <url>/Shift/MyShiftDetails</url>
           <icon></icon>
         </MenuItem>

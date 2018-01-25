@@ -8,7 +8,7 @@ namespace NLTD.EmployeePortal.LMS.Common.DisplayModel
     public class EmployeeProfile
     {
 
-        [Display(Name = "Logon Id")]
+        [Display(Name = "Corp Id")]
         public String LogonId { get; set; }
 
         [Required(ErrorMessage = "Enter Employee Id.")]
@@ -26,7 +26,7 @@ namespace NLTD.EmployeePortal.LMS.Common.DisplayModel
         public String LastName { get; set; }
 
 
-        [Display(Name = "Email Address")]
+        [Display(Name = "Email")]
         public String EmailAddress { get; set; }
 
         [Display(Name = "Mobile Number")]
@@ -41,7 +41,7 @@ namespace NLTD.EmployeePortal.LMS.Common.DisplayModel
         [Display(Name = "Reporting To")]
         public Int64? ReportedToId { get; set; }
         public String ReportedToName { get; set; }
-        [Required(ErrorMessage = "Select Holiday Office.")]
+        [Required(ErrorMessage = "Select Holiday Calendar.")]
         public Int64 OfficeHolodayId { get; set; }
 
         public Int64 OfficeId { get; set; }

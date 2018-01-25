@@ -14,7 +14,7 @@
                         <div class="col-sm-3">
                             <div class="form-group">
                                 @Html.CheckBoxFor(e => e.IsActive, new { @disabled = true })
-                                @Html.Label("Is Active")
+                                @Html.Label("Active")
                             </div>
                         </div>
                     </div>
@@ -34,7 +34,7 @@
                         </div>
                         <div class="col-sm-3">
                             <div class="form-group">
-                                @Html.Label("Logon Id")
+                                @Html.Label("Corp Id")
                                 @Html.TextBoxFor(e => e.LogonId, null, new { @class = "form-control", @readonly = true })
                             </div>
                         </div>
@@ -49,7 +49,7 @@
                         <div class="col-sm-6">
                             <div class="form-group">
 
-                                @Html.Label("Email Address")
+                                @Html.Label("Email")
                                 @Html.TextBoxFor(e => e.EmailAddress, null, new { @class = "form-control", @readonly = true })
 
                             </div>
@@ -97,7 +97,7 @@
                         </div>
 
                         <div class="col-sm-3">
-                            @Html.Label("Holiday Office")
+                            @Html.Label("Holiday Calendar")
                             @Html.TextBoxFor(e => e.HolidayOfficeName, null, new { @class = "form-control", @readonly = true })
 
                         </div>

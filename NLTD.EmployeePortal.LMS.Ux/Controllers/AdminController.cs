@@ -281,7 +281,7 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
             {
                 string[] columns = { "EmpId", "Name", "LeaveType", "LeaveBalance", "LeaveDate", "PartOfDay", "Duration", "LeaveStatus", "LeaveReason", "ApproverComments" };
                 byte[] filecontent = ExcelExportHelper.ExportExcel(excelData, "", false, columns);
-                return File(filecontent, ExcelExportHelper.ExcelContentType, "DaywiseLeaveReport_" + System.DateTime.Now + ".xlsx");
+                return File(filecontent, ExcelExportHelper.ExcelContentType, "DaywiseReport_" + System.DateTime.Now + ".xlsx");
             }
             else
             {
