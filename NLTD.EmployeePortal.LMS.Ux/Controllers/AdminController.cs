@@ -634,17 +634,18 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
             List<TimeSheetModel> excelData = timeSheetModelList.ToList();
             if (excelData.Count > 0)
             {
-                List<string> columns = new List<string>(){  "WorkingDate", "Shift", "InTime", "OutTime","WorkingHours","Status", "LMSStatus", "Day","LateEntry", "EarlyLeave","Name" };
-                string fileName = string.Empty;
-                if (RequestLevelPerson == "My")
-                {
-                    EmployeeProfile profile = (EmployeeProfile)Session["Profile"];
-                    fileName = string.Format("{0}{1}{2}{3}", profile.FirstName, profile.LastName, DateTime.Now.ToString("ddMMyyyyHHmmss"), ".xlsx");
-                }
-                else
-                {
-                    fileName = string.Format("TimeSheet_{0}{1}", DateTime.Now.ToString("ddMMyyyyHHmmss"), ".xlsx");
-                }
+                List<string> columns = new List<string>(){  "WorkingDate", "Shift", "InTime", "OutTime","WorkingHours","Status", "Requests", "Day", "LateIn", "EarlyOut", "Name" };
+                string fileName = string.Format("TimeSheet.xlsx"); ;
+
+                //if (RequestLevelPerson == "My")
+                //{
+                //    EmployeeProfile profile = (EmployeeProfile)Session["Profile"];
+                //    fileName = string.Format("{0}{1}{2}{3}", profile.FirstName, profile.LastName, DateTime.Now.ToString("ddMMyyyyHHmmss"), ".xlsx");
+                //}
+                //else
+                //{
+                //    fileName = string.Format("TimeSheet_{0}{1}", DateTime.Now.ToString("ddMMyyyyHHmmss"), ".xlsx");
+                //}
                 byte[] filecontent = ExcelExportHelper.ExportTimesheetExcel(excelData, "", true, columns.ToArray());
                 return File(filecontent, ExcelExportHelper.ExcelContentType,fileName);
             }
@@ -671,12 +672,13 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
             if (excelData.Count > 0)
             {
                 List<string>  columns = new List<string>(){"AttendenceDate", "INOutTime", "InOut","Name" };
-                string fileName = string.Format("Attendance_{0}{1}", DateTime.Now.ToString("ddMMyyyyHHmmss"), ".xlsx");
+                string fileName = "Attendance.xlsx";
+               // string fileName = string.Format("Attendance_{0}{1}", DateTime.Now.ToString("ddMMyyyyHHmmss"), ".xlsx");
                 if (EmployeeAttendenceQueryModelObj.RequestLevelPerson=="My")
                 {
                     columns = new List<string>() { "AttendenceDate", "INOutTime", "InOut"};
                     EmployeeProfile profile = (EmployeeProfile)Session["Profile"];
-                    fileName = string.Format("{0} {1}{2}{3}", profile.FirstName , profile.LastName, DateTime.Now.ToString("ddMMyyyyHHmmss"), ".xlsx");
+                   // fileName = string.Format("{0} {1}{2}{3}", profile.FirstName , profile.LastName, DateTime.Now.ToString("ddMMyyyyHHmmss"), ".xlsx");
                 }
                 
                 byte[] filecontent = ExcelExportHelper.ExportExcelAttendence(excelData, "", false, columns.ToArray());
