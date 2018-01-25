@@ -637,7 +637,7 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
             if (excelData.Count > 0)
             {
                 List<string> columns = new List<string>(){  "WorkingDate", "Shift", "InTime", "OutTime","WorkingHours","Status", "Requests", "Day", "LateIn", "EarlyOut", "Name" };
-                string fileName = string.Format("TimeSheet.xlsx"); ;
+                string fileName = string.Format("Timesheet_{0}{1}", DateTime.Now.ToString("ddMMyyyyHHmmss"), ".xlsx");
 
                 //if (RequestLevelPerson == "My")
                 //{
@@ -646,7 +646,7 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
                 //}
                 //else
                 //{
-                //    fileName = string.Format("TimeSheet_{0}{1}", DateTime.Now.ToString("ddMMyyyyHHmmss"), ".xlsx");
+                //fileName = string.Format("TimeSheet_{0}{1}", DateTime.Now.ToString("ddMMyyyyHHmmss"), ".xlsx");
                 //}
                 byte[] filecontent = ExcelExportHelper.ExportTimesheetExcel(excelData, "", true, columns.ToArray());
                 return File(filecontent, ExcelExportHelper.ExcelContentType,fileName);
@@ -674,8 +674,8 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
             if (excelData.Count > 0)
             {
                 List<string>  columns = new List<string>(){"AttendenceDate", "INOutTime", "InOut","Name" };
-                string fileName = "Attendance.xlsx";
-               // string fileName = string.Format("Attendance_{0}{1}", DateTime.Now.ToString("ddMMyyyyHHmmss"), ".xlsx");
+               // string fileName = "Attendance.xlsx";
+                string fileName = string.Format("Attendance_{0}{1}", DateTime.Now.ToString("ddMMyyyyHHmmss"), ".xlsx");
                 if (EmployeeAttendenceQueryModelObj.RequestLevelPerson=="My")
                 {
                     columns = new List<string>() { "AttendenceDate", "INOutTime", "InOut"};
