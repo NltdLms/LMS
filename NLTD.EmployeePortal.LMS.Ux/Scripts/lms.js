@@ -659,6 +659,10 @@ function LoadTeamStatus() {
 function loadDaywiseLeaves() {
     $("#alert_placeholder").empty();
 
+    if ($("#alert") != undefined) {
+        $("#alert").remove();
+    }
+
     if ($("#OnlyReportedToMe").val() == undefined) {
         var showTeam = false;
     }
@@ -679,7 +683,7 @@ function loadDaywiseLeaves() {
     }
     if ($("#Name").val() != undefined) {
         if (!ValidateAutocompleteName($("#Name").val(), $("#SearchUserID").val())) {
-            Clearshowalert("Please Choose a valid Username from the List. To Show all employee Clear the textbox.", "alert alert-danger");
+            Clearshowalert("Please Choose a valid Username from the List.", "alert alert-danger");
             return;
         }
     }
@@ -699,6 +703,11 @@ function loadDaywiseLeaves() {
 }
 function loadPermissionDetail() {
     $("#alert_placeholder").empty();
+
+    if ($("#alert") != undefined) {
+        $("#alert").remove();
+    }
+
     if ($("#OnlyReportedToMe").val() == undefined) {
         var showTeam = false;
     }
@@ -707,7 +716,7 @@ function loadPermissionDetail() {
     }
     if ($("#Name").val() != undefined) {
         if (!ValidateAutocompleteName($("#Name").val(), $("#SearchUserID").val())) {
-            Clearshowalert("Please Choose a valid Username from the List. To Show all employee Clear the textbox.", "alert alert-danger");
+            Clearshowalert("Please Choose a valid Username from the List.", "alert alert-danger");
             return;
         }
     }
