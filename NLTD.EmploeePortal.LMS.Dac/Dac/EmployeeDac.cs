@@ -268,26 +268,56 @@ namespace NLTD.EmploeePortal.LMS.Dac.Dac
                             }
                             else if (requestMenuUser == "Team")
                             {
-                                if (onlyReportedToMe)
+                                if (leadinfo.RoleName.ToUpper() == "ADMIN" || leadinfo.RoleName.ToUpper() == "HR")
                                 {
-                                    ids = ids.Where(t => t.reportingToId == userId && t.iactive == true).ToList();
+                                    if (paramUserId > 0)
+                                    {
+                                        ids = ids.Where(x => x.userId == paramUserId).ToList();
+                                    }
+                                    else
+                                    {
+                                        if (onlyReportedToMe)
+                                        {
+                                            ids = ids.Where(t => t.reportingToId == userId && t.iactive == true).ToList();
+                                        }
+                                        else
+                                        {
+                                            ids = ids.ToList();
+                                        }
+
+                                        if (hideInactiveEmp == true)
+                                        {
+                                            if (ids.Count > 0)
+                                                ids = ids.Where(x => x.iactive == true).ToList();
+                                        }
+                                    }
+                                    
+                                    
                                 }
                                 else
                                 {
-                                    ids = ids.Where(t => empList.Contains(t.userId) && t.iactive == true).ToList();
+                                    if (paramUserId > 0) {
+                                        ids = ids.Where(t => empList.Contains(t.userId) && t.iactive == true).ToList();
+                                        if(ids.Count>0)
+                                            ids = ids.Where(x => x.userId == paramUserId).ToList();
+                                    }
+                                    else
+                                    {
+                                        if (onlyReportedToMe)
+                                        {
+                                            ids = ids.Where(t => t.reportingToId == userId && t.iactive == true).ToList();
+                                        }
+                                        else
+                                        {
+                                            ids = ids.Where(t => empList.Contains(t.userId) && t.iactive == true).ToList();
+                                        }
+                                    }
                                 }
                             }
                         }
                     }
 
-                    if (paramUserId != null && paramUserId != 0)
-                    {
-                        if (ids.Count > 0)
-                            {
-                                ids = ids.Where(x => x.userId == paramUserId).ToList();
-                            }
-                        
-                    }
+                    
 
                     foreach (var memId in ids)
                     {

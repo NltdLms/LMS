@@ -101,6 +101,16 @@
 }
 
 @{
+
+    string title = string.Empty;
+    if(ViewBag.RequestLevelPerson=="My")
+    {
+        title = "My Day Wise Report";
+    }
+    else
+    {
+        title = "Team - Day Wise Report";
+    }
     if (Model.ErrorMsg != "" && Model.ErrorMsg != null)
     {
         <div class="alert alert-danger">
@@ -109,7 +119,7 @@
             </button>
             @Model.ErrorMsg
         </div>
-    }
+}
     <div id="alert_placeholder" class="col-sm-12">
 
     </div>
@@ -122,7 +132,7 @@
         <div class="col-sm-12">
             <div class="box box-primary">
                 <div class="box-header with-border">
-                    <h3 class="box-title">@((string)ViewBag.RequestLevelPerson + " Day Wise Report")</h3>
+                    <h3 class="box-title">@title</h3>
                 </div>
                 <div class="box-body">
                     <form id='your-range-form' action='@Url.Action("ExportToExcel", new { RequestLevelPerson = (string)ViewBag.RequestLevelPerson })' method='post'>

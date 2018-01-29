@@ -78,10 +78,10 @@
     @Html.Hidden("RequestLevelPerson", (string)ViewBag.RequestLevelPerson)
     @Html.Hidden("DisplayName", (string)ViewBag.DisplayName)
 
-    string pageTitle = "My Shift Details";
+    string pageTitle = "Shift";
     if ((string)ViewBag.RequestLevelPerson != "My")
     {
-        pageTitle = "Shift Allocation - Individual Employee";
+        pageTitle = "Shift Allocation - Individual";
     }
 
     <div class="row">

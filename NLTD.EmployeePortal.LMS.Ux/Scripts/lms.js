@@ -978,9 +978,11 @@ function hourEntryLayout() {
 function hideRuleText() {
 
     if ($('#LeaveType :selected').text().indexOf("Sick") != -1)
-        $('#divSickLeaveMsg > p').html("* If sick leave is more than 3 days, submit medical certificate.");
+        $('#divSickLeaveMsg > p').html("* Please submit a medical certificate to your manager for sick leaves greater than 3 days.");
     else if ($('#LeaveType :selected').text().indexOf("Compensatory Off") != -1)
-        $('#divSickLeaveMsg > p').html("* In Reason box, enter the date against which the Compensatory Off is to be availed.");
+        $('#divSickLeaveMsg > p').html("* Please provide the date against which the Compensatory Off is to be availed in the Reason.");
+    else if ($('#LeaveType :selected').text().indexOf("Debit Leave") != -1)
+        $('#divSickLeaveMsg > p').html("* This leave will be debited from your leave balance when leaves are added to your account.");
     else
         $('#divSickLeaveMsg > p').html("");
 }
@@ -1130,7 +1132,7 @@ function AddTotalDays(index) {
         if (NoOfDays.indexOf(".") > -1) {
             var decPart = (NoOfDays + "").split(".")[1];
             if (decPart != "0" && decPart != "5") {
-                Clearshowalert("No of days value after decimal point should be 0 or 5", "alert alert-danger");
+                Clearshowalert("No of days after decimal point should be 0 or 5", "alert alert-danger");
                 $("#NoOfDays" + index).focus();
                 return;
             }
@@ -1217,7 +1219,7 @@ function SubmitLeaveBalanceForm(count) {
             if (NoOfDays.indexOf(".") > -1) {
                 var decPart = (NoOfDays + "").split(".")[1];
                 if (decPart != "0" && decPart != "5") {
-                    Clearshowalert("No of days value after decimal point should be 0 or 5", "alert alert-danger");
+                    Clearshowalert("No of days after decimal point should be 0 or 5", "alert alert-danger");
                     $("#NoOfDays" + i).focus();
                     return;
                 }
@@ -1269,7 +1271,7 @@ function SubmitLeaveBalanceForm(count) {
         });
     }
     else {
-        Clearshowalert("No of Days value should be greater than 0", "alert alert-danger");
+        Clearshowalert("No of Days should be greater than 0", "alert alert-danger");
         return;
     }
 }

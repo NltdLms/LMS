@@ -110,7 +110,7 @@ else
                         @Html.DisplayName("Status")
                     </th>
                     <th>
-                        @Html.DisplayName("LMS Status")
+                        @Html.DisplayName("Requests")
                     </th>
                     <th>
                         @Html.DisplayName("Late In")
@@ -137,17 +137,18 @@ else
                         {
                             statusStyle = "belowworkinghours";
                         }
+                        if (Model[i].WorkingDate.Day == DateTime.DaysInMonth(Model[i].WorkingDate.Year, Model[i].WorkingDate.Month) || i == 0)
+                        {
+                            TimeSheetConsolidateObj = GetWeeklyHoursConsolidation(Model.ToList(), Model[i].WorkingDate, Model[i].userID, "Monthly");
+                            @GetMonthlyHoursHTML(TimeSheetConsolidateObj);
+                        }
                         if (Model[i].WorkingDate.ToString("ddd") == "Sun" || i == 0)
                         {
                             TimeSheetConsolidateObj = GetWeeklyHoursConsolidation(Model.ToList(), Model[i].WorkingDate, Model[i].userID, "Weekly");
                             @GetWeeklyHoursHTML(TimeSheetConsolidateObj);
 
                         }
-                        if (Model[i].WorkingDate.Day == DateTime.DaysInMonth(Model[i].WorkingDate.Year, Model[i].WorkingDate.Month) || i == 0)
-                        {
-                            TimeSheetConsolidateObj = GetWeeklyHoursConsolidation(Model.ToList(), Model[i].WorkingDate, Model[i].userID, "Monthly");
-                            @GetMonthlyHoursHTML(TimeSheetConsolidateObj);
-                        }
+                       
                         <tr>
 
 
@@ -162,8 +163,7 @@ else
                                 }
                             </td>
                             <td>
-
-                                @Model[i].WorkingDate.ToString("ddd")
+                                @Model[i].WorkingDate.DayOfWeek
 
                             </td>
                             <td>
@@ -208,7 +208,7 @@ else
                                 @Model[i].Status
                             </td>
                             <td>
-                                @Model[i].LMSStatus
+                                @Model[i].Requests
                             </td>
                             <td>
                                 @Model[i].LateIn
@@ -268,7 +268,7 @@ else
                                             @Html.DisplayName("Status")
                                         </th>
                                         <th>
-                                            @Html.DisplayName("LMS Status")
+                                            @Html.DisplayName("Requests")
                                         </th>
                                         <th>
                                             @Html.DisplayName("Late In")
@@ -299,10 +299,23 @@ else
                                         }
                                         if (i == j)
                                         {
-                                            TimeSheetConsolidateObj = GetWeeklyHoursConsolidation(Model.ToList(), Model[i].WorkingDate, Model[i].userID, "Weekly");
-                                            @GetWeeklyHoursHTML(TimeSheetConsolidateObj);
                                             TimeSheetConsolidateObj = GetWeeklyHoursConsolidation(Model.ToList(), Model[i].WorkingDate, Model[i].userID, "Monthly");
                                             @GetMonthlyHoursHTML(TimeSheetConsolidateObj);
+                                            TimeSheetConsolidateObj = GetWeeklyHoursConsolidation(Model.ToList(), Model[i].WorkingDate, Model[i].userID, "Weekly");
+                                            @GetWeeklyHoursHTML(TimeSheetConsolidateObj);
+                                            
+                                        }
+                                       
+
+                                        if (Model[j].WorkingDate.Day == DateTime.DaysInMonth(Model[j].WorkingDate.Year, Model[j].WorkingDate.Month) && j != i)
+                                        {
+                                            TimeSheetConsolidateObj = GetWeeklyHoursConsolidation(Model.ToList(), Model[j].WorkingDate, Model[j].userID, "Monthly");
+                                            @GetMonthlyHoursHTML(TimeSheetConsolidateObj);
+                                        }
+                                        if (Model[j].WorkingDate.ToString("ddd") == "Sun" && j != i)
+                                        {
+                                            TimeSheetConsolidateObj = GetWeeklyHoursConsolidation(Model.ToList(), Model[j].WorkingDate, Model[j].userID, "Weekly");
+                                            @GetWeeklyHoursHTML(TimeSheetConsolidateObj);
                                         }
                                         <tr>
                                             <td>
@@ -362,7 +375,7 @@ else
                                                 @Model[j].Status
                                             </td>
                                             <td>
-                                                @Model[j].LMSStatus
+                                                @Model[j].Requests
                                             </td>
                                             <td>
                                                 @Model[j].LateIn
@@ -371,16 +384,11 @@ else
                                                 @Model[j].EarlyOut
                                             </td>
                                         </tr>
-                                        if (Model[j].WorkingDate.ToString("ddd") == "Sun")
+                                       
+                                        if (j == Model.Count-1)
                                         {
-                                            TimeSheetConsolidateObj = GetWeeklyHoursConsolidation(Model.ToList(), Model[i].WorkingDate, Model[i].userID, "Weekly");
-                                            @GetWeeklyHoursHTML(TimeSheetConsolidateObj);
-                                        }
-
-                                        if (Model[j].WorkingDate.Day == DateTime.DaysInMonth(Model[j].WorkingDate.Year, Model[j].WorkingDate.Month))
-                                        {
-                                            TimeSheetConsolidateObj = GetWeeklyHoursConsolidation(Model.ToList(), Model[i].WorkingDate, Model[i].userID, "Monthly");
-                                            @GetMonthlyHoursHTML(TimeSheetConsolidateObj);
+                                            i = j;
+                                            break;
                                         }
                                     }
                                 </tbody>
@@ -476,13 +484,13 @@ else
                                                         select new TimeSheetConsolidate
                                                         {
                                                             hours = new TimeSpan(g.Sum(r => r.WorkingHours.Ticks)),
-                                                            permissionCount = g.Count(k => k.LMSStatus.Contains("Permission")),
-                                                            leaveCount = g.Count(k => k.LMSStatus.Contains("Leave")),
+                                                            permissionCount = g.Count(k => k.Requests.Contains("Permission")),
+                                                            leaveCount = g.Count(k => k.Requests.Contains("Leave")),
                                                             lateCount = g.Count(k => k.LateIn > new TimeSpan()),
                                                             earlyCount = g.Count(k => k.EarlyOut > new TimeSpan()),
                                                             fromDatetime = g.Min(k => k.WorkingDate),
                                                             toDatetime = g.Max(k => k.WorkingDate),
-                                                            WFHCount = g.Count(k=> k.LMSStatus.Contains("Work From Home"))
+                                                            WFHCount = g.Count(k=> k.Requests.Contains("Work From Home"))
                                                         }).FirstOrDefault();
 
         return TimeSheetConsolidateObj;
@@ -540,10 +548,10 @@ else
 
     <tr class="monthlytotal">
         <td>
-            @Html.DisplayName("Monthly hours")
+            @Html.DisplayName("Monthly Summary")
         </td>
         <td>
-            @Html.DisplayName(TimeSheetConsolidateObj.toDatetime.ToString("MMM"))
+            @Html.DisplayName(TimeSheetConsolidateObj.toDatetime.ToString("MMMM"))
         </td>
         <td>
             @Html.DisplayName("Work from home : ")

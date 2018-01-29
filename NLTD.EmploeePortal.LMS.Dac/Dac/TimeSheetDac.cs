@@ -187,7 +187,7 @@ namespace NLTD.EmploeePortal.LMS.Dac.Dac
                         TimeSheetModelObj.Status = GetAbsentStatus(ShiftQueryModelList[i].ShiftDate, officeWeekOffDayList,
                officeHolidayList, employeeLeaveList);
                     }
-                    TimeSheetModelObj.LMSStatus = GetLMSStatus(employeeLeaveList, ShiftQueryModelList[i].ShiftDate);
+                    TimeSheetModelObj.Requests = GetLMSStatus(employeeLeaveList, ShiftQueryModelList[i].ShiftDate);
                     timeSheetModelList.Add(TimeSheetModelObj);
 
                 }
@@ -238,7 +238,8 @@ namespace NLTD.EmploeePortal.LMS.Dac.Dac
             {
                 if (employeeLeaveList.Count > 0)
                 {
-                    LMSStatus = (from e in employeeLeaveList where statusDate >= e.StartDate && statusDate <= e.EndDate select e.LeaveType).FirstOrDefault();
+                    LMSStatus = (from e in employeeLeaveList where statusDate >= e.StartDate && statusDate <= e.EndDate select e.LeaveType).FirstOrDefault()??string.Empty;
+                    
                 }
             }
             catch (Exception)

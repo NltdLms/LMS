@@ -177,7 +177,7 @@
     }
     else if ((string)ViewBag.RequestLevelPerson == "Team")
     {
-        heading = "My Team Attendance";
+        heading = "Team - Attendance";
     }
     <div class="row">
         <div class="col-sm-12">
@@ -207,7 +207,7 @@
                                     <div class="col-sm-3" style="text-align:right">
                                         <br />
                                         <button type="button" class="btn btn-primary" onclick="loadAttendenceRangeSummary()">SEARCH</button>
-                                        <button type="submit" class="btn btn-primary" onclick="return ValidateName()">Export</button>
+                                        <button type="submit" class="btn btn-primary" onclick="return ValidateName()">EXPORT TO EXCEL</button>
                                     </div>
 
                                 </div>
@@ -235,14 +235,14 @@
                                         {
                                             <br />
                                             @Html.CheckBoxFor(m => m.DirectEmployees, new { id = "mydirectemployeecheck", @checked = "checked" })
-                                            @Html.Label("Direct employees only")
+                                        @Html.Label("My Direct Reportees")
 
                                         }
                                     </div>
                                     <div class="col-sm-3" style="text-align:right">
                                         <br />
                                         <button style="margin: 6px 12px " type="button" class="btn btn-primary" onclick="loadAttendenceRangeSummary()">SEARCH</button>
-                                        <button type="submit" class="btn btn-primary" onclick="return ValidateName()">Export</button>
+                                        <button type="submit" class="btn btn-primary" onclick="return ValidateName()">EXPORT TO EXCEL</button>
                                     </div>
                                 </div>
 

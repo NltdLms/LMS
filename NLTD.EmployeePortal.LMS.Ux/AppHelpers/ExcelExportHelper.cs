@@ -64,7 +64,16 @@ namespace NLTD.EmployeePortal.LMS.Ux.AppHelpers
                     }
                 }
 
+                dataTable.Columns["EmpID"].ColumnName = "Emp Id";
+                dataTable.Columns["LeaveType"].ColumnName = "Request Type";
+                dataTable.Columns["LeaveDate"].ColumnName = "Request Date";
+                dataTable.Columns["PartOfDay"].ColumnName = "Part Of Day";
+                dataTable.Columns["LeaveStatus"].ColumnName = "Status";
+                dataTable.Columns["LeaveReason"].ColumnName = "Reason";
+                dataTable.Columns["ApproverComments"].ColumnName = "Approver Comments";
+                dataTable.Columns["LeaveBalanace"].ColumnName = "Leave Balance";
 
+                
                 // add the content into the Excel file  
                 workSheet.Cells["A" + startRowFrom].LoadFromDataTable(dataTable, true);
 
@@ -119,7 +128,7 @@ namespace NLTD.EmployeePortal.LMS.Ux.AppHelpers
                     }
                 }
                 //custom code for this excel
-                using (ExcelRange col = workSheet.Cells[2, 4, 2 + dataTable.Rows.Count, 4])
+                using (ExcelRange col = workSheet.Cells[2, 5, 2 + dataTable.Rows.Count, 5])
                 {
                     col.Style.Numberformat.Format = "dd/MM/yyyy";
                     col.Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
@@ -141,6 +150,7 @@ namespace NLTD.EmployeePortal.LMS.Ux.AppHelpers
 
             return result;
         }
+
 
         public static byte[] ExportExcel<T>(List<T> data, string Heading = "", bool showSlno = false, params string[] ColumnsToTake)
         {
@@ -271,7 +281,12 @@ namespace NLTD.EmployeePortal.LMS.Ux.AppHelpers
                     }
                 }
 
-
+                dataTable.Columns["EmpID"].ColumnName = "Emp Id";
+                dataTable.Columns["LeaveType"].ColumnName = "Request Type";
+                dataTable.Columns["TotalLeaves"].ColumnName = "Total Leaves";
+                dataTable.Columns["UsedLeaves"].ColumnName = "Used Leaves";
+                dataTable.Columns["PendingApproval"].ColumnName = "Pending Approval";
+                dataTable.Columns["BalanceLeaves"].ColumnName = "Balance Leaves";
                 // add the content into the Excel file  
                 workSheet.Cells["A" + startRowFrom].LoadFromDataTable(dataTable, true);
 
@@ -349,7 +364,7 @@ namespace NLTD.EmployeePortal.LMS.Ux.AppHelpers
         }
 
 
-        public static byte[] ExportExcelMonthSummary(DataTable dataTable, string heading = "", bool showSrNo = false, params string[] columnsToTake)
+        public static byte[] ExportExcelMonthSummary(DataTable dataTable,int year, string heading = "", bool showSrNo = false, params string[] columnsToTake)
         {
 
             byte[] result = null;
@@ -371,8 +386,8 @@ namespace NLTD.EmployeePortal.LMS.Ux.AppHelpers
                 }
 
 
-
-
+                workSheet.Cells["A1"].Value = "Year";
+                workSheet.Cells["B1"].Value = year;
                 // add the content into the Excel file  
                 workSheet.Cells["A2"].Value = "Emp Id";
                 workSheet.Cells["B2"].Value = "Name";
@@ -380,62 +395,62 @@ namespace NLTD.EmployeePortal.LMS.Ux.AppHelpers
                 workSheet.Cells["C2"].Value = "CL/SL";
                 workSheet.Cells["D2"].Value = "EL";
                 workSheet.Cells["E2"].Value = "LWP";
-                workSheet.Cells["F2"].Value = "CO";
+                workSheet.Cells["F2"].Value = "CompOff";;
 
                 workSheet.Cells["G2"].Value = "CL/SL";
                 workSheet.Cells["H2"].Value = "EL";
                 workSheet.Cells["I2"].Value = "LWP";
-                workSheet.Cells["J2"].Value = "CO";
+                workSheet.Cells["J2"].Value = "CompOff";;
 
                 workSheet.Cells["K2"].Value = "CL/SL";
                 workSheet.Cells["L2"].Value = "EL";
                 workSheet.Cells["M2"].Value = "LWP";
-                workSheet.Cells["N2"].Value = "CO";
+                workSheet.Cells["N2"].Value = "CompOff";;
 
                 workSheet.Cells["O2"].Value = "CL/SL";
                 workSheet.Cells["P2"].Value = "EL";
                 workSheet.Cells["Q2"].Value = "LWP";
-                workSheet.Cells["R2"].Value = "CO";
+                workSheet.Cells["R2"].Value = "CompOff";;
 
                 workSheet.Cells["S2"].Value = "CL/SL";
                 workSheet.Cells["T2"].Value = "EL";
                 workSheet.Cells["U2"].Value = "LWP";
-                workSheet.Cells["V2"].Value = "CO";
+                workSheet.Cells["V2"].Value = "CompOff";;
 
                 workSheet.Cells["W2"].Value = "CL/SL";
                 workSheet.Cells["X2"].Value = "EL";
                 workSheet.Cells["Y2"].Value = "LWP";
-                workSheet.Cells["Z2"].Value = "CO";
+                workSheet.Cells["Z2"].Value = "CompOff";;
 
                 workSheet.Cells["AA2"].Value = "CL/SL";
                 workSheet.Cells["AB2"].Value = "EL";
                 workSheet.Cells["AC2"].Value = "LWP";
-                workSheet.Cells["AD2"].Value = "CO";
+                workSheet.Cells["AD2"].Value = "CompOff";;
 
                 workSheet.Cells["AE2"].Value = "CL/SL";
                 workSheet.Cells["AF2"].Value = "EL";
                 workSheet.Cells["AG2"].Value = "LWP";
-                workSheet.Cells["AH2"].Value = "CO";
+                workSheet.Cells["AH2"].Value = "CompOff";;
 
                 workSheet.Cells["AI2"].Value = "CL/SL";
                 workSheet.Cells["AJ2"].Value = "EL";
                 workSheet.Cells["AK2"].Value = "LWP";
-                workSheet.Cells["AL2"].Value = "CO";
+                workSheet.Cells["AL2"].Value = "CompOff";;
 
                 workSheet.Cells["AM2"].Value = "CL/SL";
                 workSheet.Cells["AN2"].Value = "EL";
                 workSheet.Cells["AO2"].Value = "LWP";
-                workSheet.Cells["AP2"].Value = "CO";
+                workSheet.Cells["AP2"].Value = "CompOff";;
 
                 workSheet.Cells["AQ2"].Value = "CL/SL";
                 workSheet.Cells["AR2"].Value = "EL";
                 workSheet.Cells["AS2"].Value = "LWP";
-                workSheet.Cells["AT2"].Value = "CO";
+                workSheet.Cells["AT2"].Value = "CompOff";;
 
                 workSheet.Cells["AU2"].Value = "CL/SL";
                 workSheet.Cells["AV2"].Value = "EL";
                 workSheet.Cells["AW2"].Value = "LWP";
-                workSheet.Cells["AX2"].Value = "CO";
+                workSheet.Cells["AX2"].Value = "CompOff";;
 
 
                 workSheet.Cells["A" + startRowFrom].LoadFromDataTable(dataTable, false);
@@ -601,9 +616,9 @@ namespace NLTD.EmployeePortal.LMS.Ux.AppHelpers
             return result;
         }
 
-        public static byte[] ExportExcelMonthSummary<T>(List<T> data, string Heading = "", bool showSlno = false, params string[] ColumnsToTake)
+        public static byte[] ExportExcelMonthSummary<T>(List<T> data,int year, string Heading = "", bool showSlno = false, params string[] ColumnsToTake)
         {
-            return ExportExcelMonthSummary(ListToDataTable<T>(data), Heading, showSlno, ColumnsToTake);
+            return ExportExcelMonthSummary(ListToDataTable<T>(data),year, Heading, showSlno, ColumnsToTake);
         }
 
 
@@ -906,12 +921,12 @@ namespace NLTD.EmployeePortal.LMS.Ux.AppHelpers
             {
                 TimeSheetConsolidateObj.EarlyCount = TimeSheetConsolidateObj.EarlyCount + 1;
             }
-            if (!string.IsNullOrEmpty(TimeSheetModelObj.LMSStatus) &&
-                    TimeSheetModelObj.LMSStatus.Contains("Permission"))
+            if (!string.IsNullOrEmpty(TimeSheetModelObj.Requests) &&
+                    TimeSheetModelObj.Requests.Contains("Permission"))
             {
                 TimeSheetConsolidateObj.PermissionCount = TimeSheetConsolidateObj.PermissionCount + 1;
             }
-            if (!string.IsNullOrEmpty(TimeSheetModelObj.LMSStatus) && TimeSheetModelObj.LMSStatus.Contains("Leave"))
+            if (!string.IsNullOrEmpty(TimeSheetModelObj.Requests) && TimeSheetModelObj.Requests.Contains("Leave"))
             {
                 TimeSheetConsolidateObj.LeaveCount = TimeSheetConsolidateObj.LeaveCount + 1;
             }
@@ -1056,3 +1071,4 @@ namespace NLTD.EmployeePortal.LMS.Ux.AppHelpers
 
 
 }
+

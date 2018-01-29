@@ -97,6 +97,16 @@
 }
 
 @{
+    string title = string.Empty;
+    if(ViewBag.RequestLevelPerson=="My")
+    {
+        title = ViewBag.RequestLevelPerson + " Request History";
+    }
+    else
+    {
+        title = ViewBag.RequestLevelPerson + " - Request History";
+    }
+
     @Html.Hidden("RequestLevelPerson", (string)ViewBag.RequestLevelPerson)
     @Html.HiddenFor(x => x.FromDate)
     @Html.HiddenFor(x => x.ToDate)
@@ -105,7 +115,7 @@
         <div class="col-sm-12">
             <div class="box box-primary">
                 <div class="box-header with-border">
-                    <h3 class="box-title">@((string)ViewBag.RequestLevelPerson + " Requests History Report")</h3>                    
+                    <h3 class="box-title">@title</h3>                    
                 </div>
                 <div class="box-body">
                     <div class="row">
