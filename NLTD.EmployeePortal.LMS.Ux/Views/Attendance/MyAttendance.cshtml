@@ -137,24 +137,21 @@
                 }
             }
         }
-        function ValidateName()
-        {
-
+        function ValidateName() {
             $("alert_placeholder").val("");
+            if ($("#showalert") != undefined){
+                $("#showalert").remove();
+            }
+
             if ($("#RequestLevelPerson").val() === "My") {
             }
-            else
-            {
-
-
-            if (!ValidateAutocompleteName($("#Name").val(), $("#UserID").val())) {
-                Clearshowalert("Please Choose a valid Username from the List. To Export all employee Clear the textbox.", "alert alert-danger");
-                return false;
+            else {
+                if (!ValidateAutocompleteName($("#Name").val(), $("#UserID").val())) {   
+                    Clearshowalert("Please Choose a valid Username from the List.", "alert alert-danger");
+                    return false;
                 }
             }
         }
-
-
     </script>
 
 }
