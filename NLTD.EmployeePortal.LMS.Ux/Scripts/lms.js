@@ -64,21 +64,115 @@ function SubmitForm(e) {
 
 }
 function SubmitEmpForm(e) {
-    $('.close').click()
+    $("#errorMessageArea").css("display", "none");
+    $('.close').click();
     $("#alert_placeholder").empty();
-    var corpId = $("#LogonId").val()
+    var corpId = $("#LogonId").val();
+    var iserror = false;
+    var errorMessage = "";
 
+    if ($.trim($("#FirstName").val()) == "") {
+        $("span[data-valmsg-for='FirstName']").text("Please enter first name.");
+        iserror = true;
+        //errorMessage = "Please enter first name.";
+    }
+    else {
+        $("span[data-valmsg-for='FirstName']").text("");
+    }
+
+    if ($.trim($("#LastName").val()) == "") {
+        $("span[data-valmsg-for='LastName']").text("Please enter last name.");
+        iserror = true;
+        //errorMessage = (errorMessage != "") ? errorMessage + "<br>" : "";
+        //errorMessage = errorMessage + "Please enter last name.";
+    } else {
+        $("span[data-valmsg-for='LastName']").text("");
+    }
+
+    if ($.trim($("#EmployeeId").val()) == "") {
+        $("span[data-valmsg-for='EmployeeId']").text("Please enter employee Id.");
+        iserror = true;
+        //errorMessage = (errorMessage != "") ? errorMessage + "<br>" : "";
+        //errorMessage = errorMessage + "Please enter employee Id.";
+    } else {
+
+        $("span[data-valmsg-for='EmployeeId']").text("");
+    }
+    if ($("#Gender option:selected").index() < 1) {
+        $("span[data-valmsg-for='Gender']").text("Please select employee gender.");
+        iserror = true;
+        //errorMessage = (errorMessage != "") ? errorMessage + "<br>" : "";
+        //errorMessage = errorMessage + "Please select employee gender.";
+    } else {
+        $("span[data-valmsg-for='Gender']").text("");
+    }
+    if ($("#ShiftId option:selected").index() < 1) {
+        $("span[data-valmsg-for='ShiftId']").text("Please select employee shift.");
+        iserror = true;
+        //errorMessage = (errorMessage != "") ? errorMessage + "<br>" : "";
+        //errorMessage = errorMessage + "Please select employee shift.";
+    } else {
+        $("span[data-valmsg-for='ShiftId']").text("");
+    }
+    if ($("#RoleId option:selected").index() < 0) {
+        $("span[data-valmsg-for='RoleId']").text("Please select LMS role.");
+        iserror = true;
+        //errorMessage = (errorMessage != "") ? errorMessage + "<br>" : "";
+        //errorMessage = errorMessage + "Please select LMS role.";
+    } else {
+        $("span[data-valmsg-for='RoleId']").text("");
+    }
 
     if ($("#ReportedToId option:selected").index() < 1) {
-        showalert("", "Please select Reporting To person name.", "alert alert-danger");
+        $("span[data-valmsg-for='ReportedToId']").text("Please select reporting to person name.");
+        iserror = true;
+        //errorMessage = (errorMessage != "") ? errorMessage + "<br>" : "";
+        //errorMessage = errorMessage + "Please select reporting to person name.";
+    } else {
+        $("span[data-valmsg-for='ReportedToId']").text("");
+    }
+    if ($("#OfficeId option:selected").index() < 0) {
+        $("span[data-valmsg-for='OfficeId']").text("Please select office.");
+        iserror = true;
+        //errorMessage = (errorMessage != "") ? errorMessage + "<br>" : "";
+        //errorMessage = errorMessage + "Please select office.";
+    } else {
+        $("span[data-valmsg-for='OfficeId']").text("");
+    }
+    if ($("#OfficeHolodayId option:selected").index() < 1) {
+        $("span[data-valmsg-for='OfficeHolodayId']").text("Please select holiday office.");
+        iserror = true;
+        //errorMessage = (errorMessage != "") ? errorMessage + "<br>" : "";
+        //errorMessage = errorMessage + "Please select holiday office.";
+    } else {
+        $("span[data-valmsg-for='OfficeHolodayId']").text("");
+    }
+    if ($.trim($("#DOJ").val()) == "") {
+        $("span[data-valmsg-for='DOJ']").text("Please enter joining date.");
+        iserror = true;
+        //errorMessage = (errorMessage != "") ? errorMessage + "<br>" : "";
+        //errorMessage = errorMessage + "Please enter joining date.";
+    } else {
+        $("span[data-valmsg-for='DOJ']").text("");
+    }
+
+    if (iserror == true) {
+        $("#errorMessageArea").css("display", "block");
+        showalert("", "Fix the error messages shown and try to save again.", "alert alert-danger");
         return;
     }
 
+
+    //if ($("#ReportedToId option:selected").index() < 1) {
+    //    showalert("", "Please select Reporting To person name.", "alert alert-danger");
+    //    return;
+    //}
+
     if ($("#Mode").val() == "Add") {
-        var msg = "Are you sure you want to add new employee profile?"
+        var msg = "Are you sure you want to add new employee profile?";
     }
     else {
-        var msg = "Are you sure you want to update employee profile?"
+        var msg = "Are you sure you want to update employee profile?";
     }
     bootbox.confirm({
         title: "Employee Profile Confirm",
@@ -336,7 +430,7 @@ function loadYearwiseLeaveSummary() {
             return;
         }
     }
-   
+
     if ($("#OnlyReportedToMe").val() == undefined) {
         var showTeam = false;
     }
@@ -550,7 +644,7 @@ function LoadTeamStatus() {
                 });
             },
             complete: function () {
-                
+
             },
             error: function () {
 
@@ -564,7 +658,7 @@ function LoadTeamStatus() {
 
 function loadDaywiseLeaves() {
     $("#alert_placeholder").empty();
-    
+
     if ($("#OnlyReportedToMe").val() == undefined) {
         var showTeam = false;
     }
@@ -617,7 +711,7 @@ function loadPermissionDetail() {
             return;
         }
     }
-    
+
     $("#divLoading").show();
     $("#divForPermissionDetail")
         .load('/Admin/GetPermissionDetail?paramUserId=' + $("#SearchUserID").val() + '&reqUsr=' + $("#RequestLevelPerson").val() + '&startDate=' + $("#FromDate").val() + '&endDate=' + $("#ToDate").val() + '&OnlyReportedToMe=' + showTeam,
@@ -1175,7 +1269,7 @@ function SubmitLeaveBalanceForm(count) {
         });
     }
     else {
-        Clearshowalert("No of Days value should be more than 0", "alert alert-danger");
+        Clearshowalert("No of Days value should be greater than 0", "alert alert-danger");
         return;
     }
 }
@@ -1248,7 +1342,7 @@ function loadAttendenceRangeSummary() {
     else {
         URL = '/Admin/loadEmployeeAttendence?ID=' + $("#UserID").val() + '&FromDate=' + $('#FromDate').val() + '&ToDate=' + $('#ToDate').val() + '&requestLevelPerson=' + $('#RequestLevelPerson').val() + '&myDirectEmployees=' + myDirectEmployees;
         if (!ValidateAutocompleteName($("#Name").val(), $("#UserID").val())) {
-            
+
             Clearshowalert("Please Choose a valid Username from the List. To Show all employee Clear the textbox.", "alert alert-danger");
             return;
         }

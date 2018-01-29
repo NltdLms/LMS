@@ -42,12 +42,12 @@
             <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                 <span aria-hidden="true">x</span>
             </button>
-            @Model.ErrorMesage
+            <span>@Model.ErrorMesage</span>
         </div>
     }
-
-
 }
+
+
 <script>
     $(function () {
         $('.DateControl').datetimepicker(
@@ -57,6 +57,7 @@
             });
     });
 </script>
+
 <div class="row">
     <div class="col-sm-12">
         <div class="box box-primary">
@@ -111,7 +112,7 @@
                                     }
                                     else
                                     {
-                                        @Html.TextBoxFor(e => e.EmployeeId, null, new { @class = "form-control", maxlength = 100,@readonly = true })
+                                        @Html.TextBoxFor(e => e.EmployeeId, null, new { @class = "form-control", maxlength = 100, @readonly = true })
                                     }
                                 }
                             </div>
@@ -130,8 +131,8 @@
                                 @Html.LabelFor(e => e.Gender, new { @class = "required" })
                                 <select id="Gender" name="Gender" class="form-control">
                                     <option value=""></option>
-                                    <option value="M" @if (Model.Gender == "M") { @Html.Raw("selected=\"selected\"")                                    }>Male</option>
-                                    <option value="F" @if (Model.Gender == "F") { @Html.Raw("selected=\"selected\"")                                    }>Female</option>
+                                    <option value="M" @if (Model.Gender == "M") { @Html.Raw("selected=\"selected\"")                                      }>Male</option>
+                                    <option value="F" @if (Model.Gender == "F") { @Html.Raw("selected=\"selected\"")                                      }>Female</option>
                                 </select>
                                 @Html.ValidationMessageFor(e => e.Gender, null, new { @class = "text-danger" })
                             </div>
@@ -220,6 +221,7 @@
                                         }
                                     }
                                 </select>
+                                @Html.ValidationMessageFor(e => e.ReportedToId, null, new { @class = "text-danger" })
                             </div>
                         </div>
                         <div class="col-sm-3">
@@ -307,45 +309,43 @@
                             </div>
                         </div>
                     </div>
-
-
-                </div>
-                <div class="row">
-                    <div class="col-sm-12 pull-left"> @Html.Label("Select Weekly Off(s)")</div>
-                </div>
-                <div class="row" style="padding-top:10px;padding-bottom:10px;">
-                    <div class="col-sm-6">
-                        <div class="col-sm-3">
-                            @Html.CheckBoxFor(e => e.Monday)
-                            @Html.LabelFor(e => e.Monday, new { style = "font-weight:normal" })
-                        </div>
-                        <div class="col-sm-3">
-                            @Html.CheckBoxFor(e => e.Tuesday)
-                            @Html.LabelFor(e => e.Tuesday, new { style = "font-weight:normal" })
-                        </div>
-                        <div class="col-sm-3">
-                            @Html.CheckBoxFor(e => e.Wednesday)
-                            @Html.LabelFor(e => e.Wednesday, new { style = "font-weight:normal" })
-                        </div>
-                        <div class="col-sm-3">
-                            @Html.CheckBoxFor(e => e.Thursday)
-                            @Html.LabelFor(e => e.Thursday, new { style = "font-weight:normal" })
-                        </div>
+                    <div class="row">
+                        <div class="col-sm-12 pull-left"> @Html.Label("Select Weekly Off(s)")</div>
                     </div>
-                    <div class="col-sm-6">
-                        <div class="col-sm-3">
-                            @Html.CheckBoxFor(e => e.Friday)
-                            @Html.LabelFor(e => e.Friday, new { style = "font-weight:normal" })
+                    <div class="row" style="padding-top:10px;padding-bottom:10px;">
+                        <div class="col-sm-6">
+                            <div class="col-sm-3">
+                                @Html.CheckBoxFor(e => e.Monday)
+                                @Html.LabelFor(e => e.Monday, new { style = "font-weight:normal" })
+                            </div>
+                            <div class="col-sm-3">
+                                @Html.CheckBoxFor(e => e.Tuesday)
+                                @Html.LabelFor(e => e.Tuesday, new { style = "font-weight:normal" })
+                            </div>
+                            <div class="col-sm-3">
+                                @Html.CheckBoxFor(e => e.Wednesday)
+                                @Html.LabelFor(e => e.Wednesday, new { style = "font-weight:normal" })
+                            </div>
+                            <div class="col-sm-3">
+                                @Html.CheckBoxFor(e => e.Thursday)
+                                @Html.LabelFor(e => e.Thursday, new { style = "font-weight:normal" })
+                            </div>
                         </div>
-                        <div class="col-sm-3">
-                            @Html.CheckBoxFor(e => e.Saturday)
-                            @Html.LabelFor(e => e.Saturday, new { style = "font-weight:normal" })
-                        </div>
-                        <div class="col-sm-3">
-                            @Html.CheckBoxFor(e => e.Sunday)
-                            @Html.LabelFor(e => e.Sunday, new { style = "font-weight:normal" })
-                        </div>
-                        <div class="col-sm-3">
+                        <div class="col-sm-6">
+                            <div class="col-sm-3">
+                                @Html.CheckBoxFor(e => e.Friday)
+                                @Html.LabelFor(e => e.Friday, new { style = "font-weight:normal" })
+                            </div>
+                            <div class="col-sm-3">
+                                @Html.CheckBoxFor(e => e.Saturday)
+                                @Html.LabelFor(e => e.Saturday, new { style = "font-weight:normal" })
+                            </div>
+                            <div class="col-sm-3">
+                                @Html.CheckBoxFor(e => e.Sunday)
+                                @Html.LabelFor(e => e.Sunday, new { style = "font-weight:normal" })
+                            </div>
+                            <div class="col-sm-3">
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -354,7 +354,7 @@
                         <div class="box-footer">
                             <div class="col-sm-10">
                             </div>
-                            <div class="col-sm-2" style="right:-25px;">
+                            <div class="col-sm-2">
                                 <button type="button" class="btn btn-primary" onclick="location.href='@Url.Action("UpdateEmployee", "Profile")'">CANCEL</button>
                                 <button type="submit" class="btn btn-primary pull-right">SAVE</button>
                             </div>
@@ -365,7 +365,7 @@
                         <div class="box-footer">
                             <div class="col-sm-10">
                             </div>
-                            <div class="col-sm-2" style="right:-25px;">
+                            <div class="col-sm-2">
                                 <button type="button" class="btn btn-primary" onclick="location.href='@Url.Action("AddNewEmployee", "Profile")'">CLEAR</button>
                                 @{
                                     if (Model.ErrorMesage == "Saved")
@@ -384,39 +384,70 @@
             </form>
         </div>
     </div>
+</div>
+@section readyscript
+{
+    <script>
+        //$('#frmEmployee').formValidation({
+        //    framework: 'bootstrap',
+        //    icon: {
+        //        valid: 'glyphicon glyphicon-ok',
+        //        invalid: 'glyphicon glyphicon-remove',
+        //        validating: 'glyphicon glyphicon-refresh'
+        //    },
+        //    row: {
+        //        valid: 'field-success',
+        //        invalid: 'field-error'
+        //    },
+        //    fields: {
+        //        username: {
+        //            validators: {
+        //                notEmpty: {
+        //                    message: 'The username is required'
+        //                },
+        //                stringLength: {
+        //                    min: 6,
+        //                    max: 30,
+        //                    message: 'The username must be more than 6 and less than 30 characters long'
+        //                },
+        //                regexp: {
+        //                    regexp: /^[a-zA-Z0-9_\.]+$/,
+        //                    message: 'The username can only consist of alphabetical, number, dot and underscore'
+        //                }
+        //            }
+        //        }
+        //    }
+        //});
 
-    @section readyscript{
-        <script>
-
-            function IsActiveChange() {
-                if ($("#IsActive").prop('checked') === true) {
-                    $('#RelievingDate').attr('readonly', true);
-                    $("#RelievingDate").val("");
-                } else {
-                    var exrelivingdate = $("#HiddenReliving").val();
-                    if (exrelivingdate.length > 0) {
-                        exrelivingdate = exrelivingdate.split(' ')[0];
-                        exrelivingdate = exrelivingdate.replace('/', '-');
-                        exrelivingdate = exrelivingdate.replace('/', '-');
-                        $("#RelievingDate").val(exrelivingdate);
-                    }
-                    $('#RelievingDate').attr('readonly', false);
+        function IsActiveChange() {
+            if ($("#IsActive").prop('checked') === true) {
+                $('#RelievingDate').attr('readonly', true);
+                $("#RelievingDate").val("");
+            } else {
+                var exrelivingdate = $("#HiddenReliving").val();
+                if (exrelivingdate.length > 0) {
+                    exrelivingdate = exrelivingdate.split(' ')[0];
+                    exrelivingdate = exrelivingdate.replace('/', '-');
+                    exrelivingdate = exrelivingdate.replace('/', '-');
+                    $("#RelievingDate").val(exrelivingdate);
                 }
+                $('#RelievingDate').attr('readonly', false);
             }
+        }
 
-            $("document").ready(function() {
-                var readOnlyLength = 5;
+        $("document").ready(function() {
+            var readOnlyLength = 5;
 
-                $('#LogonId').on('keypress, keydown',
-                    function(event) {
-                        var $field = $(this);
-                        if ((event.which != 37 && (event.which != 39)) &&
-                        ((this.selectionStart < readOnlyLength) ||
-                            ((this.selectionStart == readOnlyLength) && (event.which == 8)))) {
-                            return false;
-                        }
-                    });
-                $("#HiddenReliving").val('@Model.RelievingDate');
-            });
-        </script>
-    }
+            $('#LogonId').on('keypress, keydown',
+                function(event) {
+                    var $field = $(this);
+                    if ((event.which != 37 && (event.which != 39)) &&
+                    ((this.selectionStart < readOnlyLength) ||
+                        ((this.selectionStart == readOnlyLength) && (event.which == 8)))) {
+                        return false;
+                    }
+                });
+            $("#HiddenReliving").val('@Model.RelievingDate');
+        });
+    </script>
+}
