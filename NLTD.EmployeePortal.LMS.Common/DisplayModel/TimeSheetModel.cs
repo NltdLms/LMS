@@ -22,5 +22,7 @@ namespace NLTD.EmployeePortal.LMS.Common.DisplayModel
         public TimeSpan LateIn { get; set; }
         public TimeSpan EarlyOut { get; set; }
 
+        public decimal LeaveDayQty { get; set; }
+
     }
 }

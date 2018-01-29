@@ -928,7 +928,12 @@ namespace NLTD.EmployeePortal.LMS.Ux.AppHelpers
             }
             if (!string.IsNullOrEmpty(TimeSheetModelObj.Requests) && TimeSheetModelObj.Requests.Contains("Leave"))
             {
-                TimeSheetConsolidateObj.LeaveCount = TimeSheetConsolidateObj.LeaveCount + 1;
+                TimeSheetConsolidateObj.LeaveCount = TimeSheetConsolidateObj.LeaveCount + TimeSheetModelObj.LeaveDayQty;
+            }
+           
+            if (!string.IsNullOrEmpty(TimeSheetModelObj.Requests) && TimeSheetModelObj.Requests.Contains("Work From Home"))
+            {
+                TimeSheetConsolidateObj.WorkFromHomeCount = TimeSheetConsolidateObj.WorkFromHomeCount + TimeSheetModelObj.LeaveDayQty;
             }
             return TimeSheetConsolidateObj;
         }
@@ -1060,12 +1065,13 @@ namespace NLTD.EmployeePortal.LMS.Ux.AppHelpers
         public string TotalWorkingHours { get; set; }
 
         public int PermissionCount { get; set; }
-        public int LeaveCount { get; set; }
+        public decimal LeaveCount { get; set; }
         public int LateCount { get; set; }
         public int EarlyCount { get; set; }
 
-      
+        public decimal WorkFromHomeCount { get; set; }
         public DateTime FromDate { get; set; }
+
     }
 
 

@@ -653,3 +653,19 @@ Source: System
 TargetSite: Int32 ReadCfwsAndThrowIfIncomplete(System.String, Int32)
 -----------------------------------------------------------
 
+Time: 29-01-2018 03:15:17 PM
+Leave ID:20056
+-----------------------------------------------------------
+Message: The specified string is not in the form required for an e-mail address.
+StackTrace:    at System.Net.Mail.MailAddressParser.ReadCfwsAndThrowIfIncomplete(String data, Int32 index)
+   at System.Net.Mail.MailAddressParser.ParseDomain(String data, Int32& index)
+   at System.Net.Mail.MailAddressParser.ParseAddress(String data, Boolean expectMultipleAddresses, Int32& index)
+   at System.Net.Mail.MailAddressParser.ParseAddress(String data)
+   at System.Net.Mail.MailAddress..ctor(String address, String displayName, Encoding displayNameEncoding)
+   at System.Net.Mail.MailAddress..ctor(String address)
+   at NLTD.EmployeePortal.LMS.Ux.AppHelpers.EmailHelper.SendHtmlFormattedEmail(String recepientEmail, IList`1 ccEmail, String subject, String body, String emailType) in D:\Muthu\Projects\LMS\LMSGIT\NLTD.EmployeePortal.LMS.Ux\AppHelpers\EmailHelper.cs:line 23
+   at NLTD.EmployeePortal.LMS.Ux.AppHelpers.EmailHelper.SendEmail(Int64 leavId, String actionName) in D:\Muthu\Projects\LMS\LMSGIT\NLTD.EmployeePortal.LMS.Ux\AppHelpers\EmailHelper.cs:line 141
+Source: System
+TargetSite: Int32 ReadCfwsAndThrowIfIncomplete(System.String, Int32)
+-----------------------------------------------------------
+

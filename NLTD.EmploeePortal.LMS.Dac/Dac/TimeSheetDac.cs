@@ -187,7 +187,9 @@ namespace NLTD.EmploeePortal.LMS.Dac.Dac
                         TimeSheetModelObj.Status = GetAbsentStatus(ShiftQueryModelList[i].ShiftDate, officeWeekOffDayList,
                officeHolidayList, employeeLeaveList);
                     }
-                    TimeSheetModelObj.Requests = GetLMSStatus(employeeLeaveList, ShiftQueryModelList[i].ShiftDate);
+                    decimal LeaveDayQty = 0;
+                    TimeSheetModelObj.Requests = GetLMSStatus(employeeLeaveList, ShiftQueryModelList[i].ShiftDate,out LeaveDayQty);
+                    TimeSheetModelObj.LeaveDayQty = LeaveDayQty;
                     timeSheetModelList.Add(TimeSheetModelObj);
 
                 }
@@ -231,14 +233,24 @@ namespace NLTD.EmploeePortal.LMS.Dac.Dac
             }
         }
 
-        public string GetLMSStatus(List<EmployeeLeave> employeeLeaveList,DateTime statusDate)
+        public string GetLMSStatus(List<EmployeeLeave> employeeLeaveList,DateTime statusDate,out decimal LeaveDayQty)
         {
+            LeaveDayQty = 0;
             string LMSStatus = string.Empty;
+
             try
             {
                 if (employeeLeaveList.Count > 0)
                 {
-                    LMSStatus = (from e in employeeLeaveList where statusDate >= e.StartDate && statusDate <= e.EndDate select e.LeaveType).FirstOrDefault()??string.Empty;
+                 var  Status = (from e in employeeLeaveList where statusDate >= e.StartDate && statusDate <= e.EndDate select new { e.LeaveType, e.LeaveDayQty });
+                    if(Status != null && Status.Count()>0)
+                    {
+                        foreach (var item in Status)
+                        {
+                            LMSStatus = item.LeaveType;
+                            LeaveDayQty = item.LeaveDayQty;
+                        }
+                    }
                     
                 }
             }
@@ -270,5 +282,8 @@ namespace NLTD.EmploeePortal.LMS.Dac.Dac
         public DateTime? ApprovedAt { get; set; }
 
         public string LeaveType { get; set; }
+
+
+        public decimal LeaveDayQty { get; set; }
     }
 }

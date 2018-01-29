@@ -485,12 +485,12 @@ else
                                                         {
                                                             hours = new TimeSpan(g.Sum(r => r.WorkingHours.Ticks)),
                                                             permissionCount = g.Count(k => k.Requests.Contains("Permission")),
-                                                            leaveCount = g.Count(k => k.Requests.Contains("Leave")),
+                                                            leaveCount = (g.Where(k => k. Requests.Contains("Leave")).Select(x=>x.LeaveDayQty)).Sum(),
                                                             lateCount = g.Count(k => k.LateIn > new TimeSpan()),
                                                             earlyCount = g.Count(k => k.EarlyOut > new TimeSpan()),
                                                             fromDatetime = g.Min(k => k.WorkingDate),
                                                             toDatetime = g.Max(k => k.WorkingDate),
-                                                            WFHCount = g.Count(k=> k.Requests.Contains("Work From Home"))
+                                                            WFHCount = (g.Where(k => k.Requests.Contains("Work From Home")).Select(x => x.LeaveDayQty)).Sum()
                                                         }).FirstOrDefault();
 
         return TimeSheetConsolidateObj;
@@ -517,12 +517,11 @@ else
             TimeSheetConsolidateObj.toDatetime.Day, TimeSheetConsolidateObj.toDatetime.ToString("MMM")))
         </td>
         <td>@Html.DisplayName("Work from home : ")
-        @Html.DisplayName(Convert.ToString(TimeSheetConsolidateObj.WFHCount))</td>
+        @Convert.ToString(TimeSheetConsolidateObj.WFHCount)</td>
         <td></td>
         <td></td>
         <td>
             @Html.DisplayName(@GetWeeklyWorkingHours(TimeSheetConsolidateObj.hours))
-
         </td>
         <td>
             @Html.DisplayName("Permission : ")
@@ -530,7 +529,7 @@ else
         </td>
         <td>
             @Html.DisplayName("Leave : ")
-        @Html.DisplayName(Convert.ToString(TimeSheetConsolidateObj.leaveCount))
+        @Convert.ToString(TimeSheetConsolidateObj.leaveCount)
     </td>
     <td>
         @Html.DisplayName("Late In : ")
@@ -555,7 +554,7 @@ else
         </td>
         <td>
             @Html.DisplayName("Work from home : ")
-            @Html.DisplayName(Convert.ToString(TimeSheetConsolidateObj.WFHCount))
+            @Convert.ToString(TimeSheetConsolidateObj.WFHCount)
         </td>
         <td></td>
         <td></td>
@@ -569,7 +568,7 @@ else
         </td>
         <td>
             @Html.DisplayName("Leave : ")
-            @Html.DisplayName(Convert.ToString(TimeSheetConsolidateObj.leaveCount))
+            @ @Convert.ToString(TimeSheetConsolidateObj.leaveCount)
         </td>
         <td>
             @Html.DisplayName("Late In : ")

@@ -66,7 +66,11 @@
             var curdate = new Date();
             $("#FromDate").val('@DateTime.Now.AddDays(-29).ToString("dd-MM-yyyy")');
             $("#ToDate").val('@DateTime.Now.ToString("dd-MM-yyyy")');
-
+            $("#Name").keyup(function () {
+                if ($("#Name").val() == "") {
+                    $("#SearchUserID").val("");
+                }
+            });
             $('#DateRange').on('apply.daterangepicker',
                 function (ev, picker) {
                     $("#FromDate").val(picker.startDate.format('DD-MM-YYYY'));
@@ -101,6 +105,7 @@
                 focus: function (event, ui) {
                     event.preventDefault();
                     $("#Name").val(ui.item.label);
+                    $("#UserID").val(ui.item.value);
                 },
                 search: function (event, ui) {
                     $("#UserID").val("");
@@ -235,7 +240,7 @@
                                         {
                                             <br />
                                             @Html.CheckBoxFor(m => m.DirectEmployees, new { id = "mydirectemployeecheck", @checked = "checked" })
-                                        @Html.Label("My Direct Reportees")
+                                            @Html.Label("My Direct Reportees")
 
                                         }
                                     </div>

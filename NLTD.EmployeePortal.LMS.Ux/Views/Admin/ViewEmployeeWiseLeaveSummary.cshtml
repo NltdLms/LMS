@@ -6,8 +6,13 @@
         overflow-x: hidden;
     }
 
-    th { font-size: 11px; }
-    td { font-size: 12px; }
+    th {
+        font-size: 11px;
+    }
+
+    td {
+        font-size: 12px;
+    }
 </style>
 <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
 <script src="~/Scripts/DataTables/jquery.dataTables.min.js"></script>
@@ -24,6 +29,13 @@
     <link href="~/Content/bootstrap.css" rel="stylesheet" />
 
     <script type="text/javascript">
+        $(document).ready(function () {
+            $("#Name").keyup(function () {
+                if ($("#Name").val() == "") {
+                    $("#SearchUserID").val("");
+                }
+            });
+        });
         $(function () {
 
             $("#Name").autocomplete({
@@ -48,6 +60,7 @@
                 focus: function (event, ui) {
                     event.preventDefault();
                     $("#Name").val(ui.item.label);
+                    $("#SearchUserID").val(ui.item.value);
                 },
                 search: function (event, ui) {
                     $("#SearchUserID").val("");
@@ -70,7 +83,7 @@
 }
 @{
     string title = string.Empty;
-    if(ViewBag.RequestLevelPerson == "My")
+    if (ViewBag.RequestLevelPerson == "My")
     {
         title = "My Leave Balance Report";
     }
@@ -86,12 +99,12 @@
             </button>
             @Model.ErrorMsg
         </div>
-}
+    }
     <div id="alert_placeholder" class="col-sm-12">
 
     </div>
     @Html.Hidden("RequestLevelPerson", (string)ViewBag.RequestLevelPerson)
-    
+
     <div class="row">
         <div class="col-sm-12">
             <div class="box box-primary">
@@ -128,9 +141,9 @@
                                 @{ if ((string)ViewBag.RequestLevelPerson == "Team")
                                     {
                                         <p> @Html.CheckBoxFor(m => m.OnlyReportedToMe)   My Direct Reportees</p>
-                                                
+
                                     }
-                                    
+
                                 }
                             </div>
 
@@ -150,7 +163,7 @@
         </div>
     </div>
 
-        <div id="divForLeaveSummary" class="col-sm-12"></div>
+    <div id="divForLeaveSummary" class="col-sm-12"></div>
 
 
 

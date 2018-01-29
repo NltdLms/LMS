@@ -13,7 +13,6 @@
     td {
         font-size: 12px;
         border-left: 1px solid;
-        
     }
 </style>
 <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
@@ -32,38 +31,48 @@
     <link href="~/Content/bootstrap.css" rel="stylesheet" />
 
     <script type="text/javascript">
-        $(function () {
-
-            $("#Name").autocomplete({
-                source: function (request, response) {
-                    $.ajax({
-                        url: "/Admin/GetEmployeeList",
-                        type: "POST",
-                        dataType: "json",
-                        data: { term: request.term },
-                        success: function (data) {
-                            response($.map(data, function (item) {
-                                return { label: item.Name, value: item.UserId };
-                            }))
-                        }
-                    })
-                },
-                select: function (event, ui) {
-                    event.preventDefault();
-                    $("#SearchUserID").val(ui.item.value);
-
-                },
-                focus: function (event, ui) {
-                    event.preventDefault();
-                    $("#Name").val(ui.item.label);
-                },
-                search: function (event, ui) {
+        $(document).ready(function () {
+            $("#Name").keyup(function () {
+                if ($("#Name").val() == "") {
                     $("#SearchUserID").val("");
                 }
             });
+        });
+        $(function () {
+
+            $("#Name").autocomplete(
+                {
+                    source: function (request, response) {
+                        $.ajax({
+                            url: "/Admin/GetEmployeeList",
+                            type: "POST",
+                            dataType: "json",
+                            data: { term: request.term },
+                            success: function (data) {
+                                response($.map(data,
+                                    function (item) {
+                                        return { label: item.Name, value: item.UserId };
+                                    }))
+                            }
+                        })
+                    },
+                    select: function (event, ui) {
+                        event.preventDefault();
+                        $("#SearchUserID").val(ui.item.value);
+                    },
+                    focus: function (event, ui) {
+                        event.preventDefault();
+                        $("#Name").val(ui.item.label);
+                        $("#SearchUserID").val(ui.item.value);
+                    },
+                    search: function (event, ui) {
+                        $("#SearchUserID").val("");
+                    }
+                });
 
 
         });
+
 
         function CheckAutoCompleteName() {
             if ($("#SearchUserID").val() == "") {
@@ -79,7 +88,7 @@
 @{
 
     string title = string.Empty;
-    if(ViewBag.RequestLevelPerson=="My")
+    if (ViewBag.RequestLevelPerson == "My")
     {
         title = "My Month Wise Report";
     }
@@ -143,8 +152,8 @@
                             </div>
 
                             @*<div class="col-sm-1" style="padding-top:25px;">
-                                <button type="button" class="btn btn-primary pull-right" onclick="loadMonthwiseCount()">SEARCH</button>
-                            </div>*@
+                                    <button type="button" class="btn btn-primary pull-right" onclick="loadMonthwiseCount()">SEARCH</button>
+                                </div>*@
                             <div class="col-sm-3" style="padding-top:25px;">
                                 <input type='submit' class="btn btn-primary pull-right" value='EXPORT TO EXCEL' />
                             </div>

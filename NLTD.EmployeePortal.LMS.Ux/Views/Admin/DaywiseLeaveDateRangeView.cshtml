@@ -1,12 +1,20 @@
 ﻿@model NLTD.EmployeePortal.LMS.Common.QueryModel.DaywiseLeaveQueryModel
 
 <style type="text/css">
-    .ui-autocomplete { height: 220px; overflow-y: scroll; overflow-x: hidden;}
-    th { font-size: 11px; }
-    td { font-size: 12px; }
+    .ui-autocomplete {
+        height: 220px;
+        overflow-y: scroll;
+        overflow-x: hidden;
+    }
 
-   
- </style>
+    th {
+        font-size: 11px;
+    }
+
+    td {
+        font-size: 12px;
+    }
+</style>
 
 <script src="~/Scripts/DataTables/jquery.dataTables.min.js"></script>
 <link href="~/Content/DataTables/css/jquery.dataTables.min.css" rel="stylesheet" />
@@ -52,7 +60,11 @@
                 $("#FromDate").val(picker.startDate.format('DD-MM-YYYY'));
                 $("#ToDate").val(picker.endDate.format('DD-MM-YYYY'));
             });
-
+            $("#Name").keyup(function () {
+                if ($("#Name").val() == "") {
+                    $("#SearchUserID").val("");
+                }
+            });
             $("#Name").autocomplete({
                 source: function (request, response) {
                     $.ajax({
@@ -69,7 +81,7 @@
                         }
                     })
                 },
-               
+
                 select: function (event, ui) {
                     event.preventDefault();
                     $("#SearchUserID").val(ui.item.value);
@@ -78,6 +90,7 @@
                 focus: function (event, ui) {
                     event.preventDefault();
                     $("#Name").val(ui.item.label);
+                    $("#SearchUserID").val(ui.item.value);
                 },
                 search: function (event, ui) {
                     $("#SearchUserID").val("");
@@ -103,7 +116,7 @@
 @{
 
     string title = string.Empty;
-    if(ViewBag.RequestLevelPerson=="My")
+    if (ViewBag.RequestLevelPerson == "My")
     {
         title = "My Day Wise Report";
     }
@@ -119,7 +132,7 @@
             </button>
             @Model.ErrorMsg
         </div>
-}
+    }
     <div id="alert_placeholder" class="col-sm-12">
 
     </div>
@@ -127,7 +140,7 @@
     @Html.Hidden("RequestLevelPerson", (string)ViewBag.RequestLevelPerson)
     @Html.HiddenFor(x => x.FromDate)
     @Html.HiddenFor(x => x.ToDate)
-    
+
     <div class="row">
         <div class="col-sm-12">
             <div class="box box-primary">
@@ -173,36 +186,36 @@
                                     </div>
                                     <div class="col-sm-4">
 
-                                          @Html.LabelFor(x => x.Name)
-                                          @Html.TextBoxFor(m => m.Name, new { @class = "form-control" })
+                                        @Html.LabelFor(x => x.Name)
+                                        @Html.TextBoxFor(m => m.Name, new { @class = "form-control" })
 
                                     </div>
                                     <div class="col-sm-5">
                                         @{ if ((string)ViewBag.RequestLevelPerson == "Team")
                                             {
                                                 <p> @Html.CheckBoxFor(m => m.OnlyReportedToMe)   My Direct Reportees</p>
-                                                    <p> @Html.CheckBoxFor(m => m.IsLeaveOnly)   Show Leaves Only </p>
+                                                <p> @Html.CheckBoxFor(m => m.IsLeaveOnly)   Show Leaves Only </p>
                                             }
                                             else if ((string)ViewBag.RequestLevelPerson == "Admin")
                                             {
                                                 <p> @Html.CheckBoxFor(m => m.DonotShowRejected)   Do Not Show Rejected & Cancelled Requests </p>
-                                                    <p> @Html.CheckBoxFor(m => m.IsLeaveOnly)   Show Leave Requests Only </p>
+                                                <p> @Html.CheckBoxFor(m => m.IsLeaveOnly)   Show Leave Requests Only </p>
                                             }
                                         }
                                     </div>
 
                                 </div>
-                                    <div class="row">
-                                        <div class="col-sm-9"></div>
-                                        <div class="col-sm-1">
+                                <div class="row">
+                                    <div class="col-sm-9"></div>
+                                    <div class="col-sm-1">
 
-                                            <button type="button" class="btn btn-primary" onclick="loadDaywiseLeaves()">SEARCH</button>
+                                        <button type="button" class="btn btn-primary" onclick="loadDaywiseLeaves()">SEARCH</button>
 
-                                        </div>
-                                        <div class="col-sm-2">
-                                            <input type='submit' class="btn btn-primary  pull-right" value='EXPORT TO EXCEL' />
-                                        </div>
                                     </div>
+                                    <div class="col-sm-2">
+                                        <input type='submit' class="btn btn-primary  pull-right" value='EXPORT TO EXCEL' />
+                                    </div>
+                                </div>
                                             }
                         }
                     </form>

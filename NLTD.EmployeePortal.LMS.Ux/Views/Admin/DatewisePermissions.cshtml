@@ -7,8 +7,13 @@
         overflow-x: hidden;
     }
 
-     th { font-size: 11px; }
-    td { font-size: 12px; }
+    th {
+        font-size: 11px;
+    }
+
+    td {
+        font-size: 12px;
+    }
 </style>
 
 
@@ -30,79 +35,84 @@
 
     <script src="~/Scripts/moment.js"></script>
     <link href="~/Content/bootstrap.css" rel="stylesheet" />
-    
-<script type="text/javascript">
-$(function() {
-    $("#DateRange").daterangepicker({
-        locale: {
-            format: 'DD-MM-YYYY'
-        },
-        "autoApply": true,
-        "showDropdowns": true,        
-        ranges:{
-            "Today": [moment(), moment()],
-            "Yesterday": [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
-            "Tomorrow": [moment().add(1, 'days'), moment().add(1, 'days')],
-            "This Week": [moment().startOf('week'), moment().endOf('week')],
-            "This Month": [moment().startOf('month'), moment().endOf('month')],
-            "This Year": [moment().startOf('year'), moment().endOf('year')],
-            "Next 30 days": [moment(), moment().add(30, 'days')],                      
-            "Last 30 days": [moment().subtract(29, 'days'), moment()],
-            "Last 180 days": [moment().subtract(179, 'days'), moment()],
-            "Last 1 Year": [moment().subtract(1, 'year').add(1, 'day'), moment()]    
-            }
-        
-    });
 
-    $('#DateRange').on('apply.daterangepicker', function (ev, picker) {
-        $("#FromDate").val(picker.startDate.format('DD-MM-YYYY'));
-        $("#ToDate").val(picker.endDate.format('DD-MM-YYYY'));
-    });
-
-    $("#Name").autocomplete({
-        source: function (request, response) {
-            $.ajax({
-                url: "/Admin/GetEmployeeList",
-                type: "POST",
-                dataType: "json",
-                data: { term: request.term },
-                success: function (data) {
-                    response($.map(data, function (item) {
-                        return { label: item.Name, value: item.UserId };
-                    }))
-
-
+    <script type="text/javascript">
+        $(function () {
+            $("#DateRange").daterangepicker({
+                locale: {
+                    format: 'DD-MM-YYYY'
+                },
+                "autoApply": true,
+                "showDropdowns": true,
+                ranges: {
+                    "Today": [moment(), moment()],
+                    "Yesterday": [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+                    "Tomorrow": [moment().add(1, 'days'), moment().add(1, 'days')],
+                    "This Week": [moment().startOf('week'), moment().endOf('week')],
+                    "This Month": [moment().startOf('month'), moment().endOf('month')],
+                    "This Year": [moment().startOf('year'), moment().endOf('year')],
+                    "Next 30 days": [moment(), moment().add(30, 'days')],
+                    "Last 30 days": [moment().subtract(29, 'days'), moment()],
+                    "Last 180 days": [moment().subtract(179, 'days'), moment()],
+                    "Last 1 Year": [moment().subtract(1, 'year').add(1, 'day'), moment()]
                 }
-            })
-        },
-        
-        select: function (event, ui) {
-            event.preventDefault();
-            $("#SearchUserID").val(ui.item.value);
 
-        },
-        focus: function (event, ui) {
-            event.preventDefault();
-            $("#Name").val(ui.item.label);
-        },
-        search: function (event, ui) {
-            $("#SearchUserID").val("");
-        }
-    });
+            });
+
+            $('#DateRange').on('apply.daterangepicker', function (ev, picker) {
+                $("#FromDate").val(picker.startDate.format('DD-MM-YYYY'));
+                $("#ToDate").val(picker.endDate.format('DD-MM-YYYY'));
+            });
+            $("#Name").keyup(function () {
+                if ($("#Name").val() == "") {
+                    $("#SearchUserID").val("");
+                }
+            });
+            $("#Name").autocomplete({
+                source: function (request, response) {
+                    $.ajax({
+                        url: "/Admin/GetEmployeeList",
+                        type: "POST",
+                        dataType: "json",
+                        data: { term: request.term },
+                        success: function (data) {
+                            response($.map(data, function (item) {
+                                return { label: item.Name, value: item.UserId };
+                            }))
 
 
-    });
+                        }
+                    })
+                },
 
-    function CheckAutoCompleteName() {
-        if ($("#SearchUserID").val() == "") {
-            SetUserIDForAutoCompleteName(nameList, $("#Name").val(), "SearchUserID");
-            if (!ValidateAutocompleteName($("#Name").val(), $("#SearchUserID").val())) {
-                return false;
+                select: function (event, ui) {
+                    event.preventDefault();
+                    $("#SearchUserID").val(ui.item.value);
+
+                },
+                focus: function (event, ui) {
+                    event.preventDefault();
+                    $("#Name").val(ui.item.label);
+                    $("#SearchUserID").val(ui.item.value);
+                },
+                search: function (event, ui) {
+                    $("#SearchUserID").val("");
+                }
+            });
+
+
+        });
+
+        function CheckAutoCompleteName() {
+            if ($("#SearchUserID").val() == "") {
+                SetUserIDForAutoCompleteName(nameList, $("#Name").val(), "SearchUserID");
+                if (!ValidateAutocompleteName($("#Name").val(), $("#SearchUserID").val())) {
+                    return false;
+                }
             }
+            return true;
         }
-        return true;
-    }
-</script>
+    </script>
 }
 
 @{
@@ -120,9 +130,9 @@ $(function() {
     </div>
     @Html.Hidden("RequestLevelPerson", (string)ViewBag.RequestLevelPerson)
 
-    @Html.HiddenFor(x => x.FromDate)       
+    @Html.HiddenFor(x => x.FromDate)
     @Html.HiddenFor(x => x.ToDate)
-    
+
     <div class="row">
         <div class="col-sm-12">
             <div class="box box-primary">

@@ -509,6 +509,8 @@ function callProfileEdit() {
         }
         else {
             name = "";
+            Clearshowalert("Please enter the employee name.", "alert alert-danger");
+            return;
         }
     }
     $.ajax({
@@ -520,7 +522,7 @@ function callProfileEdit() {
         data: { name: name },
         success: function (result) {
             if (result == "InvalidName") {
-                showalert("", "Employee profile not found for the entered name.", "alert alert-danger")
+                Clearshowalert("Employee profile not found for the entered name.", "alert alert-danger")
             }
             else {
                 window.location.href = result.redirectToUrl
