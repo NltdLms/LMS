@@ -18,12 +18,13 @@
  *         { type: 'date-eu', targets: 0 }
  *       ]
  *    } );
+ *  In case the date format is changed we need to check month is undefined or not
  */
 
 jQuery.extend( jQuery.fn.dataTableExt.oSort, {
 	"date-eu-pre": function ( date ) {
 		date = date.replace(" ", "");
-		
+
 		if ( ! date ) {
 			return 0;
 		}
@@ -40,7 +41,12 @@ jQuery.extend( jQuery.fn.dataTableExt.oSort, {
 		}
 
 		/*month*/
-		var month = eu_date[1];
+        var month = eu_date[1];
+        // For monthly and weekly consolidated row in timesheet we add the line.
+        if (month == undefined) {
+            return 0;
+        }
+
 		if ( month.length == 1 ) {
 			month = 0+month;
 		}

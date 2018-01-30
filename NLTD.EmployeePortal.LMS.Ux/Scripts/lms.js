@@ -1438,7 +1438,10 @@ function loadTimeSheetSummary() {
             }
             else {
                 $(".dtatable").dataTable({
-                    "aaSorting": [], "pageLength": 50
+                    "aaSorting": [], "pageLength": 50,
+                    columnDefs: [
+                        { type: 'date-eu', targets: 0 }
+                    ] 
                 });
                 $('html, body').animate({
                     scrollTop: 230  // Means Less header height
