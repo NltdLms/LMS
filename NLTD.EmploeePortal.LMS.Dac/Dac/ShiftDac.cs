@@ -99,24 +99,21 @@ namespace NLTD.EmploeePortal.LMS.Dac
             {
                 using (var context = new NLTDDbContext())
                 {
-                    if (RequestMenuUser == "Admin")
-                    {
-                        var leadinfo = (from emp in context.Employee
-                                        join role in context.EmployeeRole on emp.EmployeeRoleId equals role.RoleId
-                                        where emp.UserId == UserId
-                                        select new { RoleName = role.Role }).FirstOrDefault();
+                    var leadinfo = (from emp in context.Employee
+                                    join role in context.EmployeeRole on emp.EmployeeRoleId equals role.RoleId
+                                    where emp.UserId == UserId
+                                    select new { RoleName = role.Role }).FirstOrDefault();
 
-                        if (leadinfo.RoleName.ToUpper() == "ADMIN" || leadinfo.RoleName.ToUpper() == "HR")
-                        {
-                            lstShiftEmployees = (from e in context.Employee
-                                                 where e.IsActive == true
-                                                 select new ShiftEmployees
-                                                 {
-                                                     Name = e.FirstName + " " + e.LastName,
-                                                     EmpId = e.EmployeeId,
-                                                     UserId = e.UserId
-                                                 }).ToList();
-                        }
+                    if (leadinfo.RoleName.ToUpper() == "ADMIN" || leadinfo.RoleName.ToUpper() == "HR")
+                    {
+                        lstShiftEmployees = (from e in context.Employee
+                                             where e.IsActive == true
+                                             select new ShiftEmployees
+                                             {
+                                                 Name = e.FirstName + " " + e.LastName,
+                                                 EmpId = e.EmployeeId,
+                                                 UserId = e.UserId
+                                             }).ToList();
                     }
                     else
                     {
@@ -367,22 +364,19 @@ namespace NLTD.EmploeePortal.LMS.Dac
                     {
                         string ReportingTo = (RequestMenuUser == "My" && LeaduserId > 0) ? employeeDac.ReportingToName(LeaduserId) : employeeDac.ReportingToName(userId);
 
+                        var leadinfo = (from emp in context.Employee
+                                        join role in context.EmployeeRole on emp.EmployeeRoleId equals role.RoleId
+                                        where emp.UserId == LeaduserId
+                                        select new { RoleName = role.Role }).FirstOrDefault();
+
                         List<ShiftAllocation> shiftDetails = new List<ShiftAllocation>();
                         if (RequestMenuUser == "My")
                         {
                             shiftDetails = getShiftDetails(context, LeaduserId);
                         }
-                        else if (RequestMenuUser == "Admin")
+                        else if (leadinfo.RoleName.ToUpper() == "ADMIN" || leadinfo.RoleName.ToUpper() == "HR")
                         {
-                            var leadinfo = (from emp in context.Employee
-                                            join role in context.EmployeeRole on emp.EmployeeRoleId equals role.RoleId
-                                            where emp.UserId == LeaduserId
-                                            select new { RoleName = role.Role }).FirstOrDefault();
-
-                            if (leadinfo.RoleName.ToUpper() == "ADMIN" || leadinfo.RoleName.ToUpper() == "HR")
-                            {
-                                shiftDetails = getShiftDetails(context, userId);
-                            }
+                            shiftDetails = getShiftDetails(context, userId);
                         }
                         else if (RequestMenuUser == "Team")
                         {
