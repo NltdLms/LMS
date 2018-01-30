@@ -149,7 +149,7 @@
             if ($("#UserID").val() == "") {
                 SetUserIDForAutoCompleteName(nameList, $("#Name").val(), "UserID");
                 if (!ValidateAutocompleteName($("#Name").val(), $("#UserID").val())) {
-                    Clearshowalert("Please choose a username from List", "alert alert-danger");
+                    Clearshowalert("Please choose the Username from List.", "alert alert-danger");
                     return false;
                 }
             }
@@ -254,11 +254,15 @@
                                     <div class="col-sm-3" style="text-align:right">
                                         <br />
                                         <button type="button" class="btn btn-primary" onclick="loadTimeSheetSummary()">SEARCH</button>
-                                        <button type="submit" class="btn btn-primary" click="return CheckAutoCompleteName()">EXPORT TO EXCEL</button>
+                                        <button type="submit" class="btn btn-primary" onclick="return CheckAutoCompleteName()">EXPORT TO EXCEL</button>
                                     </div>
                                 </div>
                             }
                         }
+                        <br />
+                        <div id="alert_placeholder" class="col-sm-12">
+
+                        </div>
                     </form>
 
                 </div>
@@ -266,9 +270,7 @@
         </div>
     </div>
     <br />
-    <div id="alert_placeholder" class="col-sm-12">
-
-    </div>
+   
     <div id="divForTimesheet" ></div>
 
 }

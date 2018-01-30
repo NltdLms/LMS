@@ -99,17 +99,21 @@ namespace NLTD.EmploeePortal.LMS.Dac.Dac
             try
             {
                 var toDateShift = (from m in ShiftQueryModelList where m.ShiftDate == ToDate select new { fromTime = m.ShiftFromtime, toTime = m.ShiftTotime }).FirstOrDefault();
-                TimeSpan fromTime= toDateShift.fromTime;
-                TimeSpan toTime = toDateShift.toTime;
-                if(fromTime>toTime)
+
+                if (toDateShift != null)
                 {
-                    ToDate = ToDate.AddDays(1).Add(toTime.Add(new TimeSpan(AfterShiftBuffer, 0,0)));
+                    TimeSpan fromTime = toDateShift.fromTime;
+                    TimeSpan toTime = toDateShift.toTime;
+                    if (fromTime > toTime)
+                    {
+                        ToDate = ToDate.AddDays(1).Add(toTime.Add(new TimeSpan(AfterShiftBuffer, 0, 0)));
+                    }
+                    else
+                    {
+                        ToDate = ToDate.Add(toTime.Add(new TimeSpan(AfterShiftBuffer, 0, 0)));
+                    }
+                    // TimeSpan ToDate = ToDate.Add(toDateShift);
                 }
-                else
-                {
-                    ToDate = ToDate.Add(toTime.Add(new TimeSpan(AfterShiftBuffer, 0, 0)));
-                }
-                // TimeSpan ToDate = ToDate.Add(toDateShift);
             }
             catch (Exception)
             {
