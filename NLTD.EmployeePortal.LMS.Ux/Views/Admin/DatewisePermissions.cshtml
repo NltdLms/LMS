@@ -37,6 +37,7 @@
     <link href="~/Content/bootstrap.css" rel="stylesheet" />
 
     <script type="text/javascript">
+        var nameList = [];
         $(function () {
             $("#DateRange").daterangepicker({
                 locale: {
@@ -76,11 +77,10 @@
                         dataType: "json",
                         data: { term: request.term },
                         success: function (data) {
-                            response($.map(data, function (item) {
+                            nameList = $.map(data, function (item) {
                                 return { label: item.Name, value: item.UserId };
-                            }))
-
-
+                            });
+                            response(nameList);
                         }
                     })
                 },
@@ -107,6 +107,7 @@
             if ($("#SearchUserID").val() == "") {
                 SetUserIDForAutoCompleteName(nameList, $("#Name").val(), "SearchUserID");
                 if (!ValidateAutocompleteName($("#Name").val(), $("#SearchUserID").val())) {
+                    Clearshowalert("Please Choose a valid Username from the List.", "alert alert-danger");
                     return false;
                 }
             }

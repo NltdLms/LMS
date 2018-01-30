@@ -35,6 +35,7 @@
     <script src="~/Scripts/moment.js"></script>
     <link href="~/Content/bootstrap.css" rel="stylesheet" />
     <script type="text/JavaScript">
+        var nameList = [];
         $(document).ready(function () {
             $("#DateRange").daterangepicker({
                 locale: {
@@ -74,9 +75,10 @@
                         dataType: "json",
                         data: { term: request.term },
                         success: function (data) {
-                            response($.map(data, function (item) {
+                            nameList = $.map(data, function (item) {
                                 return { label: item.Name, value: item.UserId };
-                            }))
+                            })
+                            response(nameList)
 
 
                         }

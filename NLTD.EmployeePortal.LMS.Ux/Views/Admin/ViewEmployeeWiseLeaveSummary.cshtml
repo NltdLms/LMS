@@ -29,6 +29,7 @@
     <link href="~/Content/bootstrap.css" rel="stylesheet" />
 
     <script type="text/javascript">
+        var nameList = [];
         $(document).ready(function () {
             $("#Name").keyup(function () {
                 if ($("#Name").val() == "") {
@@ -46,9 +47,10 @@
                         dataType: "json",
                         data: { term: request.term },
                         success: function (data) {
-                            response($.map(data, function (item) {
+                            nameList = $.map(data, function (item) {
                                 return { label: item.Name, value: item.UserId };
-                            }))
+                            })
+                            response(nameList);
                         }
                     })
                 },
@@ -74,6 +76,7 @@
             if ($("#SearchUserID").val() == "") {
                 SetUserIDForAutoCompleteName(nameList, $("#Name").val(), "SearchUserID");
                 if (!ValidateAutocompleteName($("#Name").val(), $("#SearchUserID").val())) {
+                    Clearshowalert("Please Choose a valid Username from the List.", "alert alert-danger");
                     return false;
                 }
             }
@@ -151,7 +154,7 @@
                                 <button type="button" class="btn btn-primary" onclick="loadYearwiseLeaveSummary()">SEARCH</button>
                             </div>
                             <div class="col-sm-2" style="padding-top:25px;">
-                                <input type='submit' class="btn btn-primary pull-right" value='EXPORT TO EXCEL' />
+                                <input type='submit' class="btn btn-primary pull-right" value='EXPORT TO EXCEL' onclick="return CheckAutoCompleteName()" />
                             </div>
 
 
