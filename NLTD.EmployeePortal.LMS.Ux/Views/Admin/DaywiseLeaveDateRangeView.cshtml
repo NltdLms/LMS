@@ -60,6 +60,7 @@
                 $("#FromDate").val(picker.startDate.format('DD-MM-YYYY'));
                 $("#ToDate").val(picker.endDate.format('DD-MM-YYYY'));
             });
+
             $("#Name").keyup(function () {
                 if ($("#Name").val() == "") {
                     $("#SearchUserID").val("");
@@ -98,12 +99,14 @@
             });
 
 
+
         });
 
         function CheckAutoCompleteName() {
             if ($("#SearchUserID").val() == "") {
                 SetUserIDForAutoCompleteName(nameList, $("#Name").val(), "SearchUserID");
                 if (!ValidateAutocompleteName($("#Name").val(), $("#SearchUserID").val())) {
+                    Clearshowalert("Please Choose a valid Username from the List.", "alert alert-danger");
                     return false;
                 }
             }
@@ -126,11 +129,11 @@
     }
     if (Model.ErrorMsg != "" && Model.ErrorMsg != null)
     {
-        <div class="alert alert-danger">
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">x</span>
-            </button>
-            @Model.ErrorMsg
+        <div id="alert" class="col-sm-12">
+            <div class="alert alert-danger">
+                <span class="close" data-dismiss="alert">×</span>
+                <span>@Model.ErrorMsg</span>
+            </div>
         </div>
     }
     <div id="alert_placeholder" class="col-sm-12">
@@ -168,7 +171,7 @@
 
                                     </div>
                                     <div class="col-sm-2" style="padding-top:23px;">
-                                        <input type='submit' class="btn btn-primary  pull-right" value='EXPORT TO EXCEL' />
+                                        <input type='submit' class="btn btn-primary  pull-right" onclick="" value='EXPORT TO EXCEL' />
                                     </div>
                                 </div>
 
@@ -194,28 +197,28 @@
                                         @{ if ((string)ViewBag.RequestLevelPerson == "Team")
                                             {
                                                 <p> @Html.CheckBoxFor(m => m.OnlyReportedToMe)   My Direct Reportees</p>
-                                                <p> @Html.CheckBoxFor(m => m.IsLeaveOnly)   Show Leaves Only </p>
+                                                        <p> @Html.CheckBoxFor(m => m.IsLeaveOnly)   Show Leaves Only </p>
                                             }
                                             else if ((string)ViewBag.RequestLevelPerson == "Admin")
                                             {
                                                 <p> @Html.CheckBoxFor(m => m.DonotShowRejected)   Do Not Show Rejected & Cancelled Requests </p>
-                                                <p> @Html.CheckBoxFor(m => m.IsLeaveOnly)   Show Leave Requests Only </p>
+                                                        <p> @Html.CheckBoxFor(m => m.IsLeaveOnly)   Show Leave Requests Only </p>
                                             }
                                         }
                                     </div>
 
                                 </div>
-                                <div class="row">
-                                    <div class="col-sm-9"></div>
-                                    <div class="col-sm-1">
+                                        <div class="row">
+                                            <div class="col-sm-9"></div>
+                                            <div class="col-sm-1">
 
-                                        <button type="button" class="btn btn-primary" onclick="loadDaywiseLeaves()">SEARCH</button>
+                                                <button type="button" class="btn btn-primary" onclick="loadDaywiseLeaves()">SEARCH</button>
 
-                                    </div>
-                                    <div class="col-sm-2">
-                                        <input type='submit' class="btn btn-primary  pull-right" value='EXPORT TO EXCEL' />
-                                    </div>
-                                </div>
+                                            </div>
+                                            <div class="col-sm-2">
+                                                <input type='submit' class="btn btn-primary  pull-right" onclick="return CheckAutoCompleteName()" value='EXPORT TO EXCEL' />
+                                            </div>
+                                        </div>
                                             }
                         }
                     </form>
@@ -225,7 +228,7 @@
         </div>
     </div>
 
-    <div id="divForDaywiseLeave" class="col-sm-12"></div>
+            <div id="divForDaywiseLeave" class="col-sm-12"></div>
 
 }
 
