@@ -695,7 +695,10 @@ function loadDaywiseLeaves() {
     $("#divForDaywiseLeave")
         .load('/Admin/loadDaywiseLeaves?paramUserId=' + $("#SearchUserID").val() + '&FromDate=' + $("#FromDate").val() + '&ToDate=' + $("#ToDate").val() + '&IsLeaveOnly=' + leaveOnly + '&OnlyReportedToMe=' + showTeam + '&reqUsr=' + $("#RequestLevelPerson").val() + '&DonotShowRejected=' + donotshowRejected,
         function () {
-            $("#Daywisetable_id").dataTable({"aaSorting": [] })
+            $("#Daywisetable_id").dataTable({
+                "aaSorting": [], columnDefs: [
+                    { type: 'date-eu', targets: 0 }
+                ] })
             $("#divLoading").hide();
             $('html, body').animate({
                 scrollTop: 230  // Means Less header height
@@ -727,7 +730,10 @@ function loadPermissionDetail() {
     $("#divForPermissionDetail")
         .load('/Admin/GetPermissionDetail?paramUserId=' + $("#SearchUserID").val() + '&reqUsr=' + $("#RequestLevelPerson").val() + '&startDate=' + $("#FromDate").val() + '&endDate=' + $("#ToDate").val() + '&OnlyReportedToMe=' + showTeam,
         function () {
-            $("#Permissions_id").dataTable()
+            $("#Permissions_id").dataTable({
+                columnDefs: [
+                    { type: 'date-eu', targets: 4 }]
+            });
             $("#divLoading").hide();
             $('html, body').animate({
                 scrollTop: 230 // Means Less header height
@@ -1326,7 +1332,13 @@ function loadTransactionLog() {
     $("#divLoading").show();
     $("#divForHistoryLeave").load('/Admin/GetTransactionLog?OnlyReportedToMe=' + showTeam + '&Name=' + name + '&RequestMenuUser=' + $("#RequestLevelPerson").val(),
         function () {
-            $(".transaction").dataTable({ "paging": false, "bFilter": false, "bInfo": false, "aaSorting": [] });
+            $(".transaction").dataTable({
+                "paging": false, "bFilter": false, "bInfo": false, "aaSorting": [],
+                columnDefs: [
+                    { type: 'date-eu', targets: 1 },
+                    { type: 'date-eu', targets: 2 },
+                    { type: 'date-eu', targets: 3 }
+                ] });
             $("#divLoading").hide();
             $('html, body').animate({
                 scrollTop: 210  // Means Less header height
@@ -1371,7 +1383,11 @@ function loadAttendenceRangeSummary() {
             }
             else {
 
-                $(".dtatable").dataTable({ "aaSorting": [] });
+                $(".dtatable").dataTable({
+                    "aaSorting": [],
+                    columnDefs: [
+                        { type: 'date-eu', targets: 0 }
+                    ]});
                 $('html, body').animate({
                     scrollTop: 230  // Means Less header height
                 }, 400);

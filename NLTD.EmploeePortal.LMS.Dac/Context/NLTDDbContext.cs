@@ -61,7 +61,7 @@ namespace NLTD.EmploeePortal.LMS.Dac
             modelBuilder.Entity<PermissionDetail>().HasKey(e => e.PermissionDetailId).ToTable("PermissionDetail");
             modelBuilder.Entity<LeaveAttachment>().HasKey(e => e.AttachmentId).ToTable("LeaveAttachment");
             modelBuilder.Entity<LeaveType>().HasKey(e => e.LeaveTypeId).ToTable("LeaveType");
-            modelBuilder.Entity<LeaveTransactionHistory>().HasKey(e => e.TransactionId).ToTable("LeaveTransactiontHistory");
+            modelBuilder.Entity<LeaveTransactionHistory>().HasKey(e => e.TransactionId).ToTable("LeaveTransactionHistory");
             modelBuilder.Entity<EmployeeTransactionHistory>().HasKey(e => e.TransactionId).ToTable("EmployeeTransactiontHistory");
             modelBuilder.Entity<LeaveType>().HasKey(e => e.LeaveTypeId).ToTable("LeaveType");
             modelBuilder.Entity<OfficeLocation>().HasKey(e => e.OfficeId).ToTable("OfficeLocation");
