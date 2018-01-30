@@ -104,11 +104,13 @@
         });
 
         function CheckAutoCompleteName() {
-            if ($("#SearchUserID").val() == "") {
-                SetUserIDForAutoCompleteName(nameList, $("#Name").val(), "SearchUserID");
-                if (!ValidateAutocompleteName($("#Name").val(), $("#SearchUserID").val())) {
-                    Clearshowalert("Please Choose a valid Username from the List.", "alert alert-danger");
-                    return false;
+            if ('@ViewBag.RequestLevelPerson' != "My") {
+                if ($("#SearchUserID").val() == "") {
+                    SetUserIDForAutoCompleteName(nameList, $("#Name").val(), "SearchUserID");
+                    if (!ValidateAutocompleteName($("#Name").val(), $("#SearchUserID").val())) {
+                        Clearshowalert("Please Choose a valid Username from the List.", "alert alert-danger");
+                        return false;
+                    }
                 }
             }
             return true;
@@ -173,7 +175,7 @@
                                 <button type="button" class="btn btn-primary" onclick="loadPermissionDetail()">SEARCH</button>
                             </div>
                             <div class="col-sm-2" style="padding-top:23px;">
-                                <input type='submit' class="btn btn-primary pull-right" value='EXPORT TO EXCEL' />
+                                <input type='submit' class="btn btn-primary pull-right" value='EXPORT TO EXCEL' onclick="return CheckAutoCompleteName()" />
                             </div>
 
 

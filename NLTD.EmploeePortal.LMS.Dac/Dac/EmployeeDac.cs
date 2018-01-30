@@ -28,7 +28,7 @@ namespace NLTD.EmploeePortal.LMS.Dac.Dac
                                    FirstName = employee.FirstName,
                                    LastName = employee.LastName,
                                    Gender = employee.Gender,
-                                   OfficeHolodayId = employee.OfficeHolodayId,
+                                   OfficeHolodayId = employee.OfficeHolidayId,
                                    OfficeId = employee.OfficeId,
                                    LocationText = "",
                                    MobileNumber = employee.MobileNumber,
@@ -124,7 +124,7 @@ namespace NLTD.EmploeePortal.LMS.Dac.Dac
                                                    FirstName = employee.FirstName,
                                                    LastName = employee.LastName,
                                                    Gender = employee.Gender,
-                                                   OfficeHolodayId = employee.OfficeHolodayId,
+                                                   OfficeHolodayId = employee.OfficeHolidayId,
                                                    OfficeId = employee.OfficeId,
                                                    LocationText = "",
                                                    MobileNumber = employee.MobileNumber,
@@ -151,7 +151,7 @@ namespace NLTD.EmploeePortal.LMS.Dac.Dac
                                                        FirstName = employee.FirstName,
                                                        LastName = employee.LastName,
                                                        Gender = employee.Gender,
-                                                       OfficeHolodayId = employee.OfficeHolodayId,
+                                                       OfficeHolodayId = employee.OfficeHolidayId,
                                                        OfficeId = employee.OfficeId,
                                                        LocationText = "",
                                                        MobileNumber = employee.MobileNumber,
@@ -177,7 +177,7 @@ namespace NLTD.EmploeePortal.LMS.Dac.Dac
                                                        FirstName = employee.FirstName,
                                                        LastName = employee.LastName,
                                                        Gender = employee.Gender,
-                                                       OfficeHolodayId = employee.OfficeHolodayId,
+                                                       OfficeHolodayId = employee.OfficeHolidayId,
                                                        OfficeId = employee.OfficeId,
                                                        LocationText = "",
                                                        MobileNumber = employee.MobileNumber,
@@ -325,7 +325,7 @@ namespace NLTD.EmploeePortal.LMS.Dac.Dac
                         profile = (from employee in context.Employee.AsEnumerable()
                                    join rt in context.EmployeeRole on employee.EmployeeRoleId equals rt.RoleId
                                    join o in context.OfficeLocation on employee.OfficeId equals o.OfficeId
-                                   join h in context.OfficeHoliday on employee.OfficeHolodayId equals h.OfficeHolodayId
+                                   join h in context.OfficeHoliday on employee.OfficeHolidayId equals h.OfficeHolodayId
                                    join s in context.ShiftMaster on employee.ShiftId equals s.ShiftID
                                    where employee.UserId == memId.userId
                                    select new ViewEmployeeProfileModel
@@ -336,7 +336,7 @@ namespace NLTD.EmploeePortal.LMS.Dac.Dac
                                        LastName = employee.LastName,
                                        Name = employee.FirstName + " " + employee.LastName,
                                        Gender = employee.Gender == "M" ? "Male" : "Female",
-                                       HolidayOfficeId = employee.OfficeHolodayId,
+                                       HolidayOfficeId = employee.OfficeHolidayId,
                                        OfficeName = o.OfficeName,
                                        MobileNumber = employee.MobileNumber,
                                        ReportedToId = employee.ReportingToId,
@@ -427,7 +427,7 @@ namespace NLTD.EmploeePortal.LMS.Dac.Dac
                     profile = (from employee in context.Employee
                                join rt in context.EmployeeRole on employee.EmployeeRoleId equals rt.RoleId
                                join o in context.OfficeLocation on employee.OfficeId equals o.OfficeId
-                               join h in context.OfficeHoliday on employee.OfficeHolodayId equals h.OfficeHolodayId
+                               join h in context.OfficeHoliday on employee.OfficeHolidayId equals h.OfficeHolodayId
                                where employee.UserId == userId
                                select new ViewEmployeeProfileModel
                                {
@@ -436,7 +436,7 @@ namespace NLTD.EmploeePortal.LMS.Dac.Dac
                                    FirstName = employee.FirstName,
                                    LastName = employee.LastName,
                                    Gender = employee.Gender == "M" ? "Male" : "Female",
-                                   HolidayOfficeId = employee.OfficeHolodayId,
+                                   HolidayOfficeId = employee.OfficeHolidayId,
                                    OfficeName = o.OfficeName,
                                    MobileNumber = employee.MobileNumber,
                                    ReportedToId = employee.ReportingToId,
@@ -784,7 +784,7 @@ namespace NLTD.EmploeePortal.LMS.Dac.Dac
                             employee.EmailAddress = profile.EmailAddress;
                             employee.EmployeeRoleId = profile.RoleId;
                             employee.ReportingToId = profile.ReportedToId;
-                            employee.OfficeHolodayId = profile.OfficeHolodayId;
+                            employee.OfficeHolidayId = profile.OfficeHolodayId;
                             employee.ShiftId = profile.ShiftId;
                             employee.Cardid = profile.CardId;
                             employee.DOJ = profile.DOJ;
@@ -890,7 +890,7 @@ namespace NLTD.EmploeePortal.LMS.Dac.Dac
                             if (profile.EmailAddress != oldEmpData.EmailAddress)
                                 remarks = remarks + "#EmailAddress" + "^" + profile.EmailAddress;
 
-                            if (profile.OfficeHolodayId != oldEmpData.OfficeHolodayId)
+                            if (profile.OfficeHolodayId != oldEmpData.OfficeHolidayId)
                                 remarks = remarks + "#OfficeHolodayId" + "^" + profile.OfficeHolodayId;
 
                             if (profile.RoleId != oldEmpData.EmployeeRoleId)
@@ -924,7 +924,7 @@ namespace NLTD.EmploeePortal.LMS.Dac.Dac
                             employee.EmailAddress = profile.EmailAddress;
                             employee.ShiftId = profile.ShiftId;
                             employee.Cardid = profile.CardId;
-                            employee.OfficeHolodayId = profile.OfficeHolodayId;
+                            employee.OfficeHolidayId = profile.OfficeHolodayId;
                             employee.EmployeeRoleId = profile.RoleId;
                             employee.DOJ = profile.DOJ;
                             employee.ConfirmationDate = profile.ConfirmationDate;

@@ -125,7 +125,7 @@ namespace NLTD.EmploeePortal.LMS.Dac.Dac
                                     isSaved = context.SaveChanges();
                                 }
 
-                                LeaveTransactiontHistory leaveTransactiontHistory = new LeaveTransactiontHistory();
+                                LeaveTransactionHistory leaveTransactiontHistory = new LeaveTransactionHistory();
                                 leaveTransactiontHistory.UserId = UserId;
                                 leaveTransactiontHistory.LeaveTypeId = Convert.ToInt64(item.LeaveTypeId);
                                 leaveTransactiontHistory.LeaveId = -1;

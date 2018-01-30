@@ -695,7 +695,7 @@ function loadDaywiseLeaves() {
     $("#divForDaywiseLeave")
         .load('/Admin/loadDaywiseLeaves?paramUserId=' + $("#SearchUserID").val() + '&FromDate=' + $("#FromDate").val() + '&ToDate=' + $("#ToDate").val() + '&IsLeaveOnly=' + leaveOnly + '&OnlyReportedToMe=' + showTeam + '&reqUsr=' + $("#RequestLevelPerson").val() + '&DonotShowRejected=' + donotshowRejected,
         function () {
-            $("#Daywisetable_id").dataTable()
+            $("#Daywisetable_id").dataTable({"aaSorting": [] })
             $("#divLoading").hide();
             $('html, body').animate({
                 scrollTop: 230  // Means Less header height

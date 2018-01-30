@@ -54,10 +54,12 @@
         });
 
         function CheckAutoCompleteName() {
-            if ($("#SearchUserID").val() == "") {
-                SetUserIDForAutoCompleteName(nameList, $("#Name").val(), "SearchUserID");
-                if (!ValidateAutocompleteName($("#Name").val(), $("#SearchUserID").val())) {
-                    return false;
+            if ('@ViewBag.RequestLevelPerson' != "My") {
+                if ($("#SearchUserID").val() == "") {
+                    SetUserIDForAutoCompleteName(nameList, $("#Name").val(), "SearchUserID");
+                    if (!ValidateAutocompleteName($("#Name").val(), $("#SearchUserID").val())) {
+                        return false;
+                    }
                 }
             }
             return true;

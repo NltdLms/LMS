@@ -35,7 +35,7 @@ namespace NLTD.EmploeePortal.LMS.Dac
 
         public DbSet<PermissionDetail> PermissionDetail { get; set; }
         public DbSet<LeaveAttachment> LeaveAttachment { get; set; }
-        public DbSet<LeaveTransactiontHistory> LeaveTransactionHistory { get; set; }
+        public DbSet<LeaveTransactionHistory> LeaveTransactionHistory { get; set; }
         public DbSet<LeaveType> LeaveType { get; set; }
         public DbSet<OfficeLocation> OfficeLocation { get; set; }
         public DbSet<OfficeHoliday> OfficeHoliday { get; set; }
@@ -61,7 +61,7 @@ namespace NLTD.EmploeePortal.LMS.Dac
             modelBuilder.Entity<PermissionDetail>().HasKey(e => e.PermissionDetailId).ToTable("PermissionDetail");
             modelBuilder.Entity<LeaveAttachment>().HasKey(e => e.AttachmentId).ToTable("LeaveAttachment");
             modelBuilder.Entity<LeaveType>().HasKey(e => e.LeaveTypeId).ToTable("LeaveType");
-            modelBuilder.Entity<LeaveTransactiontHistory>().HasKey(e => e.TransactionId).ToTable("LeaveTransactiontHistory");
+            modelBuilder.Entity<LeaveTransactionHistory>().HasKey(e => e.TransactionId).ToTable("LeaveTransactiontHistory");
             modelBuilder.Entity<EmployeeTransactionHistory>().HasKey(e => e.TransactionId).ToTable("EmployeeTransactiontHistory");
             modelBuilder.Entity<LeaveType>().HasKey(e => e.LeaveTypeId).ToTable("LeaveType");
             modelBuilder.Entity<OfficeLocation>().HasKey(e => e.OfficeId).ToTable("OfficeLocation");

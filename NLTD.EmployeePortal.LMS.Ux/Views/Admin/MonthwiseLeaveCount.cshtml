@@ -77,11 +77,13 @@
 
 
         function CheckAutoCompleteName() {
-            if ($("#SearchUserID").val() == "") {
-                SetUserIDForAutoCompleteName(nameList, $("#Name").val(), "SearchUserID");
-                if (!ValidateAutocompleteName($("#Name").val(), $("#SearchUserID").val())) {
-                    Clearshowalert("Please Choose a valid Username from the List.", "alert alert-danger");
-                    return false;
+            if ('@ViewBag.RequestLevelPerson' != "My") {
+                if ($("#SearchUserID").val() == "") {
+                    SetUserIDForAutoCompleteName(nameList, $("#Name").val(), "SearchUserID");
+                    if (!ValidateAutocompleteName($("#Name").val(), $("#SearchUserID").val())) {
+                        Clearshowalert("Please Choose a valid Username from the List.", "alert alert-danger");
+                        return false;
+                    }
                 }
             }
             return true;

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace NLTD.EmployeePortal.LMS.Common.DisplayModel
 {
-    public class LeaveTransactiontHistoryModel
+    public class LeaveTransactionHistoryModel
     {
         public Int64 TransactionId { get; set; }
         public Int64 UserId { get; set; }
@@ -30,6 +30,6 @@ namespace NLTD.EmployeePortal.LMS.Common.DisplayModel
         public string ReportingTo { get; set; }
         public Int64 LeaveTypeId { get; set; }
         public string LeaveType { get; set; }
-        public List<LeaveTransactiontHistoryModel> LeaveTransactiontHistoryModel { get; set; }
+        public List<LeaveTransactionHistoryModel> LeaveTransactiontHistoryModel { get; set; }
     }
 }

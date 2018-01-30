@@ -36,7 +36,7 @@ namespace NLTD.EmploeePortal.LMS.Dac.Dac
                     {
                         string ReportingTo = (RequestMenuUser == "My" && LeaduserId > 0) ? employeeDac.ReportingToName(LeaduserId) : employeeDac.ReportingToName(userId);
 
-                        List<LeaveTransactiontHistoryModel> transactionDetails = new List<LeaveTransactiontHistoryModel>();
+                        List<LeaveTransactionHistoryModel> transactionDetails = new List<LeaveTransactionHistoryModel>();
                         if (RequestMenuUser == "My")
                         {
                             transactionDetails = getTransactionDetails(context, LeaduserId);
@@ -116,7 +116,7 @@ namespace NLTD.EmploeePortal.LMS.Dac.Dac
             }
             return null;
         }
-        public List<LeaveTransactiontHistoryModel> getTransactionDetails(NLTDDbContext context, long userId)
+        public List<LeaveTransactionHistoryModel> getTransactionDetails(NLTDDbContext context, long userId)
         {
             // var myInClause = new string[] { "P", "R", "C" };
 
@@ -145,7 +145,7 @@ namespace NLTD.EmploeePortal.LMS.Dac.Dac
                                       join e in context.Employee on lth.UserId equals e.UserId
                                       where lth.UserId == userId && lt.IsTimeBased == false
                                       // myInClause.Contains(lth.Remarks) &&
-                                      select new LeaveTransactiontHistoryModel
+                                      select new LeaveTransactionHistoryModel
                                       {
                                           LeaveId = lth.LeaveId,
                                           LeaveTypeId = lth.LeaveTypeId,

@@ -20,10 +20,10 @@ namespace NLTD.EmploeePortal.LMS.Dac.DbModel
         public String Gender { get; set; }
         public String AvatarUrl { get; set; }
         public Int64? ReportingToId { get; set; }
-        public Int64 OfficeHolodayId { get; set; }
+        public Int64 OfficeHolidayId { get; set; }
         public Int64? EmployeeRoleId { get; set; }
         //public Boolean IsHandleMembers { get; set; }
-        public Boolean IsInProbagationPeriod { get; set; }
+        public Boolean IsInProbationaryPeriod { get; set; }
         public Boolean CanAvailYearlyLeave { get; set; }        
 
         

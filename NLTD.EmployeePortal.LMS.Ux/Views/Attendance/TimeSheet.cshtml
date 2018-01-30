@@ -38,6 +38,7 @@
     <script src="~/Scripts/moment.js"></script>
     <link href="~/Content/bootstrap.css" rel="stylesheet" />
     <script type="text/JavaScript">
+
         var nameList = [];
         $(document).ready(function() {
             $("#DateRange").daterangepicker({
@@ -92,7 +93,7 @@
                 select: function (event, ui) {
                     event.preventDefault();
                     $("#UserID").val(ui.item.value);
-                    
+
                 },
                 focus: function (event, ui) {
                     event.preventDefault();
@@ -120,12 +121,12 @@
             else {
                 $("#divLoading").show();
                 var data = {};
-                if ($("#RequestLevelPerson").val() == "Team") 
+                if ($("#RequestLevelPerson").val() == "Team")
                 {
                     data =
                         { TimeSheetQueryModelObj: { MyDirectEmployees: true } }
                 }
-                
+
                 $("#divForTimesheet")
                     .load('/Admin/LoadMyTeamTimesheet', data,
                     function () {
@@ -145,15 +146,17 @@
 
         function CheckAutoCompleteName()
         {
-            $("#alert_placeholder").empty();
-            if ($("#UserID").val() == "") {
-                SetUserIDForAutoCompleteName(nameList, $("#Name").val(), "UserID");
-                if (!ValidateAutocompleteName($("#Name").val(), $("#UserID").val())) {
-                    Clearshowalert("Please choose the Username from List.", "alert alert-danger");
-                    return false;
+            if ('@ViewBag.RequestLevelPerson' != "My") {
+                $("#alert_placeholder").empty();
+                if ($("#UserID").val() == "") {
+                    SetUserIDForAutoCompleteName(nameList, $("#Name").val(), "UserID");
+                    if (!ValidateAutocompleteName($("#Name").val(), $("#UserID").val())) {
+                        Clearshowalert("Please choose the Username from List.", "alert alert-danger");
+                        return false;
+                    }
                 }
             }
-            
+
             return true;
         }
 
