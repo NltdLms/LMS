@@ -697,7 +697,7 @@ function loadDaywiseLeaves() {
         function () {
             $("#Daywisetable_id").dataTable({
                 "aaSorting": [], columnDefs: [
-                    { type: 'date-eu', targets: 0 }
+                    { type: 'date-eu', targets: 4 }
                 ] })
             $("#divLoading").hide();
             $('html, body').animate({
