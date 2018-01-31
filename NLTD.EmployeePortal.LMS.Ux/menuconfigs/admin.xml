@@ -42,7 +42,7 @@
           <icon></icon>
         </MenuItem>
         <MenuItem>
-          <title>View Transaction Log</title>
+          <title>Transaction Log</title>
           <url>/Admin/MyTransactionLogs</url>
           <icon></icon>
         </MenuItem>
@@ -107,8 +107,8 @@
           <icon></icon>
         </MenuItem>
         <MenuItem>
-          <title>My TimeSheet</title>
-          <url>/Attendance/MyTimeSheet</url>
+          <title>My Timesheet</title>
+          <url>/Attendance/MyTimesheet</url>
           <icon></icon>
         </MenuItem>
         <MenuItem>

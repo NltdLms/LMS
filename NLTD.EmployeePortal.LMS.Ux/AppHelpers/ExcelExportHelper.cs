@@ -645,7 +645,13 @@ namespace NLTD.EmployeePortal.LMS.Ux.AppHelpers
             using (ExcelPackage package = new ExcelPackage())
             {
                 DataTable dataTable = ListToDataTable<TimeSheetModel>(TimeSheetModelObj);
-                ExcelWorksheet workSheet = package.Workbook.Worksheets.Add("TimeSheet");
+                dataTable.Columns["WorkingDate"].ColumnName = "Date";
+                dataTable.Columns["InTime"].ColumnName = "In Time";
+                dataTable.Columns["OutTime"].ColumnName = "Out Time";
+                dataTable.Columns["WorkingHours"].ColumnName = "Working Hours";
+                dataTable.Columns["LateIn"].ColumnName = "Late In";
+                dataTable.Columns["EarlyOut"].ColumnName = "Early Out";
+                ExcelWorksheet workSheet = package.Workbook.Worksheets.Add("Timesheet");
                 int startRowFrom = String.IsNullOrEmpty(heading) ? 1 : 3;
                 if (showSrNo)
                 {
@@ -657,7 +663,7 @@ namespace NLTD.EmployeePortal.LMS.Ux.AppHelpers
                     foreach (DataRow item in dataTable.Rows)
                     {
                         item[0] = index;
-                        item["Day"] = Convert.ToDateTime(item["WorkingDate"]).DayOfWeek.ToString();
+                        item["Day"] = Convert.ToDateTime(item["Date"]).DayOfWeek.ToString();
                         index++;
 
                     }
@@ -746,7 +752,14 @@ namespace NLTD.EmployeePortal.LMS.Ux.AppHelpers
 
                 // For Weekly Report
                 dataTable = ListToDataTable<ConsolidateReport>(weeklyTimeSheetConsolidateList);
-                workSheet = package.Workbook.Worksheets.Add("Weekly Report");
+                dataTable.Columns["DateRange"].ColumnName = "Date";
+                dataTable.Columns["TotalWorkingHours"].ColumnName = "Total Working Hours";
+                dataTable.Columns["PermissionCount"].ColumnName = "No. Of Permission";
+                dataTable.Columns["LeaveCount"].ColumnName = "No .Of Leaves";
+                dataTable.Columns["LateCount"].ColumnName = "No. Of Late In";
+                dataTable.Columns["WorkFromHomeCount"].ColumnName = "No. Of Work From Home";
+                dataTable.Columns["EarlyCount"].ColumnName = "No. Of Early out";
+                workSheet = package.Workbook.Worksheets.Add("Summary");
                 startRowFrom = String.IsNullOrEmpty(heading) ? 1 : 3;
                 if (showSrNo)
                 {
@@ -767,26 +780,26 @@ namespace NLTD.EmployeePortal.LMS.Ux.AppHelpers
                 // autofit width of cells with small content  
 
 
-                dataTable = ListToDataTable<ConsolidateReport>(monthlyTimeSheetConsolidateList);
-                workSheet = package.Workbook.Worksheets.Add("Monthly Report");
-                startRowFrom = String.IsNullOrEmpty(heading) ? 1 : 3;
-                if (showSrNo)
-                {
-                    DataColumn dataColumn = dataTable.Columns.Add("#", typeof(int));
-                    dataColumn.SetOrdinal(0);
-                    int index = 1;
-                    foreach (DataRow item in dataTable.Rows)
-                    {
-                        item[0] = index;
-                        index++;
-                    }
-                }
+                //dataTable = ListToDataTable<ConsolidateReport>(monthlyTimeSheetConsolidateList);
+                //workSheet = package.Workbook.Worksheets.Add("Monthly Report");
+                //startRowFrom = String.IsNullOrEmpty(heading) ? 1 : 3;
+                //if (showSrNo)
+                //{
+                //    DataColumn dataColumn = dataTable.Columns.Add("#", typeof(int));
+                //    dataColumn.SetOrdinal(0);
+                //    int index = 1;
+                //    foreach (DataRow item in dataTable.Rows)
+                //    {
+                //        item[0] = index;
+                //        index++;
+                //    }
+                //}
 
 
-                // add the content into the Excel file  
-                workSheet.Cells["A" + startRowFrom].LoadFromDataTable(dataTable, true);
-                // autofit width of cells with small content  
-                workSheet = FormatConsolidateExcel(workSheet, dataTable, startRowFrom, showSrNo);
+                //// add the content into the Excel file  
+                //workSheet.Cells["A" + startRowFrom].LoadFromDataTable(dataTable, true);
+                //// autofit width of cells with small content  
+                //workSheet = FormatConsolidateExcel(workSheet, dataTable, startRowFrom, showSrNo);
                 result = package.GetAsByteArray();
             }
 
@@ -1064,12 +1077,15 @@ namespace NLTD.EmployeePortal.LMS.Ux.AppHelpers
 
         public string TotalWorkingHours { get; set; }
 
-        public int PermissionCount { get; set; }
+       
         public decimal LeaveCount { get; set; }
+
+        public decimal WorkFromHomeCount { get; set; }
+        public int PermissionCount { get; set; }
         public int LateCount { get; set; }
         public int EarlyCount { get; set; }
 
-        public decimal WorkFromHomeCount { get; set; }
+       
         public DateTime FromDate { get; set; }
 
     }

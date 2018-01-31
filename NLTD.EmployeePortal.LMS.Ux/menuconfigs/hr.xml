@@ -42,7 +42,7 @@
           <icon></icon>
         </MenuItem>
         <MenuItem>
-          <title>View Transaction Log</title>
+          <title>Transaction Log</title>
           <url>/Admin/MyTransactionLogs</url>
           <icon></icon>
         </MenuItem>
@@ -84,12 +84,12 @@
           <icon></icon>
         </MenuItem>
         <MenuItem>
-          <title>View Employee Profile</title>
+          <title>Employee Profile</title>
           <url>/Profile/TeamLmsProfile</url>
           <icon></icon>
         </MenuItem>
         <MenuItem>
-          <title>View Transaction Log</title>
+          <title>Transaction Log</title>
           <url>/Admin/TeamTransactionLogs</url>
           <icon></icon>
         </MenuItem>
@@ -107,7 +107,7 @@
           <icon></icon>
         </MenuItem>
         <MenuItem>
-          <title>TimeSheet</title>
+          <title>Timesheet</title>
           <url>/Attendance/MyTimeSheet</url>
           <icon></icon>
         </MenuItem>
@@ -130,7 +130,7 @@
           <icon></icon>
         </MenuItem>
         <MenuItem>
-          <title>TimeSheet</title>
+          <title>Timesheet</title>
           <url>/Attendance/MyTeamTimeSheet</url>
           <icon></icon>
         </MenuItem>
