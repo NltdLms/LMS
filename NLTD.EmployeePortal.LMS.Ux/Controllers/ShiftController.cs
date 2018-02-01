@@ -100,11 +100,23 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
         public ActionResult SaveEmployeeShift(List<Int64> UserId, int Shift, DateTime FromDate, DateTime ToDate, string RequestMenuUser)
         {
             string result = "";
+            EmployeeProfile EmployeeProfileObj = (EmployeeProfile)Session["Profile"];
+            
             if (ModelState.IsValid)
             {
-                if (RequestMenuUser == "Team" && (FromDate <= DateTime.Now.AddDays(-7) || ToDate <= DateTime.Now.AddDays(-7)))
+                if(EmployeeProfileObj.RoleText == "Employee")
                 {
-                    result = "The system restricts modifying shifts earlier than 7 days. Please contact HR for any changes.";
+                    if (RequestMenuUser == "Team" && (FromDate <= DateTime.Now.AddDays(-7) || ToDate <= DateTime.Now.AddDays(-7)))
+                    {
+                        result = "The system restricts modifying shifts earlier than 7 days. Please contact HR for any changes.";
+                    }
+                    else
+                    {
+                        using (var client = new ShiftClient())
+                        {
+                            result = client.SaveEmployeeShift(UserId, Shift, FromDate, ToDate, this.UserId);
+                        }
+                    }
                 }
                 else
                 {
@@ -113,6 +125,7 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
                         result = client.SaveEmployeeShift(UserId, Shift, FromDate, ToDate, this.UserId);
                     }
                 }
+
             }
 
             return Json(result);
@@ -190,11 +203,22 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
         public ActionResult SaveIndividualEmployeeShift(DateTime FromDate, DateTime ToDate, int Shift, Int64 UserId, string RequestMenuUser)
         {
             string result = "";
+            EmployeeProfile EmployeeProfileObj = (EmployeeProfile)Session["Profile"];
             if (ModelState.IsValid)
             {
-                if (RequestMenuUser == "Team" && (FromDate <= DateTime.Now.AddDays(-7) || ToDate <= DateTime.Now.AddDays(-7)))
+                if (EmployeeProfileObj.RoleText == "Employee")
                 {
-                    result = "The system restricts modifying shifts earlier than 7 days. Please contact HR for any changes.";
+                    if (RequestMenuUser == "Team" && (FromDate <= DateTime.Now.AddDays(-7) || ToDate <= DateTime.Now.AddDays(-7)))
+                    {
+                        result = "The system restricts modifying shifts earlier than 7 days. Please contact HR for any changes.";
+                    }
+                    else
+                    {
+                        using (var client = new ShiftClient())
+                        {
+                            result = client.SaveIndividualEmployeeShift(UserId, Shift, FromDate, ToDate, this.UserId);
+                        }
+                    }
                 }
                 else
                 {
