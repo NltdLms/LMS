@@ -844,7 +844,7 @@ namespace NLTD.EmploeePortal.LMS.Dac.Dac
                                 hist.TransactionType = "Insert";
                                 hist.TransactionBy = ModifiedBy;
                                 hist.Remarks = remarks;
-                                context.EmployeeTransactiontHistory.Add(hist);
+                                context.EmployeeTransactionHistory.Add(hist);
                                 isSaved = context.SaveChanges();
 
                             }
@@ -1068,7 +1068,7 @@ namespace NLTD.EmploeePortal.LMS.Dac.Dac
                                 hist.TransactionType = "Update";
                                 hist.TransactionBy = ModifiedBy;
                                 hist.Remarks = remarks;
-                                context.EmployeeTransactiontHistory.Add(hist);
+                                context.EmployeeTransactionHistory.Add(hist);
                                 isSaved = context.SaveChanges();
 
                             }

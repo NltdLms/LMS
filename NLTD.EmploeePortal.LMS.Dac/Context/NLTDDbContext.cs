@@ -40,7 +40,7 @@ namespace NLTD.EmploeePortal.LMS.Dac
         public DbSet<OfficeLocation> OfficeLocation { get; set; }
         public DbSet<OfficeHoliday> OfficeHoliday { get; set; }
 
-        public DbSet<EmployeeTransactionHistory>EmployeeTransactiontHistory { get; set; }
+        public DbSet<EmployeeTransactionHistory>EmployeeTransactionHistory { get; set; }
         public DbSet<EmployeeWeekOff> EmployeeWeekOff { get; set; }
 
         public DbSet<DaysOfWeek> DayOfWeek { get; set; }
@@ -62,7 +62,7 @@ namespace NLTD.EmploeePortal.LMS.Dac
             modelBuilder.Entity<LeaveAttachment>().HasKey(e => e.AttachmentId).ToTable("LeaveAttachment");
             modelBuilder.Entity<LeaveType>().HasKey(e => e.LeaveTypeId).ToTable("LeaveType");
             modelBuilder.Entity<LeaveTransactionHistory>().HasKey(e => e.TransactionId).ToTable("LeaveTransactionHistory");
-            modelBuilder.Entity<EmployeeTransactionHistory>().HasKey(e => e.TransactionId).ToTable("EmployeeTransactiontHistory");
+            modelBuilder.Entity<EmployeeTransactionHistory>().HasKey(e => e.TransactionId).ToTable("EmployeeTransactionHistory");
             modelBuilder.Entity<LeaveType>().HasKey(e => e.LeaveTypeId).ToTable("LeaveType");
             modelBuilder.Entity<OfficeLocation>().HasKey(e => e.OfficeId).ToTable("OfficeLocation");
             modelBuilder.Entity<OfficeHoliday>().HasKey(e => e.OfficeHolodayId).ToTable("OfficeHoliday");
