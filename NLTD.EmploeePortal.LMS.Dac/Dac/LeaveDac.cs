@@ -5,6 +5,7 @@ using NLTD.EmployeePortal.LMS.Common.QueryModel;
 using NLTD.EmployeePortal.LMS.Repository;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Data.Entity;
 using System.Globalization;
 using System.Linq;
@@ -1945,6 +1946,7 @@ namespace NLTD.EmploeePortal.LMS.Dac
         {
             int count = 0;
             DateTime dateTime = DateTime.Now;
+            int BSB = Convert.ToInt32(ConfigurationManager.AppSettings["BeforeShiftBuffer"]);
             using (var context = new NLTDDbContext())
             {
                 var qry = (from e in context.EmployeeAttendance
@@ -1953,7 +1955,7 @@ namespace NLTD.EmploeePortal.LMS.Dac
                            join sm in context.ShiftMaster on s.ShiftID equals sm.ShiftID
                            where emp.OfficeId == OfficeId && DbFunctions.TruncateTime(e.InOutDate) == DbFunctions.TruncateTime(dateTime)
                                  && DbFunctions.TruncateTime(s.ShiftDate) == DbFunctions.TruncateTime(dateTime)
-                                 && (DbFunctions.CreateTime(e.InOutDate.Hour + 3, e.InOutDate.Minute, e.InOutDate.Second) >= sm.FromTime
+                                 && (DbFunctions.CreateTime(e.InOutDate.Hour > (24 - BSB) ? 24 : e.InOutDate.Hour + BSB, e.InOutDate.Minute, e.InOutDate.Second) >= sm.FromTime
                                  && DbFunctions.CreateTime(e.InOutDate.Hour, e.InOutDate.Minute, e.InOutDate.Second) <= sm.ToTime)
                            select new { userID = e.UserID }
                 );
