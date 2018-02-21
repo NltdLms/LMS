@@ -7,8 +7,8 @@
     <ProjectGuid>{779A6702-63A3-46D2-A529-E155D1C93974}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>NLTD.EmploeePortal.LMS.Dac</RootNamespace>
-    <AssemblyName>NLTD.EmploeePortal.LMS.Dac</AssemblyName>
+    <RootNamespace>NLTD.EmployeePortal.LMS.Dac</RootNamespace>
+    <AssemblyName>NLTD.EmployeePortal.LMS.Dac</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>

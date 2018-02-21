@@ -64,7 +64,7 @@
     <Compile Include="TimesheetClient.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\NLTD.EmploeePortal.LMS.Dac\NLTD.EmployeePortal.LMS.Dac.csproj">
+    <ProjectReference Include="..\NLTD.EmployeePortal.LMS.Dac\NLTD.EmployeePortal.LMS.Dac.csproj">
       <Project>{779a6702-63a3-46d2-a529-e155d1c93974}</Project>
       <Name>NLTD.EmployeePortal.LMS.Dac</Name>
     </ProjectReference>

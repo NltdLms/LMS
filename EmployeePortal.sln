@@ -7,7 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NLTD.EmployeePortal.LMS.Com
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NLTD.EmployeePortal.LMS.Repository", "NLTD.EmployeePortal.LMS.Repository\NLTD.EmployeePortal.LMS.Repository.csproj", "{77D27C9B-1EA3-4A01-91AA-BDC3B1757D10}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NLTD.EmployeePortal.LMS.Dac", "NLTD.EmploeePortal.LMS.Dac\NLTD.EmployeePortal.LMS.Dac.csproj", "{779A6702-63A3-46D2-A529-E155D1C93974}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NLTD.EmployeePortal.LMS.Dac", "NLTD.EmployeePortal.LMS.Dac\NLTD.EmployeePortal.LMS.Dac.csproj", "{779A6702-63A3-46D2-A529-E155D1C93974}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NLTD.EmployeePortal.LMS.Client", "NLTD.EmployeePortal.LMS.Client\NLTD.EmployeePortal.LMS.Client.csproj", "{80D51968-14E9-4545-93C7-775CC5BEC3F7}"
 EndProject
