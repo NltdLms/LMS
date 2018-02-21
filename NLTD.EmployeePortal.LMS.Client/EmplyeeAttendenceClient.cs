@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using NLTD.EmploeePortal.LMS.Dac.Dac;
-using NLTD.EmploeePortal.LMS.Dac.DbHelper;
+using NLTD.EmployeePortal.LMS.Dac.Dac;
+using NLTD.EmployeePortal.LMS.Dac.DbHelper;
 using NLTD.EmployeePortal.LMS.Common.DisplayModel;
 using NLTD.EmployeePortal.LMS.Repository;
 

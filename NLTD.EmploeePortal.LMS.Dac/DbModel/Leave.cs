@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using NLTD.EmploeePortal.LMS.Dac.DbModel;
+using NLTD.EmployeePortal.LMS.Dac.DbModel;
 
-namespace NLTD.EmploeePortal.LMS.Dac.DbModel
+namespace NLTD.EmployeePortal.LMS.Dac.DbModel
 {
     public class Leave
     {

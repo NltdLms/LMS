@@ -67,7 +67,7 @@
     <Compile Include="DisplayModel\LeaveItem.cs" />
     <Compile Include="DisplayModel\LeaveRequestModel.cs" />
     <Compile Include="DisplayModel\LeaveSummary.cs" />
-    <Compile Include="DisplayModel\LeaveTransactiontHistoryModel.cs" />
+    <Compile Include="DisplayModel\LeaveTransactionHistoryModel.cs" />
     <Compile Include="DisplayModel\LeaveTypesModel.cs" />
     <Compile Include="DisplayModel\MonthwiseLeavesCountModel.cs" />
     <Compile Include="DisplayModel\PermissionDetailsModel.cs" />

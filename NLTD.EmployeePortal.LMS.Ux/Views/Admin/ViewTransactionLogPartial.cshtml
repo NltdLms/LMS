@@ -58,10 +58,10 @@
         <div class="box-footer">
             <div id="conformBox"></div>
             <div class="col-sm-5" style="left:-15px;">
-                <span style="font-weight:bold">Name: @Model[0].LeaveTransactiontHistoryModel[0].FirstName @Model[0].LeaveTransactiontHistoryModel[0].LastName</span>
+                <span style="font-weight:bold">Name: @Model[0].leaveTransactionHistoryModel[0].FirstName @Model[0].leaveTransactionHistoryModel[0].LastName</span>
             </div>
             <div class="col-sm-2" style="left:-15px;">
-                <span style="font-weight:bold">Employee Id: @Model[0].LeaveTransactiontHistoryModel[0].EmployeeId</span>
+                <span style="font-weight:bold">Employee Id: @Model[0].leaveTransactionHistoryModel[0].EmployeeId</span>
             </div>
             <div class="col-sm-5" style="padding-right:0px">
                 <span style="font-weight:bold">Reporting To: @Model[0].ReportingTo</span>
@@ -85,7 +85,7 @@
                             @*<div id="@("summary"+Model[i].LeaveTypeId)" class="collapse">
                                     <div id="@("divForCreate"+Model[i].LeaveTypeId)"></div>
                                 </div>*@
-                            @Html.Partial("~/Views/Admin/ViewTransactionLogSubDetailPartial.cshtml", Model[i].LeaveTransactiontHistoryModel)
+                            @Html.Partial("~/Views/Admin/ViewTransactionLogSubDetailPartial.cshtml", Model[i].leaveTransactionHistoryModel)
                         </div>
                     </div>
                 </div>

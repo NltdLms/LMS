@@ -5,7 +5,7 @@ using System.Text;
 using NLTD.EmployeePortal.LMS.Common.DisplayModel;
 using NLTD.EmployeePortal.LMS.Common.QueryModel;
 
-namespace NLTD.EmploeePortal.LMS.Dac.DbHelper
+namespace NLTD.EmployeePortal.LMS.Dac.DbHelper
 {
     public class LeaveHelper : ILeaveHelper
     {

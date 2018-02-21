@@ -269,7 +269,7 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
                 }
                 catch (Exception ex)
                 {
-                    throw ex;
+                    throw;
                 }
             }
             using (var client = new LeaveClient())
@@ -343,7 +343,7 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
                 }
                 catch (Exception ex)
                 {
-                    throw ex;
+                    throw;
                 }
             }
             if (startDate == "" || endDate == "")
@@ -403,7 +403,7 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
                 }
                 catch (Exception ex)
                 {
-                    throw ex;
+                    throw;
                 }
             }
             using (var client = new LeaveClient())
@@ -628,7 +628,7 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
                 }
                 catch (Exception ex)
                 {
-                    throw ex;
+                    throw;
                 }
             }
 

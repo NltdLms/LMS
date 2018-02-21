@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Data.Entity;
-using NLTD.EmploeePortal.LMS.Dac.DbModel;
+using NLTD.EmployeePortal.LMS.Dac.DbModel;
 using System.Data.Entity.ModelConfiguration;
 
-namespace NLTD.EmploeePortal.LMS.Dac
+namespace NLTD.EmployeePortal.LMS.Dac
 {
     public class NLTDDbContext : DbContext
     {

@@ -1,5 +1,5 @@
-﻿using NLTD.EmploeePortal.LMS.Dac.Dac;
-using NLTD.EmploeePortal.LMS.Dac.DbModel;
+﻿using NLTD.EmployeePortal.LMS.Dac.Dac;
+using NLTD.EmployeePortal.LMS.Dac.DbModel;
 using NLTD.EmployeePortal.LMS.Common.DisplayModel;
 using NLTD.EmployeePortal.LMS.Common.QueryModel;
 using NLTD.EmployeePortal.LMS.Repository;
@@ -10,10 +10,11 @@ using System.Data.Entity;
 using System.Globalization;
 using System.Linq;
 using System.Text;
-namespace NLTD.EmploeePortal.LMS.Dac
+namespace NLTD.EmployeePortal.LMS.Dac
 {
     public class LeaveDac : ILeaveHelper
     {
+        int BSB = Convert.ToInt32(ConfigurationManager.AppSettings["BeforeShiftBuffer"]);
         public string ChangeStatus(LeaveStatusModel status)
         {
             int isSaved = 0;
@@ -219,7 +220,8 @@ namespace NLTD.EmploeePortal.LMS.Dac
                                 //lstSummary = LeaveItemsquery.Where(t => empList.Contains(t.UserId)).ToList();
                                 if (leadinfo.RoleName.ToUpper() == "ADMIN" || leadinfo.RoleName.ToUpper() == "HR")
                                 {
-                                    if (paramUserId>0) {
+                                    if (paramUserId > 0)
+                                    {
 
                                         lstSummary = LeaveItemsquery.Where(x => x.UserId == paramUserId).ToList();
                                     }
@@ -239,9 +241,10 @@ namespace NLTD.EmploeePortal.LMS.Dac
                                 }
                                 else
                                 {
-                                    if (paramUserId > 0) {
+                                    if (paramUserId > 0)
+                                    {
                                         lstSummary = LeaveItemsquery.Where(t => empList.Contains(t.UserId)).ToList();
-                                        if(lstSummary.Count>0)
+                                        if (lstSummary.Count > 0)
                                             lstSummary = lstSummary.Where(x => x.UserId == paramUserId).ToList();
                                     }
                                     else
@@ -263,12 +266,12 @@ namespace NLTD.EmploeePortal.LMS.Dac
                     }
                     //if (paramUserId != null && paramUserId != 0)
                     //{
-                       
+
                     //        if (lstSummary.Count > 0)
                     //        {
                     //            lstSummary = lstSummary.Where(x => x.UserId == paramUserId).ToList();
                     //        }
-                        
+
                     //}
 
                     lstSummary = lstSummary.OrderBy(x => x.Name).ToList();
@@ -789,8 +792,8 @@ namespace NLTD.EmploeePortal.LMS.Dac
                             if (qryMdl.SearchUserID > 0)
                             {
                                 LeaveItems = LeaveItemsquery.Where(t => empList.Contains(t.UserId)).ToList();
-                                if(LeaveItems.Count>0)
-                                LeaveItems = LeaveItems.Where(x => x.UserId == qryMdl.SearchUserID).ToList();
+                                if (LeaveItems.Count > 0)
+                                    LeaveItems = LeaveItems.Where(x => x.UserId == qryMdl.SearchUserID).ToList();
                             }
                             else
                             {
@@ -804,21 +807,21 @@ namespace NLTD.EmploeePortal.LMS.Dac
                                 }
                             }
                         }
-                        
+
                     }
                 }
                 if (qryMdl.ShowApprovedLeaves)
                 {
                     LeaveItems = LeaveItems.Where(x => x.Status == "A").ToList();
                 }
-                if (qryMdl.SearchUserID != null && qryMdl.SearchUserID !=0)
+                if (qryMdl.SearchUserID != null && qryMdl.SearchUserID != 0)
                 {
-                   
-                        if (LeaveItems.Count > 0)
-                        {
-                            LeaveItems = LeaveItems.Where(x => x.UserId == qryMdl.SearchUserID).ToList();
-                        }
-                    
+
+                    if (LeaveItems.Count > 0)
+                    {
+                        LeaveItems = LeaveItems.Where(x => x.UserId == qryMdl.SearchUserID).ToList();
+                    }
+
                 }
                 LeaveItems = (from l in LeaveItems
                               join e in context.Employee on l.AppliedById equals e.UserId
@@ -1074,7 +1077,7 @@ namespace NLTD.EmploeePortal.LMS.Dac
                                             duplicateRequest = "Duplicate";
                                         }
                                     }
-                                    
+
                                 }
                                 if (duplicateRequest == "Duplicate")
                                 {
@@ -1531,11 +1534,12 @@ namespace NLTD.EmploeePortal.LMS.Dac
 
                     if (leadinfo != null)
                     {
-                         if (reqUsr == "Team")
+                        if (reqUsr == "Team")
                         {
                             if (leadinfo.RoleName.ToUpper() == "ADMIN" || leadinfo.RoleName.ToUpper() == "HR")
                             {
-                                if (paramUserId > 0) {
+                                if (paramUserId > 0)
+                                {
 
                                     retList = retList.Where(x => x.UserId == paramUserId).ToList();
                                 }
@@ -1558,8 +1562,8 @@ namespace NLTD.EmploeePortal.LMS.Dac
                                 if (paramUserId > 0)
                                 {
                                     retList = retList.Where(t => empList.Contains(t.UserId)).OrderBy(t => t.Name).ToList();
-                                    if(retList.Count>0)
-                                    retList = retList.Where(x => x.UserId == paramUserId).ToList();
+                                    if (retList.Count > 0)
+                                        retList = retList.Where(x => x.UserId == paramUserId).ToList();
                                 }
                                 else
                                 {
@@ -1576,7 +1580,7 @@ namespace NLTD.EmploeePortal.LMS.Dac
                         }
                     }
                 }
-                
+
 
                 for (int i = 0; i < retList.Count; i++)
                 {
@@ -1591,7 +1595,7 @@ namespace NLTD.EmploeePortal.LMS.Dac
 
             }
             if (retList.Count > 0)
-                retList = retList.OrderBy(x => x.EmpId).ThenByDescending(x=>x.LeaveDate).ToList();
+                retList = retList.OrderBy(x => x.EmpId).ThenByDescending(x => x.LeaveDate).ToList();
             return retList;
         }
         public string ReturnStatus(string status)
@@ -1734,7 +1738,7 @@ namespace NLTD.EmploeePortal.LMS.Dac
                                     select new { RoleName = role.Role }).FirstOrDefault();
                     if (leadinfo != null)
                     {
-                       if (reqUsr == "Team")
+                        if (reqUsr == "Team")
                         {
                             if (leadinfo.RoleName.ToUpper() == "ADMIN" || leadinfo.RoleName.ToUpper() == "HR")
                             {
@@ -1759,8 +1763,8 @@ namespace NLTD.EmploeePortal.LMS.Dac
                                 if (paramUserId > 0)
                                 {
                                     permissions = qry.Where(t => empList.Contains(t.UserId)).ToList();
-                                    if(permissions.Count>0)
-                                    permissions = permissions.Where(x => x.UserId == paramUserId).ToList();
+                                    if (permissions.Count > 0)
+                                        permissions = permissions.Where(x => x.UserId == paramUserId).ToList();
                                 }
                                 else
                                 {
@@ -1779,8 +1783,8 @@ namespace NLTD.EmploeePortal.LMS.Dac
 
                 }
             }
-            
-            if (permissions.Count>0)
+
+            if (permissions.Count > 0)
             {
                 TimeSpan timeFrom;
                 DateTime permissionDateFromTime;
@@ -1931,7 +1935,7 @@ namespace NLTD.EmploeePortal.LMS.Dac
                             where emp.UserId == UserID
                             select role.Role).FirstOrDefault();
             }
-            
+
             List<EmployeeProfile> employeeProfileListUnderManager = new EmployeeDac().GetReportingEmployeeProfile(UserID, userRole, false).OrderBy(m => m.FirstName).ToList();
 
             for (int i = 0; i < employeeProfileListUnderManager.Count; i++)
@@ -1946,16 +1950,15 @@ namespace NLTD.EmploeePortal.LMS.Dac
         {
             int count = 0;
             DateTime dateTime = DateTime.Now;
-            int BSB = Convert.ToInt32(ConfigurationManager.AppSettings["BeforeShiftBuffer"]);
             using (var context = new NLTDDbContext())
             {
                 var qry = (from e in context.EmployeeAttendance
-                           join emp in context.Employee on e.UserID equals  emp.UserId
+                           join emp in context.Employee on e.UserID equals emp.UserId
                            join s in context.ShiftMapping on e.UserID equals s.UserID
                            join sm in context.ShiftMaster on s.ShiftID equals sm.ShiftID
                            where emp.OfficeId == OfficeId && DbFunctions.TruncateTime(e.InOutDate) == DbFunctions.TruncateTime(dateTime)
                                  && DbFunctions.TruncateTime(s.ShiftDate) == DbFunctions.TruncateTime(dateTime)
-                                 && (DbFunctions.CreateTime(e.InOutDate.Hour > (24 - BSB) ? 24 : e.InOutDate.Hour + BSB, e.InOutDate.Minute, e.InOutDate.Second) >= sm.FromTime
+                                 && (DbFunctions.CreateTime(e.InOutDate.Hour > (23 - BSB) ? 23 : e.InOutDate.Hour + BSB, e.InOutDate.Minute, e.InOutDate.Second) >= sm.FromTime
                                  && DbFunctions.CreateTime(e.InOutDate.Hour, e.InOutDate.Minute, e.InOutDate.Second) <= sm.ToTime)
                            select new { userID = e.UserID }
                 );
@@ -2056,7 +2059,8 @@ namespace NLTD.EmploeePortal.LMS.Dac
                         {
                             if (leadinfo.RoleName.ToUpper() == "ADMIN" || leadinfo.RoleName.ToUpper() == "HR")
                             {
-                                if (paramUserId > 0) {
+                                if (paramUserId > 0)
+                                {
                                     retList = retList.Where(x => x.UserId == paramUserId).ToList();
                                 }
                                 else
@@ -2076,8 +2080,8 @@ namespace NLTD.EmploeePortal.LMS.Dac
                                 if (paramUserId > 0)
                                 {
                                     retList = retList.Where(t => empList.Contains(t.UserId)).OrderBy(t => t.Name).ToList();
-                                    if(retList.Count>0)
-                                    retList = retList.Where(x => x.UserId == paramUserId).ToList();
+                                    if (retList.Count > 0)
+                                        retList = retList.Where(x => x.UserId == paramUserId).ToList();
                                 }
                                 else
                                 {
@@ -2096,7 +2100,7 @@ namespace NLTD.EmploeePortal.LMS.Dac
                 }
 
                 IList<MonthwiseCountEmp> newList = new List<MonthwiseCountEmp>();
-                
+
                 if (paramUserId != null && paramUserId != 0)
                 {
                     if (retList.Count > 0)
@@ -2115,7 +2119,7 @@ namespace NLTD.EmploeePortal.LMS.Dac
                              ).ToList();
                     }
 
-                    
+
                 }
                 else
                 {
@@ -2258,12 +2262,12 @@ namespace NLTD.EmploeePortal.LMS.Dac
 
                         mdl.CL8 = newList.Where(x => x.Month == 8 && x.LeaveType == "Casual/Sick Leave" && x.EmpId == item.EmpId).FirstOrDefault() == null ? 0 : newList.Where(x => x.Month == 8 && x.LeaveType == "Casual/Sick Leave" && x.EmpId == item.EmpId).FirstOrDefault().Duration;
                         mdl.PL8 = newList.Where(x => x.Month == 8 && x.LeaveType == "Earned Leave" && x.EmpId == item.EmpId).FirstOrDefault() == null ? 0 : newList.Where(x => x.Month == 8 && x.LeaveType == "Earned Leave" && x.EmpId == item.EmpId).FirstOrDefault().Duration;
-                        mdl.LWP8  = newList.Where(x => x.Month == 8 && x.LeaveType == "Leave Without Pay" && x.EmpId == item.EmpId).FirstOrDefault() == null ? 0 : newList.Where(x => x.Month == 8 && x.LeaveType == "Leave Without Pay" && x.EmpId == item.EmpId).FirstOrDefault().Duration;
+                        mdl.LWP8 = newList.Where(x => x.Month == 8 && x.LeaveType == "Leave Without Pay" && x.EmpId == item.EmpId).FirstOrDefault() == null ? 0 : newList.Where(x => x.Month == 8 && x.LeaveType == "Leave Without Pay" && x.EmpId == item.EmpId).FirstOrDefault().Duration;
                         mdl.CO8 = newList.Where(x => x.Month == 8 && x.LeaveType == "Compensatory Off" && x.EmpId == item.EmpId).FirstOrDefault() == null ? 0 : newList.Where(x => x.Month == 8 && x.LeaveType == "Compensatory Off" && x.EmpId == item.EmpId).FirstOrDefault().Duration;
 
-                        mdl.CL9= newList.Where(x => x.Month == 9 && x.LeaveType == "Casual/Sick Leave" && x.EmpId == item.EmpId).FirstOrDefault() == null ? 0 : newList.Where(x => x.Month == 9 && x.LeaveType == "Casual/Sick Leave" && x.EmpId == item.EmpId).FirstOrDefault().Duration;
-                        mdl.PL9= newList.Where(x => x.Month == 9 && x.LeaveType == "Earned Leave" && x.EmpId == item.EmpId).FirstOrDefault() == null ? 0 : newList.Where(x => x.Month == 9 && x.LeaveType == "Earned Leave" && x.EmpId == item.EmpId).FirstOrDefault().Duration;
-                        mdl.LWP9  = newList.Where(x => x.Month == 9 && x.LeaveType == "Leave Without Pay" && x.EmpId == item.EmpId).FirstOrDefault() == null ? 0 : newList.Where(x => x.Month == 9 && x.LeaveType == "Leave Without Pay" && x.EmpId == item.EmpId).FirstOrDefault().Duration;
+                        mdl.CL9 = newList.Where(x => x.Month == 9 && x.LeaveType == "Casual/Sick Leave" && x.EmpId == item.EmpId).FirstOrDefault() == null ? 0 : newList.Where(x => x.Month == 9 && x.LeaveType == "Casual/Sick Leave" && x.EmpId == item.EmpId).FirstOrDefault().Duration;
+                        mdl.PL9 = newList.Where(x => x.Month == 9 && x.LeaveType == "Earned Leave" && x.EmpId == item.EmpId).FirstOrDefault() == null ? 0 : newList.Where(x => x.Month == 9 && x.LeaveType == "Earned Leave" && x.EmpId == item.EmpId).FirstOrDefault().Duration;
+                        mdl.LWP9 = newList.Where(x => x.Month == 9 && x.LeaveType == "Leave Without Pay" && x.EmpId == item.EmpId).FirstOrDefault() == null ? 0 : newList.Where(x => x.Month == 9 && x.LeaveType == "Leave Without Pay" && x.EmpId == item.EmpId).FirstOrDefault().Duration;
                         mdl.CO9 = newList.Where(x => x.Month == 9 && x.LeaveType == "Compensatory Off" && x.EmpId == item.EmpId).FirstOrDefault() == null ? 0 : newList.Where(x => x.Month == 9 && x.LeaveType == "Compensatory Off" && x.EmpId == item.EmpId).FirstOrDefault().Duration;
 
                         mdl.CL10 = newList.Where(x => x.Month == 10 && x.LeaveType == "Casual/Sick Leave" && x.EmpId == item.EmpId).FirstOrDefault() == null ? 0 : newList.Where(x => x.Month == 10 && x.LeaveType == "Casual/Sick Leave" && x.EmpId == item.EmpId).FirstOrDefault().Duration;
@@ -2430,7 +2434,10 @@ namespace NLTD.EmploeePortal.LMS.Dac
                 return retMdl;
 
             }
-            catch (Exception ex) { throw ex; }
+            catch (Exception)
+            {
+                throw;
+            }
         }
         public EmailDataModel ViewLeaveFromEmail(Int64 leaveId, Int64 userId)
         {
@@ -2522,7 +2529,10 @@ namespace NLTD.EmploeePortal.LMS.Dac
                 return retMdl;
 
             }
-            catch (Exception ex) { throw ex; }
+            catch (Exception)
+            {
+                throw;
+            }
         }
 
         public void Dispose()

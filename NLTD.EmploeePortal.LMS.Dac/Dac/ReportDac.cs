@@ -1,5 +1,5 @@
-﻿using NLTD.EmploeePortal.LMS.Dac.Dac;
-using NLTD.EmploeePortal.LMS.Dac.DbModel;
+﻿using NLTD.EmployeePortal.LMS.Dac.Dac;
+using NLTD.EmployeePortal.LMS.Dac.DbModel;
 using NLTD.EmployeePortal.LMS.Common.DisplayModel;
 using NLTD.EmployeePortal.LMS.Common.QueryModel;
 using NLTD.EmployeePortal.LMS.DbHelper;
@@ -12,10 +12,12 @@ using System.Data.Entity.Migrations;
 using System.Globalization;
 using System.Linq;
 using System.Text;
-namespace NLTD.EmploeePortal.LMS.Dac
+namespace NLTD.EmployeePortal.LMS.Dac
 {
     public class ReportDac : IReportHelper
     {
+        int BeforeShiftBuffer = Convert.ToInt32(ConfigurationManager.AppSettings["BeforeShiftBuffer"]);
+        int AfterShiftBuffer = Convert.ToInt32(ConfigurationManager.AppSettings["AfterShiftBuffer"]);
         public List<LateAndEarltRpt> GetLateAndEarlyEmployees(DateTime FromDate, DateTime ToDate, Int64 UserId, bool OnlyReportedToMe)
         {
             List<LateAndEarltRpt> lateAndEarltRpt = new List<LateAndEarltRpt>();
@@ -102,8 +104,6 @@ namespace NLTD.EmploeePortal.LMS.Dac
             TimeSheetDac timeSheetDac = new TimeSheetDac();
             List<ReportLateMonth> reportLateMonthlst = new List<ReportLateMonth>();
             List<ShiftQueryModel> ShiftQueryModelList = timeSheetDac.GetShiftDetails(UserID, FromDate, ToDate);
-            int BeforeShiftBuffer = Convert.ToInt32(ConfigurationManager.AppSettings["BeforeShiftBuffer"]);
-            int AfterShiftBuffer = Convert.ToInt32(ConfigurationManager.AppSettings["AfterShiftBuffer"]);
             try
             {
                 var toDateShift = (from m in ShiftQueryModelList where m.ShiftDate == ToDate

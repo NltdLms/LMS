@@ -5,10 +5,10 @@ using System.Text;
 using System.Threading.Tasks;
 using NLTD.EmployeePortal.LMS.Common.DisplayModel;
 using NLTD.EmployeePortal.LMS.Repository;
-using NLTD.EmploeePortal.LMS.Dac;
-using NLTD.EmploeePortal.LMS.Dac.Dac;
+using NLTD.EmployeePortal.LMS.Dac;
+using NLTD.EmployeePortal.LMS.Dac.Dac;
 
-namespace NLTD.EmploeePortal.LMS.Dac.DbHelper
+namespace NLTD.EmployeePortal.LMS.Dac.DbHelper
 {
     public class EmployeeAttendanceHelper : IEmployeeAttendanceHelper
     {

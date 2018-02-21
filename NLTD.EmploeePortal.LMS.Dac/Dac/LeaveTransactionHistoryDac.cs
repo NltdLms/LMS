@@ -1,14 +1,11 @@
-﻿using NLTD.EmploeePortal.LMS.Dac.DbModel;
-using NLTD.EmployeePortal.LMS.Common.DisplayModel;
+﻿using NLTD.EmployeePortal.LMS.Common.DisplayModel;
+using NLTD.EmployeePortal.LMS.Dac.DbModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using NLTD.EmploeePortal.LMS.Dac.DbModel;
 
 
-namespace NLTD.EmploeePortal.LMS.Dac.Dac
+namespace NLTD.EmployeePortal.LMS.Dac.Dac
 {
     public class LeaveTransactionHistoryDac : IDisposable
     {
@@ -67,7 +64,7 @@ namespace NLTD.EmploeePortal.LMS.Dac.Dac
 
                         IList<LeaveTransactionDetail> retList = new List<LeaveTransactionDetail>();
                         var groupedLeaveList = transactionDetails.GroupBy(u => u.LeaveTypeId)
-                                                              .Select(grp => new { LeaveTypeId = grp.Key, LeaveTransactiontHistoryModel = grp.ToList() })
+                                                              .Select(grp => new { LeaveTypeId = grp.Key, leaveTransactionHistoryModel = grp.ToList() })
                                                               .ToList();
 
                         retModel = (from gv in groupedLeaveList
@@ -75,8 +72,8 @@ namespace NLTD.EmploeePortal.LMS.Dac.Dac
                                     {
                                         ReportingTo = ReportingTo,
                                         LeaveTypeId = gv.LeaveTypeId,
-                                        LeaveType = gv.LeaveTransactiontHistoryModel[0].Type,
-                                        LeaveTransactiontHistoryModel = gv.LeaveTransactiontHistoryModel
+                                        LeaveType = gv.leaveTransactionHistoryModel[0].Type,
+                                        leaveTransactionHistoryModel = gv.leaveTransactionHistoryModel
                                     }).ToList();
                     }
                 }
@@ -124,7 +121,7 @@ namespace NLTD.EmploeePortal.LMS.Dac.Dac
             //                          join l in context.LeaveType on lth.LeaveTypeId equals l.LeaveTypeId
             //                          join e in context.Employee on lth.UserId equals e.UserId
             //                          where lth.UserId == userId && lth.LeaveId == -1 && l.IsTimeBased == false
-            //                          select new LeaveTransactiontHistoryModel
+            //                          select new leaveTransactionHistoryModel
             //                          {
             //                              LeaveTypeId = lth.LeaveTypeId,
             //                              TransactionType = lth.TransactionType == "C" ? "Credit" : "Debit",

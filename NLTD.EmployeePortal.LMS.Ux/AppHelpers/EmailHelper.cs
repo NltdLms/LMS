@@ -14,33 +14,37 @@ namespace NLTD.EmployeePortal.LMS.Ux.AppHelpers
 {
     public class EmailHelper
     {
-        private void SendHtmlFormattedEmail(string recepientEmail,IList<string>ccEmail, string subject, string body,string emailType)
-        {
-           
+        string mailUserName = ConfigurationManager.AppSettings["UserName"];
+        string mailHost = ConfigurationManager.AppSettings["Host"];
+        bool mailEnableSsl = Convert.ToBoolean(ConfigurationManager.AppSettings["EnableSsl"]);
+        string mailPassword = ConfigurationManager.AppSettings["Password"];
+        int mailPort = int.Parse(ConfigurationManager.AppSettings["Port"]);
+        string mailBaseUrl = ConfigurationManager.AppSettings["LMSUrl"];
 
+        private void SendHtmlFormattedEmail(string recepientEmail,IList<string>ccEmail, string subject, string body,string emailType)
+        {           
             using (MailMessage mailMessage = new MailMessage())
             {
-                mailMessage.From = new MailAddress(ConfigurationManager.AppSettings["UserName"]);
+                mailMessage.From = new MailAddress(mailUserName);
                 mailMessage.Subject = subject;
                 mailMessage.Body = body;
                 mailMessage.IsBodyHtml = true;
                 mailMessage.To.Add(new MailAddress(recepientEmail));
-                
-                
+                                
                 foreach (var item in ccEmail)
                 {
                     mailMessage.CC.Add(item);
                 }
 
                 SmtpClient smtp = new SmtpClient();
-                smtp.Host = ConfigurationManager.AppSettings["Host"];
-                smtp.EnableSsl = Convert.ToBoolean(ConfigurationManager.AppSettings["EnableSsl"]);
+                smtp.Host = mailHost;
+                smtp.EnableSsl = mailEnableSsl;
                 System.Net.NetworkCredential NetworkCred = new System.Net.NetworkCredential();
-                NetworkCred.UserName = ConfigurationManager.AppSettings["UserName"];
-                NetworkCred.Password = ConfigurationManager.AppSettings["Password"];
+                NetworkCred.UserName = mailUserName;
+                NetworkCred.Password = mailPassword;
                 smtp.UseDefaultCredentials = true;
                 smtp.Credentials = NetworkCred;
-                smtp.Port = int.Parse(ConfigurationManager.AppSettings["Port"]);
+                smtp.Port = mailPort;
                 smtp.Send(mailMessage);
             }
         }
@@ -48,7 +52,7 @@ namespace NLTD.EmployeePortal.LMS.Ux.AppHelpers
         {
             string body = string.Empty;
             //HttpRequest request = HttpContext.Current.Request;
-            string baseUrl = ConfigurationManager.AppSettings["LMSUrl"]; // request.Url.GetComponents(UriComponents.SchemeAndServer, UriFormat.UriEscaped);
+            string baseUrl = mailBaseUrl;
             if (emailType == "Applied")
             {
 

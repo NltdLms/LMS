@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using NLTD.EmploeePortal.LMS.Dac;
+using NLTD.EmployeePortal.LMS.Dac;
 using NLTD.EmployeePortal.LMS.Repository;
 using NLTD.EmployeePortal.LMS.Common;
 using NLTD.EmployeePortal.LMS.Common.DisplayModel;
 using NLTD.EmployeePortal.LMS.Common.QueryModel;
-using NLTD.EmploeePortal.LMS.Dac.Dac;
+using NLTD.EmployeePortal.LMS.Dac.Dac;
 
 namespace NLTD.EmployeePortal.LMS.DbHelper
 {

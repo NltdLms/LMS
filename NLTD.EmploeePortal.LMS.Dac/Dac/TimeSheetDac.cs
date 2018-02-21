@@ -6,13 +6,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using NLTD.EmployeePortal.LMS.Repository;
-using NLTD.EmploeePortal.LMS.Dac.DbModel;
+using NLTD.EmployeePortal.LMS.Dac.DbModel;
 using System.Configuration;
 
-namespace NLTD.EmploeePortal.LMS.Dac.Dac
+namespace NLTD.EmployeePortal.LMS.Dac.Dac
 {
     public class TimeSheetDac : ITimesheetHelper
     {
+        int BeforeShiftBuffer = Convert.ToInt32(ConfigurationManager.AppSettings["BeforeShiftBuffer"]);
+        int AfterShiftBuffer = Convert.ToInt32(ConfigurationManager.AppSettings["AfterShiftBuffer"]);
         public List<ShiftQueryModel> GetShiftDetails(Int64 UserID, DateTime FromDate, DateTime ToDate)
         {
             List<ShiftQueryModel> shiftQueryModelList = new List<ShiftQueryModel>();
@@ -94,9 +96,7 @@ namespace NLTD.EmploeePortal.LMS.Dac.Dac
         {
             List<TimeSheetModel> timeSheetModelList = new List<TimeSheetModel>();
             List<ShiftQueryModel> ShiftQueryModelList = GetShiftDetails(UserID, FromDate, ToDate);
-            int BeforeShiftBuffer = Convert.ToInt32(ConfigurationManager.AppSettings["BeforeShiftBuffer"]);
-            int AfterShiftBuffer = Convert.ToInt32(ConfigurationManager.AppSettings["AfterShiftBuffer"]);
-
+            
             var toDateShift = (from m in ShiftQueryModelList where m.ShiftDate == ToDate select new { fromTime = m.ShiftFromtime, toTime = m.ShiftTotime }).FirstOrDefault();
 
             if (toDateShift != null)

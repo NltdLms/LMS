@@ -30,6 +30,6 @@ namespace NLTD.EmployeePortal.LMS.Common.DisplayModel
         public string ReportingTo { get; set; }
         public Int64 LeaveTypeId { get; set; }
         public string LeaveType { get; set; }
-        public List<LeaveTransactionHistoryModel> LeaveTransactiontHistoryModel { get; set; }
+        public List<LeaveTransactionHistoryModel> leaveTransactionHistoryModel { get; set; }
     }
 }

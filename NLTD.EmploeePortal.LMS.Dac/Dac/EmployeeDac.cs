@@ -1,4 +1,4 @@
-﻿using NLTD.EmploeePortal.LMS.Dac.DbModel;
+﻿using NLTD.EmployeePortal.LMS.Dac.DbModel;
 using NLTD.EmployeePortal.LMS.Common.DisplayModel;
 using NLTD.EmployeePortal.LMS.Repository;
 using System;
@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-namespace NLTD.EmploeePortal.LMS.Dac.Dac
+namespace NLTD.EmployeePortal.LMS.Dac.Dac
 {
     public class EmployeeDac : IEmployeeHelper
     {
@@ -101,7 +101,10 @@ namespace NLTD.EmploeePortal.LMS.Dac.Dac
                     }
                 }
             }
-            catch (Exception ex) { throw; }
+            catch (Exception)
+            {
+                throw;
+            }
             return profile;
         }
 
@@ -193,7 +196,7 @@ namespace NLTD.EmploeePortal.LMS.Dac.Dac
                     }
                 }
             }
-            catch (Exception e)
+            catch (Exception)
             {
 
             }
@@ -499,7 +502,10 @@ namespace NLTD.EmploeePortal.LMS.Dac.Dac
                     }
                 }
             }
-            catch (Exception ex) { throw; }
+            catch (Exception)
+            {
+                throw;
+            }
             return profile;
         }
 

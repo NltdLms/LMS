@@ -2,11 +2,11 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using NLTD.EmploeePortal.LMS.Dac.DbModel;
+using NLTD.EmployeePortal.LMS.Dac.DbModel;
 using NLTD.EmployeePortal.LMS.Common.DisplayModel;
 using NLTD.EmployeePortal.LMS.Common.QueryModel;
 
-namespace NLTD.EmploeePortal.LMS.Dac.DbHelper
+namespace NLTD.EmployeePortal.LMS.Dac.DbHelper
 {
     public class ShiftHelper : IShiftHelper, IDisposable
     {
