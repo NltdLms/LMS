@@ -5,7 +5,7 @@ using System.Text;
 using NLTD.EmployeePortal.LMS.Common.DisplayModel;
 using NLTD.EmployeePortal.LMS.Common.QueryModel;
 
-namespace NLTD.EmploeePortal.LMS.Dac.DbHelper
+namespace NLTD.EmployeePortal.LMS.Dac.DbHelper
 {
     public class LeaveHelper : ILeaveHelper
     {
@@ -97,6 +97,15 @@ namespace NLTD.EmploeePortal.LMS.Dac.DbHelper
                 return dac.GetLeaveSumary(UserId, summaryYear);
             }
         }
+
+        public IList<HolidayModel> GetHolidaysDetails(long UserId, int holidayYear, ref bool previousYear, ref bool nextYear)
+        {
+            using (var dac = new LeaveDac())
+            {
+                return dac.GetHolidaysDetails(UserId, holidayYear, ref previousYear, ref nextYear);
+            }
+        }
+
         public IList<HolidayModel> GetHolidays(long UserId, Int32 holidayYear)
         {
             using (var dac = new LeaveDac())
@@ -104,27 +113,27 @@ namespace NLTD.EmploeePortal.LMS.Dac.DbHelper
                 return dac.GetHolidays(UserId, holidayYear);
             }
         }
-        public IList<EmployeeWiseLeaveSummaryModel> GetEmployeeWiseLeaveSumary(Int64 UserId, int Year, string reqUsr,string Name, bool OnlyReportedToMe)
+        public IList<EmployeeWiseLeaveSummaryModel> GetEmployeeWiseLeaveSumary(Int64 UserId, int Year, string reqUsr,Int64? paramUserId, bool OnlyReportedToMe)
         {
             using (var dac = new LeaveDac())
             {
                
-                return dac.GetEmployeeWiseLeaveSumary(UserId, Year, reqUsr,Name, OnlyReportedToMe);
+                return dac.GetEmployeeWiseLeaveSumary(UserId, Year, reqUsr, paramUserId, OnlyReportedToMe);
             }
         }
-        public IList<DaywiseLeaveDtlModel> GetDaywiseLeaveDtl(DateTime? FromDate, DateTime? ToDate, bool IsLeaveOnly, Int64 LeadId, bool OnlyReportedToMe,string Name, string reqUsr, bool DonotShowRejected)
+        public IList<DaywiseLeaveDtlModel> GetDaywiseLeaveDtl(DateTime? FromDate, DateTime? ToDate, bool IsLeaveOnly, Int64 LeadId, bool OnlyReportedToMe,Int64? paramUserId, string reqUsr, bool DonotShowRejected)
         {
             using (var dac = new LeaveDac())
             {
 
-                return dac.GetDaywiseLeaveDtl(FromDate, ToDate, IsLeaveOnly, LeadId, OnlyReportedToMe, Name, reqUsr,DonotShowRejected);
+                return dac.GetDaywiseLeaveDtl(FromDate, ToDate, IsLeaveOnly, LeadId, OnlyReportedToMe, paramUserId, reqUsr,DonotShowRejected);
             }
         }
-        public IList<MonthwiseLeavesCountModel> GetMonthwiseLeavesCount(Int32 year, Int64 LeadId, bool OnlyReportedToMe, string Name, string reqUsr) {
+        public IList<MonthwiseLeavesCountModel> GetMonthwiseLeavesCount(Int32 year, Int64 LeadId, bool OnlyReportedToMe, Int64? paramUserId, string reqUsr) {
             using (var dac = new LeaveDac())
             {
 
-                return dac.GetMonthwiseLeavesCount(year,  LeadId, OnlyReportedToMe, Name, reqUsr);
+                return dac.GetMonthwiseLeavesCount(year,  LeadId, OnlyReportedToMe, paramUserId, reqUsr);
             }
         }
         public IList<LeaveDtl> GetLeaveDetailCalculation(DateTime LeaveFrom, DateTime LeaveUpto, string LeaveFromTime, string LeaveUptoTime, Int64 UserId, Int64 LeaveTypText)
@@ -149,19 +158,19 @@ namespace NLTD.EmploeePortal.LMS.Dac.DbHelper
                 return dac.ReturnDuration(LeaveFrom, LeaveUpto, LeaveFromTime, LeaveUptoTime, UserId);
             }
         }
-        public IList<PermissionDetailsModel> GetPermissionDetail(string Name, string reqUsr, DateTime? startDate, DateTime? endDate, bool OnlyReportedToMe, Int64 LeadId)
+        public IList<PermissionDetailsModel> GetPermissionDetail(Int64? paramUserId, string reqUsr, DateTime? startDate, DateTime? endDate, bool OnlyReportedToMe, Int64 LeadId)
         {
             using (var dac = new LeaveDac())
             {
 
-                return dac.GetPermissionDetail(Name, reqUsr, startDate, endDate, OnlyReportedToMe, LeadId);
+                return dac.GetPermissionDetail(paramUserId, reqUsr, startDate, endDate, OnlyReportedToMe, LeadId);
             }
         }
-        public DashBoardModel GetDashboardData(Int64 UserId)
+        public DashBoardModel GetDashboardData(Int64 UserId, Int64 OfficeId)
         {
             using (var dac = new LeaveDac())
             {
-                return dac.GetDashboardData(UserId);
+                return dac.GetDashboardData(UserId, OfficeId);
             }
         }
         public LeaveRequestModel ApplyLeaveCommonData(Int64 UserId, Int64 OfficeId)
@@ -185,6 +194,15 @@ namespace NLTD.EmploeePortal.LMS.Dac.DbHelper
                 return dac.GetEmployeeList(param, userId);
             }
         }
+
+        public List<TimeSheetModel> GetMyTeamTimeSheet(Int64 UserID)
+        {
+            using (var dac = new LeaveDac())
+            {
+                return dac.GetMyTeamTimeSheet(UserID);
+            }
+        }
+
         public int GetPendingApprovalCount(Int64 userId)
         {
             using (var dac = new LeaveDac())

@@ -2,11 +2,11 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using NLTD.EmploeePortal.LMS.Dac.DbModel;
+using NLTD.EmployeePortal.LMS.Dac.DbModel;
 using NLTD.EmployeePortal.LMS.Common.DisplayModel;
 using NLTD.EmployeePortal.LMS.Common.QueryModel;
 
-namespace NLTD.EmploeePortal.LMS.Dac.DbHelper
+namespace NLTD.EmployeePortal.LMS.Dac.DbHelper
 {
     public class ShiftHelper : IShiftHelper, IDisposable
     {
@@ -61,11 +61,11 @@ namespace NLTD.EmploeePortal.LMS.Dac.DbHelper
             }
         }
 
-        public EmpShift GetEmployeeShiftDetails(string Name, string RequestMenuUser, long LeaduserId)
+        public EmpShift GetEmployeeShiftDetails(Int64 UserId, string RequestMenuUser, long LeaduserId)
         {
             using (var dac = new ShiftDac())
             {
-                return dac.GetEmployeeShiftDetails(Name, RequestMenuUser, LeaduserId);
+                return dac.GetEmployeeShiftDetails(UserId, RequestMenuUser, LeaduserId);
             }
         }
 

@@ -14,13 +14,13 @@
     td {
         font-size: 12px;
     }
-    form
-    {
-        margin-bottom:0px;
+
+    form {
+        margin-bottom: 0px;
     }
-    .box-body
-    {
-        padding:10px 10px 0px 10px;
+
+    .box-body {
+        padding: 10px 10px 0px 10px;
     }
 </style>
 
@@ -34,7 +34,7 @@
 @section scripts
 {
     <script src="~/Scripts/jquery-2.2.4.js"></script>
-    <script src="~/Scripts/lms.js?v=1.03"></script>
+    <script src="~/Scripts/lms.js?v=1.05"></script>
     <script type="text/javascript" src="~/Scripts/bootstrap.js"></script>
     <script src="~/Scripts/bootstrap-datetimepicker.js"></script>
     <link href="~/Content/bootstrap-datetimepicker.css" rel="stylesheet" />
@@ -42,6 +42,7 @@
     <script src="~/Scripts/moment.js"></script>
     <link href="~/Content/bootstrap.css" rel="stylesheet" />
     <script type="text/JavaScript">
+        var nameList = [];
         $(document).ready(function () {
             $("#DateRange").daterangepicker({
                 locale: {
@@ -51,7 +52,7 @@
                 "showDropdowns": true,
                 ranges: {
                     "Today": [moment(), moment()],
-                    "Yesterday": [moment().subtract(1, 'days'), moment()],
+                    "Yesterday": [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
                     "This Week": [moment().startOf('week'), moment().endOf('week')],
                     "This Month": [moment().startOf('month'), moment().endOf('month')],
                     "This Year": [moment().startOf('year'), moment().endOf('year')],
@@ -65,7 +66,11 @@
             var curdate = new Date();
             $("#FromDate").val('@DateTime.Now.AddDays(-29).ToString("dd-MM-yyyy")');
             $("#ToDate").val('@DateTime.Now.ToString("dd-MM-yyyy")');
-
+            $("#Name").keyup(function () {
+                if ($("#Name").val() == "") {
+                    $("#SearchUserID").val("");
+                }
+            });
             $('#DateRange').on('apply.daterangepicker',
                 function (ev, picker) {
                     $("#FromDate").val(picker.startDate.format('DD-MM-YYYY'));
@@ -80,24 +85,41 @@
                         dataType: "json",
                         data: { term: request.term },
                         success: function (data) {
-                            response($.map(data,
+                            nameList = $.map(data,
                                 function (item) {
-                                    return { label: item.Name, value: item.Name };
-                                }))
-
-
+                                    return { label: item.Name, value: item.UserId };
+                                });
+                            response(nameList);
                         }
                     })
                 },
                 messages: {
                     noResults: "",
                     results: function () { }
+                },
+                select: function (event, ui) {
+                    event.preventDefault();
+                    $("#UserID").val(ui.item.value);
+                    console.log("Select");
+                },
+                focus: function (event, ui) {
+                    event.preventDefault();
+                    $("#Name").val(ui.item.label);
+                    $("#UserID").val(ui.item.value);
+                },
+                search: function (event, ui) {
+                    $("#UserID").val("");
                 }
             });
 
             $("#divLoading").show();
+            var myDirectEmployees = false;
+            if ($("#RequestLevelPerson").val() === "Team")
+            {
+                myDirectEmployees = true;
+            }
             $("#divForEmployeeAttendence")
-                .load('/Admin/loadEmployeeAttendence?FromDate=Nodate&ToDate=Nodate&requestLevelPerson=' + $("#RequestLevelPerson").val(),
+                .load('/Admin/loadEmployeeAttendence?FromDate=Nodate&ToDate=Nodate&requestLevelPerson=' + $("#RequestLevelPerson").val() + '&myDirectEmployees=' + myDirectEmployees,
                 function () {
 
                      $(".dtatable").dataTable({ "aaSorting": [] });
@@ -120,6 +142,21 @@
                 }
             }
         }
+        function ValidateName() {
+            $("alert_placeholder").val("");
+            if ($("#showalert") != undefined){
+                $("#showalert").remove();
+            }
+
+            if ($("#RequestLevelPerson").val() === "My") {
+            }
+            else {
+                if (!ValidateAutocompleteName($("#Name").val(), $("#UserID").val())) {   
+                    Clearshowalert("Please Choose a valid Username from the List.", "alert alert-danger");
+                    return false;
+                }
+            }
+        }
     </script>
 
 }
@@ -129,30 +166,20 @@
 
 
 
-    if (@Model != null)
-    {
-        if (Model.ErrorMsg != "" && Model.ErrorMsg != null)
-        {
-            <div class="alert alert-danger">
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                    <span aria-hidden="true">x</span>
-                </button>
-                @Model.ErrorMsg
-            </div>
-        }
-    }
+
     string heading = string.Empty;
-    if((string)ViewBag.RequestLevelPerson == "Admin" || (string)ViewBag.RequestLevelPerson == "HR")
+    string exportExcel = string.Empty;
+    if ((string)ViewBag.RequestLevelPerson == "Admin" || (string)ViewBag.RequestLevelPerson == "HR")
     {
         heading = "Employee Attendance";
     }
-    else if((string)ViewBag.RequestLevelPerson == "My")
+    else if ((string)ViewBag.RequestLevelPerson == "My")
     {
         heading = "My Attendance";
     }
     else if ((string)ViewBag.RequestLevelPerson == "Team")
     {
-        heading = "My Team Attendance";
+        heading = "Team - Attendance";
     }
     <div class="row">
         <div class="col-sm-12">
@@ -167,6 +194,7 @@
                             @Html.Hidden("RequestLevelPerson", (string)ViewBag.RequestLevelPerson)
                             @Html.HiddenFor(x => x.FromDate)
                             @Html.HiddenFor(x => x.ToDate)
+                            @Html.HiddenFor(x => x.UserID)
                             if ((string)ViewBag.RequestLevelPerson == "My")
                             {
                                 <div class="row">
@@ -181,7 +209,7 @@
                                     <div class="col-sm-3" style="text-align:right">
                                         <br />
                                         <button type="button" class="btn btn-primary" onclick="loadAttendenceRangeSummary()">SEARCH</button>
-
+                                        <button type="submit" class="btn btn-primary" onclick="return ValidateName()">EXPORT TO EXCEL</button>
                                     </div>
 
                                 </div>
@@ -198,18 +226,25 @@
 
 
                                     </div>
-                                    <div class="col-sm-4">
+                                    <div class="col-sm-3">
 
                                         @Html.LabelFor(x => x.Name)
                                         @Html.TextBoxFor(m => m.Name, new { @class = "form-control" })
 
                                     </div>
-                                    <div class="col-sm-3">
-                                    </div>
-                                    <div class="col-sm-2" style="text-align:right">
-                                        <br />
-                                        <button style="margin: 6px 12px "  type="button" class="btn btn-primary" onclick="loadAttendenceRangeSummary()">SEARCH</button>
+                                    <div class="col-sm-3" style="padding-top:10px">
+                                        @if ((string)ViewBag.RequestLevelPerson == "Team")
+                                        {
+                                            <br />
+                                            @Html.CheckBoxFor(m => m.DirectEmployees, new { id = "mydirectemployeecheck", @checked = "checked" })
+                                            @Html.Label("My Direct Reportees")
 
+                                        }
+                                    </div>
+                                    <div class="col-sm-3" style="text-align:right">
+                                        <br />
+                                        <button style="margin: 6px 12px " type="button" class="btn btn-primary" onclick="loadAttendenceRangeSummary()">SEARCH</button>
+                                        <button type="submit" class="btn btn-primary" onclick="return ValidateName()">EXPORT TO EXCEL</button>
                                     </div>
                                 </div>
 
@@ -225,7 +260,8 @@
             </div>
         </div>
     </div>
-    <div id="divForEmployeeAttendence" ></div>
+
+    <div id="divForEmployeeAttendence"></div>
 
 }
 

@@ -4,7 +4,7 @@
 
 <div class="box-body">
     <div class="row">
-        <div class="col-sm-5">
+        <div class="col-sm-3">
             <h6 class="box-title">Leave Type</h6>
         </div>
         <div class="col-sm-2"  style="padding-left:11px;">
@@ -13,8 +13,11 @@
         <div class="col-sm-2"  style="padding-left:11px;">
             <h6 class="box-title">Used</h6>
         </div>
-        <div class="col-sm-3"  style="padding-left:11px;">
+        <div class="col-sm-2" style="padding-left:11px;">
             <h6 class="box-title">Applied</h6>
+        </div>
+        <div class="col-sm-3" style="padding-left:11px;">
+            <h6 class="box-title">Balance</h6>
         </div>
     </div>
 
@@ -23,7 +26,7 @@
         foreach (var item in Model)
         {
             <div class="row">
-                <div class="col-sm-5">
+                <div class="col-sm-3">
                     <p>@item.LeaveType</p>
                 </div>
                 <div class="col-sm-2" style="text-align: justify;">
@@ -32,8 +35,11 @@
                 <div class="col-sm-2" style="text-align: justify;">
                     @Html.Label("", item.LeavesTaken.ToString())
                 </div>
-                <div class="col-sm-3" style="text-align: justify;">
+                <div class="col-sm-2" style="text-align: justify;">
                     @Html.Label("", item.LeavesPendingApproval.ToString())
+                </div>
+                <div class="col-sm-3" style="text-align: justify;">
+                    @Html.Label("", item.LeavesBalance.ToString())
                 </div>
 
             </div>

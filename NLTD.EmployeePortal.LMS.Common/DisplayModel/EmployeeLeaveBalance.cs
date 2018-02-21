@@ -32,7 +32,7 @@ namespace NLTD.EmployeePortal.LMS.Common.DisplayModel
         public Decimal? TotalDays { get; set; }
         [Required(ErrorMessage = "Enter No Of Days.")]
         [Display(Name = "No of Days")]
-        public Int64 NoOfDays { get; set; }
+        public Decimal NoOfDays { get; set; }
         public String CreditOrDebit { get; set; }
         public string Remarks { get; set; }
     }

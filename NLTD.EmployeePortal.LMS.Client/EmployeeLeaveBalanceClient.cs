@@ -1,4 +1,4 @@
-﻿using NLTD.EmploeePortal.LMS.Dac.DbHelper;
+﻿using NLTD.EmployeePortal.LMS.Dac.DbHelper;
 using NLTD.EmployeePortal.LMS.Common.DisplayModel;
 using NLTD.EmployeePortal.LMS.Repository;
 using System;
@@ -16,11 +16,11 @@ namespace NLTD.EmployeePortal.LMS.Client
             //Nothing to implement...
         }
 
-        public IList<LeaveBalanceEmpProfile> GetLeaveBalanceEmpProfile(string name)
+        public IList<LeaveBalanceEmpProfile> GetLeaveBalanceEmpProfile(Int64 UserId)
         {
             using (IEmployeeLeaveBalanceHelper helper = new EmployeeLeaveBalanceHelper())
             {
-                return helper.GetLeaveBalanceEmpProfile(name);
+                return helper.GetLeaveBalanceEmpProfile(UserId);
             }
         }
 

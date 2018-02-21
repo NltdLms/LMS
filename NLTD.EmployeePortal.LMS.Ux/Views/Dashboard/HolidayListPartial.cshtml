@@ -1,17 +1,63 @@
-﻿@model List<NLTD.EmployeePortal.LMS.Common.DisplayModel.HolidayModel>
+﻿@model IList<NLTD.EmployeePortal.LMS.Common.DisplayModel.HolidayModel>
 
-<div style="height:380px;">
-    <div class="box-header with-border" style="height:33px;">
+<style type="text/css">
+    .HolidayNavClass {
+        display: inline-block;
+    }
+    #previous[disabled], #next[disabled] {
+        cursor: default;
+        background-image: none;
+        opacity: .65;
+        filter: alpha(opacity=65);
+        box-shadow: none;
+    }
+    #previous, #next {
+        height: 2.0em;
+        font-size: 0.75em;
+    }
+    #year {
+        display: inline-block;
+        font-size: 14px;
+        padding: 0 10px;
+    }
+</style>
+
+<div>
+    <div class="box-header with-border">
         <h3 class="box-title">My Holidays</h3>
-        @{
+        <div class="box-tools col-md-8">
+            <div class="col-md-7">
+                <div class="fc fc-ltr fc-unthemed">
+                    <div class="fc-button-group">
+                        <button type="button" id="previous" class="fc-prev-button fc-button fc-state-default fc-corner-left" @ViewBag.PreviousYear>
+                            <span class="fc-icon fc-icon-left-single-arrow"></span>
+                        </button>
+                        <div id="year">@ViewBag.HolidayYear</div>
+                        <button type="button" id="next" class="fc-next-button fc-button fc-state-default fc-corner-right" @ViewBag.NextYear>
+                            <span class="fc-icon fc-icon-right-single-arrow"></span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <span style="text-align: right; font-size: 14px; font-weight: bold; font-style: italic; color: maroon">
+                @ViewBag.HolidayOfficeName
+            </span>
+        </div>
+        
 
-            if (Model.Count > 0)
-            {
-                <h6 style="text-align:right;font-weight:bold;font-style:italic;color:maroon">@Model[0].HolidayOfficeName</h6>
-            }
-        }
-        
-        
+        @*@{
+
+                if (Model.Count > 0)
+                {
+                    <button type="button" id="previous"><</button>
+                    <div id="year">@Model[0].HolidayDate.Year</div>
+                    <button type="button" id="next">></button>
+
+                    <h6 style="text-align:right;font-weight:bold;font-style:italic;color:maroon">@Model[0].HolidayOfficeName</h6>
+                }
+            }*@
+
+
     </div>
     <div class="box-body">
         <div class="row">
@@ -19,7 +65,7 @@
                 <h6 class="box-title">Date</h6>
             </div>
             <div class="col-sm-9">
-                <h6 class="box-title">Holiday Name</h6>
+                <h6 class="box-title">Holiday</h6>
             </div>
 
         </div>
@@ -43,5 +89,29 @@
 
     </div>
 </div>
+
+<script>
+    $("document").ready(function () {
+        var holidayYear;
+        var updateHolidays = function () {
+            //$('#year').text(year);
+            //$('#HolidayListPartialDiv').empty();
+            $('#HolidayListPartialDiv').load("/Dashboard/ListHolidayByYear?year=" + holidayYear);
+        };
+
+        $('#previous').click(function () {
+            holidayYear = $('#year').text();
+            holidayYear--;
+            updateHolidays();
+        });
+
+        $('#next').click(function () {
+            holidayYear = $('#year').text();
+            holidayYear++;
+            updateHolidays();
+        });
+
+    });
+</script>
 
 

@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using NLTD.EmployeePortal.LMS.Common.DisplayModel;
-using NLTD.EmploeePortal.LMS.Dac.DbHelper;
+using NLTD.EmployeePortal.LMS.Dac.DbHelper;
 
 namespace NLTD.EmployeePortal.LMS.Client
 {
@@ -90,11 +90,11 @@ namespace NLTD.EmployeePortal.LMS.Client
             }
         }
 
-        public IList<ViewEmployeeProfileModel> GetTeamProfiles(Int64 userId, bool onlyReportedToMe, string name, string requestMenuUser,bool hideInactiveEmp)
+        public IList<ViewEmployeeProfileModel> GetTeamProfiles(Int64 userId, bool onlyReportedToMe, Int64? paramUserId, string requestMenuUser,bool hideInactiveEmp)
         {
             using (IEmployeeHelper helper = new EmployeeHelper())
             {
-                return helper.GetTeamProfiles(userId, onlyReportedToMe, name,  requestMenuUser, hideInactiveEmp);
+                return helper.GetTeamProfiles(userId, onlyReportedToMe, paramUserId,  requestMenuUser, hideInactiveEmp);
             }
         }
 

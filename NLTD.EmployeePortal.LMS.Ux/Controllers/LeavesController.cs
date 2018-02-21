@@ -318,7 +318,7 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
                     endDateFormatted = DateTime.Parse(ToDate, new CultureInfo("en-GB", true));
                 }
                 catch (Exception ex) {
-                    throw ex;
+                    throw;
                 }
             }
             ManageTeamLeavesQueryModel qryMdl = new ManageTeamLeavesQueryModel();
@@ -335,14 +335,11 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
             }
             return PartialView("ManageLeaveDetailPartial", LeaveRequests);
         }
-        public ActionResult ViewLeaveHistory(bool OnlyReportedToMe, string FromDate,string ToDate, bool IsLeaveOnly,string Name,string RequestMenuUser)
+        public ActionResult ViewLeaveHistory(bool OnlyReportedToMe, string FromDate,string ToDate, bool IsLeaveOnly,Int64? paramUserId, string RequestMenuUser)
         {
             DateTime? startDateFormatted = null;
             DateTime? endDateFormatted = null;
-            if (Name != "")
-            {
-                Name = Name.Replace("|", " ");
-            }
+           
             if (FromDate != "")
             {
                 try
@@ -352,7 +349,7 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
                 }
                 catch(Exception ex)
                 {
-                    throw ex;
+                    throw;
                 }
             }
             if (FromDate == "" || ToDate == "")
@@ -366,7 +363,7 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
             qryMdl.ToDate = endDateFormatted;
             qryMdl.RequestMenuUser = RequestMenuUser;
             qryMdl.IsLeaveOnly = IsLeaveOnly;
-            qryMdl.Name = Name;
+            qryMdl.SearchUserID = paramUserId;
             IList<TeamLeaves> LeaveRequests = null;
             qryMdl.LeadId = UserId;
             using (var client = new LeaveClient())
@@ -455,7 +452,7 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
                     }
                     catch(Exception ex)
                     {
-                        throw ex;
+                        throw;
                     }
                 }
             }
@@ -512,7 +509,7 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
                     }
                     catch (Exception ex)
                     {
-                        throw ex;
+                        throw;
                     }
                 }
             }

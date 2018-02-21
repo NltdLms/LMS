@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace NLTD.EmploeePortal.LMS.Dac.DbModel
+namespace NLTD.EmployeePortal.LMS.Dac.DbModel
 {
-    public class LeaveTransactiontHistory
+    public class LeaveTransactionHistory
     {
         public Int64 TransactionId { get; set; }
         public Int64 UserId { get; set; }

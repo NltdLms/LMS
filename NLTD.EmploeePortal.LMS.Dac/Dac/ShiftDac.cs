@@ -1,5 +1,5 @@
-﻿using NLTD.EmploeePortal.LMS.Dac.Dac;
-using NLTD.EmploeePortal.LMS.Dac.DbModel;
+﻿using NLTD.EmployeePortal.LMS.Dac.Dac;
+using NLTD.EmployeePortal.LMS.Dac.DbModel;
 using NLTD.EmployeePortal.LMS.Common.DisplayModel;
 using NLTD.EmployeePortal.LMS.Common.QueryModel;
 using NLTD.EmployeePortal.LMS.Repository;
@@ -9,7 +9,7 @@ using System.Data.Entity.Migrations;
 using System.Globalization;
 using System.Linq;
 using System.Text;
-namespace NLTD.EmploeePortal.LMS.Dac
+namespace NLTD.EmployeePortal.LMS.Dac
 {
     public class ShiftDac : IShiftHelper
     {
@@ -99,24 +99,21 @@ namespace NLTD.EmploeePortal.LMS.Dac
             {
                 using (var context = new NLTDDbContext())
                 {
-                    if (RequestMenuUser == "Admin")
-                    {
-                        var leadinfo = (from emp in context.Employee
-                                        join role in context.EmployeeRole on emp.EmployeeRoleId equals role.RoleId
-                                        where emp.UserId == UserId
-                                        select new { RoleName = role.Role }).FirstOrDefault();
+                    var leadinfo = (from emp in context.Employee
+                                    join role in context.EmployeeRole on emp.EmployeeRoleId equals role.RoleId
+                                    where emp.UserId == UserId
+                                    select new { RoleName = role.Role }).FirstOrDefault();
 
-                        if (leadinfo.RoleName.ToUpper() == "ADMIN" || leadinfo.RoleName.ToUpper() == "HR")
-                        {
-                            lstShiftEmployees = (from e in context.Employee
-                                                 where e.IsActive == true
-                                                 select new ShiftEmployees
-                                                 {
-                                                     Name = e.FirstName + " " + e.LastName,
-                                                     EmpId = e.EmployeeId,
-                                                     UserId = e.UserId
-                                                 }).ToList();
-                        }
+                    if (leadinfo.RoleName.ToUpper() == "ADMIN" || leadinfo.RoleName.ToUpper() == "HR")
+                    {
+                        lstShiftEmployees = (from e in context.Employee
+                                             where e.IsActive == true
+                                             select new ShiftEmployees
+                                             {
+                                                 Name = e.FirstName + " " + e.LastName,
+                                                 EmpId = e.EmployeeId,
+                                                 UserId = e.UserId
+                                             }).ToList();
                     }
                     else
                     {
@@ -327,7 +324,7 @@ namespace NLTD.EmploeePortal.LMS.Dac
 
 
 
-        public EmpShift GetEmployeeShiftDetails(string Name, string RequestMenuUser, long LeaduserId)
+        public EmpShift GetEmployeeShiftDetails(Int64 UserId, string RequestMenuUser, long LeaduserId)
         {
             EmpShift retModel = new EmpShift();
 
@@ -337,37 +334,49 @@ namespace NLTD.EmploeePortal.LMS.Dac
                 {
                     EmployeeDac employeeDac = new EmployeeDac();
                     long userId = 0; string EmpId = "";
+                    string Name = "";
 
                     if (RequestMenuUser != "My")
                     {
-                        var empPrf = context.Employee.Where(x => string.Concat(x.FirstName, " ", x.LastName).ToUpper() == Name.ToUpper()).FirstOrDefault();
+                        var empPrf = context.Employee
+                            .Where(x => x.UserId == UserId)
+                            .FirstOrDefault();
                         if (empPrf != null)
                         {
                             userId = empPrf.UserId;
                             EmpId = empPrf.EmployeeId;
+                            Name = empPrf.FirstName + " " + empPrf.LastName;
                         }
                     }
+                    else
+                    {
+                        var empPrf = context.Employee.Where(x => (x.UserId) == LeaduserId).FirstOrDefault();
+                        if (empPrf != null)
+                        {
+                            userId = empPrf.UserId;
+                            EmpId = empPrf.EmployeeId;
+                            Name = empPrf.FirstName + " " + empPrf.LastName;
+                        }
+                    }
+
 
                     if (userId > 0 || (RequestMenuUser == "My" && LeaduserId > 0))
                     {
                         string ReportingTo = (RequestMenuUser == "My" && LeaduserId > 0) ? employeeDac.ReportingToName(LeaduserId) : employeeDac.ReportingToName(userId);
+
+                        var leadinfo = (from emp in context.Employee
+                                        join role in context.EmployeeRole on emp.EmployeeRoleId equals role.RoleId
+                                        where emp.UserId == LeaduserId
+                                        select new { RoleName = role.Role }).FirstOrDefault();
 
                         List<ShiftAllocation> shiftDetails = new List<ShiftAllocation>();
                         if (RequestMenuUser == "My")
                         {
                             shiftDetails = getShiftDetails(context, LeaduserId);
                         }
-                        else if (RequestMenuUser == "Admin")
+                        else if (leadinfo.RoleName.ToUpper() == "ADMIN" || leadinfo.RoleName.ToUpper() == "HR")
                         {
-                            var leadinfo = (from emp in context.Employee
-                                            join role in context.EmployeeRole on emp.EmployeeRoleId equals role.RoleId
-                                            where emp.UserId == LeaduserId
-                                            select new { RoleName = role.Role }).FirstOrDefault();
-
-                            if (leadinfo.RoleName.ToUpper() == "ADMIN" || leadinfo.RoleName.ToUpper() == "HR")
-                            {
-                                shiftDetails = getShiftDetails(context, userId);
-                            }
+                            shiftDetails = getShiftDetails(context, userId);
                         }
                         else if (RequestMenuUser == "Team")
                         {

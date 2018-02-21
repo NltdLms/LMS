@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("NLTD.EmploeePortal.LMS.Dac")]
+[assembly: AssemblyTitle("NLTD.EmployeePortal.LMS.Dac")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("NLTD.EmploeePortal.LMS.Dac")]
+[assembly: AssemblyProduct("NLTD.EmployeePortal.LMS.Dac")]
 [assembly: AssemblyCopyright("Copyright ©  2017")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]

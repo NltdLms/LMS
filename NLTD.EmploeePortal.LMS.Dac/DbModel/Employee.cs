@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace NLTD.EmploeePortal.LMS.Dac.DbModel
+namespace NLTD.EmployeePortal.LMS.Dac.DbModel
 {
     public class Employee
     {
@@ -20,10 +20,10 @@ namespace NLTD.EmploeePortal.LMS.Dac.DbModel
         public String Gender { get; set; }
         public String AvatarUrl { get; set; }
         public Int64? ReportingToId { get; set; }
-        public Int64 OfficeHolodayId { get; set; }
+        public Int64 OfficeHolidayId { get; set; }
         public Int64? EmployeeRoleId { get; set; }
         //public Boolean IsHandleMembers { get; set; }
-        public Boolean IsInProbagationPeriod { get; set; }
+        public Boolean IsInProbationaryPeriod { get; set; }
         public Boolean CanAvailYearlyLeave { get; set; }        
 
         
@@ -34,5 +34,8 @@ namespace NLTD.EmploeePortal.LMS.Dac.DbModel
 
         public Int32? ShiftId { get; set; }
         public Int64? Cardid { get; set; }
+        public DateTime? DOJ { get; set; }
+       public DateTime? ConfirmationDate { get; set; }
+        public DateTime? RelievingDate { get; set; }
     }
 }

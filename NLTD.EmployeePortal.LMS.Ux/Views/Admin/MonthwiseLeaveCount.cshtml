@@ -13,7 +13,6 @@
     td {
         font-size: 12px;
         border-left: 1px solid;
-        
     }
 </style>
 <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
@@ -26,33 +25,83 @@
 @section scripts
 {
     <script src="~/Scripts/jquery-2.2.4.js"></script>
-    <script src="~/Scripts/lms.js?v=1.04"></script>
+    <script src="~/Scripts/lms.js?v=1.05"></script>
     <script type="text/javascript" src="~/Scripts/bootstrap.js"></script>
     <script src="~/Scripts/moment.js"></script>
     <link href="~/Content/bootstrap.css" rel="stylesheet" />
 
     <script type="text/javascript">
-        $(function () {
-
-            $("#Name").autocomplete({
-                source: function (request, response) {
-                    $.ajax({
-                        url: "/Admin/GetEmployeeList",
-                        type: "POST",
-                        dataType: "json",
-                        data: { term: request.term },
-                        success: function (data) {
-                            response($.map(data, function (item) {
-                                return { label: item.Name, value: item.Name };
-                            }))
-                        }
-                    })
+        var nameList = [];
+        $(document).ready(function () {
+            $("#Name").keyup(function () {
+                if ($("#Name").val() == "") {
+                    $("#SearchUserID").val("");
                 }
             });
         });
+        $(function () {
+
+            $("#Name").autocomplete(
+                {
+                    source: function (request, response) {
+                        $.ajax({
+                            url: "/Admin/GetEmployeeList",
+                            type: "POST",
+                            dataType: "json",
+                            data: { term: request.term },
+                            success: function (data) {
+                                nameList = $.map(data,
+                                    function (item) {
+                                        return { label: item.Name, value: item.UserId };
+                                    })
+                                response(nameList);
+                            }
+                        })
+                    },
+                    select: function (event, ui) {
+                        event.preventDefault();
+                        $("#SearchUserID").val(ui.item.value);
+                    },
+                    focus: function (event, ui) {
+                        event.preventDefault();
+                        $("#Name").val(ui.item.label);
+                        $("#SearchUserID").val(ui.item.value);
+                    },
+                    search: function (event, ui) {
+                        $("#SearchUserID").val("");
+                    }
+                });
+
+
+        });
+
+
+        function CheckAutoCompleteName() {
+            if ('@ViewBag.RequestLevelPerson' != "My") {
+                if ($("#SearchUserID").val() == "") {
+                    SetUserIDForAutoCompleteName(nameList, $("#Name").val(), "SearchUserID");
+                    if (!ValidateAutocompleteName($("#Name").val(), $("#SearchUserID").val())) {
+                        Clearshowalert("Please Choose a valid Username from the List.", "alert alert-danger");
+                        return false;
+                    }
+                }
+            }
+            return true;
+        }
     </script>
 }
 @{
+
+    string title = string.Empty;
+    if (ViewBag.RequestLevelPerson == "My")
+    {
+        title = "My Month Wise Report";
+    }
+    else
+    {
+        title = "Team - Month Wise Report";
+    }
+
     if (Model.ErrorMsg != "" && Model.ErrorMsg != null)
     {
         <div class="alert alert-danger">
@@ -69,12 +118,13 @@
         <div class="col-sm-12">
             <div class="box box-primary">
                 <div class="box-header with-border">
-                    <h3 class="box-title">@((string)ViewBag.RequestLevelPerson + " Month Wise Report")</h3>
+                    <h3 class="box-title">@title</h3>
                 </div>
 
                 <div class="box-body">
                     <div class="row">
                         <form id="frmYearSummary" method="post" action='@Url.Action("ExportMonthCountToExcel", new { RequestLevelPerson = (string)ViewBag.RequestLevelPerson })'>
+                            @Html.HiddenFor(x => x.SearchUserID)
                             <div class="col-sm-2 pull-left">
                                 @Html.Label("Year")
 
@@ -107,10 +157,10 @@
                             </div>
 
                             @*<div class="col-sm-1" style="padding-top:25px;">
-                                <button type="button" class="btn btn-primary pull-right" onclick="loadMonthwiseCount()">SEARCH</button>
-                            </div>*@
+                                    <button type="button" class="btn btn-primary pull-right" onclick="loadMonthwiseCount()">SEARCH</button>
+                                </div>*@
                             <div class="col-sm-3" style="padding-top:25px;">
-                                <input type='submit' class="btn btn-primary pull-right" value='EXPORT TO EXCEL' />
+                                <input type='submit' class="btn btn-primary pull-right" onclick="return CheckAutoCompleteName()" value='EXPORT TO EXCEL' />
                             </div>
 
 

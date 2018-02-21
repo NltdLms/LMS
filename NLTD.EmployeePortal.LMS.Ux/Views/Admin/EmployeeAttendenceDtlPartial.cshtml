@@ -1,7 +1,7 @@
 ﻿
 
 @model IList<NLTD.EmployeePortal.LMS.Common.DisplayModel.EmployeeAttendanceModel>
-<script type="text/javascript" src="~/Scripts/lms.js?v=1.04"></script>
+<script type="text/javascript" src="~/Scripts/lms.js?v=1.05"></script>
 <style type="text/css">
     .panel-group .panel {
         border-radius: 0;
@@ -43,11 +43,13 @@
 </style>
 @if (Model.Count == 0)
 {
-    <div class="alert alert-danger">
-        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-            <span aria-hidden="true">x</span>
-        </button>
-        No matching records found.
+    <div id="showalert">
+        <div class="alert alert-danger">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">x</span>
+            </button>
+            No matching records found.
+        </div>
     </div>
 
 }
@@ -78,7 +80,7 @@ else
                     @Model[j].InOutDate.ToString("dd-MM-yyyy")
                 </td>
                 <td>
-                    @Model[j].InOutDate.ToString("hh:mm tt")
+                    @Model[j].InOutDate.ToString("hh:mm:ss")
                 </td>
                 <td>
                     @Model[j].InOut
@@ -94,7 +96,7 @@ else
         <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
             @for (int i = 0; i < Model.Count; i++)
                 {
-                    Int64 userID = Model[i].UserID;
+                    Int64? userID = Model[i].UserID;
         <div class="panel panel-default">
             <div class="panel-heading" role="tab" id="@("heading" + Model[i].UserID)">
                 <h4 class="panel-title">
@@ -137,7 +139,7 @@ else
                                         @Model[j].InOutDate.ToString("dd-MM-yyyy")
                                     </td>
                                     <td>
-                                        @Model[j].InOutDate.ToString("hh:mm tt")
+                                        @Model[j].InOutDate.ToString("hh:mm:ss")
                                     </td>
                                     <td>
                                         @Model[j].InOut

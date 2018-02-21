@@ -1,4 +1,4 @@
-﻿using NLTD.EmploeePortal.LMS.Dac.DbModel;
+﻿using NLTD.EmployeePortal.LMS.Dac.DbModel;
 using NLTD.EmployeePortal.LMS.Common.DisplayModel;
 using System;
 using System.Collections.Generic;
@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace NLTD.EmploeePortal.LMS.Dac.Dac
+namespace NLTD.EmployeePortal.LMS.Dac.Dac
 {
     public class EmployeeLeaveBalanceDac : IDisposable
     {
@@ -15,14 +15,12 @@ namespace NLTD.EmploeePortal.LMS.Dac.Dac
             //Nothing to implement...
         }
         //Added by Tamil
-        public IList<LeaveBalanceEmpProfile> GetLeaveBalanceEmpProfile(string name)
+        public IList<LeaveBalanceEmpProfile> GetLeaveBalanceEmpProfile(Int64 userId)
         {
             IList<LeaveBalanceEmpProfile> retModel = new List<LeaveBalanceEmpProfile>();
 
             using (var context = new NLTDDbContext())
             {
-                EmployeeDac employeeDac = new EmployeeDac();
-                long userId = employeeDac.GetUserId(name);
 
                 if (userId > 0)
                 {
@@ -65,7 +63,7 @@ namespace NLTD.EmploeePortal.LMS.Dac.Dac
                     {
                         employeeLeaveBalanceProfile = employeeLeaveBalanceProfile,
                         lstEmployeeLeaveBalance = employeeLeaveBalance,
-                        Name = name
+                        Name = employeeLeaveBalanceProfile.FirstName + " " + employeeLeaveBalanceProfile.LastName
                     });
                 }
             }
@@ -127,16 +125,16 @@ namespace NLTD.EmploeePortal.LMS.Dac.Dac
                                     isSaved = context.SaveChanges();
                                 }
 
-                                LeaveTransactiontHistory leaveTransactiontHistory = new LeaveTransactiontHistory();
-                                leaveTransactiontHistory.UserId = UserId;
-                                leaveTransactiontHistory.LeaveTypeId = Convert.ToInt64(item.LeaveTypeId);
-                                leaveTransactiontHistory.LeaveId = -1;
-                                leaveTransactiontHistory.TransactionDate = DateTime.Now;
-                                leaveTransactiontHistory.TransactionType = item.CreditOrDebit;
-                                leaveTransactiontHistory.NumberOfDays = item.NoOfDays;
-                                leaveTransactiontHistory.TransactionBy = LoginUserId;
-                                leaveTransactiontHistory.Remarks = item.Remarks;
-                                context.LeaveTransactionHistory.Add(leaveTransactiontHistory);
+                                LeaveTransactionHistory leaveTransactionHistory = new LeaveTransactionHistory();
+                                leaveTransactionHistory.UserId = UserId;
+                                leaveTransactionHistory.LeaveTypeId = Convert.ToInt64(item.LeaveTypeId);
+                                leaveTransactionHistory.LeaveId = -1;
+                                leaveTransactionHistory.TransactionDate = DateTime.Now;
+                                leaveTransactionHistory.TransactionType = item.CreditOrDebit;
+                                leaveTransactionHistory.NumberOfDays = item.NoOfDays;
+                                leaveTransactionHistory.TransactionBy = LoginUserId;
+                                leaveTransactionHistory.Remarks = item.Remarks;
+                                context.LeaveTransactionHistory.Add(leaveTransactionHistory);
                                 isSaved = context.SaveChanges();
                             }
                         }

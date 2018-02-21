@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using NLTD.EmploeePortal.LMS.Dac.DbModel;
+using NLTD.EmployeePortal.LMS.Dac.DbModel;
 
-namespace NLTD.EmploeePortal.LMS.Dac.Dac
+namespace NLTD.EmployeePortal.LMS.Dac.Dac
 {
     public class OfficeHolidayDac : IDisposable
     {
@@ -18,7 +18,7 @@ namespace NLTD.EmploeePortal.LMS.Dac.Dac
             List<OfficeHoliday> officeHolidayList = new List<OfficeHoliday>();
             using (var context = new NLTDDbContext())
             {
-                officeHolidayList = (from oh in context.OfficeHoliday join e in context.Employee on oh.OfficeId equals e.OfficeHolodayId
+                officeHolidayList = (from oh in context.OfficeHoliday join e in context.Employee on oh.OfficeId equals e.OfficeHolidayId
                                      where e.UserId == userID  || userID ==0
                                      select oh).ToList();
             }

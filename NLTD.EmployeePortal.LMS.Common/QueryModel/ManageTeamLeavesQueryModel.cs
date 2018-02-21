@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -22,10 +23,13 @@ namespace NLTD.EmployeePortal.LMS.Common.QueryModel
 
         public string RequestMenuUser { get; set; }
 
+        [DisplayName("Date Range")]
         public string DateRange { get; set; }
 
         public string Name { get; set; }
 
         public string IsAuthorized { get; set; }
+
+        public Int64? SearchUserID { get; set; }
     }
 }

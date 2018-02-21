@@ -25,5 +25,7 @@ namespace NLTD.EmployeePortal.LMS.Common.QueryModel
 
         public bool DonotShowRejected { get; set; }
 
+        public Int64? SearchUserID { get; set; }
+
     }
 }

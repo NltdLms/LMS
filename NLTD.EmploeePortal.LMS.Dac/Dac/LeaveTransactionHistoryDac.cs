@@ -1,14 +1,11 @@
-﻿using NLTD.EmploeePortal.LMS.Dac.DbModel;
-using NLTD.EmployeePortal.LMS.Common.DisplayModel;
+﻿using NLTD.EmployeePortal.LMS.Common.DisplayModel;
+using NLTD.EmployeePortal.LMS.Dac.DbModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using NLTD.EmploeePortal.LMS.Dac.DbModel;
 
 
-namespace NLTD.EmploeePortal.LMS.Dac.Dac
+namespace NLTD.EmployeePortal.LMS.Dac.Dac
 {
     public class LeaveTransactionHistoryDac : IDisposable
     {
@@ -36,12 +33,12 @@ namespace NLTD.EmploeePortal.LMS.Dac.Dac
                     {
                         string ReportingTo = (RequestMenuUser == "My" && LeaduserId > 0) ? employeeDac.ReportingToName(LeaduserId) : employeeDac.ReportingToName(userId);
 
-                        List<LeaveTransactiontHistoryModel> transactionDetails = new List<LeaveTransactiontHistoryModel>();
+                        List<LeaveTransactionHistoryModel> transactionDetails = new List<LeaveTransactionHistoryModel>();
                         if (RequestMenuUser == "My")
                         {
                             transactionDetails = getTransactionDetails(context, LeaduserId);
                         }
-                        else if (RequestMenuUser == "Admin")
+                        if (RequestMenuUser == "Team")
                         {
                             var leadinfo = (from emp in context.Employee
                                             join role in context.EmployeeRole on emp.EmployeeRoleId equals role.RoleId
@@ -52,26 +49,22 @@ namespace NLTD.EmploeePortal.LMS.Dac.Dac
                             {
                                 transactionDetails = getTransactionDetails(context, userId);
                             }
-                        }
-                        else if (RequestMenuUser == "Team")
-                        {
-                            //var user = (from e in context.Employee
-                            //            where e.ReportingToId == LeaduserId
-                            //            select e).ToList();
-
-                            var user = empList.Where(x => x == userId).FirstOrDefault();
-
-                            //var found = FindControlRecursively(user, userId);
-
-                            if (user != null)
+                            else
                             {
-                                transactionDetails = getTransactionDetails(context, userId);
+                                var user = empList.Where(x => x == userId).FirstOrDefault();
+
+                                //var found = FindControlRecursively(user, userId);
+
+                                if (user>0)
+                                {
+                                    transactionDetails = getTransactionDetails(context, userId);
+                                }
                             }
                         }
 
                         IList<LeaveTransactionDetail> retList = new List<LeaveTransactionDetail>();
                         var groupedLeaveList = transactionDetails.GroupBy(u => u.LeaveTypeId)
-                                                              .Select(grp => new { LeaveTypeId = grp.Key, LeaveTransactiontHistoryModel = grp.ToList() })
+                                                              .Select(grp => new { LeaveTypeId = grp.Key, leaveTransactionHistoryModel = grp.ToList() })
                                                               .ToList();
 
                         retModel = (from gv in groupedLeaveList
@@ -79,8 +72,8 @@ namespace NLTD.EmploeePortal.LMS.Dac.Dac
                                     {
                                         ReportingTo = ReportingTo,
                                         LeaveTypeId = gv.LeaveTypeId,
-                                        LeaveType = gv.LeaveTransactiontHistoryModel[0].Type,
-                                        LeaveTransactiontHistoryModel = gv.LeaveTransactiontHistoryModel
+                                        LeaveType = gv.leaveTransactionHistoryModel[0].Type,
+                                        leaveTransactionHistoryModel = gv.leaveTransactionHistoryModel
                                     }).ToList();
                     }
                 }
@@ -120,7 +113,7 @@ namespace NLTD.EmploeePortal.LMS.Dac.Dac
             }
             return null;
         }
-        public List<LeaveTransactiontHistoryModel> getTransactionDetails(NLTDDbContext context, long userId)
+        public List<LeaveTransactionHistoryModel> getTransactionDetails(NLTDDbContext context, long userId)
         {
             // var myInClause = new string[] { "P", "R", "C" };
 
@@ -128,7 +121,7 @@ namespace NLTD.EmploeePortal.LMS.Dac.Dac
             //                          join l in context.LeaveType on lth.LeaveTypeId equals l.LeaveTypeId
             //                          join e in context.Employee on lth.UserId equals e.UserId
             //                          where lth.UserId == userId && lth.LeaveId == -1 && l.IsTimeBased == false
-            //                          select new LeaveTransactiontHistoryModel
+            //                          select new leaveTransactionHistoryModel
             //                          {
             //                              LeaveTypeId = lth.LeaveTypeId,
             //                              TransactionType = lth.TransactionType == "C" ? "Credit" : "Debit",
@@ -144,13 +137,14 @@ namespace NLTD.EmploeePortal.LMS.Dac.Dac
             //transactionDetails = transactionDetails.Union
             var transactionDetails = (from lth in context.LeaveTransactionHistory
                                       join lt in context.LeaveType on lth.LeaveTypeId equals lt.LeaveTypeId
-                                      //join l in context.Leave on lth.LeaveId equals l.LeaveId
+                                      join l in context.Leave on lth.LeaveId equals l.LeaveId into ps
+                                      from p in ps.DefaultIfEmpty()
                                       join e in context.Employee on lth.UserId equals e.UserId
                                       where lth.UserId == userId && lt.IsTimeBased == false
                                       // myInClause.Contains(lth.Remarks) &&
-                                      select new LeaveTransactiontHistoryModel
+                                      select new LeaveTransactionHistoryModel
                                       {
-										  LeaveId= lth.LeaveId,
+                                          LeaveId = lth.LeaveId,
                                           LeaveTypeId = lth.LeaveTypeId,
                                           TransactionType = lth.TransactionType == "C" ? "Credit" : "Debit",
                                           NumberOfDays = lth.NumberOfDays,
@@ -160,7 +154,9 @@ namespace NLTD.EmploeePortal.LMS.Dac.Dac
                                           Type = lt.Type,
                                           FirstName = e.FirstName,
                                           LastName = e.LastName,
-                                          EmployeeId = e.EmployeeId
+                                          EmployeeId = e.EmployeeId,
+                                          StartDate = p.StartDate,
+                                          EndDate = p.EndDate
                                       }).ToList().OrderByDescending(x => x.TransactionDate).ToList();
             return transactionDetails;
         }
@@ -181,7 +177,8 @@ namespace NLTD.EmploeePortal.LMS.Dac.Dac
                                      UserId = l.UserId,
                                      StartDate = ld.LeaveDate,
                                      EndDate = ld.LeaveDate,
-                                     LeaveType = lt.Type
+                                     LeaveType = lt.Type,
+                                     LeaveDayQty = ld.LeaveDayQty
                                  }
                                  ).ToList();
 

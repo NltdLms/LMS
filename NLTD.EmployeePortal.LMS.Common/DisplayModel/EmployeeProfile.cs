@@ -7,8 +7,8 @@ namespace NLTD.EmployeePortal.LMS.Common.DisplayModel
 {
     public class EmployeeProfile
     {
-        [Required(ErrorMessage = "Enter Logon Id.")]
-        [Display(Name = "Logon Id")]
+
+        [Display(Name = "Corp Id")]
         public String LogonId { get; set; }
 
         [Required(ErrorMessage = "Enter Employee Id.")]
@@ -25,8 +25,8 @@ namespace NLTD.EmployeePortal.LMS.Common.DisplayModel
         [Display(Name = "Last Name")]
         public String LastName { get; set; }
 
-        [Required(ErrorMessage = "Enter Email Address.")]
-        [Display(Name = "Email Address")]
+
+        [Display(Name = "Email")]
         public String EmailAddress { get; set; }
 
         [Display(Name = "Mobile Number")]
@@ -41,19 +41,27 @@ namespace NLTD.EmployeePortal.LMS.Common.DisplayModel
         [Display(Name = "Reporting To")]
         public Int64? ReportedToId { get; set; }
         public String ReportedToName { get; set; }
-        [Required(ErrorMessage = "Select Holiday Office.")]
+        [Required(ErrorMessage = "Select Holiday Calendar.")]
         public Int64 OfficeHolodayId { get; set; }
 
         public Int64 OfficeId { get; set; }
         public String LocationText { get; set; }
         [Required(ErrorMessage = "Select Emplye Shift.")]
         public Int32? ShiftId { get; set; }
-        
+
         public Int64? CardId { get; set; }
         public String Avatar { get; set; }
 
         [Display(Name = "Is LMS Approver")]
         public Boolean IsHandleMembers { get; set; }
+
+        [Required(ErrorMessage = "Enter Joining Date.")]
+        public DateTime? DOJ { get; set; }
+       
+        public DateTime? ConfirmationDate { get; set; }
+
+       
+        public DateTime? RelievingDate { get; set; }
         public bool Sunday { get; set; }
 
         public bool Monday { get; set; }

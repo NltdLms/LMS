@@ -6,8 +6,13 @@
         overflow-x: hidden;
     }
 
-    th { font-size: 11px; }
-    td { font-size: 12px; }
+    th {
+        font-size: 11px;
+    }
+
+    td {
+        font-size: 12px;
+    }
 </style>
 <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
 <script src="~/Scripts/DataTables/jquery.dataTables.min.js"></script>
@@ -18,12 +23,20 @@
 @section scripts
 {
     <script src="~/Scripts/jquery-2.2.4.js"></script>
-    <script src="~/Scripts/lms.js?v=1.04"></script>
+    <script src="~/Scripts/lms.js?v=1.05"></script>
     <script type="text/javascript" src="~/Scripts/bootstrap.js"></script>
     <script src="~/Scripts/moment.js"></script>
     <link href="~/Content/bootstrap.css" rel="stylesheet" />
 
     <script type="text/javascript">
+        var nameList = [];
+        $(document).ready(function () {
+            $("#Name").keyup(function () {
+                if ($("#Name").val() == "") {
+                    $("#SearchUserID").val("");
+                }
+            });
+        });
         $(function () {
 
             $("#Name").autocomplete({
@@ -34,17 +47,55 @@
                         dataType: "json",
                         data: { term: request.term },
                         success: function (data) {
-                            response($.map(data, function (item) {
-                                return { label: item.Name, value: item.Name };
-                            }))
+                            nameList = $.map(data, function (item) {
+                                return { label: item.Name, value: item.UserId };
+                            })
+                            response(nameList);
                         }
                     })
+                },
+                select: function (event, ui) {
+                    event.preventDefault();
+                    $("#SearchUserID").val(ui.item.value);
+
+                },
+                focus: function (event, ui) {
+                    event.preventDefault();
+                    $("#Name").val(ui.item.label);
+                    $("#SearchUserID").val(ui.item.value);
+                },
+                search: function (event, ui) {
+                    $("#SearchUserID").val("");
                 }
             });
+
+
         });
+
+        function CheckAutoCompleteName() {
+            if ('@ViewBag.RequestLevelPerson'!= "My") {
+                if ($("#SearchUserID").val() == "") {
+                    SetUserIDForAutoCompleteName(nameList, $("#Name").val(), "SearchUserID");
+                    if (!ValidateAutocompleteName($("#Name").val(), $("#SearchUserID").val())) {
+                        Clearshowalert("Please Choose a valid Username from the List.", "alert alert-danger");
+                        return false;
+                    }
+                }
+            }
+            return true;
+        }
     </script>
 }
 @{
+    string title = string.Empty;
+    if (ViewBag.RequestLevelPerson == "My")
+    {
+        title = "My Leave Balance Report";
+    }
+    else
+    {
+        title = "Team - Leave Balance Report";
+    }
     if (Model.ErrorMsg != "" && Model.ErrorMsg != null)
     {
         <div class="alert alert-danger">
@@ -54,19 +105,22 @@
             @Model.ErrorMsg
         </div>
     }
+    <div id="alert_placeholder" class="col-sm-12">
 
+    </div>
     @Html.Hidden("RequestLevelPerson", (string)ViewBag.RequestLevelPerson)
 
     <div class="row">
         <div class="col-sm-12">
             <div class="box box-primary">
                 <div class="box-header with-border">
-                    <h3 class="box-title">@((string)ViewBag.RequestLevelPerson + " Year Wise Report")</h3>
+                    <h3 class="box-title">@title</h3>
                 </div>
 
                 <div class="box-body">
                     <div class="row">
                         <form id="frmYearSummary" method="post" action='@Url.Action("ExportYearSummaryToExcel", new { RequestLevelPerson = (string)ViewBag.RequestLevelPerson })'>
+                            @Html.HiddenFor(x => x.SearchUserID)
                             <div class="col-sm-2 pull-left">
                                 @Html.Label("Year")
 
@@ -92,9 +146,9 @@
                                 @{ if ((string)ViewBag.RequestLevelPerson == "Team")
                                     {
                                         <p> @Html.CheckBoxFor(m => m.OnlyReportedToMe)   My Direct Reportees</p>
-                                                
+
                                     }
-                                    
+
                                 }
                             </div>
 
@@ -102,7 +156,7 @@
                                 <button type="button" class="btn btn-primary" onclick="loadYearwiseLeaveSummary()">SEARCH</button>
                             </div>
                             <div class="col-sm-2" style="padding-top:25px;">
-                                <input type='submit' class="btn btn-primary pull-right" value='EXPORT TO EXCEL' />
+                                <input type='submit' class="btn btn-primary pull-right" value='EXPORT TO EXCEL' onclick="return CheckAutoCompleteName()" />
                             </div>
 
 
@@ -114,7 +168,7 @@
         </div>
     </div>
 
-        <div id="divForLeaveSummary" class="col-sm-12"></div>
+    <div id="divForLeaveSummary" class="col-sm-12"></div>
 
 
 

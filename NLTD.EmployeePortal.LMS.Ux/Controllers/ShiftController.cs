@@ -100,11 +100,23 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
         public ActionResult SaveEmployeeShift(List<Int64> UserId, int Shift, DateTime FromDate, DateTime ToDate, string RequestMenuUser)
         {
             string result = "";
+            EmployeeProfile EmployeeProfileObj = (EmployeeProfile)Session["Profile"];
+            
             if (ModelState.IsValid)
             {
-                if (RequestMenuUser == "Team" && (FromDate <= DateTime.Now || ToDate <= DateTime.Now))
+                if(EmployeeProfileObj.RoleText == "Employee")
                 {
-                    result = "Leads are allowed to update the shift for future date only. Contact Admin/HR to modify it.";
+                    if (RequestMenuUser == "Team" && (FromDate <= DateTime.Now.AddDays(-7) || ToDate <= DateTime.Now.AddDays(-7)))
+                    {
+                        result = "The system restricts modifying shifts earlier than 7 days. Please contact HR for any changes.";
+                    }
+                    else
+                    {
+                        using (var client = new ShiftClient())
+                        {
+                            result = client.SaveEmployeeShift(UserId, Shift, FromDate, ToDate, this.UserId);
+                        }
+                    }
                 }
                 else
                 {
@@ -113,10 +125,12 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
                         result = client.SaveEmployeeShift(UserId, Shift, FromDate, ToDate, this.UserId);
                     }
                 }
+
             }
 
             return Json(result);
         }
+
 
         public ActionResult SaveShiftMaster(int shiftId, string shiftName, TimeSpan fromTime, TimeSpan toTime)
         {
@@ -153,6 +167,13 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
             return View("EmployeeShiftAllocation", qyMdl);
         }
 
+        public ActionResult MyShiftDetails()
+        {
+            ViewBag.RequestLevelPerson = "My";
+            ManageTeamLeavesQueryModel qyMdl = new ManageTeamLeavesQueryModel();
+            return View("EmployeeShiftAllocation", qyMdl);
+        }
+
         public ActionResult TeamEmployeeShiftAllocation()
         {
             ViewBag.RequestLevelPerson = "Team";
@@ -160,22 +181,20 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
             return View("EmployeeShiftAllocation", qyMdl);
         }
 
-        public ActionResult GetEmployeeShiftDetails(string Name, string RequestMenuUser, string FromDate, string ToDate, string Shift)
+        public ActionResult GetEmployeeShiftDetails(Int64 UserId, string RequestMenuUser, string FromDate, string ToDate, string Shift)
         {
             EmpShift shiftDetail = null;
-
-            if (Name != "")
-            {
-                Name = Name.Replace("|", " ");
-            }
-
+            
             using (var client = new ShiftClient())
             {
-                long Userid = this.UserId;
-                shiftDetail = client.GetEmployeeShiftDetails(Name, RequestMenuUser, Userid);
+                if(RequestMenuUser == "My" && UserId == 0)
+                    UserId = this.UserId;
+              
+                shiftDetail = client.GetEmployeeShiftDetails(UserId, RequestMenuUser, this.UserId);
                 ViewBag.FromDate = FromDate;
                 ViewBag.ToDate = ToDate;
                 ViewBag.Shift = Shift;
+                ViewBag.RequestLevelPerson = RequestMenuUser;
             }
 
             return PartialView("EmpShiftAllocationPartial", shiftDetail);
@@ -184,11 +203,22 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
         public ActionResult SaveIndividualEmployeeShift(DateTime FromDate, DateTime ToDate, int Shift, Int64 UserId, string RequestMenuUser)
         {
             string result = "";
+            EmployeeProfile EmployeeProfileObj = (EmployeeProfile)Session["Profile"];
             if (ModelState.IsValid)
             {
-                if (RequestMenuUser == "Team" && (FromDate <= DateTime.Now || ToDate <= DateTime.Now))
+                if (EmployeeProfileObj.RoleText == "Employee")
                 {
-                    result = "Leads are allowed to update the shift for future date only. Contact Admin/HR to modify it.";
+                    if (RequestMenuUser == "Team" && (FromDate <= DateTime.Now.AddDays(-7) || ToDate <= DateTime.Now.AddDays(-7)))
+                    {
+                        result = "The system restricts modifying shifts earlier than 7 days. Please contact HR for any changes.";
+                    }
+                    else
+                    {
+                        using (var client = new ShiftClient())
+                        {
+                            result = client.SaveIndividualEmployeeShift(UserId, Shift, FromDate, ToDate, this.UserId);
+                        }
+                    }
                 }
                 else
                 {
@@ -201,5 +231,6 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
 
             return Json(result);
         }
+
     }
 }

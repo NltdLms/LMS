@@ -6,13 +6,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using NLTD.EmployeePortal.LMS.Repository;
-using NLTD.EmploeePortal.LMS.Dac.DbModel;
+using NLTD.EmployeePortal.LMS.Dac.DbModel;
 using System.Configuration;
 
-namespace NLTD.EmploeePortal.LMS.Dac.Dac
+namespace NLTD.EmployeePortal.LMS.Dac.Dac
 {
     public class TimeSheetDac : ITimesheetHelper
     {
+        int BeforeShiftBuffer = Convert.ToInt32(ConfigurationManager.AppSettings["BeforeShiftBuffer"]);
+        int AfterShiftBuffer = Convert.ToInt32(ConfigurationManager.AppSettings["AfterShiftBuffer"]);
         public List<ShiftQueryModel> GetShiftDetails(Int64 UserID, DateTime FromDate, DateTime ToDate)
         {
             List<ShiftQueryModel> shiftQueryModelList = new List<ShiftQueryModel>();
@@ -88,22 +90,22 @@ namespace NLTD.EmploeePortal.LMS.Dac.Dac
                 return status;
         }
 
-      
+
 
         public List<TimeSheetModel> GetMyTimeSheet(Int64 UserID, DateTime FromDate, DateTime ToDate)
         {
             List<TimeSheetModel> timeSheetModelList = new List<TimeSheetModel>();
             List<ShiftQueryModel> ShiftQueryModelList = GetShiftDetails(UserID, FromDate, ToDate);
-            int BeforeShiftBuffer = Convert.ToInt32(ConfigurationManager.AppSettings["BeforeShiftBuffer"]);
-            int AfterShiftBuffer = Convert.ToInt32(ConfigurationManager.AppSettings["AfterShiftBuffer"]);
-            try
+            
+            var toDateShift = (from m in ShiftQueryModelList where m.ShiftDate == ToDate select new { fromTime = m.ShiftFromtime, toTime = m.ShiftTotime }).FirstOrDefault();
+
+            if (toDateShift != null)
             {
-                var toDateShift = (from m in ShiftQueryModelList where m.ShiftDate == ToDate select new { fromTime = m.ShiftFromtime, toTime = m.ShiftTotime }).FirstOrDefault();
-                TimeSpan fromTime= toDateShift.fromTime;
+                TimeSpan fromTime = toDateShift.fromTime;
                 TimeSpan toTime = toDateShift.toTime;
-                if(fromTime>toTime)
+                if (fromTime > toTime)
                 {
-                    ToDate = ToDate.AddDays(1).Add(toTime.Add(new TimeSpan(AfterShiftBuffer, 0,0)));
+                    ToDate = ToDate.AddDays(1).Add(toTime.Add(new TimeSpan(AfterShiftBuffer, 0, 0)));
                 }
                 else
                 {
@@ -111,13 +113,10 @@ namespace NLTD.EmploeePortal.LMS.Dac.Dac
                 }
                 // TimeSpan ToDate = ToDate.Add(toDateShift);
             }
-            catch (Exception)
-            {
-                throw;
-            }
+
             IEmployeeAttendanceHelper EmployeeAttendanceDacObj = new EmployeeAttendanceDac();
             //To Retrive the Employee Attendence for the given date.
-            List<EmployeeAttendanceModel> EmployeeAttendenceList = EmployeeAttendanceDacObj.GetAttendenceForRange(UserID, FromDate, ToDate, "My");
+            List<EmployeeAttendanceModel> EmployeeAttendenceList = EmployeeAttendanceDacObj.GetAttendenceForRange(UserID, FromDate, ToDate, "My", true);
 
             // To Get the Employee name
             EmployeeProfile EmployeeProfileObj = new EmployeeDac().GetEmployeeProfile(UserID);
@@ -134,63 +133,76 @@ namespace NLTD.EmploeePortal.LMS.Dac.Dac
             OfficeHolidayDac officeHolidayDacObj = new OfficeHolidayDac();
             List<OfficeHoliday> officeHolidayList = officeHolidayDacObj.GetOfficeHoliday(UserID);
             // To get the employee Leave Details
-            try
+
+            LeaveTransactionHistoryDac leaveTransactionHistoryDacObj = new LeaveTransactionHistoryDac();
+            List<EmployeeLeave> employeeLeaveList = leaveTransactionHistoryDacObj.GetLeaveForEmployee(UserID);
+
+            for (int i = 0; i < ShiftQueryModelList.Count(); i++)
             {
-                LeaveTransactionHistoryDac leaveTransactionHistoryDacObj = new LeaveTransactionHistoryDac();
-                List<EmployeeLeave> employeeLeaveList = leaveTransactionHistoryDacObj.GetLeaveForEmployee(UserID);
-                
-                for (int i = 0; i < ShiftQueryModelList.Count(); i++)
+                TimeSheetModel TimeSheetModelObj = new TimeSheetModel();
+                DateTime shiftFromDateTime = ShiftQueryModelList[i].ShiftDate.Add(ShiftQueryModelList[i].ShiftFromtime.Add(new TimeSpan(-BeforeShiftBuffer, 0, 0)));
+                DateTime shiftEndDateTime = ShiftQueryModelList[i].ShiftDate.Add(ShiftQueryModelList[i].ShiftTotime.Add(new TimeSpan(AfterShiftBuffer, 0, 0)));
+
+                if (shiftEndDateTime < shiftFromDateTime)
                 {
-                    TimeSheetModel TimeSheetModelObj = new TimeSheetModel();
-                    DateTime shiftFromDateTime = ShiftQueryModelList[i].ShiftDate.Add(ShiftQueryModelList[i].ShiftFromtime.Add(new TimeSpan(-BeforeShiftBuffer, 0, 0)));
-                    DateTime shiftEndDateTime = ShiftQueryModelList[i].ShiftDate.Add(ShiftQueryModelList[i].ShiftTotime.Add(new TimeSpan(AfterShiftBuffer, 0, 0)));
+                    shiftEndDateTime = shiftEndDateTime.AddDays(1);
+                }
+                // To add the employee basic details 
+                TimeSheetModelObj.Shift = ShiftQueryModelList[i].ShiftFromtime.ToString(@"hh\:mm") + '-' + ShiftQueryModelList[i].ShiftTotime.ToString(@"hh\:mm");
+                TimeSheetModelObj.userID = UserID;
+                TimeSheetModelObj.Name = name;
+                TimeSheetModelObj.WorkingDate = ShiftQueryModelList[i].ShiftDate;
+                // Linq query to find the min and max for the given date
+                var maxmin = from s in EmployeeAttendenceList
+                             where s.InOutDate >= shiftFromDateTime && s.InOutDate <= shiftEndDateTime
+                             group s by true into r
+                             select new
+                             {
+                                 min = r.Min(z => z.InOutDate),
+                                 max = r.Max(z => z.InOutDate)
+                             };
+                if (maxmin != null && maxmin.Count() > 0)
+                {
+                    TimeSheetModelObj.InTime = maxmin.ToList()[0].min;
+                    TimeSheetModelObj.OutTime = maxmin.ToList()[0].max;
+                    TimeSheetModelObj.WorkingHours = TimeSheetModelObj.OutTime - TimeSheetModelObj.InTime;
+                    TimeSheetModelObj.Status = "Present";
 
-                    if (shiftEndDateTime < shiftFromDateTime)
+                    if (TimeSheetModelObj.InTime.TimeOfDay > ShiftQueryModelList[i].ShiftFromtime)
                     {
-                        shiftEndDateTime = shiftEndDateTime.AddDays(1);
+                        TimeSheetModelObj.LateIn = TimeSheetModelObj.InTime.TimeOfDay - ShiftQueryModelList[i].ShiftFromtime;
                     }
-                    // To add the employee basic details 
-                    TimeSheetModelObj.Shift = ShiftQueryModelList[i].ShiftFromtime.ToString(@"hh\:mm") + '-' + ShiftQueryModelList[i].ShiftTotime.ToString(@"hh\:mm");
-                    TimeSheetModelObj.userID = UserID;
-                    TimeSheetModelObj.Name = name;
-                    TimeSheetModelObj.WorkingDate = ShiftQueryModelList[i].ShiftDate;
-                    // Linq query to find the min and max for the given date
-                    var maxmin = from s in EmployeeAttendenceList
-                                 where s.InOutDate >= shiftFromDateTime && s.InOutDate <= shiftEndDateTime
-                                 group s by true into r
-                                 select new
-                                 {
-                                     min = r.Min(z => z.InOutDate),
-                                     max = r.Max(z => z.InOutDate)
-                                 };
-                    if (maxmin != null && maxmin.Count() > 0)
+
+                    DateTime shiftToTime = ShiftQueryModelList[i].ShiftDate.Add(ShiftQueryModelList[i].ShiftTotime);
+                    DateTime shiftFromTime = ShiftQueryModelList[i].ShiftDate.Add(ShiftQueryModelList[i].ShiftFromtime);
+                    if (shiftToTime < shiftFromTime)
                     {
-                        TimeSheetModelObj.InTime = maxmin.ToList()[0].min;
-                        TimeSheetModelObj.OutTime = maxmin.ToList()[0].max;
-                        TimeSheetModelObj.WorkingHours = TimeSheetModelObj.OutTime - TimeSheetModelObj.InTime;
-                        TimeSheetModelObj.Status = "Present";
+                        shiftToTime = shiftToTime.AddDays(1);
+                    }
+                    if (shiftToTime > TimeSheetModelObj.OutTime)
+                    {
+                        TimeSheetModelObj.EarlyOut = ShiftQueryModelList[i].ShiftTotime - TimeSheetModelObj.OutTime.TimeOfDay;
 
                     }
-                    else// If no record found in the employee for the given date 
-                    {
-                        // Get Absent Details 
-                        TimeSheetModelObj.Status = GetAbsentStatus(ShiftQueryModelList[i].ShiftDate, officeWeekOffDayList,
-               officeHolidayList, employeeLeaveList);
-                    }
-                    TimeSheetModelObj.LMSStatus = GetLMSStatus(employeeLeaveList, ShiftQueryModelList[i].ShiftDate);
-                    timeSheetModelList.Add(TimeSheetModelObj);
 
                 }
-            }
-            catch (Exception)
-            {
+                else// If no record found in the employee for the given date 
+                {
+                    // Get Absent Details 
+                    TimeSheetModelObj.Status = GetAbsentStatus(ShiftQueryModelList[i].ShiftDate, officeWeekOffDayList,
+           officeHolidayList, employeeLeaveList);
+                }
+                decimal LeaveDayQty = 0;
+                TimeSheetModelObj.Requests = GetLMSStatus(employeeLeaveList, ShiftQueryModelList[i].ShiftDate, out LeaveDayQty);
+                TimeSheetModelObj.LeaveDayQty = LeaveDayQty;
+                timeSheetModelList.Add(TimeSheetModelObj);
 
-                throw;
             }
-            return timeSheetModelList.OrderByDescending(m=>m.WorkingDate).ToList();
+
+            return timeSheetModelList.OrderByDescending(m => m.WorkingDate).ToList();
         }
 
-        public List<TimeSheetModel> GetMyTeamTimeSheet(Int64 UserID, DateTime FromDate, DateTime ToDate)
+        public List<TimeSheetModel> GetMyTeamTimeSheet(Int64 UserID, DateTime FromDate, DateTime ToDate,bool myDirectEmployees)
         {
             List<TimeSheetModel> timeSheetModelList = new List<TimeSheetModel>();
             // To Get all the employee profile under the manager or lead
@@ -206,7 +218,7 @@ namespace NLTD.EmploeePortal.LMS.Dac.Dac
                                 where emp.UserId == UserID
                                 select role.Role).FirstOrDefault();
                 }
-                List<EmployeeProfile> employeeProfileListUnderManager = EmployeeDacObj.GetReportingEmployeeProfile(UserID, userRole).OrderBy(m => m.FirstName).ToList();
+                List<EmployeeProfile> employeeProfileListUnderManager = EmployeeDacObj.GetReportingEmployeeProfile(UserID, userRole,myDirectEmployees).OrderBy(m => m.FirstName).ToList();
                 for (int i = 0; i < employeeProfileListUnderManager.Count; i++)
                 {
                     List<TimeSheetModel> timeSheetModelListTemp = GetMyTimeSheet(employeeProfileListUnderManager[i].UserId, FromDate, ToDate);
@@ -221,14 +233,25 @@ namespace NLTD.EmploeePortal.LMS.Dac.Dac
             }
         }
 
-        public string GetLMSStatus(List<EmployeeLeave> employeeLeaveList,DateTime statusDate)
+        public string GetLMSStatus(List<EmployeeLeave> employeeLeaveList,DateTime statusDate,out decimal LeaveDayQty)
         {
+            LeaveDayQty = 0;
             string LMSStatus = string.Empty;
+
             try
             {
                 if (employeeLeaveList.Count > 0)
                 {
-                    LMSStatus = (from e in employeeLeaveList where statusDate >= e.StartDate && statusDate <= e.EndDate select e.LeaveType).FirstOrDefault();
+                 var  Status = (from e in employeeLeaveList where statusDate >= e.StartDate && statusDate <= e.EndDate select new { e.LeaveType, e.LeaveDayQty });
+                    if(Status != null && Status.Count()>0)
+                    {
+                        foreach (var item in Status)
+                        {
+                            LMSStatus = item.LeaveType;
+                            LeaveDayQty = item.LeaveDayQty;
+                        }
+                    }
+                    
                 }
             }
             catch (Exception)
@@ -259,5 +282,8 @@ namespace NLTD.EmploeePortal.LMS.Dac.Dac
         public DateTime? ApprovedAt { get; set; }
 
         public string LeaveType { get; set; }
+
+
+        public decimal LeaveDayQty { get; set; }
     }
 }

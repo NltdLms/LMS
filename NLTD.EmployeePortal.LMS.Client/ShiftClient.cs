@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using NLTD.EmployeePortal.LMS.Common.DisplayModel;
-using NLTD.EmploeePortal.LMS.Dac.DbHelper;
+using NLTD.EmployeePortal.LMS.Dac.DbHelper;
 using NLTD.EmployeePortal.LMS.Common.QueryModel;
 
 namespace NLTD.EmployeePortal.LMS.Client
@@ -55,11 +55,11 @@ namespace NLTD.EmployeePortal.LMS.Client
             }
         }
 
-        public EmpShift GetEmployeeShiftDetails(string Name, string RequestMenuUser, long LeaduserId)
+        public EmpShift GetEmployeeShiftDetails(Int64 UserId, string RequestMenuUser, long LeaduserId)
         {
             using (IShiftHelper helper = new ShiftHelper())
             {
-                return helper.GetEmployeeShiftDetails(Name, RequestMenuUser, LeaduserId);
+                return helper.GetEmployeeShiftDetails(UserId, RequestMenuUser, LeaduserId);
             }
         }
 

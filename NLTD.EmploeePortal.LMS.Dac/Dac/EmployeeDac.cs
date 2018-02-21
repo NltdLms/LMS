@@ -1,4 +1,4 @@
-﻿using NLTD.EmploeePortal.LMS.Dac.DbModel;
+﻿using NLTD.EmployeePortal.LMS.Dac.DbModel;
 using NLTD.EmployeePortal.LMS.Common.DisplayModel;
 using NLTD.EmployeePortal.LMS.Repository;
 using System;
@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-namespace NLTD.EmploeePortal.LMS.Dac.Dac
+namespace NLTD.EmployeePortal.LMS.Dac.Dac
 {
     public class EmployeeDac : IEmployeeHelper
     {
@@ -28,7 +28,7 @@ namespace NLTD.EmploeePortal.LMS.Dac.Dac
                                    FirstName = employee.FirstName,
                                    LastName = employee.LastName,
                                    Gender = employee.Gender,
-                                   OfficeHolodayId = employee.OfficeHolodayId,
+                                   OfficeHolodayId = employee.OfficeHolidayId,
                                    OfficeId = employee.OfficeId,
                                    LocationText = "",
                                    MobileNumber = employee.MobileNumber,
@@ -39,7 +39,9 @@ namespace NLTD.EmploeePortal.LMS.Dac.Dac
                                    Avatar = employee.AvatarUrl,
                                    CardId = employee.Cardid,
                                    ShiftId = employee.ShiftId,
-                                   //IsHandleMembers = employee.IsHandleMembers,                                   
+                                   ConfirmationDate = employee.ConfirmationDate,
+                                   DOJ = employee.DOJ,
+                                   RelievingDate = employee.RelievingDate,
                                    LogonId = employee.LoginId,
                                    IsActive = employee.IsActive
 
@@ -99,11 +101,14 @@ namespace NLTD.EmploeePortal.LMS.Dac.Dac
                     }
                 }
             }
-            catch (Exception ex) { throw; }
+            catch (Exception)
+            {
+                throw;
+            }
             return profile;
         }
 
-        public List<EmployeeProfile> GetReportingEmployeeProfile(Int64 userId, string role)
+        public List<EmployeeProfile> GetReportingEmployeeProfile(Int64 userId, string role, bool myDirectEmployees)
         {
             List<EmployeeProfile> employeeProfileList = new List<EmployeeProfile>();
             try
@@ -122,7 +127,7 @@ namespace NLTD.EmploeePortal.LMS.Dac.Dac
                                                    FirstName = employee.FirstName,
                                                    LastName = employee.LastName,
                                                    Gender = employee.Gender,
-                                                   OfficeHolodayId = employee.OfficeHolodayId,
+                                                   OfficeHolodayId = employee.OfficeHolidayId,
                                                    OfficeId = employee.OfficeId,
                                                    LocationText = "",
                                                    MobileNumber = employee.MobileNumber,
@@ -137,33 +142,61 @@ namespace NLTD.EmploeePortal.LMS.Dac.Dac
                     }
                     else//for Team Lead
                     {
-                        IList<Int64> reportingEmployeeList = GetEmployeesReporting(userId);
-                        employeeProfileList = (from employee in context.Employee
-                                               join rt in context.EmployeeRole on employee.EmployeeRoleId equals rt.RoleId
-                                               where employee.IsActive == true && reportingEmployeeList.Contains(employee.UserId)
-                                               select new EmployeeProfile
-                                               {
-                                                   EmailAddress = employee.EmailAddress,
-                                                   EmployeeId = employee.EmployeeId,
-                                                   FirstName = employee.FirstName,
-                                                   LastName = employee.LastName,
-                                                   Gender = employee.Gender,
-                                                   OfficeHolodayId = employee.OfficeHolodayId,
-                                                   OfficeId = employee.OfficeId,
-                                                   LocationText = "",
-                                                   MobileNumber = employee.MobileNumber,
-                                                   ReportedToId = employee.ReportingToId,
-                                                   RoleId = employee.EmployeeRoleId,
-                                                   RoleText = rt.Role,
-                                                   UserId = employee.UserId,
-                                                   Avatar = employee.AvatarUrl,
-                                                   LogonId = employee.LoginId,
-                                                   IsActive = employee.IsActive
-                                               }).ToList();
+                        if (myDirectEmployees)
+                        {
+                            employeeProfileList = (from employee in context.Employee
+                                                   join rt in context.EmployeeRole on employee.EmployeeRoleId equals rt.RoleId
+                                                   where employee.IsActive == true && employee.ReportingToId == userId
+                                                   select new EmployeeProfile
+                                                   {
+                                                       EmailAddress = employee.EmailAddress,
+                                                       EmployeeId = employee.EmployeeId,
+                                                       FirstName = employee.FirstName,
+                                                       LastName = employee.LastName,
+                                                       Gender = employee.Gender,
+                                                       OfficeHolodayId = employee.OfficeHolidayId,
+                                                       OfficeId = employee.OfficeId,
+                                                       LocationText = "",
+                                                       MobileNumber = employee.MobileNumber,
+                                                       ReportedToId = employee.ReportingToId,
+                                                       RoleId = employee.EmployeeRoleId,
+                                                       RoleText = rt.Role,
+                                                       UserId = employee.UserId,
+                                                       Avatar = employee.AvatarUrl,
+                                                       LogonId = employee.LoginId,
+                                                       IsActive = employee.IsActive
+                                                   }).ToList();
+                        }
+                        else
+                        {
+                            IList<Int64> reportingEmployeeList = GetEmployeesReporting(userId);
+                            employeeProfileList = (from employee in context.Employee
+                                                   join rt in context.EmployeeRole on employee.EmployeeRoleId equals rt.RoleId
+                                                   where employee.IsActive == true && reportingEmployeeList.Contains(employee.UserId)
+                                                   select new EmployeeProfile
+                                                   {
+                                                       EmailAddress = employee.EmailAddress,
+                                                       EmployeeId = employee.EmployeeId,
+                                                       FirstName = employee.FirstName,
+                                                       LastName = employee.LastName,
+                                                       Gender = employee.Gender,
+                                                       OfficeHolodayId = employee.OfficeHolidayId,
+                                                       OfficeId = employee.OfficeId,
+                                                       LocationText = "",
+                                                       MobileNumber = employee.MobileNumber,
+                                                       ReportedToId = employee.ReportingToId,
+                                                       RoleId = employee.EmployeeRoleId,
+                                                       RoleText = rt.Role,
+                                                       UserId = employee.UserId,
+                                                       Avatar = employee.AvatarUrl,
+                                                       LogonId = employee.LoginId,
+                                                       IsActive = employee.IsActive
+                                                   }).ToList();
+                        }
                     }
                 }
             }
-            catch (Exception e)
+            catch (Exception)
             {
 
             }
@@ -193,7 +226,7 @@ namespace NLTD.EmploeePortal.LMS.Dac.Dac
             }
             return result;
         }
-        public IList<ViewEmployeeProfileModel> GetTeamProfiles(Int64 userId, bool onlyReportedToMe, string name, string requestMenuUser, bool hideInactiveEmp)
+        public IList<ViewEmployeeProfileModel> GetTeamProfiles(Int64 userId, bool onlyReportedToMe, Int64? paramUserId, string requestMenuUser, bool hideInactiveEmp)
         {
             IList<ViewEmployeeProfileModel> retModel = new List<ViewEmployeeProfileModel>();
             IList<Int64> empList = GetEmployeesReporting(userId);
@@ -238,28 +271,56 @@ namespace NLTD.EmploeePortal.LMS.Dac.Dac
                             }
                             else if (requestMenuUser == "Team")
                             {
-                                if (onlyReportedToMe)
+                                if (leadinfo.RoleName.ToUpper() == "ADMIN" || leadinfo.RoleName.ToUpper() == "HR")
                                 {
-                                    ids = ids.Where(t => t.reportingToId == userId && t.iactive == true).ToList();
+                                    if (paramUserId > 0)
+                                    {
+                                        ids = ids.Where(x => x.userId == paramUserId).ToList();
+                                    }
+                                    else
+                                    {
+                                        if (onlyReportedToMe)
+                                        {
+                                            ids = ids.Where(t => t.reportingToId == userId && t.iactive == true).ToList();
+                                        }
+                                        else
+                                        {
+                                            ids = ids.ToList();
+                                        }
+
+                                        if (hideInactiveEmp == true)
+                                        {
+                                            if (ids.Count > 0)
+                                                ids = ids.Where(x => x.iactive == true).ToList();
+                                        }
+                                    }
+                                    
+                                    
                                 }
                                 else
                                 {
-                                    ids = ids.Where(t => empList.Contains(t.userId) && t.iactive == true).ToList();
+                                    if (paramUserId > 0) {
+                                        ids = ids.Where(t => empList.Contains(t.userId) && t.iactive == true).ToList();
+                                        if(ids.Count>0)
+                                            ids = ids.Where(x => x.userId == paramUserId).ToList();
+                                    }
+                                    else
+                                    {
+                                        if (onlyReportedToMe)
+                                        {
+                                            ids = ids.Where(t => t.reportingToId == userId && t.iactive == true).ToList();
+                                        }
+                                        else
+                                        {
+                                            ids = ids.Where(t => empList.Contains(t.userId) && t.iactive == true).ToList();
+                                        }
+                                    }
                                 }
                             }
                         }
                     }
 
-                    if (name != null)
-                    {
-                        if (name.Trim() != "")
-                        {
-                            if (ids.Count > 0)
-                            {
-                                ids = ids.Where(x => x.name.ToUpper().Trim() == name.ToUpper().Trim()).ToList();
-                            }
-                        }
-                    }
+                    
 
                     foreach (var memId in ids)
                     {
@@ -267,7 +328,7 @@ namespace NLTD.EmploeePortal.LMS.Dac.Dac
                         profile = (from employee in context.Employee.AsEnumerable()
                                    join rt in context.EmployeeRole on employee.EmployeeRoleId equals rt.RoleId
                                    join o in context.OfficeLocation on employee.OfficeId equals o.OfficeId
-                                   join h in context.OfficeHoliday on employee.OfficeHolodayId equals h.OfficeHolodayId
+                                   join h in context.OfficeHoliday on employee.OfficeHolidayId equals h.OfficeHolodayId
                                    join s in context.ShiftMaster on employee.ShiftId equals s.ShiftID
                                    where employee.UserId == memId.userId
                                    select new ViewEmployeeProfileModel
@@ -278,7 +339,7 @@ namespace NLTD.EmploeePortal.LMS.Dac.Dac
                                        LastName = employee.LastName,
                                        Name = employee.FirstName + " " + employee.LastName,
                                        Gender = employee.Gender == "M" ? "Male" : "Female",
-                                       HolidayOfficeId = employee.OfficeHolodayId,
+                                       HolidayOfficeId = employee.OfficeHolidayId,
                                        OfficeName = o.OfficeName,
                                        MobileNumber = employee.MobileNumber,
                                        ReportedToId = employee.ReportingToId,
@@ -287,6 +348,9 @@ namespace NLTD.EmploeePortal.LMS.Dac.Dac
                                        LogonId = employee.LoginId,
                                        IsActive = employee.IsActive,
                                        CardId = employee.Cardid,
+                                       DOJ = String.Format("{0:dd-MM-yyyy}", employee.DOJ)  ,
+                                       RelievingDate = String.Format("{0:dd-MM-yyyy}", employee.RelievingDate) ,
+                                       ConfirmationDate = String.Format("{0:dd-MM-yyyy}", employee.ConfirmationDate),
                                        Shift = string.Format("{0:hh\\:mm}", s.FromTime) + " - " + string.Format("{0:hh\\:mm}", s.ToTime)
 
                                    }).FirstOrDefault();
@@ -366,7 +430,7 @@ namespace NLTD.EmploeePortal.LMS.Dac.Dac
                     profile = (from employee in context.Employee
                                join rt in context.EmployeeRole on employee.EmployeeRoleId equals rt.RoleId
                                join o in context.OfficeLocation on employee.OfficeId equals o.OfficeId
-                               join h in context.OfficeHoliday on employee.OfficeHolodayId equals h.OfficeHolodayId
+                               join h in context.OfficeHoliday on employee.OfficeHolidayId equals h.OfficeHolodayId
                                where employee.UserId == userId
                                select new ViewEmployeeProfileModel
                                {
@@ -375,7 +439,7 @@ namespace NLTD.EmploeePortal.LMS.Dac.Dac
                                    FirstName = employee.FirstName,
                                    LastName = employee.LastName,
                                    Gender = employee.Gender == "M" ? "Male" : "Female",
-                                   HolidayOfficeId = employee.OfficeHolodayId,
+                                   HolidayOfficeId = employee.OfficeHolidayId,
                                    OfficeName = o.OfficeName,
                                    MobileNumber = employee.MobileNumber,
                                    ReportedToId = employee.ReportingToId,
@@ -438,7 +502,10 @@ namespace NLTD.EmploeePortal.LMS.Dac.Dac
                     }
                 }
             }
-            catch (Exception ex) { throw; }
+            catch (Exception)
+            {
+                throw;
+            }
             return profile;
         }
 
@@ -660,7 +727,10 @@ namespace NLTD.EmploeePortal.LMS.Dac.Dac
                             var isCorpIdExits = context.Employee.Where(e => e.LoginId == profile.LogonId.ToUpper()).FirstOrDefault();
                             if (isCorpIdExits != null)
                             {
-                                return "DupCorp";
+                                if (isCorpIdExits.LoginId.Trim().Length > 5)
+                                {
+                                    return "DupCorp";
+                                }
                             }
                             var isCardIdExits = context.Employee.Where(e => e.Cardid == profile.CardId && e.Cardid != null && e.IsActive).FirstOrDefault();
                             if (isCardIdExits != null)
@@ -674,8 +744,11 @@ namespace NLTD.EmploeePortal.LMS.Dac.Dac
                             var isCorpIdExits = context.Employee.Where(e => e.LoginId == profile.LogonId.ToUpper() && e.EmployeeId != employee.EmployeeId).FirstOrDefault();
                             if (isCorpIdExits != null)
                             {
+                                if (isCorpIdExits.LoginId.Trim().Length > 5)
+                                {
+                                    return "DupCorp";
+                                }
 
-                                return "DupCorp";
 
                             }
                             var isCardIdExits = context.Employee.Where(e => e.Cardid == profile.CardId && e.Cardid != null && e.EmployeeId != employee.EmployeeId && e.IsActive).FirstOrDefault();
@@ -701,9 +774,12 @@ namespace NLTD.EmploeePortal.LMS.Dac.Dac
                             remarks = remarks + "#OfficeHolodayId" + "^" + profile.OfficeHolodayId;
                             remarks = remarks + "#ShiftId" + "^" + profile.ShiftId;
                             remarks = remarks + "#CardId" + "^" + profile.CardId;
+                            remarks = remarks + "#DOJ" + "^" + profile.DOJ;
+                            remarks = remarks + "#ConfirmationDate" + "^" + profile.ConfirmationDate;
+                            remarks = remarks + "#RelievingDate" + "^" + profile.RelievingDate;
 
                             employee = new Employee();
-                            employee.LoginId = profile.LogonId.ToUpper();
+                            employee.LoginId = profile.LogonId.Trim().ToUpper();
                             employee.EmployeeId = profile.EmployeeId;
                             employee.OfficeId = profile.OfficeId;
                             employee.IsActive = profile.IsActive;
@@ -714,9 +790,12 @@ namespace NLTD.EmploeePortal.LMS.Dac.Dac
                             employee.EmailAddress = profile.EmailAddress;
                             employee.EmployeeRoleId = profile.RoleId;
                             employee.ReportingToId = profile.ReportedToId;
-                            employee.OfficeHolodayId = profile.OfficeHolodayId;
+                            employee.OfficeHolidayId = profile.OfficeHolodayId;
                             employee.ShiftId = profile.ShiftId;
                             employee.Cardid = profile.CardId;
+                            employee.DOJ = profile.DOJ;
+                            employee.ConfirmationDate = profile.ConfirmationDate;
+                            employee.RelievingDate = profile.RelievingDate;
                             employee.ModifiedBy = -1;
                             employee.CreatedBy = ModifiedBy;
                             employee.CreatedOn = System.DateTime.Now;
@@ -771,7 +850,7 @@ namespace NLTD.EmploeePortal.LMS.Dac.Dac
                                 hist.TransactionType = "Insert";
                                 hist.TransactionBy = ModifiedBy;
                                 hist.Remarks = remarks;
-                                context.EmployeeTransactiontHistory.Add(hist);
+                                context.EmployeeTransactionHistory.Add(hist);
                                 isSaved = context.SaveChanges();
 
                             }
@@ -817,7 +896,7 @@ namespace NLTD.EmploeePortal.LMS.Dac.Dac
                             if (profile.EmailAddress != oldEmpData.EmailAddress)
                                 remarks = remarks + "#EmailAddress" + "^" + profile.EmailAddress;
 
-                            if (profile.OfficeHolodayId != oldEmpData.OfficeHolodayId)
+                            if (profile.OfficeHolodayId != oldEmpData.OfficeHolidayId)
                                 remarks = remarks + "#OfficeHolodayId" + "^" + profile.OfficeHolodayId;
 
                             if (profile.RoleId != oldEmpData.EmployeeRoleId)
@@ -829,9 +908,18 @@ namespace NLTD.EmploeePortal.LMS.Dac.Dac
                             if (profile.CardId != oldEmpData.Cardid)
                                 remarks = remarks + "#CardId" + "^" + profile.CardId;
 
+                            if (profile.DOJ != oldEmpData.DOJ)
+                                remarks = remarks + "#DOJ" + "^" + profile.DOJ;
+
+                            if (profile.ConfirmationDate != oldEmpData.ConfirmationDate)
+                                remarks = remarks + "#ConfirmationDate" + "^" + profile.ConfirmationDate;
+
+                            if (profile.RelievingDate != oldEmpData.RelievingDate)
+                                remarks = remarks + "#RelievingDate" + "^" + profile.RelievingDate;
+
                             int? oldShiftid = oldEmpData.ShiftId;
                             employee.OfficeId = profile.OfficeId;
-                            employee.LoginId = profile.LogonId;
+                            employee.LoginId = profile.LogonId.Trim().ToUpper();
                             employee.EmployeeId = profile.EmployeeId;
                             employee.IsActive = profile.IsActive;
                             employee.ReportingToId = profile.ReportedToId;
@@ -842,8 +930,12 @@ namespace NLTD.EmploeePortal.LMS.Dac.Dac
                             employee.EmailAddress = profile.EmailAddress;
                             employee.ShiftId = profile.ShiftId;
                             employee.Cardid = profile.CardId;
-                            employee.OfficeHolodayId = profile.OfficeHolodayId;
+                            employee.OfficeHolidayId = profile.OfficeHolodayId;
                             employee.EmployeeRoleId = profile.RoleId;
+                            employee.DOJ = profile.DOJ;
+                            employee.ConfirmationDate = profile.ConfirmationDate;
+                            employee.RelievingDate = profile.RelievingDate;
+
                             if (remarks == "") { noChanges = true; }
                             else
                             {
@@ -982,7 +1074,7 @@ namespace NLTD.EmploeePortal.LMS.Dac.Dac
                                 hist.TransactionType = "Update";
                                 hist.TransactionBy = ModifiedBy;
                                 hist.Remarks = remarks;
-                                context.EmployeeTransactiontHistory.Add(hist);
+                                context.EmployeeTransactionHistory.Add(hist);
                                 isSaved = context.SaveChanges();
 
                             }
@@ -1014,6 +1106,7 @@ namespace NLTD.EmploeePortal.LMS.Dac.Dac
                 throw;
             }
         }
+
 
         public long GetEmployeeId(string LogonId)
         {
@@ -1108,6 +1201,23 @@ namespace NLTD.EmploeePortal.LMS.Dac.Dac
             }
         }
 
+        public List<Int64> GetDirectEmployees(Int64 userID)
+        {
+            List<Int64> userIDList = new List<Int64>();
+            try
+            {
+                using (var context = new NLTDDbContext())
+                {
+                    userIDList = (from e in context.Employee where e.ReportingToId == userID && e.IsActive select e.UserId).ToList();
+                }
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+            return userIDList;
+        }
 
     }
 }

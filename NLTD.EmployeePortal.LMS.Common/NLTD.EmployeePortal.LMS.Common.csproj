@@ -67,11 +67,13 @@
     <Compile Include="DisplayModel\LeaveItem.cs" />
     <Compile Include="DisplayModel\LeaveRequestModel.cs" />
     <Compile Include="DisplayModel\LeaveSummary.cs" />
-    <Compile Include="DisplayModel\LeaveTransactiontHistoryModel.cs" />
+    <Compile Include="DisplayModel\LeaveTransactionHistoryModel.cs" />
     <Compile Include="DisplayModel\LeaveTypesModel.cs" />
     <Compile Include="DisplayModel\MonthwiseLeavesCountModel.cs" />
     <Compile Include="DisplayModel\PermissionDetailsModel.cs" />
+    <Compile Include="DisplayModel\ReportModel.cs" />
     <Compile Include="DisplayModel\ShiftAllocation.cs" />
+    <Compile Include="DisplayModel\TimeSheetConsolidate.cs" />
     <Compile Include="DisplayModel\TimeSheetModel.cs" />
     <Compile Include="DisplayModel\ViewEmployeeProfileModel.cs" />
     <Compile Include="DisplayModel\WeekOffDayModel.cs" />

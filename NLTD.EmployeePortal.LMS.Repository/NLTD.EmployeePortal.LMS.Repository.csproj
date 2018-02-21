@@ -57,6 +57,7 @@
     <Compile Include="IOfficeHolidayHelper.cs" />
     <Compile Include="IOfficeLocationHelper.cs" />
     <Compile Include="IOfficeWeekEndHelper.cs" />
+    <Compile Include="IReportHelper.cs" />
     <Compile Include="IRoleHelper.cs" />
     <Compile Include="IShiftHelper.cs" />
     <Compile Include="ITimesheetHelper.cs" />

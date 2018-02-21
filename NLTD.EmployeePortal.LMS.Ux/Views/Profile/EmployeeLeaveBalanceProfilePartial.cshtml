@@ -1,5 +1,5 @@
 ﻿@model IList<NLTD.EmployeePortal.LMS.Common.DisplayModel.LeaveBalanceEmpProfile>
-<script type="text/javascript" src="~/Scripts/lms.js?v=1.04"></script>
+<script type="text/javascript" src="~/Scripts/lms.js?v=1.05"></script>
 <script src="~/Scripts/bootbox.min.js"></script>
 <style type="text/css">
     .panel-group .panel {
@@ -112,7 +112,7 @@
                                                                @onchange = "AddTotalDays(" + j + ")",
                                                                @id = "NoOfDays" + j,
                                                                @style = "float:right;width: 55%",
-                                                               @onkeypress = "return isNumber(event)",
+                                                               @onkeypress = "return isNumberKey(event,this)",
                                                                autocomplete = "off"
                                                            })
                                                                 @Html.ValidationMessageFor(e => Model[i].lstEmployeeLeaveBalance[j].NoOfDays, null, new { @class = "text-danger" })
