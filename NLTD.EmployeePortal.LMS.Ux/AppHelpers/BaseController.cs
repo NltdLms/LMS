@@ -34,8 +34,8 @@ namespace NLTD.EmployeePortal.LMS.Ux.AppHelpers
                 var identity = (WindowsIdentity)System.Web.HttpContext.Current.User.Identity;               
                 string menu = string.Empty;
 
-                var windowsLoginName = identity.Name;
-                //var windowsLoginName = "CORP\\UMAGESWARI";
+                var windowsLoginName = identity.Name.ToUpper();
+                //var windowsLoginName = "CORP\\SKMASETTI";
                 
                 if (Request.QueryString["Username"] != null)
                 {

@@ -5,7 +5,7 @@
 @model IList<TimeSheetModel>
 
 
-<script type="text/javascript" src="~/Scripts/lms.js?v=1.03"></script>
+<script type="text/javascript" src="~/Scripts/lms.js?v=1.05"></script>
 
 
 <style type="text/css">
@@ -481,7 +481,7 @@ else
 
         TimeSheetConsolidate TimeSheetConsolidateObj = (from m in TimeSheetModelList
                                                         where m.WorkingDate <= fromDatetime &&
-                                           m.WorkingDate >= todateTime
+                                           m.WorkingDate >= todateTime && m.userID == userID
                                                         group m by m.userID into g
                                                         select new TimeSheetConsolidate
                                                         {

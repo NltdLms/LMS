@@ -313,7 +313,7 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
                     endDateFormatted = DateTime.Parse(ToDate, new CultureInfo("en-GB", true));
                 }
                 catch (Exception ex) {
-                    throw ex;
+                    throw;
                 }
             }
             ManageTeamLeavesQueryModel qryMdl = new ManageTeamLeavesQueryModel();
@@ -344,7 +344,7 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
                 }
                 catch(Exception ex)
                 {
-                    throw ex;
+                    throw;
                 }
             }
             if (FromDate == "" || ToDate == "")
@@ -442,7 +442,7 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
                     }
                     catch(Exception ex)
                     {
-                        throw ex;
+                        throw;
                     }
                 }
             }
@@ -499,7 +499,7 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
                     }
                     catch (Exception ex)
                     {
-                        throw ex;
+                        throw;
                     }
                 }
             }
