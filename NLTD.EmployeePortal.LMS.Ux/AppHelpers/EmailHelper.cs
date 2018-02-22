@@ -147,6 +147,9 @@ namespace NLTD.EmployeePortal.LMS.Ux.AppHelpers
             }
             catch(Exception ex){
                 LogError(ex, leavId);
+                Elmah.ErrorLog.GetDefault(null).Log(new Elmah.Error(ex));
+                throw;
+                
             }
 
            

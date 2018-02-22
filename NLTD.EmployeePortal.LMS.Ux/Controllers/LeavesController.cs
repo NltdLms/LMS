@@ -1,4 +1,5 @@
-﻿using NLTD.EmployeePortal.LMS.Client;
+﻿using Hangfire;
+using NLTD.EmployeePortal.LMS.Client;
 using NLTD.EmployeePortal.LMS.Common.DisplayModel;
 using NLTD.EmployeePortal.LMS.Common.QueryModel;
 using NLTD.EmployeePortal.LMS.Ux.AppHelpers;
@@ -199,21 +200,15 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
                             if (result.IndexOf("$") > 0)
                             {
                                 data.ErrorMesage = "Saved";
+
                                 try
                                 {
-                                    Thread email = new Thread(delegate ()
-                                    {
-                                        EmailHelper emailHelp = new EmailHelper();
-                                        emailHelp.SendEmail(Convert.ToInt64(result.Substring(6)), "Applied");
-                                    });
-                                    email.IsBackground = true;
-                                    email.Start();
+                                    EmailHelper emailHelp = new EmailHelper();
+                                    BackgroundJob.Enqueue(() => emailHelp.SendEmail(Convert.ToInt64(result.Substring(6)), "Applied"));
+                                }
+                                catch { data.ErrorMesage = "EmailFailed"; }
 
-                                }
-                                catch
-                                {
-                                    data.ErrorMesage = "EmailFailed";
-                                }
+                               
                             }
                             else if (result == "Duplicate")
                                 data.ErrorMesage = "There is a previously applied request falling within this date range.";
@@ -382,8 +377,7 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
                 string Status = client.ChangeStatus(obj);
                 if (Status == "Saved")
                 {
-                    try
-                    {
+                    
                         string action = string.Empty;
                         if (obj.Status == "R")
                             action = "Rejected";
@@ -392,18 +386,14 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
                         else if (obj.Status == "C")
                             action = "Cancelled";
 
-                        Thread email = new Thread(delegate ()
-                        {
-                            EmailHelper emailHelp = new EmailHelper();
-                            emailHelp.SendEmail(Convert.ToInt64(obj.LeaveId), action);
-                        });
-                        email.IsBackground = true;
-                        email.Start();
-                    }
-                    catch
+
+                    try
                     {
-                        Status = "EmailFailed";
+                        EmailHelper emailHelp = new EmailHelper();
+                        BackgroundJob.Enqueue(() => emailHelp.SendEmail(Convert.ToInt64(obj.LeaveId), action));
                     }
+                    catch {  }
+                    
                 }
                 return Json(Status);
             }
