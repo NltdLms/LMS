@@ -1959,7 +1959,7 @@ namespace NLTD.EmployeePortal.LMS.Dac
                            where emp.OfficeId == OfficeId && DbFunctions.TruncateTime(e.InOutDate) == DbFunctions.TruncateTime(dateTime)
                                  && DbFunctions.TruncateTime(s.ShiftDate) == DbFunctions.TruncateTime(dateTime)
                                  && (DbFunctions.CreateTime(e.InOutDate.Hour > (23 - BSB) ? 23 : e.InOutDate.Hour + BSB, e.InOutDate.Minute, e.InOutDate.Second) >= sm.FromTime
-                                 && DbFunctions.CreateTime(e.InOutDate.Hour, e.InOutDate.Minute, e.InOutDate.Second) <= sm.ToTime)
+                                 && DbFunctions.CreateTime(e.InOutDate.Hour, e.InOutDate.Minute, e.InOutDate.Second) <= (sm.ToTime.Hours > 9 ? sm.ToTime : new TimeSpan(23, 59, 59)) )
                            select new { userID = e.UserID }
                 );
 
