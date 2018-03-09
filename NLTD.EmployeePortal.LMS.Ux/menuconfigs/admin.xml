@@ -32,7 +32,7 @@
           <icon></icon>
         </MenuItem>
         <MenuItem>
-          <title>Year wise Report</title>
+          <title>Leave Balance Report</title>
           <url>/Admin/MyYearWiseLeaveSumary</url>
           <icon></icon>
         </MenuItem>
@@ -84,12 +84,12 @@
           <icon></icon>
         </MenuItem>
         <MenuItem>
-          <title>View Employee Profile</title>
+          <title>Employee Profile</title>
           <url>/Profile/TeamLmsProfile</url>
           <icon></icon>
         </MenuItem>
         <MenuItem>
-          <title>View Transaction Log</title>
+          <title>Transaction Log</title>
           <url>/Admin/TeamTransactionLogs</url>
           <icon></icon>
         </MenuItem>
@@ -97,53 +97,44 @@
       </level1item>
     </MenuItem>
     <MenuItem>
-      <title>Timesheet</title>
+      <title>My Timesheet</title>
       <url>#</url>
-      <icon>fa fa-calculator</icon>
+      <icon>fa fa-user-circle-o</icon>
       <level1item>
         <MenuItem>
-          <title>My Attendance</title>
+          <title>Attendance</title>
           <url>/Attendance/MyAttendance</url>
           <icon></icon>
         </MenuItem>
         <MenuItem>
-          <title>My Timesheet</title>
-          <url>/Attendance/MyTimesheet</url>
+          <title>Timesheet</title>
+          <url>/Attendance/MyTimeSheet</url>
           <icon></icon>
         </MenuItem>
         <MenuItem>
-          <title>My Shifts</title>
+          <title>Shift</title>
           <url>/Shift/MyShiftDetails</url>
           <icon></icon>
         </MenuItem>
-        <MenuItem>
-          <title>Employee Attendance</title>
-          <url>/Attendance/EmployeeAttendance</url>
-          <icon></icon>
-        </MenuItem>
-        <MenuItem>
-          <title>Employee TimeSheet</title>
-          <url>/Attendance/EmployeeTimeSheet</url>
-          <icon></icon>
-        </MenuItem>
-        <MenuItem>
-          <title>Shift Master</title>
-          <url>/Shift/ShiftMaster</url>
-          <icon></icon>
-        </MenuItem>
-        <MenuItem>
-          <title>Shift Allocation - Individual</title>
-          <url>/Shift/EmployeeShiftAllocation</url>
-          <icon></icon>
-        </MenuItem>
-        <MenuItem>
-          <title>Shift Allocation - Multiple</title>
-          <url>/Shift/AdminShiftAllocation</url>
-          <icon></icon>
-        </MenuItem>
-
       </level1item>
     </MenuItem>
- 
+
+    <MenuItem>
+      <title>My Team Timesheet</title>
+      <url>#</url>
+      <icon>fa fa-users</icon>
+      <level1item>
+        <MenuItem>
+          <title>Attendance</title>
+          <url>/Attendance/MyTeamAttendance</url>
+          <icon></icon>
+        </MenuItem>
+        <MenuItem>
+          <title>Timesheet</title>
+          <url>/Attendance/MyTeamTimeSheet</url>
+          <icon></icon>
+        </MenuItem>
+      </level1item>
+    </MenuItem>
   </menuitem>
 </Menu>
