@@ -1,13 +1,11 @@
 ﻿using NLTD.EmployeePortal.LMS.Common.DisplayModel;
 using NLTD.EmployeePortal.LMS.Common.QueryModel;
+using NLTD.EmployeePortal.LMS.Dac.DbModel;
+using NLTD.EmployeePortal.LMS.Repository;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using NLTD.EmployeePortal.LMS.Repository;
-using NLTD.EmployeePortal.LMS.Dac.DbModel;
 using System.Configuration;
+using System.Linq;
 
 namespace NLTD.EmployeePortal.LMS.Dac.Dac
 {
@@ -111,10 +109,10 @@ namespace NLTD.EmployeePortal.LMS.Dac.Dac
                 {
                     ToDate = ToDate.Add(toTime.Add(new TimeSpan(AfterShiftBuffer, 0, 0)));
                 }
-                // TimeSpan ToDate = ToDate.Add(toDateShift);
             }
 
             IEmployeeAttendanceHelper EmployeeAttendanceDacObj = new EmployeeAttendanceDac();
+
             //To Retrive the Employee Attendence for the given date.
             List<EmployeeAttendanceModel> EmployeeAttendenceList = EmployeeAttendanceDacObj.GetAttendenceForRange(UserID, FromDate, ToDate, "My", true);
 
@@ -129,11 +127,12 @@ namespace NLTD.EmployeePortal.LMS.Dac.Dac
             // To get the employee weekoff Days
             OfficeWeekOffDac officeWeekOffDacObj = new OfficeWeekOffDac();
             List<string> officeWeekOffDayList = officeWeekOffDacObj.GetEmployeeWeekOffDay(UserID);
+
             // To get the employee Holiday List 
             OfficeHolidayDac officeHolidayDacObj = new OfficeHolidayDac();
             List<OfficeHoliday> officeHolidayList = officeHolidayDacObj.GetOfficeHoliday(UserID);
-            // To get the employee Leave Details
 
+            // To get the employee Leave Details
             LeaveTransactionHistoryDac leaveTransactionHistoryDacObj = new LeaveTransactionHistoryDac();
             List<EmployeeLeave> employeeLeaveList = leaveTransactionHistoryDacObj.GetLeaveForEmployee(UserID);
 
@@ -245,18 +244,14 @@ namespace NLTD.EmployeePortal.LMS.Dac.Dac
                  var  Status = (from e in employeeLeaveList where statusDate >= e.StartDate && statusDate <= e.EndDate select new { e.LeaveType, e.LeaveDayQty });
                     if(Status != null && Status.Count()>0)
                     {
-                        foreach (var item in Status)
-                        {
-                            LMSStatus = item.LeaveType;
-                            LeaveDayQty = item.LeaveDayQty;
-                        }
+                        LMSStatus = string.Join(", ", Status.Select(p => p.LeaveType));
+                        LeaveDayQty = Status.Sum(p => p.LeaveDayQty);
                     }
                     
                 }
             }
             catch (Exception)
             {
-
                 throw;
             }
             return LMSStatus;

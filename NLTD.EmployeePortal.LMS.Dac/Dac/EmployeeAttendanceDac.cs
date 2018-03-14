@@ -1,11 +1,8 @@
-﻿using System;
+﻿using NLTD.EmployeePortal.LMS.Common.DisplayModel;
+using NLTD.EmployeePortal.LMS.Repository;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using NLTD.EmployeePortal.LMS.Common.DisplayModel;
-using NLTD.EmployeePortal.LMS.Repository;
-using NLTD.EmployeePortal.LMS.Dac.DbModel;
 
 namespace NLTD.EmployeePortal.LMS.Dac.Dac
 {

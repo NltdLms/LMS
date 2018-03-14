@@ -200,14 +200,18 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
                             if (result.IndexOf("$") > 0)
                             {
                                 data.ErrorMesage = "Saved";
-
+                                
                                 try
-                                {
-                                    EmailHelper emailHelp = new EmailHelper();
-                                    BackgroundJob.Enqueue(() => emailHelp.SendEmail(Convert.ToInt64(result.Substring(6)), "Applied"));
-                                }
-                                catch { data.ErrorMesage = "EmailFailed"; }
+                                {                                    
+                                    EmailHelper emailHelper = new EmailHelper();
+#if DEBUG
+                                    emailHelper.SendEmail(Convert.ToInt64(result.Substring(6)), "Applied");
+#else
 
+                                    BackgroundJob.Enqueue(() => emailHelper.SendEmail(Convert.ToInt64(result.Substring(6)), "Applied"));
+#endif
+                                }
+                                catch { data.ErrorMesage = "EmailFailed"; }                                
                                
                             }
                             else if (result == "Duplicate")
@@ -226,8 +230,6 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
                                 data.ErrorMesage = "Please select the correct time duration for the request.";
                             else if (result == "PermissionDateTobeSame")
                                 data.ErrorMesage = "The From and To dates should be same for this typeof request.";
-                            //else if (result == "PermissionDurationTime")
-                            //    data.ErrorMesage = "Permission duration is more than 4 hours.";
                             else if (result.Contains("ExceedMaxPerRequest"))
                                 data.ErrorMesage = "Number of days allowed per request are " + result.Substring(19) + ".";
                         }

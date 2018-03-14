@@ -1,10 +1,6 @@
 ﻿using NLTD.EmployeePortal.LMS.Common.DisplayModel;
-using NLTD.EmployeePortal.LMS.Common.QueryModel;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace NLTD.EmployeePortal.LMS.Repository
 {

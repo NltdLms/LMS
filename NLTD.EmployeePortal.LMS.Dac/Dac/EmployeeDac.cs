@@ -1,11 +1,9 @@
-﻿using NLTD.EmployeePortal.LMS.Dac.DbModel;
-using NLTD.EmployeePortal.LMS.Common.DisplayModel;
+﻿using NLTD.EmployeePortal.LMS.Common.DisplayModel;
+using NLTD.EmployeePortal.LMS.Dac.DbModel;
 using NLTD.EmployeePortal.LMS.Repository;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 namespace NLTD.EmployeePortal.LMS.Dac.Dac
 {
     public class EmployeeDac : IEmployeeHelper

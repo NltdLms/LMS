@@ -16,8 +16,7 @@ namespace NLTD.EmployeePortal.LMS.Common.DisplayModel
         public Int64 LeaveTypeId { get; set; }
 
         public bool IsLeave { get; set; }
-
-        public decimal? LeaveBalanace { get; set; }
+        
         [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}")]
         public DateTime LeaveDate { get; set; }
 

@@ -1,14 +1,11 @@
-﻿using NLTD.EmployeePortal.LMS.Dac.Dac;
+﻿using NLTD.EmployeePortal.LMS.Common.DisplayModel;
+using NLTD.EmployeePortal.LMS.Dac.Dac;
 using NLTD.EmployeePortal.LMS.Dac.DbModel;
-using NLTD.EmployeePortal.LMS.Common.DisplayModel;
-using NLTD.EmployeePortal.LMS.Common.QueryModel;
 using NLTD.EmployeePortal.LMS.Repository;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity.Migrations;
-using System.Globalization;
 using System.Linq;
-using System.Text;
 namespace NLTD.EmployeePortal.LMS.Dac
 {
     public class ShiftDac : IShiftHelper

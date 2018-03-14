@@ -1,4 +1,5 @@
-﻿using OfficeOpenXml;
+﻿using NLTD.EmployeePortal.LMS.Common.DisplayModel;
+using OfficeOpenXml;
 using OfficeOpenXml.Style;
 using System;
 using System.Collections.Generic;
@@ -6,7 +7,6 @@ using System.ComponentModel;
 using System.Data;
 using System.Linq;
 using System.Web;
-using NLTD.EmployeePortal.LMS.Common.DisplayModel;
 
 namespace NLTD.EmployeePortal.LMS.Ux.AppHelpers
 {
@@ -71,7 +71,6 @@ namespace NLTD.EmployeePortal.LMS.Ux.AppHelpers
                 dataTable.Columns["LeaveStatus"].ColumnName = "Status";
                 dataTable.Columns["LeaveReason"].ColumnName = "Reason";
                 dataTable.Columns["ApproverComments"].ColumnName = "Approver Comments";
-                dataTable.Columns["LeaveBalanace"].ColumnName = "Leave Balance";
 
                 
                 // add the content into the Excel file  

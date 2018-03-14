@@ -1,13 +1,13 @@
 ﻿using NLTD.EmployeePortal.LMS.Client;
 using NLTD.EmployeePortal.LMS.Common.DisplayModel;
 using NLTD.EmployeePortal.LMS.Common.QueryModel;
+using NLTD.EmployeePortal.LMS.Repository;
 using NLTD.EmployeePortal.LMS.Ux.AppHelpers;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Web.Mvc;
-using NLTD.EmployeePortal.LMS.Repository;
 
 namespace NLTD.EmployeePortal.LMS.Ux.Controllers
 {
