@@ -115,33 +115,12 @@ namespace NLTD.EmployeePortal.LMS.Dac.Dac
         }
         public List<LeaveTransactionHistoryModel> getTransactionDetails(NLTDDbContext context, long userId)
         {
-            // var myInClause = new string[] { "P", "R", "C" };
-
-            //var transactionDetails = (from lth in context.LeaveTransactionHistory
-            //                          join l in context.LeaveType on lth.LeaveTypeId equals l.LeaveTypeId
-            //                          join e in context.Employee on lth.UserId equals e.UserId
-            //                          where lth.UserId == userId && lth.LeaveId == -1 && l.IsTimeBased == false
-            //                          select new leaveTransactionHistoryModel
-            //                          {
-            //                              LeaveTypeId = lth.LeaveTypeId,
-            //                              TransactionType = lth.TransactionType == "C" ? "Credit" : "Debit",
-            //                              NumberOfDays = lth.NumberOfDays,
-            //                              UserId = lth.UserId,
-            //                              Remarks = lth.Remarks,
-            //                              TransactionDate = lth.TransactionDate,
-            //                              Type = l.Type,
-            //                              FirstName = e.FirstName,
-            //                              LastName = e.LastName,
-            //                              EmployeeId = e.EmployeeId
-            //                          }).ToList();
-            //transactionDetails = transactionDetails.Union
             var transactionDetails = (from lth in context.LeaveTransactionHistory
                                       join lt in context.LeaveType on lth.LeaveTypeId equals lt.LeaveTypeId
                                       join l in context.Leave on lth.LeaveId equals l.LeaveId into ps
                                       from p in ps.DefaultIfEmpty()
                                       join e in context.Employee on lth.UserId equals e.UserId
                                       where lth.UserId == userId && lt.IsTimeBased == false
-                                      // myInClause.Contains(lth.Remarks) &&
                                       select new LeaveTransactionHistoryModel
                                       {
                                           LeaveId = lth.LeaveId,
@@ -164,6 +143,7 @@ namespace NLTD.EmployeePortal.LMS.Dac.Dac
         public List<EmployeeLeave> GetLeaveForEmployee(Int64 UserID)
         {
             List<EmployeeLeave> leaveList = new List<EmployeeLeave>();
+            LeaveDac lv = new LeaveDac();
             try
             {
                 using (var context = new NLTDDbContext())
@@ -191,9 +171,13 @@ namespace NLTD.EmployeePortal.LMS.Dac.Dac
                                                               UserId = l.UserId,
                                                               StartDate = ld.PermissionDate,
                                                               EndDate = ld.PermissionDate,
-                                                              LeaveType = lt.Type
+                                                              LeaveType = lt.Type,
+                                                              TimeFrom = ld.TimeFrom,
+                                                              TimeTo = ld.TimeTo
                                                           }
                                  ).ToList();
+
+                    PermissionList.ForEach(pl => pl.permissionCount = (decimal)(lv.calculateDuration(pl.TimeFrom, pl.TimeTo).TotalMinutes)/60);
 
                     if (PermissionList.Count > 0)
                         leaveList.AddRange(PermissionList);

@@ -20,5 +20,7 @@ namespace NLTD.EmployeePortal.LMS.Common.DisplayModel
 
         public decimal LeaveDayQty { get; set; }
 
+        public decimal permissionCount { get; set; }
+
     }
 }

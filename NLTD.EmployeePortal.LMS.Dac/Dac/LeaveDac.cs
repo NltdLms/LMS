@@ -674,27 +674,13 @@ namespace NLTD.EmployeePortal.LMS.Dac
 
                 if (permissions.Count > 0)
                 {
-                    TimeSpan timeFrom;
-                    DateTime permissionDateFromTime;
-                    TimeSpan timeTo;
-                    DateTime permissionDateToTime;
-
                     for (int i = 0; i < permissions.Count; i++)
                     {
-
-                        permissionDateFromTime = Convert.ToDateTime(permissions[i].TimeFrom);
-                        permissionDateToTime = Convert.ToDateTime(permissions[i].TimeTo);
-                        timeFrom = Convert.ToDateTime(permissions[i].TimeFrom).TimeOfDay;
-                        timeTo = Convert.ToDateTime(permissions[i].TimeTo).TimeOfDay;
-                        if ((timeFrom.Hours >= 0 && timeFrom.Hours < 12) && timeTo.Hours < 12)
-                            permissionDateFromTime = permissionDateFromTime.AddDays(1);
-                        if (timeTo.Hours >= 0 && timeTo.Hours < 12)
-                            permissionDateToTime = permissionDateToTime.AddDays(1);
-                        totalDuration = totalDuration + (permissionDateToTime.Subtract(permissionDateFromTime));
-
+                        totalDuration = totalDuration + calculateDuration(permissions[i].TimeFrom, permissions[i].TimeTo);
                     }
 
                 }
+
                 if (totalDuration == TimeSpan.Zero)
                 {
                     retSring = "00:00";
@@ -706,6 +692,34 @@ namespace NLTD.EmployeePortal.LMS.Dac
             return retSring;
 
         }
+
+        public TimeSpan calculateDuration(string permissionTimeFrom, string permissionTimeTo)
+        {
+            TimeSpan timeFrom;
+            DateTime permissionDateFromTime;
+            TimeSpan timeTo;
+            DateTime permissionDateToTime;
+            TimeSpan duration = TimeSpan.Zero;
+
+            permissionDateFromTime = Convert.ToDateTime(permissionTimeFrom);
+            permissionDateToTime = Convert.ToDateTime(permissionTimeTo);
+            timeFrom = Convert.ToDateTime(permissionTimeFrom).TimeOfDay;
+            timeTo = Convert.ToDateTime(permissionTimeTo).TimeOfDay;
+            if ((timeFrom.Hours >= 0 && timeFrom.Hours < 12) && timeTo.Hours < 12)
+            {
+                permissionDateFromTime = permissionDateFromTime.AddDays(1);
+            }
+            if (timeTo.Hours >= 0 && timeTo.Hours < 12)
+            {
+                permissionDateToTime = permissionDateToTime.AddDays(1);
+            }
+
+            duration = permissionDateToTime.Subtract(permissionDateFromTime);
+
+            return duration;
+
+        }
+
         public IList<TeamLeaves> GetTeamLeaveHistory(ManageTeamLeavesQueryModel qryMdl)
         {
             IList<Int64> empList = GetEmployeesReporting(qryMdl.LeadId);

@@ -547,7 +547,7 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
                 TimeSheetQueryModelObj.UserID = profile.UserId;
                 if (TimeSheetQueryModelObj.FromDate == DateTime.MinValue)
                 {
-                    // For Last 30 days Attendence
+                    // For Last 30 days Attendance
                     TimeSheetQueryModelObj.FromDate = currentDate.AddDays(-30);
                     TimeSheetQueryModelObj.ToDate = currentDate;
                 }

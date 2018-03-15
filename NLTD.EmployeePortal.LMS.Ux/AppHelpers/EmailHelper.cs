@@ -94,7 +94,7 @@ namespace NLTD.EmployeePortal.LMS.Ux.AppHelpers
         }
 
         
-        public void SendEmail(Int64 leavId,string actionName)
+        public void SendEmail(Int64 leaveId,string actionName)
         {
             try
             {
@@ -103,7 +103,7 @@ namespace NLTD.EmployeePortal.LMS.Ux.AppHelpers
                 string descritpion = string.Empty;
                 using (var client = new LeaveClient())
                 {
-                    mdl = client.GetEmailData(leavId, actionName);
+                    mdl = client.GetEmailData(leaveId, actionName);
                 }
                 if (mdl.ToEmailId == "AutoApproved")
                 {
@@ -131,7 +131,7 @@ namespace NLTD.EmployeePortal.LMS.Ux.AppHelpers
                 {
                     
                     body = this.PopulateBody(helloUser, "", descritpion
-        , mdl.RequestFor,mdl.EmpId, mdl.LeaveTypeText, mdl.Date, mdl.Duration, mdl.Reason, mdl.ReportingToName, mdl.ApproverComments, Convert.ToString(leavId), actionName);
+        , mdl.RequestFor,mdl.EmpId, mdl.LeaveTypeText, mdl.Date, mdl.Duration, mdl.Reason, mdl.ReportingToName, mdl.ApproverComments, Convert.ToString(leaveId), actionName);
                    
                         this.SendHtmlFormattedEmail(mdl.ToEmailId, mdl.CcEmailIds, "LMS - Request from " + mdl.RequestFor + " - " + "Pending", body, actionName);
                 }
@@ -139,14 +139,14 @@ namespace NLTD.EmployeePortal.LMS.Ux.AppHelpers
                 {
                     emailType = "ToAndCc";
                     body = this.PopulateBody(helloUser, "", descritpion
-   , mdl.RequestFor, mdl.EmpId,mdl.LeaveTypeText, mdl.Date, mdl.Duration, mdl.Reason, mdl.ReportingToName, mdl.ApproverComments, Convert.ToString(leavId), emailType);
+   , mdl.RequestFor, mdl.EmpId,mdl.LeaveTypeText, mdl.Date, mdl.Duration, mdl.Reason, mdl.ReportingToName, mdl.ApproverComments, Convert.ToString(leaveId), emailType);
 
 
                     this.SendHtmlFormattedEmail(mdl.ToEmailId, mdl.CcEmailIds, "LMS - Request from " + mdl.RequestFor + " - " + actionName, body, emailType);
                 }
             }
             catch(Exception ex){
-                LogError(ex, leavId);
+                LogError(ex, leaveId);
                 Elmah.ErrorLog.GetDefault(null).Log(new Elmah.Error(ex));
                 throw;
                 
