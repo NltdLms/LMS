@@ -622,14 +622,14 @@ namespace NLTD.EmployeePortal.LMS.Ux.AppHelpers
 
 
 
-        public static byte[] ExportExcelAttendence(List<EmployeeAttendanceModel> data, string Heading = "", bool showSlno = false, params string[] ColumnsToTake)
+        public static byte[] ExportExcelAttendance(List<EmployeeAttendanceModel> data, string Heading = "", bool showSlno = false, params string[] ColumnsToTake)
         {
             List<EmployeeAttendanceModel> employeeAttendanceModelListObj = (from at in data
                                                                             select new EmployeeAttendanceModel
                                                                             {
                                                                                 UserID = at.UserID,
                                                                                 InOut = at.InOut,
-                                                                                AttendenceDate = at.InOutDate.ToString("dd-MM-yyyy"),
+                                                                                AttendanceDate = at.InOutDate.ToString("dd-MM-yyyy"),
                                                                                 INOutTime = at.InOutDate.ToString("hh:mm:ss"),
                                                                                 Name = at.Name
                                                                             }).ToList();

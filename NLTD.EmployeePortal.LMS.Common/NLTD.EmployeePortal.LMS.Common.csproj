@@ -80,7 +80,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QueryModel\ApplyOnBehalfSearchModel.cs" />
     <Compile Include="QueryModel\DaywiseLeaveQueryModel.cs" />
-    <Compile Include="QueryModel\EmployeeAttendenceQueryModel.cs" />
+    <Compile Include="QueryModel\EmployeeAttendanceQueryModel.cs" />
     <Compile Include="QueryModel\EmployeeProfileSearchModel.cs" />
     <Compile Include="QueryModel\EmployeeQueryModel.cs" />
     <Compile Include="QueryModel\LeaveStatusModel.cs" />
