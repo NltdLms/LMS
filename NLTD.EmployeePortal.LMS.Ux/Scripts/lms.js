@@ -741,29 +741,6 @@ function loadPermissionDetail() {
         });
 }
 
-//function loadPermissionDetail() {
-//    $.ajax({
-//        method: "GET",
-//        beforeSend: function () {
-//            $("#divLoading").show()
-//        },
-//        url: '/Admin/GetPermissionDetail?Name=' + $("#Name").val() + '&Year=' + $("#Year").val() + '&reqUsr=' + $("#RequestLevelPerson").val(),
-//        async: false,
-//        success: function (response) {
-//            $('#divForPermissionDetail').html(response);
-
-//        },
-//        complete: function () {
-//            $("#divLoading").hide();
-//        },
-//        error: function () {
-//            $("#divLoading").hide();
-//        }
-
-//    });
-//}
-
-
 function hideLeaveSplit(e) {
 
     $("#LeaveDtlSplit" + e).css("display", "none");
@@ -1491,7 +1468,6 @@ function AddShiftPopup(shiftId) {
         );
     });
     $("#myModal").modal('show');
-    // $("#divLoading").hide();
 }
 
 function SaveShiftMaster() {
@@ -1501,12 +1477,7 @@ function SaveShiftMaster() {
     shiftId = $("#ShiftId").val().trim();
     fromTime = $("#fromTime").val().trim();
     toTime = $("#toTime").val().trim();
-
-    //if (shiftName == '') {
-    //    Clearshowalert("Please enter the Shift Name", "alert alert-danger");
-    //    return;
-    //}
-
+    
     if (fromTime == '') {
         Clearshowalert("Please enter the Start Time.", "alert alert-danger");
         return;

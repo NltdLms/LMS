@@ -34,8 +34,9 @@ namespace NLTD.EmployeePortal.LMS.Ux.AppHelpers
                 string menu = string.Empty;
 
                 var windowsLoginName = identity.Name.ToUpper();
-                //windowsLoginName = "CORP\\SureshV";
-                
+#if DEBUG
+                //windowsLoginName = "CORP\\UMageswari";
+#endif
                 if (Request.QueryString["Username"] != null)
                 {
                     windowsLoginName = Convert.ToString(Request.QueryString["Username"]).Replace(".", "\\");
@@ -107,10 +108,7 @@ namespace NLTD.EmployeePortal.LMS.Ux.AppHelpers
                     ViewBag.MenuText = "NoProfile";
 
                 }
-
-                //
-            }
-            
+            }            
         }
     }
 }

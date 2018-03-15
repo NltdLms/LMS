@@ -45,11 +45,12 @@ namespace NLTD.EmployeePortal.LMS.Dac.Dac
         }
 
         private string GetAbsentStatus(DateTime CurrentDate, List<string> officeWeekOffDayList,
-            List<OfficeHoliday> officeHolidayList, List<EmployeeLeave> employeeLeaveList)
+            List<OfficeHoliday> officeHolidayList)
         {
             string status = string.Empty;
             bool found = false;
-            // to check whether the day is weekoff
+
+            // to check whether the day is week off
             try
             {
                 if (officeWeekOffDayList.Count() > 0)
@@ -68,8 +69,8 @@ namespace NLTD.EmployeePortal.LMS.Dac.Dac
                 {
                     if (officeHolidayList.Count > 0)
                     {
-                        int count = (from hl in officeHolidayList where hl.Holiday == CurrentDate select hl)
-                            .Count();
+                        int count = (from hl in officeHolidayList where hl.Holiday == CurrentDate select hl).Count();
+
                         if (count > 0)
                         {
                             status = TimeSheetStatus.Holiday;
@@ -83,9 +84,8 @@ namespace NLTD.EmployeePortal.LMS.Dac.Dac
 
                 throw;
             }
-            
-            
-                return status;
+
+            return status;
         }
 
 
@@ -113,7 +113,7 @@ namespace NLTD.EmployeePortal.LMS.Dac.Dac
 
             IEmployeeAttendanceHelper EmployeeAttendanceDacObj = new EmployeeAttendanceDac();
 
-            //To Retrive the Employee Attendence for the given date.
+            //To Retrieve the Employee Attendance for the given date.
             List<EmployeeAttendanceModel> EmployeeAttendenceList = EmployeeAttendanceDacObj.GetAttendenceForRange(UserID, FromDate, ToDate, "My", true);
 
             // To Get the Employee name
@@ -124,17 +124,13 @@ namespace NLTD.EmployeePortal.LMS.Dac.Dac
                 name = EmployeeProfileObj.FirstName + ' ' + EmployeeProfileObj.LastName;
             }
 
-            // To get the employee weekoff Days
+            // To get the employee week off Days
             OfficeWeekOffDac officeWeekOffDacObj = new OfficeWeekOffDac();
             List<string> officeWeekOffDayList = officeWeekOffDacObj.GetEmployeeWeekOffDay(UserID);
 
             // To get the employee Holiday List 
             OfficeHolidayDac officeHolidayDacObj = new OfficeHolidayDac();
             List<OfficeHoliday> officeHolidayList = officeHolidayDacObj.GetOfficeHoliday(UserID);
-
-            // To get the employee Leave Details
-            LeaveTransactionHistoryDac leaveTransactionHistoryDacObj = new LeaveTransactionHistoryDac();
-            List<EmployeeLeave> employeeLeaveList = leaveTransactionHistoryDacObj.GetLeaveForEmployee(UserID);
 
             for (int i = 0; i < ShiftQueryModelList.Count(); i++)
             {
@@ -189,11 +185,17 @@ namespace NLTD.EmployeePortal.LMS.Dac.Dac
                 {
                     // Get Absent Details 
                     TimeSheetModelObj.Status = GetAbsentStatus(ShiftQueryModelList[i].ShiftDate, officeWeekOffDayList,
-           officeHolidayList, employeeLeaveList);
+           officeHolidayList);
                 }
                 decimal LeaveDayQty = 0;
-                TimeSheetModelObj.Requests = GetLMSStatus(employeeLeaveList, ShiftQueryModelList[i].ShiftDate, out LeaveDayQty);
+                decimal PermissionCount = 0;
+                // To get the employee Leave Details
+                LeaveTransactionHistoryDac leaveTransactionHistoryDacObj = new LeaveTransactionHistoryDac();
+                List<EmployeeLeave> employeeLeaveList = leaveTransactionHistoryDacObj.GetLeaveForEmployee(UserID);
+
+                TimeSheetModelObj.Requests = GetLMSStatus(employeeLeaveList, ShiftQueryModelList[i].ShiftDate, out LeaveDayQty, out PermissionCount);
                 TimeSheetModelObj.LeaveDayQty = LeaveDayQty;
+                TimeSheetModelObj.permissionCount = PermissionCount;
                 timeSheetModelList.Add(TimeSheetModelObj);
 
             }
@@ -232,20 +234,22 @@ namespace NLTD.EmployeePortal.LMS.Dac.Dac
             }
         }
 
-        public string GetLMSStatus(List<EmployeeLeave> employeeLeaveList,DateTime statusDate,out decimal LeaveDayQty)
+        public string GetLMSStatus(List<EmployeeLeave> employeeLeaveList,DateTime statusDate,out decimal LeaveDayQty, out decimal PermissionCount)
         {
             LeaveDayQty = 0;
+            PermissionCount = 0;
             string LMSStatus = string.Empty;
 
             try
             {
                 if (employeeLeaveList.Count > 0)
                 {
-                 var  Status = (from e in employeeLeaveList where statusDate >= e.StartDate && statusDate <= e.EndDate select new { e.LeaveType, e.LeaveDayQty });
-                    if(Status != null && Status.Count()>0)
+                 var  Status = (from e in employeeLeaveList where statusDate >= e.StartDate && statusDate <= e.EndDate select new { e.LeaveType, e.LeaveDayQty,e.permissionCount });
+                    if(Status != null && Status.Count() > 0)
                     {
                         LMSStatus = string.Join(", ", Status.Select(p => p.LeaveType));
                         LeaveDayQty = Status.Sum(p => p.LeaveDayQty);
+                        PermissionCount = Status.Sum(p => p.permissionCount);
                     }
                     
                 }
@@ -278,7 +282,10 @@ namespace NLTD.EmployeePortal.LMS.Dac.Dac
 
         public string LeaveType { get; set; }
 
-
         public decimal LeaveDayQty { get; set; }
+        public string TimeFrom { get; set; }
+        public string TimeTo { get; set; }
+
+        public decimal permissionCount { get; set; }
     }
 }

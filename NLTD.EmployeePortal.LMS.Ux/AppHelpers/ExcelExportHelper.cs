@@ -753,7 +753,7 @@ namespace NLTD.EmployeePortal.LMS.Ux.AppHelpers
                 dataTable = ListToDataTable<ConsolidateReport>(weeklyTimeSheetConsolidateList);
                 dataTable.Columns["DateRange"].ColumnName = "Date";
                 dataTable.Columns["TotalWorkingHours"].ColumnName = "Total Working Hours";
-                dataTable.Columns["PermissionCount"].ColumnName = "No. Of Permission";
+                dataTable.Columns["PermissionCount"].ColumnName = "Total Permission Hours";
                 dataTable.Columns["LeaveCount"].ColumnName = "No .Of Leaves";
                 dataTable.Columns["LateCount"].ColumnName = "No. Of Late In";
                 dataTable.Columns["WorkFromHomeCount"].ColumnName = "No. Of Work From Home";
@@ -936,7 +936,7 @@ namespace NLTD.EmployeePortal.LMS.Ux.AppHelpers
             if (!string.IsNullOrEmpty(TimeSheetModelObj.Requests) &&
                     TimeSheetModelObj.Requests.Contains("Permission"))
             {
-                TimeSheetConsolidateObj.PermissionCount = TimeSheetConsolidateObj.PermissionCount + 1;
+                TimeSheetConsolidateObj.PermissionCount = TimeSheetConsolidateObj.PermissionCount + TimeSheetModelObj.permissionCount;
             }
             if (!string.IsNullOrEmpty(TimeSheetModelObj.Requests) && TimeSheetModelObj.Requests.Contains("Leave"))
             {
@@ -1080,7 +1080,7 @@ namespace NLTD.EmployeePortal.LMS.Ux.AppHelpers
         public decimal LeaveCount { get; set; }
 
         public decimal WorkFromHomeCount { get; set; }
-        public int PermissionCount { get; set; }
+        public decimal PermissionCount { get; set; }
         public int LateCount { get; set; }
         public int EarlyCount { get; set; }
 
