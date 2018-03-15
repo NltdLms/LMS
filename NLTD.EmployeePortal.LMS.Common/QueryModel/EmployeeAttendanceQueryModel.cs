@@ -2,7 +2,7 @@
 
 namespace NLTD.EmployeePortal.LMS.Common.QueryModel
 {
-    public class EmployeeAttendenceQueryModel
+    public class EmployeeAttendanceQueryModel
     {
 
         public DateTime? FromDate { get; set; }

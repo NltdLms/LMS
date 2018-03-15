@@ -114,7 +114,7 @@ namespace NLTD.EmployeePortal.LMS.Dac.Dac
             IEmployeeAttendanceHelper EmployeeAttendanceDacObj = new EmployeeAttendanceDac();
 
             //To Retrieve the Employee Attendance for the given date.
-            List<EmployeeAttendanceModel> EmployeeAttendenceList = EmployeeAttendanceDacObj.GetAttendenceForRange(UserID, FromDate, ToDate, "My", true);
+            List<EmployeeAttendanceModel> EmployeeAttendanceList = EmployeeAttendanceDacObj.GetAttendanceForRange(UserID, FromDate, ToDate, "My", true);
 
             // To Get the Employee name
             EmployeeProfile EmployeeProfileObj = new EmployeeDac().GetEmployeeProfile(UserID);
@@ -148,7 +148,7 @@ namespace NLTD.EmployeePortal.LMS.Dac.Dac
                 TimeSheetModelObj.Name = name;
                 TimeSheetModelObj.WorkingDate = ShiftQueryModelList[i].ShiftDate;
                 // Linq query to find the min and max for the given date
-                var maxmin = from s in EmployeeAttendenceList
+                var maxmin = from s in EmployeeAttendanceList
                              where s.InOutDate >= shiftFromDateTime && s.InOutDate <= shiftEndDateTime
                              group s by true into r
                              select new

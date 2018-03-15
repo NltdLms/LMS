@@ -515,7 +515,7 @@ else
             @Html.DisplayName("Summary")
         </td>
         <td>
-            string.Format("{0} {1} - {2} {3}", TimeSheetConsolidateObj.fromDatetime.Day, TimeSheetConsolidateObj.fromDatetime.ToString("MMM"),
+            @string.Format("{0} {1} - {2} {3}", TimeSheetConsolidateObj.fromDatetime.Day, TimeSheetConsolidateObj.fromDatetime.ToString("MMM"),
         TimeSheetConsolidateObj.toDatetime.Day, TimeSheetConsolidateObj.toDatetime.ToString("MMM"))
         </td>
         <td>
@@ -554,7 +554,7 @@ else
             @Html.DisplayName("Monthly Summary")
         </td>
         <td>
-            TimeSheetConsolidateObj.toDatetime.ToString("MMMM")
+            @TimeSheetConsolidateObj.toDatetime.ToString("MMMM")
         </td>
         <td>
             @Html.DisplayName("Work From Home : ")

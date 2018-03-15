@@ -19,15 +19,15 @@ namespace NLTD.EmployeePortal.LMS.Dac.DbHelper
           //  throw new NotImplementedException();
         }
 
-        public List<EmployeeAttendanceModel> GetAttendence(Int64 UserID)
+        public List<EmployeeAttendanceModel> GetAttendance(Int64 UserID)
         {
-            return employeeAttendanceHelper.GetAttendence(UserID);
+            return employeeAttendanceHelper.GetAttendance(UserID);
         }
 
 
-        public List<EmployeeAttendanceModel> GetAttendenceForRange(Int64 UserID, DateTime FromDateTime,DateTime ToDateTime,string requestLevelUser,bool IsDirectEmployees)
+        public List<EmployeeAttendanceModel> GetAttendanceForRange(Int64 UserID, DateTime FromDateTime,DateTime ToDateTime,string requestLevelUser,bool IsDirectEmployees)
         {
-            return employeeAttendanceHelper.GetAttendenceForRange(UserID, FromDateTime, ToDateTime, requestLevelUser, IsDirectEmployees);
+            return employeeAttendanceHelper.GetAttendanceForRange(UserID, FromDateTime, ToDateTime, requestLevelUser, IsDirectEmployees);
         }
 
     }

@@ -119,8 +119,8 @@ namespace NLTD.EmployeePortal.LMS.Dac
                 throw;
             }
             IEmployeeAttendanceHelper EmployeeAttendanceDacObj = new EmployeeAttendanceDac();
-            //To Retrive the Employee Attendence for the given date.
-            List<EmployeeAttendanceModel> EmployeeAttendenceList = EmployeeAttendanceDacObj.GetAttendenceForRange(UserID, FromDate, ToDate, "My", true);
+            //To Retrive the Employee Attendance for the given date.
+            List<EmployeeAttendanceModel> EmployeeAttendanceList = EmployeeAttendanceDacObj.GetAttendanceForRange(UserID, FromDate, ToDate, "My", true);
 
             try
             {
@@ -139,7 +139,7 @@ namespace NLTD.EmployeePortal.LMS.Dac
                     reportLateMonth.ReportingTo =ReportingTo;
                     reportLateMonth.Name =Name;
                     reportLateMonth.EmpId=EmpId;
-                    var maxmin = from s in EmployeeAttendenceList
+                    var maxmin = from s in EmployeeAttendanceList
                                  where s.InOutDate >= shiftFromDateTime && s.InOutDate <= shiftEndDateTime
                                  group s by true into r
                                  select new

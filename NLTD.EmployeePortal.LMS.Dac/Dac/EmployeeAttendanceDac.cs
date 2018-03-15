@@ -13,7 +13,7 @@ namespace NLTD.EmployeePortal.LMS.Dac.Dac
 
         }
 
-        public List<EmployeeAttendanceModel> GetAttendence(Int64 UserID)
+        public List<EmployeeAttendanceModel> GetAttendance(Int64 UserID)
         {
             List<EmployeeAttendanceModel> employeeAttendanceModelList = new List<EmployeeAttendanceModel>();
             try
@@ -39,7 +39,7 @@ namespace NLTD.EmployeePortal.LMS.Dac.Dac
         }
 
 
-        public List<EmployeeAttendanceModel> GetAttendenceForRange(Int64 UserID, DateTime FromDateTime, DateTime ToDateTime, string requestLevelPerson,bool isDirectEmployees)
+        public List<EmployeeAttendanceModel> GetAttendanceForRange(Int64 UserID, DateTime FromDateTime, DateTime ToDateTime, string requestLevelPerson,bool isDirectEmployees)
         {
             List<EmployeeAttendanceModel> employeeAttendanceModelList = new List<EmployeeAttendanceModel>();
             try

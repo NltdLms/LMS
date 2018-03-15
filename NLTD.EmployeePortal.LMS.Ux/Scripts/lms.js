@@ -1325,7 +1325,7 @@ function loadTransactionLog() {
 
 }
 
-function loadAttendenceRangeSummary() {
+function loadAttendanceRangeSummary() {
     $("#alert_placeholder").empty();
     try {
         $("#showalert").empty();
@@ -1339,10 +1339,10 @@ function loadAttendenceRangeSummary() {
         myDirectEmployees = $("#mydirectemployeecheck").is(':checked');
     }
     if ($("#RequestLevelPerson").val() === "My") {
-        URL = '/Admin/loadEmployeeAttendence?&FromDate=' + $('#FromDate').val() + '&ToDate=' + $('#ToDate').val() + '&requestLevelPerson=' + $('#RequestLevelPerson').val() + '&myDirectEmployees=' + myDirectEmployees;
+        URL = '/Admin/loadEmployeeAttendance?&FromDate=' + $('#FromDate').val() + '&ToDate=' + $('#ToDate').val() + '&requestLevelPerson=' + $('#RequestLevelPerson').val() + '&myDirectEmployees=' + myDirectEmployees;
     }
     else {
-        URL = '/Admin/loadEmployeeAttendence?ID=' + $("#UserID").val() + '&FromDate=' + $('#FromDate').val() + '&ToDate=' + $('#ToDate').val() + '&requestLevelPerson=' + $('#RequestLevelPerson').val() + '&myDirectEmployees=' + myDirectEmployees;
+        URL = '/Admin/loadEmployeeAttendance?ID=' + $("#UserID").val() + '&FromDate=' + $('#FromDate').val() + '&ToDate=' + $('#ToDate').val() + '&requestLevelPerson=' + $('#RequestLevelPerson').val() + '&myDirectEmployees=' + myDirectEmployees;
         if (!ValidateAutocompleteName($("#Name").val(), $("#UserID").val())) {
 
             Clearshowalert("Please Choose a valid Username from the List.", "alert alert-danger");
@@ -1350,13 +1350,13 @@ function loadAttendenceRangeSummary() {
         }
     }
     $("#divLoading").show();
-    $("#divForEmployeeAttendence")
+    $("#divForEmployeeAttendance")
         .load(URL,
         function (responseText, textStatus, req) {
             $("#divLoading").hide();
             if (textStatus == "error") {
                 Clearshowalert("No Records Found", "alert alert-danger");
-                $('#Attendencetable_id').DataTable().clear().destroy();
+                $('#Attendancetable_id').DataTable().clear().destroy();
             }
             else {
 
