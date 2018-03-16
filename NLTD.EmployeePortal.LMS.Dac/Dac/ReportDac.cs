@@ -12,9 +12,9 @@ namespace NLTD.EmployeePortal.LMS.Dac
     {
         int BeforeShiftBuffer = Convert.ToInt32(ConfigurationManager.AppSettings["BeforeShiftBuffer"]);
         int AfterShiftBuffer = Convert.ToInt32(ConfigurationManager.AppSettings["AfterShiftBuffer"]);
-        public List<LateAndEarltRpt> GetLateAndEarlyEmployees(DateTime FromDate, DateTime ToDate, Int64 UserId, bool OnlyReportedToMe)
+        public List<lateAndEarlyRpt> GetLateAndEarlyEmployees(DateTime FromDate, DateTime ToDate, Int64 UserId, bool OnlyReportedToMe)
         {
-            List<LateAndEarltRpt> lateAndEarltRpt = new List<LateAndEarltRpt>();
+            List<lateAndEarlyRpt> lateAndEarlyRpt = new List<lateAndEarlyRpt>();
 
             try
             {
@@ -45,7 +45,7 @@ namespace NLTD.EmployeePortal.LMS.Dac
             {
                 throw;
             }
-            return lateAndEarltRpt;
+            return lateAndEarlyRpt;
         }
 
         public List<NoOfLateInMonth> GetLateReport(Int64 UserID, DateTime FromDate, DateTime ToDate, bool myDirectEmployees)

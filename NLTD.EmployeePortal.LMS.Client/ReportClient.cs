@@ -8,7 +8,7 @@ namespace NLTD.EmployeePortal.LMS.Client
 {
     public class ReportClient : IReportHelper
     {
-        public List<LateAndEarltRpt> GetLateAndEarlyEmployees(DateTime FromDate, DateTime ToDate, Int64 UserId, bool OnlyReportedToMe)
+        public List<lateAndEarlyRpt> GetLateAndEarlyEmployees(DateTime FromDate, DateTime ToDate, Int64 UserId, bool OnlyReportedToMe)
         {
             using (IReportHelper helper = new ReportHelper())
             {
