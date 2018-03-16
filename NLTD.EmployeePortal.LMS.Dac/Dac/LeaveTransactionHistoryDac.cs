@@ -140,7 +140,7 @@ namespace NLTD.EmployeePortal.LMS.Dac.Dac
             return transactionDetails;
         }
 
-        public List<EmployeeLeave> GetLeaveForEmployee(Int64 UserID)
+        public List<EmployeeLeave> GetLeaveForEmployee(Int64 UserID, DateTime FromDate, DateTime ToDate)
         {
             List<EmployeeLeave> leaveList = new List<EmployeeLeave>();
             LeaveDac lv = new LeaveDac();
@@ -151,8 +151,8 @@ namespace NLTD.EmployeePortal.LMS.Dac.Dac
                     leaveList = (from l in context.Leave
                                  join lt in context.LeaveType on l.LeaveTypeId equals lt.LeaveTypeId
                                  join ld in context.LeaveDetail on l.LeaveId equals ld.LeaveId
-                                 where l.UserId == UserID && l.Status == "A" && ld.IsDayOff == false
-                                 select new EmployeeLeave
+                                 where l.UserId == UserID && l.Status == "A" && ld.IsDayOff == false && ld.LeaveDate >= FromDate && ld.LeaveDate <= ToDate
+                                 select new EmployeeLeave 
                                  {
                                      UserId = l.UserId,
                                      StartDate = ld.LeaveDate,
@@ -165,7 +165,7 @@ namespace NLTD.EmployeePortal.LMS.Dac.Dac
                     List<EmployeeLeave> PermissionList = (from l in context.Leave
                                                           join lt in context.LeaveType on l.LeaveTypeId equals lt.LeaveTypeId
                                                           join ld in context.PermissionDetail on l.LeaveId equals ld.LeaveId
-                                                          where l.UserId == UserID && l.Status == "A"
+                                                          where l.UserId == UserID && l.Status == "A" && ld.PermissionDate >= FromDate && ld.PermissionDate <= ToDate
                                                           select new EmployeeLeave
                                                           {
                                                               UserId = l.UserId,

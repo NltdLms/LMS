@@ -132,6 +132,10 @@ namespace NLTD.EmployeePortal.LMS.Dac.Dac
             OfficeHolidayDac officeHolidayDacObj = new OfficeHolidayDac();
             List<OfficeHoliday> officeHolidayList = officeHolidayDacObj.GetOfficeHoliday(UserID);
 
+            // To get the employee Leave Details
+            LeaveTransactionHistoryDac leaveTransactionHistoryDacObj = new LeaveTransactionHistoryDac();
+            List<EmployeeLeave> employeeLeaveList = leaveTransactionHistoryDacObj.GetLeaveForEmployee(UserID, FromDate, ToDate);
+
             for (int i = 0; i < ShiftQueryModelList.Count(); i++)
             {
                 TimeSheetModel TimeSheetModelObj = new TimeSheetModel();
@@ -184,20 +188,16 @@ namespace NLTD.EmployeePortal.LMS.Dac.Dac
                 else// If no record found in the employee for the given date 
                 {
                     // Get Absent Details 
-                    TimeSheetModelObj.Status = GetAbsentStatus(ShiftQueryModelList[i].ShiftDate, officeWeekOffDayList,
-           officeHolidayList);
+                    TimeSheetModelObj.Status = GetAbsentStatus(ShiftQueryModelList[i].ShiftDate, officeWeekOffDayList, officeHolidayList);
                 }
                 decimal LeaveDayQty = 0;
                 decimal PermissionCount = 0;
-                // To get the employee Leave Details
-                LeaveTransactionHistoryDac leaveTransactionHistoryDacObj = new LeaveTransactionHistoryDac();
-                List<EmployeeLeave> employeeLeaveList = leaveTransactionHistoryDacObj.GetLeaveForEmployee(UserID);
 
+                // To get the employee Leave Details
                 TimeSheetModelObj.Requests = GetLMSStatus(employeeLeaveList, ShiftQueryModelList[i].ShiftDate, out LeaveDayQty, out PermissionCount);
                 TimeSheetModelObj.LeaveDayQty = LeaveDayQty;
                 TimeSheetModelObj.permissionCount = PermissionCount;
                 timeSheetModelList.Add(TimeSheetModelObj);
-
             }
 
             return timeSheetModelList.OrderByDescending(m => m.WorkingDate).ToList();
