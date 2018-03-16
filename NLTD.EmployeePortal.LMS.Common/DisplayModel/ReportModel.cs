@@ -2,7 +2,7 @@
 
 namespace NLTD.EmployeePortal.LMS.Common.DisplayModel
 {
-    public class LateAndEarltRpt
+    public class lateAndEarlyRpt
     {
         public string Name { get; set; }
         public Int64? UserID { get; set; }

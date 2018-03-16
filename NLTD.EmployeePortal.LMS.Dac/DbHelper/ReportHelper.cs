@@ -12,7 +12,7 @@ namespace NLTD.EmployeePortal.LMS.Dac.DbHelper
             //Nothing to dispose...
         }
 
-        public List<LateAndEarltRpt> GetLateAndEarlyEmployees(DateTime FromDate, DateTime ToDate, Int64 UserId, bool OnlyReportedToMe)
+        public List<lateAndEarlyRpt> GetLateAndEarlyEmployees(DateTime FromDate, DateTime ToDate, Int64 UserId, bool OnlyReportedToMe)
         {
             using (var dac = new ReportDac())
             {

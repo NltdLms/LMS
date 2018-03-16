@@ -27,7 +27,7 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
 
         public ActionResult loadLateAndEarlyRpt(string Name, string FromDate, string ToDate, bool IsLeaveOnly, bool OnlyReportedToMe, string reqUsr, bool DonotShowRejected)
         {
-            List<TimeSheetModel> lateAndEarltRpt = null;
+            List<TimeSheetModel> lateAndEarlyRpt = null;
 
             if (Name != "")
             {
@@ -60,14 +60,14 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
 
                 if (UserID > 0)
                 {
-                    lateAndEarltRpt = EmployeeAttendanceHelperObj.GetMyTimeSheet(UserID, startDateFormatted, endDateFormatted);
+                    lateAndEarlyRpt = EmployeeAttendanceHelperObj.GetMyTimeSheet(UserID, startDateFormatted, endDateFormatted);
                 }
             }
             else
             {
-                lateAndEarltRpt = EmployeeAttendanceHelperObj.GetMyTeamTimeSheet(this.UserId, startDateFormatted, endDateFormatted, OnlyReportedToMe);
+                lateAndEarlyRpt = EmployeeAttendanceHelperObj.GetMyTeamTimeSheet(this.UserId, startDateFormatted, endDateFormatted, OnlyReportedToMe);
             }
-            return PartialView("ShiftBasedLateAndEarlyRptPartial", lateAndEarltRpt);
+            return PartialView("ShiftBasedLateAndEarlyRptPartial", lateAndEarlyRpt);
         }
 
         public ActionResult NoOfLateReportRpt()
@@ -114,7 +114,7 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
 
             //    if (UserID > 0)
             //    {
-            //        lateAndEarltRpt = EmployeeAttendanceHelperObj.GetMyTimeSheet(UserID, startDateFormatted, endDateFormatted);
+            //        lateAndEarlyRpt = EmployeeAttendanceHelperObj.GetMyTimeSheet(UserID, startDateFormatted, endDateFormatted);
             //    }
             //}
             //else
