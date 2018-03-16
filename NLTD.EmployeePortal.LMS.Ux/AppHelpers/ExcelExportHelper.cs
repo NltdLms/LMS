@@ -849,7 +849,7 @@ namespace NLTD.EmployeePortal.LMS.Ux.AppHelpers
                     }
                     if(i== timeSheet.Count-1 && timeSheet[i].WorkingDate.ToString("ddd") != "Mon")
                     {
-                        weeklyConsolidateReport.DateRange = string.Format("{0} to {1}", timeSheet[i].WorkingDate.ToString("dd/MM/yyyy"), monthlyFromDate.ToString("dd/MM/yyyy"));
+                        weeklyConsolidateReport.DateRange = string.Format("{0} to {1}", timeSheet[i].WorkingDate.ToString("dd/MM/yyyy"), weeklyFromDate.ToString("dd/MM/yyyy"));
                         weeklyConsolidateReport.Name = timeSheet[i].Name;
                         weeklyConsolidateReport.TotalWorkingHours = GetWorkingHours(weeklyConsolidateReport.WorkingHours);
                         weeklyTimeSheetConsolidateList.Add(weeklyConsolidateReport);
