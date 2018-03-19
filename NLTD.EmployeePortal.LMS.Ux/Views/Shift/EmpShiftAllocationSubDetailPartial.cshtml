@@ -8,6 +8,9 @@
                 @Html.DisplayName("Shift Date")
             </th>
             <th>
+                @Html.DisplayName("Shift Day")
+            </th>
+            <th>
                 @Html.DisplayName("Start Time")
             </th>
             <th>
@@ -27,6 +30,9 @@
             <tr>
                 <td>
                     @Html.DisplayFor(modelItem => ShiftDate)
+                </td>
+                <td>
+                    @item.ShiftDate.DayOfWeek
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => FromTime)
