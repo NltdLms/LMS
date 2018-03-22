@@ -226,12 +226,13 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
                                 try
                                 {                                    
                                     EmailHelper emailHelper = new EmailHelper();
-#if DEBUG
                                     emailHelper.SendEmail(Convert.ToInt64(result.Substring(6)), "Applied");
-#else
+//#if DEBUG
+//                                    emailHelper.SendEmail(Convert.ToInt64(result.Substring(6)), "Applied");
+//#else
 
-                                    BackgroundJob.Enqueue(() => emailHelper.SendEmail(Convert.ToInt64(result.Substring(6)), "Applied"));
-#endif
+//                                    //BackgroundJob.Enqueue(() => emailHelper.SendEmail(Convert.ToInt64(result.Substring(6)), "Applied"));
+//#endif
                                 }
                                 catch
                                 {
@@ -418,11 +419,12 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
                     try
                     {
                         EmailHelper emailHelp = new EmailHelper();
-#if DEBUG
                         emailHelp.SendEmail(Convert.ToInt64(obj.LeaveId), action);
-#else
-                        BackgroundJob.Enqueue(() => emailHelp.SendEmail(Convert.ToInt64(obj.LeaveId), action));
-#endif
+//#if DEBUG
+//                        emailHelp.SendEmail(Convert.ToInt64(obj.LeaveId), action);
+//#else
+//                        BackgroundJob.Enqueue(() => emailHelp.SendEmail(Convert.ToInt64(obj.LeaveId), action));
+//#endif
                     }
                     catch
                     {

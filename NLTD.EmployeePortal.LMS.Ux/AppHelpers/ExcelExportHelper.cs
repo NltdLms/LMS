@@ -727,12 +727,12 @@ namespace NLTD.EmployeePortal.LMS.Ux.AppHelpers
                 }
                 using (ExcelRange col = workSheet.Cells[2, 6, 1 + dataTable.Rows.Count, 8])
                 {
-                    col.Style.Numberformat.Format = "hh:mm:ss";
+                    col.Style.Numberformat.Format = "HH:mm:ss";
                     col.Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
                 }
                 using (ExcelRange col = workSheet.Cells[2, 11, 1 + dataTable.Rows.Count, 12])
                 {
-                    col.Style.Numberformat.Format = "hh:mm:ss";
+                    col.Style.Numberformat.Format = "HH:mm:ss";
                     col.Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
                 }
                 if (!String.IsNullOrEmpty(heading))
@@ -904,7 +904,7 @@ namespace NLTD.EmployeePortal.LMS.Ux.AppHelpers
             // Formating Working Hours 
             using (ExcelRange col = workSheet.Cells[2, 4, 1 + dataTable.Rows.Count, 4])
             {
-                col.Style.Numberformat.Format = "hh:mm:ss";
+                col.Style.Numberformat.Format = "HH:mm:ss";
                 col.Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
             }
             string[] columnsToRemove = { "WorkingHours", "FromDate" };
@@ -1048,7 +1048,7 @@ namespace NLTD.EmployeePortal.LMS.Ux.AppHelpers
                 //}
                 //using (ExcelRange col = workSheet.Cells[2, 5, 1 + dataTable.Rows.Count, 7])
                 //{
-                //    col.Style.Numberformat.Format = "hh:mm:ss";
+                //    col.Style.Numberformat.Format = "HH:mm:ss";
                 //    col.Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
                 //}
                 if (!String.IsNullOrEmpty(heading))

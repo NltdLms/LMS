@@ -158,7 +158,7 @@ namespace NLTD.EmployeePortal.LMS.Ux.AppHelpers
         {
             try
             {
-                string message = string.Format("Time: {0}", DateTime.Now.ToString("dd/MM/yyyy hh:mm:ss tt"));
+                string message = string.Format("Time: {0}", DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss tt"));
                 message += Environment.NewLine;
                 message += "Leave ID:" + leaveId;
                 message += Environment.NewLine;
