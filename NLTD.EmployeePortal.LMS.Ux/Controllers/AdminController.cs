@@ -636,7 +636,7 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
             List<TimeSheetModel> excelData = timeSheetModelList.ToList();
             if (excelData.Count > 0)
             {
-                List<string> columns = new List<string>(){ "Date", "Shift", "In Time", "Out Time", "Working Hours", "Status", "Requests", "Day", "Late In", "Early Out", "Name" };
+                List<string> columns = new List<string>(){ "Date", "Shift", "In Time", "Out Time", "Working Hours", "Status", "Requests", "Day", "Late In", "Early Out", "Name", "Reporting Manager" };
                 string fileName = string.Format("Timesheet_{0}{1}", DateTime.Now.ToString("ddMMyyyyHHmmss"), ".xlsx");
 
                 //if (RequestLevelPerson == "My")
