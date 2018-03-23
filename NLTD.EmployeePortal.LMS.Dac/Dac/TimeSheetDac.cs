@@ -119,9 +119,11 @@ namespace NLTD.EmployeePortal.LMS.Dac.Dac
             // To Get the Employee name
             EmployeeProfile EmployeeProfileObj = new EmployeeDac().GetEmployeeProfile(UserID);
             string name = string.Empty;
+            string reportingManager = string.Empty;
             if (EmployeeProfileObj != null)
             {
                 name = EmployeeProfileObj.FirstName + ' ' + EmployeeProfileObj.LastName;
+                reportingManager = EmployeeProfileObj.ReportedToName;
             }
 
             // To get the employee week off Days
@@ -150,6 +152,7 @@ namespace NLTD.EmployeePortal.LMS.Dac.Dac
                 TimeSheetModelObj.Shift = ShiftQueryModelList[i].ShiftFromtime.ToString(@"hh\:mm") + '-' + ShiftQueryModelList[i].ShiftTotime.ToString(@"hh\:mm");
                 TimeSheetModelObj.userID = UserID;
                 TimeSheetModelObj.Name = name;
+                TimeSheetModelObj.ReportingManager = reportingManager;
                 TimeSheetModelObj.WorkingDate = ShiftQueryModelList[i].ShiftDate;
                 // Linq query to find the min and max for the given date
                 var maxmin = from s in EmployeeAttendanceList
@@ -191,12 +194,12 @@ namespace NLTD.EmployeePortal.LMS.Dac.Dac
                     TimeSheetModelObj.Status = GetAbsentStatus(ShiftQueryModelList[i].ShiftDate, officeWeekOffDayList, officeHolidayList);
                 }
                 decimal LeaveDayQty = 0;
-                decimal PermissionCount = 0;
+                decimal permissionCount = 0;
 
                 // To get the employee Leave Details
-                TimeSheetModelObj.Requests = GetLMSStatus(employeeLeaveList, ShiftQueryModelList[i].ShiftDate, out LeaveDayQty, out PermissionCount);
+                TimeSheetModelObj.Requests = GetLMSStatus(employeeLeaveList, ShiftQueryModelList[i].ShiftDate, out LeaveDayQty, out permissionCount);
                 TimeSheetModelObj.LeaveDayQty = LeaveDayQty;
-                TimeSheetModelObj.permissionCount = PermissionCount;
+                TimeSheetModelObj.PermissionCount = permissionCount;
                 timeSheetModelList.Add(TimeSheetModelObj);
             }
 
@@ -244,12 +247,12 @@ namespace NLTD.EmployeePortal.LMS.Dac.Dac
             {
                 if (employeeLeaveList.Count > 0)
                 {
-                 var  Status = (from e in employeeLeaveList where statusDate >= e.StartDate && statusDate <= e.EndDate select new { e.LeaveType, e.LeaveDayQty,e.permissionCount });
+                 var  Status = (from e in employeeLeaveList where statusDate >= e.StartDate && statusDate <= e.EndDate select new { e.LeaveType, e.LeaveDayQty,e.PermissionCount });
                     if(Status != null && Status.Count() > 0)
                     {
                         LMSStatus = string.Join(", ", Status.Select(p => p.LeaveType));
                         LeaveDayQty = Status.Sum(p => p.LeaveDayQty);
-                        PermissionCount = Status.Sum(p => p.permissionCount);
+                        PermissionCount = Status.Sum(p => p.PermissionCount);
                     }
                     
                 }
@@ -286,6 +289,6 @@ namespace NLTD.EmployeePortal.LMS.Dac.Dac
         public string TimeFrom { get; set; }
         public string TimeTo { get; set; }
 
-        public decimal permissionCount { get; set; }
+        public decimal PermissionCount { get; set; }
     }
 }

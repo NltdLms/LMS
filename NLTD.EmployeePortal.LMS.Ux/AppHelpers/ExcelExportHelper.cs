@@ -645,6 +645,7 @@ namespace NLTD.EmployeePortal.LMS.Ux.AppHelpers
             {
                 DataTable dataTable = ListToDataTable<TimeSheetModel>(TimeSheetModelObj);
                 dataTable.Columns["WorkingDate"].ColumnName = "Date";
+                dataTable.Columns["ReportingManager"].ColumnName = "Reporting Manager";
                 dataTable.Columns["InTime"].ColumnName = "In Time";
                 dataTable.Columns["OutTime"].ColumnName = "Out Time";
                 dataTable.Columns["WorkingHours"].ColumnName = "Working Hours";
@@ -758,6 +759,7 @@ namespace NLTD.EmployeePortal.LMS.Ux.AppHelpers
                 dataTable.Columns["LateCount"].ColumnName = "No. Of Late In";
                 dataTable.Columns["WorkFromHomeCount"].ColumnName = "No. Of Work From Home";
                 dataTable.Columns["EarlyCount"].ColumnName = "No. Of Early out";
+                dataTable.Columns["ReportingManager"].ColumnName = "Reporting Manager";
                 workSheet = package.Workbook.Worksheets.Add("Summary");
                 startRowFrom = String.IsNullOrEmpty(heading) ? 1 : 3;
                 if (showSrNo)
@@ -833,6 +835,7 @@ namespace NLTD.EmployeePortal.LMS.Ux.AppHelpers
 
                         weeklyConsolidateReport.DateRange = string.Format("{0} to {1}", timeSheet[i].WorkingDate.ToString("dd/MM/yyyy"), weeklyFromDate.ToString("dd/MM/yyyy"));
                         weeklyConsolidateReport.Name = timeSheet[i].Name;
+                        weeklyConsolidateReport.ReportingManager = timeSheet[i].ReportingManager;
                         weeklyConsolidateReport.TotalWorkingHours = GetWorkingHours(weeklyConsolidateReport.WorkingHours);
                         weeklyTimeSheetConsolidateList.Add(weeklyConsolidateReport);
                         weeklyConsolidateReport = new ConsolidateReport();
@@ -842,6 +845,7 @@ namespace NLTD.EmployeePortal.LMS.Ux.AppHelpers
                     {
                         monthlyConsolidateReport.DateRange = string.Format("{0} to {1}", timeSheet[i].WorkingDate.ToString("dd/MM/yyyy"), monthlyFromDate.ToString("dd/MM/yyyy"));
                         monthlyConsolidateReport.Name = timeSheet[i].Name;
+                        monthlyConsolidateReport.ReportingManager = timeSheet[i].ReportingManager;
                         monthlyConsolidateReport.TotalWorkingHours = GetWorkingHours(monthlyConsolidateReport.WorkingHours);
                         monthlyTimeSheetConsolidateList.Add(monthlyConsolidateReport);
                         monthlyConsolidateReport = new ConsolidateReport();
@@ -851,6 +855,7 @@ namespace NLTD.EmployeePortal.LMS.Ux.AppHelpers
                     {
                         weeklyConsolidateReport.DateRange = string.Format("{0} to {1}", timeSheet[i].WorkingDate.ToString("dd/MM/yyyy"), weeklyFromDate.ToString("dd/MM/yyyy"));
                         weeklyConsolidateReport.Name = timeSheet[i].Name;
+                        weeklyConsolidateReport.ReportingManager = timeSheet[i].ReportingManager;
                         weeklyConsolidateReport.TotalWorkingHours = GetWorkingHours(weeklyConsolidateReport.WorkingHours);
                         weeklyTimeSheetConsolidateList.Add(weeklyConsolidateReport);
                     }
@@ -858,6 +863,7 @@ namespace NLTD.EmployeePortal.LMS.Ux.AppHelpers
                     {
                         monthlyConsolidateReport.DateRange = string.Format("{0} to {1}", timeSheet[i].WorkingDate.ToString("dd/MM/yyyy"), monthlyFromDate.ToString("dd/MM/yyyy"));
                         monthlyConsolidateReport.Name = timeSheet[i].Name;
+                        monthlyConsolidateReport.ReportingManager = timeSheet[i].ReportingManager;
                         monthlyConsolidateReport.TotalWorkingHours = GetWorkingHours(monthlyConsolidateReport.WorkingHours);
                         monthlyTimeSheetConsolidateList.Add(monthlyConsolidateReport);
                     }
@@ -936,7 +942,7 @@ namespace NLTD.EmployeePortal.LMS.Ux.AppHelpers
             if (!string.IsNullOrEmpty(TimeSheetModelObj.Requests) &&
                     TimeSheetModelObj.Requests.Contains("Permission"))
             {
-                TimeSheetConsolidateObj.PermissionCount = TimeSheetConsolidateObj.PermissionCount + TimeSheetModelObj.permissionCount;
+                TimeSheetConsolidateObj.PermissionCount = TimeSheetConsolidateObj.PermissionCount + TimeSheetModelObj.PermissionCount;
             }
             if (!string.IsNullOrEmpty(TimeSheetModelObj.Requests) && TimeSheetModelObj.Requests.Contains("Leave"))
             {
@@ -1083,9 +1089,10 @@ namespace NLTD.EmployeePortal.LMS.Ux.AppHelpers
         public decimal PermissionCount { get; set; }
         public int LateCount { get; set; }
         public int EarlyCount { get; set; }
-
-       
+               
         public DateTime FromDate { get; set; }
+
+        public string ReportingManager { get; set; }
 
     }
 
