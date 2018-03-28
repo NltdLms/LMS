@@ -393,63 +393,75 @@ namespace NLTD.EmployeePortal.LMS.Ux.AppHelpers
 
                 workSheet.Cells["C2"].Value = "CL/SL";
                 workSheet.Cells["D2"].Value = "EL";
-                workSheet.Cells["E2"].Value = "LWP";
-                workSheet.Cells["F2"].Value = "CompOff";;
+                workSheet.Cells["E2"].Value = "Debit";
+                workSheet.Cells["F2"].Value = "LWP";
+                workSheet.Cells["G2"].Value = "CompOff";;
 
-                workSheet.Cells["G2"].Value = "CL/SL";
-                workSheet.Cells["H2"].Value = "EL";
-                workSheet.Cells["I2"].Value = "LWP";
-                workSheet.Cells["J2"].Value = "CompOff";;
+                workSheet.Cells["H2"].Value = "CL/SL";
+                workSheet.Cells["I2"].Value = "EL";
+                workSheet.Cells["J2"].Value = "Debit";
+                workSheet.Cells["K2"].Value = "LWP";
+                workSheet.Cells["L2"].Value = "CompOff";;
 
-                workSheet.Cells["K2"].Value = "CL/SL";
-                workSheet.Cells["L2"].Value = "EL";
-                workSheet.Cells["M2"].Value = "LWP";
-                workSheet.Cells["N2"].Value = "CompOff";;
+                workSheet.Cells["M2"].Value = "CL/SL";
+                workSheet.Cells["N2"].Value = "EL";
+                workSheet.Cells["O2"].Value = "Debit";
+                workSheet.Cells["P2"].Value = "LWP";
+                workSheet.Cells["Q2"].Value = "CompOff";;
 
-                workSheet.Cells["O2"].Value = "CL/SL";
-                workSheet.Cells["P2"].Value = "EL";
-                workSheet.Cells["Q2"].Value = "LWP";
-                workSheet.Cells["R2"].Value = "CompOff";;
-
-                workSheet.Cells["S2"].Value = "CL/SL";
-                workSheet.Cells["T2"].Value = "EL";
+                workSheet.Cells["R2"].Value = "CL/SL";
+                workSheet.Cells["S2"].Value = "EL";
+                workSheet.Cells["T2"].Value = "Debit";
                 workSheet.Cells["U2"].Value = "LWP";
                 workSheet.Cells["V2"].Value = "CompOff";;
 
                 workSheet.Cells["W2"].Value = "CL/SL";
                 workSheet.Cells["X2"].Value = "EL";
-                workSheet.Cells["Y2"].Value = "LWP";
-                workSheet.Cells["Z2"].Value = "CompOff";;
+                workSheet.Cells["Y2"].Value = "Debit";
+                workSheet.Cells["Z2"].Value = "LWP";
+                workSheet.Cells["AA2"].Value = "CompOff";;
 
-                workSheet.Cells["AA2"].Value = "CL/SL";
-                workSheet.Cells["AB2"].Value = "EL";
-                workSheet.Cells["AC2"].Value = "LWP";
-                workSheet.Cells["AD2"].Value = "CompOff";;
+                workSheet.Cells["AB2"].Value = "CL/SL";
+                workSheet.Cells["AC2"].Value = "EL";
+                workSheet.Cells["AD2"].Value = "Debit";
+                workSheet.Cells["AE2"].Value = "LWP";
+                workSheet.Cells["AF2"].Value = "CompOff";;
 
-                workSheet.Cells["AE2"].Value = "CL/SL";
-                workSheet.Cells["AF2"].Value = "EL";
-                workSheet.Cells["AG2"].Value = "LWP";
-                workSheet.Cells["AH2"].Value = "CompOff";;
+                workSheet.Cells["AG2"].Value = "CL/SL";
+                workSheet.Cells["AH2"].Value = "EL";
+                workSheet.Cells["AI2"].Value = "Debit";
+                workSheet.Cells["AJ2"].Value = "LWP";
+                workSheet.Cells["AK2"].Value = "CompOff";;
 
-                workSheet.Cells["AI2"].Value = "CL/SL";
-                workSheet.Cells["AJ2"].Value = "EL";
-                workSheet.Cells["AK2"].Value = "LWP";
-                workSheet.Cells["AL2"].Value = "CompOff";;
-
-                workSheet.Cells["AM2"].Value = "CL/SL";
-                workSheet.Cells["AN2"].Value = "EL";
+                workSheet.Cells["AL2"].Value = "CL/SL";
+                workSheet.Cells["AM2"].Value = "EL";
+                workSheet.Cells["AN2"].Value = "Debit";
                 workSheet.Cells["AO2"].Value = "LWP";
                 workSheet.Cells["AP2"].Value = "CompOff";;
 
                 workSheet.Cells["AQ2"].Value = "CL/SL";
                 workSheet.Cells["AR2"].Value = "EL";
-                workSheet.Cells["AS2"].Value = "LWP";
-                workSheet.Cells["AT2"].Value = "CompOff";;
+                workSheet.Cells["AS2"].Value = "Debit";
+                workSheet.Cells["AT2"].Value = "LWP";
+                workSheet.Cells["AU2"].Value = "CompOff";;
 
-                workSheet.Cells["AU2"].Value = "CL/SL";
-                workSheet.Cells["AV2"].Value = "EL";
-                workSheet.Cells["AW2"].Value = "LWP";
-                workSheet.Cells["AX2"].Value = "CompOff";;
+                workSheet.Cells["AV2"].Value = "CL/SL";
+                workSheet.Cells["AW2"].Value = "EL";
+                workSheet.Cells["AX2"].Value = "Debit";
+                workSheet.Cells["AY2"].Value = "LWP";
+                workSheet.Cells["AZ2"].Value = "CompOff";;
+
+                workSheet.Cells["BA2"].Value = "CL/SL";
+                workSheet.Cells["BB2"].Value = "EL";
+                workSheet.Cells["BC2"].Value = "Debit";
+                workSheet.Cells["BD2"].Value = "LWP";
+                workSheet.Cells["BE2"].Value = "CompOff";;
+
+                workSheet.Cells["BF2"].Value = "CL/SL";
+                workSheet.Cells["BG2"].Value = "EL";
+                workSheet.Cells["BH2"].Value = "Debit";
+                workSheet.Cells["BI2"].Value = "LWP";
+                workSheet.Cells["BJ2"].Value = "CompOff";;
 
 
                 workSheet.Cells["A" + startRowFrom].LoadFromDataTable(dataTable, false);
@@ -470,91 +482,89 @@ namespace NLTD.EmployeePortal.LMS.Ux.AppHelpers
                 }
 
 
-                workSheet.Cells[1, 3, 1, 6].Merge = true;
-                workSheet.Cells[1, 1, 1, 6].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
-                workSheet.Cells[1, 3, 1, 6].Value = "January";
-                workSheet.Cells[1, 3, 1, 6].Style.Font.Bold = true;
-                //                workSheet.Cells[1, 3, 1, 6].Style.Border.BorderAround(ExcelBorderStyle.Thick);
-                workSheet.Cells[1, 3, 1, 6].Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
-                workSheet.Cells[1, 3, 1, 6].Style.Fill.BackgroundColor.SetColor(System.Drawing.ColorTranslator.FromHtml("#ffff00"));
+                workSheet.Cells[1, 3, 1, 7].Merge = true;
+                workSheet.Cells[1, 3, 1, 7].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                workSheet.Cells[1, 3, 1, 7].Value = "January";
+                workSheet.Cells[1, 3, 1, 7].Style.Font.Bold = true;
+                workSheet.Cells[1, 3, 1, 7].Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
+                workSheet.Cells[1, 3, 1, 7].Style.Fill.BackgroundColor.SetColor(System.Drawing.ColorTranslator.FromHtml("#ffff00"));
 
-                workSheet.Cells[1, 7, 1, 10].Merge = true;
-                workSheet.Cells[1, 7, 1, 10].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
-                workSheet.Cells[1, 7, 1, 10].Value = "February";
-                workSheet.Cells[1, 7, 1, 10].Style.Font.Bold = true;
-                //                workSheet.Cells[1, 7, 1, 10].Style.Border.BorderAround(ExcelBorderStyle.Thick);
-                workSheet.Cells[1, 7, 1, 10].Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
-                workSheet.Cells[1, 7, 1, 10].Style.Fill.BackgroundColor.SetColor(System.Drawing.ColorTranslator.FromHtml("#ffff00"));
+                workSheet.Cells[1, 8, 1, 12].Merge = true;
+                workSheet.Cells[1, 8, 1, 12].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                workSheet.Cells[1, 8, 1, 12].Value = "February";
+                workSheet.Cells[1, 8, 1, 12].Style.Font.Bold = true;
+                workSheet.Cells[1, 8, 1, 12].Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
+                workSheet.Cells[1, 8, 1, 12].Style.Fill.BackgroundColor.SetColor(System.Drawing.ColorTranslator.FromHtml("#ffff00"));
 
-                workSheet.Cells[1, 11, 1, 14].Merge = true;
-                workSheet.Cells[1, 11, 1, 14].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
-                workSheet.Cells[1, 11, 1, 14].Value = "March";
-                workSheet.Cells[1, 11, 1, 14].Style.Font.Bold = true;
-                workSheet.Cells[1, 11, 1, 14].Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
-                workSheet.Cells[1, 11, 1, 14].Style.Fill.BackgroundColor.SetColor(System.Drawing.ColorTranslator.FromHtml("#ffff00"));
+                workSheet.Cells[1, 13, 1, 17].Merge = true;
+                workSheet.Cells[1, 13, 1, 17].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                workSheet.Cells[1, 13, 1, 17].Value = "March";
+                workSheet.Cells[1, 13, 1, 17].Style.Font.Bold = true;
+                workSheet.Cells[1, 13, 1, 17].Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
+                workSheet.Cells[1, 13, 1, 17].Style.Fill.BackgroundColor.SetColor(System.Drawing.ColorTranslator.FromHtml("#ffff00"));
 
-                workSheet.Cells[1, 15, 1, 18].Merge = true;
-                workSheet.Cells[1, 15, 1, 18].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
-                workSheet.Cells[1, 15, 1, 18].Value = "April";
-                workSheet.Cells[1, 15, 1, 18].Style.Font.Bold = true;
-                workSheet.Cells[1, 15, 1, 18].Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
-                workSheet.Cells[1, 15, 1, 18].Style.Fill.BackgroundColor.SetColor(System.Drawing.ColorTranslator.FromHtml("#ffff00"));
+                workSheet.Cells[1, 18, 1, 22].Merge = true;
+                workSheet.Cells[1, 18, 1, 22].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                workSheet.Cells[1, 18, 1, 22].Value = "April";
+                workSheet.Cells[1, 18, 1, 22].Style.Font.Bold = true;
+                workSheet.Cells[1, 18, 1, 22].Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
+                workSheet.Cells[1, 18, 1, 22].Style.Fill.BackgroundColor.SetColor(System.Drawing.ColorTranslator.FromHtml("#ffff00"));
 
-                workSheet.Cells[1, 19, 1, 22].Merge = true;
-                workSheet.Cells[1, 19, 1, 22].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
-                workSheet.Cells[1, 19, 1, 22].Value = "May";
-                workSheet.Cells[1, 19, 1, 22].Style.Font.Bold = true;
-                workSheet.Cells[1, 19, 1, 22].Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
-                workSheet.Cells[1, 19, 1, 22].Style.Fill.BackgroundColor.SetColor(System.Drawing.ColorTranslator.FromHtml("#ffff00"));
+                workSheet.Cells[1, 23, 1, 27].Merge = true;
+                workSheet.Cells[1, 23, 1, 27].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                workSheet.Cells[1, 23, 1, 27].Value = "May";
+                workSheet.Cells[1, 23, 1, 27].Style.Font.Bold = true;
+                workSheet.Cells[1, 23, 1, 27].Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
+                workSheet.Cells[1, 23, 1, 27].Style.Fill.BackgroundColor.SetColor(System.Drawing.ColorTranslator.FromHtml("#ffff00"));
 
-                workSheet.Cells[1, 23, 1, 26].Merge = true;
-                workSheet.Cells[1, 23, 1, 26].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
-                workSheet.Cells[1, 23, 1, 26].Value = "June";
-                workSheet.Cells[1, 23, 1, 26].Style.Font.Bold = true;
-                workSheet.Cells[1, 23, 1, 26].Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
-                workSheet.Cells[1, 23, 1, 26].Style.Fill.BackgroundColor.SetColor(System.Drawing.ColorTranslator.FromHtml("#ffff00"));
+                workSheet.Cells[1, 28, 1, 32].Merge = true;
+                workSheet.Cells[1, 28, 1, 32].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                workSheet.Cells[1, 28, 1, 32].Value = "June";
+                workSheet.Cells[1, 28, 1, 32].Style.Font.Bold = true;
+                workSheet.Cells[1, 28, 1, 32].Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
+                workSheet.Cells[1, 28, 1, 32].Style.Fill.BackgroundColor.SetColor(System.Drawing.ColorTranslator.FromHtml("#ffff00"));
 
-                workSheet.Cells[1, 27, 1, 30].Merge = true;
-                workSheet.Cells[1, 27, 1, 30].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
-                workSheet.Cells[1, 27, 1, 30].Value = "July";
-                workSheet.Cells[1, 27, 1, 30].Style.Font.Bold = true;
-                workSheet.Cells[1, 27, 1, 30].Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
-                workSheet.Cells[1, 27, 1, 30].Style.Fill.BackgroundColor.SetColor(System.Drawing.ColorTranslator.FromHtml("#ffff00"));
+                workSheet.Cells[1, 33, 1, 37].Merge = true;
+                workSheet.Cells[1, 33, 1, 37].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                workSheet.Cells[1, 33, 1, 37].Value = "July";
+                workSheet.Cells[1, 33, 1, 37].Style.Font.Bold = true;
+                workSheet.Cells[1, 33, 1, 37].Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
+                workSheet.Cells[1, 33, 1, 37].Style.Fill.BackgroundColor.SetColor(System.Drawing.ColorTranslator.FromHtml("#ffff00"));
 
-                workSheet.Cells[1, 31, 1, 34].Merge = true;
-                workSheet.Cells[1, 31, 1, 34].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
-                workSheet.Cells[1, 31, 1, 34].Value = "August";
-                workSheet.Cells[1, 31, 1, 34].Style.Font.Bold = true;
-                workSheet.Cells[1, 31, 1, 34].Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
-                workSheet.Cells[1, 31, 1, 34].Style.Fill.BackgroundColor.SetColor(System.Drawing.ColorTranslator.FromHtml("#ffff00"));
+                workSheet.Cells[1, 38, 1, 42].Merge = true;
+                workSheet.Cells[1, 38, 1, 42].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                workSheet.Cells[1, 38, 1, 42].Value = "August";
+                workSheet.Cells[1, 38, 1, 42].Style.Font.Bold = true;
+                workSheet.Cells[1, 38, 1, 42].Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
+                workSheet.Cells[1, 38, 1, 42].Style.Fill.BackgroundColor.SetColor(System.Drawing.ColorTranslator.FromHtml("#ffff00"));
 
-                workSheet.Cells[1, 35, 1, 38].Merge = true;
-                workSheet.Cells[1, 35, 1, 38].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
-                workSheet.Cells[1, 35, 1, 38].Value = "September";
-                workSheet.Cells[1, 35, 1, 38].Style.Font.Bold = true;
-                workSheet.Cells[1, 35, 1, 38].Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
-                workSheet.Cells[1, 35, 1, 38].Style.Fill.BackgroundColor.SetColor(System.Drawing.ColorTranslator.FromHtml("#ffff00"));
+                workSheet.Cells[1, 43, 1, 47].Merge = true;
+                workSheet.Cells[1, 43, 1, 47].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                workSheet.Cells[1, 43, 1, 47].Value = "September";
+                workSheet.Cells[1, 43, 1, 47].Style.Font.Bold = true;
+                workSheet.Cells[1, 43, 1, 47].Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
+                workSheet.Cells[1, 43, 1, 47].Style.Fill.BackgroundColor.SetColor(System.Drawing.ColorTranslator.FromHtml("#ffff00"));
 
-                workSheet.Cells[1, 39, 1, 42].Merge = true;
-                workSheet.Cells[1, 39, 1, 42].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
-                workSheet.Cells[1, 39, 1, 42].Value = "October";
-                workSheet.Cells[1, 39, 1, 42].Style.Font.Bold = true;
-                workSheet.Cells[1, 39, 1, 42].Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
-                workSheet.Cells[1, 39, 1, 42].Style.Fill.BackgroundColor.SetColor(System.Drawing.ColorTranslator.FromHtml("#ffff00"));
+                workSheet.Cells[1, 48, 1, 52].Merge = true;
+                workSheet.Cells[1, 48, 1, 52].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                workSheet.Cells[1, 48, 1, 52].Value = "October";
+                workSheet.Cells[1, 48, 1, 52].Style.Font.Bold = true;
+                workSheet.Cells[1, 48, 1, 52].Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
+                workSheet.Cells[1, 48, 1, 52].Style.Fill.BackgroundColor.SetColor(System.Drawing.ColorTranslator.FromHtml("#ffff00"));
 
-                workSheet.Cells[1, 43, 1, 46].Merge = true;
-                workSheet.Cells[1, 43, 1, 46].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
-                workSheet.Cells[1, 43, 1, 46].Value = "November";
-                workSheet.Cells[1, 43, 1, 46].Style.Font.Bold = true;
-                workSheet.Cells[1, 43, 1, 46].Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
-                workSheet.Cells[1, 43, 1, 46].Style.Fill.BackgroundColor.SetColor(System.Drawing.ColorTranslator.FromHtml("#ffff00"));
+                workSheet.Cells[1, 53, 1, 57].Merge = true;
+                workSheet.Cells[1, 53, 1, 57].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                workSheet.Cells[1, 53, 1, 57].Value = "November";
+                workSheet.Cells[1, 53, 1, 57].Style.Font.Bold = true;
+                workSheet.Cells[1, 53, 1, 57].Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
+                workSheet.Cells[1, 53, 1, 57].Style.Fill.BackgroundColor.SetColor(System.Drawing.ColorTranslator.FromHtml("#ffff00"));
 
-                workSheet.Cells[1, 47, 1, 50].Merge = true;
-                workSheet.Cells[1, 47, 1, 50].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
-                workSheet.Cells[1, 47, 1, 50].Value = "December";
-                workSheet.Cells[1, 47, 1, 50].Style.Font.Bold = true;
-                workSheet.Cells[1, 47, 1, 50].Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
-                workSheet.Cells[1, 47, 1, 50].Style.Fill.BackgroundColor.SetColor(System.Drawing.ColorTranslator.FromHtml("#ffff00"));
+                workSheet.Cells[1, 58, 1, 62].Merge = true;
+                workSheet.Cells[1, 58, 1, 62].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                workSheet.Cells[1, 58, 1, 62].Value = "December";
+                workSheet.Cells[1, 58, 1, 62].Style.Font.Bold = true;
+                workSheet.Cells[1, 58, 1, 62].Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
+                workSheet.Cells[1, 58, 1, 62].Style.Fill.BackgroundColor.SetColor(System.Drawing.ColorTranslator.FromHtml("#ffff00"));
 
 
                 // format header - bold, yellow on black  
