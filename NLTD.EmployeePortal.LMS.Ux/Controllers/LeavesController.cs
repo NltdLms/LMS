@@ -226,12 +226,12 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
                                 try
                                 {                                    
                                     EmailHelper emailHelper = new EmailHelper();
-                                    emailHelper.SendEmail(Convert.ToInt64(result.Substring(6)), "Applied");
+                                    emailHelper.SendEmail(Convert.ToInt64(result.Substring(6)), "Pending");
 //#if DEBUG
-//                                    emailHelper.SendEmail(Convert.ToInt64(result.Substring(6)), "Applied");
+//                                    emailHelper.SendEmail(Convert.ToInt64(result.Substring(6)), "Pending");
 //#else
 
-//                                    //BackgroundJob.Enqueue(() => emailHelper.SendEmail(Convert.ToInt64(result.Substring(6)), "Applied"));
+//                                    //BackgroundJob.Enqueue(() => emailHelper.SendEmail(Convert.ToInt64(result.Substring(6)), "Pending"));
 //#endif
                                 }
                                 catch
@@ -418,12 +418,12 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
                             action = "Cancelled";
                     try
                     {
-                        EmailHelper emailHelp = new EmailHelper();
-                        emailHelp.SendEmail(Convert.ToInt64(obj.LeaveId), action);
+                        EmailHelper emailHelper = new EmailHelper();
+                        emailHelper.SendEmail(Convert.ToInt64(obj.LeaveId), action);
 //#if DEBUG
-//                        emailHelp.SendEmail(Convert.ToInt64(obj.LeaveId), action);
+//                        emailHelper.SendEmail(Convert.ToInt64(obj.LeaveId), action);
 //#else
-//                        BackgroundJob.Enqueue(() => emailHelp.SendEmail(Convert.ToInt64(obj.LeaveId), action));
+//                        BackgroundJob.Enqueue(() => emailHelper.SendEmail(Convert.ToInt64(obj.LeaveId), action));
 //#endif
                     }
                     catch

@@ -21,7 +21,7 @@ namespace NLTD.EmployeePortal.LMS.Ux.AppHelpers
         int mailPort = int.Parse(ConfigurationManager.AppSettings["Port"]);
         string mailBaseUrl = ConfigurationManager.AppSettings["LMSUrl"];
 
-        private void SendHtmlFormattedEmail(string recepientEmail,IList<string>ccEmail, string subject, string body,string emailType)
+        private void SendHtmlFormattedEmail(string recepientEmail,IList<string>ccEmail, string subject, string body)
         {           
             using (MailMessage mailMessage = new MailMessage())
             {
@@ -48,14 +48,12 @@ namespace NLTD.EmployeePortal.LMS.Ux.AppHelpers
                 smtp.Send(mailMessage);
             }
         }
-        private string PopulateBody(string userName,string url,string Description,string requestFor,string empId,string requestType,string range,string duration,string reason, string approverName,string approverComments,string leaveId,string emailType)
+        private string PopulateBody(string userName, string description, string requestFor, string empId, string requestType, string range, string duration, string reason, string approverName, string approverComments, string actionName)
         {
             string body = string.Empty;
-            //HttpRequest request = HttpContext.Current.Request;
             string baseUrl = mailBaseUrl;
-            if (emailType == "Applied")
+            if (actionName == "Pending")
             {
-
                 using (var stream = new FileStream(HostingEnvironment.MapPath("~/EmailTemplate.html"), FileMode.Open, FileAccess.Read, FileShare.Read))
                 {
                     StreamReader reader = new StreamReader(stream);
@@ -69,12 +67,8 @@ namespace NLTD.EmployeePortal.LMS.Ux.AppHelpers
                 {
                     StreamReader reader = new StreamReader(stream);
                     body = reader.ReadToEnd();
-                }               
-               
+                }
             }
-           
-            body = body.Replace("{Url}", url);
-           
 
             body = body.Replace("{RequestFor}", requestFor);
             body = body.Replace("{EmpId}", empId);
@@ -82,25 +76,23 @@ namespace NLTD.EmployeePortal.LMS.Ux.AppHelpers
             body = body.Replace("{Range}", range);
             body = body.Replace("{Duration}", duration);
             body = body.Replace("{ApproverName}", approverName);
-            if (userName != "")
-                userName = " " + userName;
-            body = body.Replace("{HelloUser}", userName);
-            body = body.Replace("{Description}", Description);
+            body = body.Replace("{HelloUser}", " " + userName);
+            body = body.Replace("{Description}", description);
             body = body.Replace("{Reason}", reason);
-            body = body.Replace("{ApproverComments}", approverComments);             
-            
+            body = body.Replace("{ApproverComments}", approverComments);
             body = body.Replace("{ManageLink}", baseUrl + "/Leaves/ManageLeaveRequest");
+
             return body;
         }
-
-        
+                
         public void SendEmail(Int64 leaveId,string actionName)
         {
             try
             {
                 EmailDataModel mdl;
                 string helloUser = string.Empty;
-                string descritpion = string.Empty;
+                string description = string.Empty;
+
                 using (var client = new LeaveClient())
                 {
                     mdl = client.GetEmailData(leaveId, actionName);
@@ -110,46 +102,28 @@ namespace NLTD.EmployeePortal.LMS.Ux.AppHelpers
                     actionName = "Auto Approved";
                     mdl.ToEmailId = mdl.RequestorEmailId;
                 }
-                if (actionName == "Applied")
+
+                if (actionName == "Pending")
                 {
                     helloUser = mdl.ReportingToName;
-                    descritpion = "The request of the below employee is pending for your action:";
+                    description = "The request of the below employee is pending for your action:";
                 }
                 else
                 {
                     helloUser = mdl.RequestFor;
-                    descritpion = "Your request has been " + actionName + ".";
+                    description = "Your request has been " + actionName + ".";
                 }
 
-                //cc Applied
-                string emailType = string.Empty;
                 string body = string.Empty;
 
-               
+                body = this.PopulateBody(helloUser, description, mdl.RequestFor,mdl.EmpId, mdl.LeaveTypeText, mdl.Date, mdl.Duration, mdl.Reason, mdl.ReportingToName, mdl.ApproverComments, actionName);
 
-                 if (actionName == "Applied")
-                {
-                    
-                    body = this.PopulateBody(helloUser, "", descritpion
-        , mdl.RequestFor,mdl.EmpId, mdl.LeaveTypeText, mdl.Date, mdl.Duration, mdl.Reason, mdl.ReportingToName, mdl.ApproverComments, Convert.ToString(leaveId), actionName);
-                   
-                        this.SendHtmlFormattedEmail(mdl.ToEmailId, mdl.CcEmailIds, "LMS - Request from " + mdl.RequestFor + " - " + "Pending", body, actionName);
-                }
-                else
-                {
-                    emailType = "ToAndCc";
-                    body = this.PopulateBody(helloUser, "", descritpion
-   , mdl.RequestFor, mdl.EmpId,mdl.LeaveTypeText, mdl.Date, mdl.Duration, mdl.Reason, mdl.ReportingToName, mdl.ApproverComments, Convert.ToString(leaveId), emailType);
-
-
-                    this.SendHtmlFormattedEmail(mdl.ToEmailId, mdl.CcEmailIds, "LMS - Request from " + mdl.RequestFor + " - " + actionName, body, emailType);
-                }
+                this.SendHtmlFormattedEmail(mdl.ToEmailId, mdl.CcEmailIds, "LMS - Request from " + mdl.RequestFor + " - " + actionName, body);
             }
-            catch(Exception ex){
+            catch (Exception ex){
                 LogError(ex, leaveId);
                 Elmah.ErrorLog.GetDefault(null).Log(new Elmah.Error(ex));
-                throw;
-                
+                throw;                
             }
 
            
