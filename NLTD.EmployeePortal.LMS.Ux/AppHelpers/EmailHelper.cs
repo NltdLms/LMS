@@ -51,7 +51,7 @@ namespace NLTD.EmployeePortal.LMS.Ux.AppHelpers
         private string PopulateBody(string userName, string description, string requestFor, string empId, string requestType, string range, string duration, string reason, string approverName, string approverComments, string actionName)
         {
             string body = string.Empty;
-            string baseUrl = mailBaseUrl;
+
             if (actionName == "Pending")
             {
                 using (var stream = new FileStream(HostingEnvironment.MapPath("~/EmailTemplate.html"), FileMode.Open, FileAccess.Read, FileShare.Read))
@@ -80,12 +80,12 @@ namespace NLTD.EmployeePortal.LMS.Ux.AppHelpers
             body = body.Replace("{Description}", description);
             body = body.Replace("{Reason}", reason);
             body = body.Replace("{ApproverComments}", approverComments);
-            body = body.Replace("{ManageLink}", baseUrl + "/Leaves/ManageLeaveRequest");
+            body = body.Replace("{ManageLink}", mailBaseUrl + "/Leaves/ManageLeaveRequest");
 
             return body;
         }
-                
-        public void SendEmail(Int64 leaveId,string actionName)
+
+        public void SendEmail(Int64 leaveId, string actionName)
         {
             try
             {
@@ -116,18 +116,18 @@ namespace NLTD.EmployeePortal.LMS.Ux.AppHelpers
 
                 string body = string.Empty;
 
-                body = this.PopulateBody(helloUser, description, mdl.RequestFor,mdl.EmpId, mdl.LeaveTypeText, mdl.Date, mdl.Duration, mdl.Reason, mdl.ReportingToName, mdl.ApproverComments, actionName);
+                body = this.PopulateBody(helloUser, description, mdl.RequestFor, mdl.EmpId, mdl.LeaveTypeText, mdl.Date, mdl.Duration, mdl.Reason, mdl.ReportingToName, mdl.ApproverComments, actionName);
 
                 this.SendHtmlFormattedEmail(mdl.ToEmailId, mdl.CcEmailIds, "LMS - Request from " + mdl.RequestFor + " - " + actionName, body);
             }
-            catch (Exception ex){
+            catch (Exception ex)
+            {
                 LogError(ex, leaveId);
                 Elmah.ErrorLog.GetDefault(null).Log(new Elmah.Error(ex));
-                throw;                
+                throw;
             }
-
-           
         }
+
         private void LogError(Exception ex,Int64 leaveId)
         {
             try
