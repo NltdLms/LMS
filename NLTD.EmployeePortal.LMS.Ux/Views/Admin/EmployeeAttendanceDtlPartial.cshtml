@@ -1,7 +1,5 @@
-﻿
-
-@model IList<NLTD.EmployeePortal.LMS.Common.DisplayModel.EmployeeAttendanceModel>
-<script type="text/javascript" src="~/Scripts/lms.js?v=1.05"></script>
+﻿@model IList<NLTD.EmployeePortal.LMS.Common.DisplayModel.EmployeeAttendanceModel>
+<script type="text/javascript" src="~/Scripts/lms.js?v=1.06"></script>
 <style type="text/css">
     .panel-group .panel {
         border-radius: 0;
@@ -64,6 +62,9 @@ else
                         @Html.DisplayName("Date")
                     </th>
                     <th>
+                        @Html.DisplayName("Day")
+                    </th>
+                    <th>
                         @Html.DisplayName("Time")
                     </th>
                     <th>
@@ -80,7 +81,10 @@ else
                     @Model[j].InOutDate.ToString("dd-MM-yyyy")
                 </td>
                 <td>
-                    @Model[j].InOutDate.ToString("hh:mm:ss")
+                    @Model[j].InOutDate.DayOfWeek
+                </td>
+                <td>
+                    @Model[j].InOutDate.ToString("HH:mm:ss")
                 </td>
                 <td>
                     @Model[j].InOut
@@ -116,6 +120,9 @@ else
                                     @Html.DisplayName("Date")
                                 </th>
                                 <th>
+                                    @Html.DisplayName("Day")
+                                </th>
+                                <th>
                                     @Html.DisplayName("Time")
                                 </th>
                                 <th>
@@ -139,7 +146,10 @@ else
                                         @Model[j].InOutDate.ToString("dd-MM-yyyy")
                                     </td>
                                     <td>
-                                        @Model[j].InOutDate.ToString("hh:mm:ss")
+                                        @Model[j].InOutDate.DayOfWeek
+                                    </td>
+                                    <td>
+                                        @Model[j].InOutDate.ToString("HH:mm:ss")
                                     </td>
                                     <td>
                                         @Model[j].InOut

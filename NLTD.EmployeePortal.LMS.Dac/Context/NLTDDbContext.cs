@@ -1,11 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using NLTD.EmployeePortal.LMS.Dac.DbModel;
 using System.Data.Entity;
-using NLTD.EmployeePortal.LMS.Dac.DbModel;
-using System.Data.Entity.ModelConfiguration;
 
 namespace NLTD.EmployeePortal.LMS.Dac
 {

@@ -16,9 +16,6 @@
                 @Html.DisplayName("Request Type")
             </th>
             <th>
-                @Html.DisplayName("Leave Balance")
-            </th>
-            <th>
                 @Html.DisplayName("Request Date")
             </th>
             <th>
@@ -52,11 +49,6 @@
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.LeaveType)
-                </td>
-                <td>
-                    
-                    @Html.Label("", (item.AdjustLeaveBalance == false ? "NA" : item.LeaveBalanace.ToString()), new { style = "font-weight:normal" })
-                    
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.LeaveDate)

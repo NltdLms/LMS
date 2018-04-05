@@ -741,29 +741,6 @@ function loadPermissionDetail() {
         });
 }
 
-//function loadPermissionDetail() {
-//    $.ajax({
-//        method: "GET",
-//        beforeSend: function () {
-//            $("#divLoading").show()
-//        },
-//        url: '/Admin/GetPermissionDetail?Name=' + $("#Name").val() + '&Year=' + $("#Year").val() + '&reqUsr=' + $("#RequestLevelPerson").val(),
-//        async: false,
-//        success: function (response) {
-//            $('#divForPermissionDetail').html(response);
-
-//        },
-//        complete: function () {
-//            $("#divLoading").hide();
-//        },
-//        error: function () {
-//            $("#divLoading").hide();
-//        }
-
-//    });
-//}
-
-
 function hideLeaveSplit(e) {
 
     $("#LeaveDtlSplit" + e).css("display", "none");
@@ -1348,7 +1325,7 @@ function loadTransactionLog() {
 
 }
 
-function loadAttendenceRangeSummary() {
+function loadAttendanceRangeSummary() {
     $("#alert_placeholder").empty();
     try {
         $("#showalert").empty();
@@ -1362,10 +1339,10 @@ function loadAttendenceRangeSummary() {
         myDirectEmployees = $("#mydirectemployeecheck").is(':checked');
     }
     if ($("#RequestLevelPerson").val() === "My") {
-        URL = '/Admin/loadEmployeeAttendence?&FromDate=' + $('#FromDate').val() + '&ToDate=' + $('#ToDate').val() + '&requestLevelPerson=' + $('#RequestLevelPerson').val() + '&myDirectEmployees=' + myDirectEmployees;
+        URL = '/Admin/loadEmployeeAttendance?&FromDate=' + $('#FromDate').val() + '&ToDate=' + $('#ToDate').val() + '&requestLevelPerson=' + $('#RequestLevelPerson').val() + '&myDirectEmployees=' + myDirectEmployees;
     }
     else {
-        URL = '/Admin/loadEmployeeAttendence?ID=' + $("#UserID").val() + '&FromDate=' + $('#FromDate').val() + '&ToDate=' + $('#ToDate').val() + '&requestLevelPerson=' + $('#RequestLevelPerson').val() + '&myDirectEmployees=' + myDirectEmployees;
+        URL = '/Admin/loadEmployeeAttendance?ID=' + $("#UserID").val() + '&FromDate=' + $('#FromDate').val() + '&ToDate=' + $('#ToDate').val() + '&requestLevelPerson=' + $('#RequestLevelPerson').val() + '&myDirectEmployees=' + myDirectEmployees;
         if (!ValidateAutocompleteName($("#Name").val(), $("#UserID").val())) {
 
             Clearshowalert("Please Choose a valid Username from the List.", "alert alert-danger");
@@ -1373,13 +1350,13 @@ function loadAttendenceRangeSummary() {
         }
     }
     $("#divLoading").show();
-    $("#divForEmployeeAttendence")
+    $("#divForEmployeeAttendance")
         .load(URL,
         function (responseText, textStatus, req) {
             $("#divLoading").hide();
             if (textStatus == "error") {
                 Clearshowalert("No Records Found", "alert alert-danger");
-                $('#Attendencetable_id').DataTable().clear().destroy();
+                $('#Attendancetable_id').DataTable().clear().destroy();
             }
             else {
 
@@ -1491,7 +1468,6 @@ function AddShiftPopup(shiftId) {
         );
     });
     $("#myModal").modal('show');
-    // $("#divLoading").hide();
 }
 
 function SaveShiftMaster() {
@@ -1501,12 +1477,7 @@ function SaveShiftMaster() {
     shiftId = $("#ShiftId").val().trim();
     fromTime = $("#fromTime").val().trim();
     toTime = $("#toTime").val().trim();
-
-    //if (shiftName == '') {
-    //    Clearshowalert("Please enter the Shift Name", "alert alert-danger");
-    //    return;
-    //}
-
+    
     if (fromTime == '') {
         Clearshowalert("Please enter the Start Time.", "alert alert-danger");
         return;

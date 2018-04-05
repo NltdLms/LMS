@@ -1,7 +1,7 @@
-﻿using NLTD.EmployeePortal.LMS.Dac.Dac;
-using NLTD.EmployeePortal.LMS.Dac.DbModel;
-using NLTD.EmployeePortal.LMS.Common.DisplayModel;
+﻿using NLTD.EmployeePortal.LMS.Common.DisplayModel;
 using NLTD.EmployeePortal.LMS.Common.QueryModel;
+using NLTD.EmployeePortal.LMS.Dac.Dac;
+using NLTD.EmployeePortal.LMS.Dac.DbModel;
 using NLTD.EmployeePortal.LMS.Repository;
 using System;
 using System.Collections.Generic;
@@ -465,6 +465,7 @@ namespace NLTD.EmployeePortal.LMS.Dac
                     result.AddRange(GetEmployeesReporting(employee.UserId));
                 }
                 empReporting = result.ToList();
+
                 var empployees = (from emp in context.Employee
                                   select new EmployeeList
                                   {
@@ -673,27 +674,13 @@ namespace NLTD.EmployeePortal.LMS.Dac
 
                 if (permissions.Count > 0)
                 {
-                    TimeSpan timeFrom;
-                    DateTime permissionDateFromTime;
-                    TimeSpan timeTo;
-                    DateTime permissionDateToTime;
-
                     for (int i = 0; i < permissions.Count; i++)
                     {
-
-                        permissionDateFromTime = Convert.ToDateTime(permissions[i].TimeFrom);
-                        permissionDateToTime = Convert.ToDateTime(permissions[i].TimeTo);
-                        timeFrom = Convert.ToDateTime(permissions[i].TimeFrom).TimeOfDay;
-                        timeTo = Convert.ToDateTime(permissions[i].TimeTo).TimeOfDay;
-                        if ((timeFrom.Hours >= 0 && timeFrom.Hours < 12) && timeTo.Hours < 12)
-                            permissionDateFromTime = permissionDateFromTime.AddDays(1);
-                        if (timeTo.Hours >= 0 && timeTo.Hours < 12)
-                            permissionDateToTime = permissionDateToTime.AddDays(1);
-                        totalDuration = totalDuration + (permissionDateToTime.Subtract(permissionDateFromTime));
-
+                        totalDuration = totalDuration + calculateDuration(permissions[i].TimeFrom, permissions[i].TimeTo);
                     }
 
                 }
+
                 if (totalDuration == TimeSpan.Zero)
                 {
                     retSring = "00:00";
@@ -705,6 +692,34 @@ namespace NLTD.EmployeePortal.LMS.Dac
             return retSring;
 
         }
+
+        public TimeSpan calculateDuration(string permissionTimeFrom, string permissionTimeTo)
+        {
+            TimeSpan timeFrom;
+            DateTime permissionDateFromTime;
+            TimeSpan timeTo;
+            DateTime permissionDateToTime;
+            TimeSpan duration = TimeSpan.Zero;
+
+            permissionDateFromTime = Convert.ToDateTime(permissionTimeFrom);
+            permissionDateToTime = Convert.ToDateTime(permissionTimeTo);
+            timeFrom = Convert.ToDateTime(permissionTimeFrom).TimeOfDay;
+            timeTo = Convert.ToDateTime(permissionTimeTo).TimeOfDay;
+            if ((timeFrom.Hours >= 0 && timeFrom.Hours < 12) && timeTo.Hours < 12)
+            {
+                permissionDateFromTime = permissionDateFromTime.AddDays(1);
+            }
+            if (timeTo.Hours >= 0 && timeTo.Hours < 12)
+            {
+                permissionDateToTime = permissionDateToTime.AddDays(1);
+            }
+
+            duration = permissionDateToTime.Subtract(permissionDateFromTime);
+
+            return duration;
+
+        }
+
         public IList<TeamLeaves> GetTeamLeaveHistory(ManageTeamLeavesQueryModel qryMdl)
         {
             IList<Int64> empList = GetEmployeesReporting(qryMdl.LeadId);
@@ -980,22 +995,6 @@ namespace NLTD.EmployeePortal.LMS.Dac
                                         if (isTimeBased == false)
                                             duplicateRequest = "Duplicate";
                                     }
-                                    //else
-                                    //{
-                                    //    var chkTime = context.PermissionDetail.Where(x => x.LeaveId == item.LeaveId).FirstOrDefault();
-                                    //    DateTime PermisionFrom = DateTime.Parse(chkTime.TimeFrom);
-                                    //    DateTime PermisionTo = DateTime.Parse(chkTime.TimeTo);                                        
-
-                                    //    DateTime existingStartTime = new DateTime(chkTime.PermissionDate.Year, chkTime.PermissionDate.Month, chkTime.PermissionDate.Day, PermisionFrom.Hour, PermisionFrom.Minute,0);
-                                    //     DateTime existingEndTime = new DateTime(chkTime.PermissionDate.Year, chkTime.PermissionDate.Month, chkTime.PermissionDate.Day, PermisionTo.Hour, PermisionTo.Minute, 0);
-
-                                    //    PermisionFrom = DateTime.Parse(request.PermissionTimeFrom);
-                                    //    PermisionTo = DateTime.Parse(request.PermissionTimeTo);
-
-                                    //    DateTime NewStartTime = new DateTime(request.LeaveFrom.Year, request.LeaveFrom.Month, request.LeaveFrom.Day, PermisionFrom.Hour, PermisionFrom.Minute, 0);
-                                    //    DateTime NewEndTime = new DateTime(request.LeaveFrom.Year, request.LeaveFrom.Month, request.LeaveFrom.Day, PermisionTo.Hour, PermisionTo.Minute, 0);
-
-                                    //}
                                 }
                                 else
                                 {
@@ -1126,19 +1125,6 @@ namespace NLTD.EmployeePortal.LMS.Dac
                                     return "LeaveExceeded#" + chkLeaveBal.LeavesBalance;
                                 }
                             }
-                            //else
-                            //{
-                            //    if (adjustBal.MaximumPerYear != null)
-                            //    {
-                            //        if (adjustBal.MaximumPerYear > 0)
-                            //        {
-                            //            if (request.NumberOfDays > (adjustBal.MaximumPerYear - nonAdjLeavesTaken))
-                            //            {
-                            //                return "LeaveExceeded#" + (adjustBal.MaximumPerYear - nonAdjLeavesTaken);
-                            //            }
-                            //        }
-                            //    }
-                            //}
                         }
                         Int32 daysDiff = (request.LeaveUpto - request.LeaveFrom).Days;
                         IList<HolidayModel> holidayList = GetHolidays(request.UserId, request.LeaveFrom.Year);
@@ -1313,8 +1299,7 @@ namespace NLTD.EmployeePortal.LMS.Dac
                                         leaveBalRec.ModifiedOn = DateTime.Now;
                                         isSaved = context.SaveChanges();
                                     }
-                                    //if (adjustBal.IsLeave == true)
-                                    //{
+
                                     if (isSaved > 0)
                                     {
                                         TransactionHistoryModel hist = new TransactionHistoryModel();
@@ -1338,7 +1323,6 @@ namespace NLTD.EmployeePortal.LMS.Dac
                                         else
                                             isSaved = -1;
                                     }
-                                    //}
                                 }
                             }
                         }
@@ -1484,15 +1468,13 @@ namespace NLTD.EmployeePortal.LMS.Dac
 
             IList<Int64> empList = GetEmployeesReporting(LeadId);
             IList<DaywiseLeaveDtlModel> retList;
-            int year = (ToDate ?? DateTime.Now).Year;
             using (var context = new NLTDDbContext())
             {
                 var dtlQry = (from emp in context.Employee
                               join lv in context.Leave on emp.UserId equals lv.UserId
                               join lvd in context.LeaveDetail on lv.LeaveId equals lvd.LeaveId
-                              join lvb in context.EmployeeLeaveBalance on new { A = emp.UserId, B = lv.LeaveTypeId } equals new { A = lvb.UserId, B = lvb.LeaveTypeId }
                               join lt in context.LeaveType on lv.LeaveTypeId equals lt.LeaveTypeId
-                              where lvd.IsDayOff == false && (lvd.LeaveDate >= FromDate && lvd.LeaveDate <= ToDate) && lt.IsTimeBased == false && lvb.Year == year
+                              where lvd.IsDayOff == false && (lvd.LeaveDate >= FromDate && lvd.LeaveDate <= ToDate) && lt.IsTimeBased == false
                               orderby emp.FirstName
                               select new DaywiseLeaveDtlModel
                               {
@@ -1501,7 +1483,6 @@ namespace NLTD.EmployeePortal.LMS.Dac
                                   Name = emp.FirstName + " " + emp.LastName,
                                   LeaveType = lt.Type,
                                   IsLeave = lt.IsLeave,
-                                  LeaveBalanace = lvb.BalanceDays ?? 0,
                                   LeaveDate = lvd.LeaveDate,
                                   IsDayOff = lvd.IsDayOff,
                                   Duration = lvd.LeaveDayQty,
@@ -1551,7 +1532,6 @@ namespace NLTD.EmployeePortal.LMS.Dac
                                     }
                                     else
                                     {
-                                        //retList = retList.ToList();
                                         if (DonotShowRejected)
                                             retList = retList.Where(x => x.LeaveStatus != "R" && x.LeaveStatus != "C").ToList();
                                     }

@@ -43,28 +43,16 @@
                 @ViewBag.HolidayOfficeName
             </span>
         </div>
-        
-
-        @*@{
-
-                if (Model.Count > 0)
-                {
-                    <button type="button" id="previous"><</button>
-                    <div id="year">@Model[0].HolidayDate.Year</div>
-                    <button type="button" id="next">></button>
-
-                    <h6 style="text-align:right;font-weight:bold;font-style:italic;color:maroon">@Model[0].HolidayOfficeName</h6>
-                }
-            }*@
-
-
     </div>
     <div class="box-body">
         <div class="row">
             <div class="col-sm-3">
                 <h6 class="box-title">Date</h6>
             </div>
-            <div class="col-sm-9">
+            <div class="col-sm-3">
+                <h6 class="box-title">Day</h6>
+            </div>
+            <div class="col-sm-6">
                 <h6 class="box-title">Holiday</h6>
             </div>
 
@@ -78,7 +66,10 @@
                     <div class="col-sm-3">
                         <p>@item.HolidayDate.ToShortDateString()</p>
                     </div>
-                    <div class="col-sm-9" style="text-align: justify;">
+                    <div class="col-sm-3">
+                        <p>@item.HolidayDate.DayOfWeek</p>
+                    </div>
+                    <div class="col-sm-6" style="text-align: justify;">
                         <p>@item.HolidayText</p>
                     </div>
 
@@ -94,8 +85,6 @@
     $("document").ready(function () {
         var holidayYear;
         var updateHolidays = function () {
-            //$('#year').text(year);
-            //$('#HolidayListPartialDiv').empty();
             $('#HolidayListPartialDiv').load("/Dashboard/ListHolidayByYear?year=" + holidayYear);
         };
 

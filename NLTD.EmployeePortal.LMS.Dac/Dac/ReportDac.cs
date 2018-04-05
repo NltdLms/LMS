@@ -1,26 +1,20 @@
-﻿using NLTD.EmployeePortal.LMS.Dac.Dac;
-using NLTD.EmployeePortal.LMS.Dac.DbModel;
-using NLTD.EmployeePortal.LMS.Common.DisplayModel;
+﻿using NLTD.EmployeePortal.LMS.Common.DisplayModel;
 using NLTD.EmployeePortal.LMS.Common.QueryModel;
-using NLTD.EmployeePortal.LMS.DbHelper;
+using NLTD.EmployeePortal.LMS.Dac.Dac;
 using NLTD.EmployeePortal.LMS.Repository;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
-using System.Data.Entity.Core.Objects;
-using System.Data.Entity.Migrations;
-using System.Globalization;
 using System.Linq;
-using System.Text;
 namespace NLTD.EmployeePortal.LMS.Dac
 {
     public class ReportDac : IReportHelper
     {
         int BeforeShiftBuffer = Convert.ToInt32(ConfigurationManager.AppSettings["BeforeShiftBuffer"]);
         int AfterShiftBuffer = Convert.ToInt32(ConfigurationManager.AppSettings["AfterShiftBuffer"]);
-        public List<LateAndEarltRpt> GetLateAndEarlyEmployees(DateTime FromDate, DateTime ToDate, Int64 UserId, bool OnlyReportedToMe)
+        public List<lateAndEarlyRpt> GetLateAndEarlyEmployees(DateTime FromDate, DateTime ToDate, Int64 UserId, bool OnlyReportedToMe)
         {
-            List<LateAndEarltRpt> lateAndEarltRpt = new List<LateAndEarltRpt>();
+            List<lateAndEarlyRpt> lateAndEarlyRpt = new List<lateAndEarlyRpt>();
 
             try
             {
@@ -51,7 +45,7 @@ namespace NLTD.EmployeePortal.LMS.Dac
             {
                 throw;
             }
-            return lateAndEarltRpt;
+            return lateAndEarlyRpt;
         }
 
         public List<NoOfLateInMonth> GetLateReport(Int64 UserID, DateTime FromDate, DateTime ToDate, bool myDirectEmployees)
@@ -125,8 +119,8 @@ namespace NLTD.EmployeePortal.LMS.Dac
                 throw;
             }
             IEmployeeAttendanceHelper EmployeeAttendanceDacObj = new EmployeeAttendanceDac();
-            //To Retrive the Employee Attendence for the given date.
-            List<EmployeeAttendanceModel> EmployeeAttendenceList = EmployeeAttendanceDacObj.GetAttendenceForRange(UserID, FromDate, ToDate, "My", true);
+            //To Retrive the Employee Attendance for the given date.
+            List<EmployeeAttendanceModel> EmployeeAttendanceList = EmployeeAttendanceDacObj.GetAttendanceForRange(UserID, FromDate, ToDate, "My", true);
 
             try
             {
@@ -145,7 +139,7 @@ namespace NLTD.EmployeePortal.LMS.Dac
                     reportLateMonth.ReportingTo =ReportingTo;
                     reportLateMonth.Name =Name;
                     reportLateMonth.EmpId=EmpId;
-                    var maxmin = from s in EmployeeAttendenceList
+                    var maxmin = from s in EmployeeAttendanceList
                                  where s.InOutDate >= shiftFromDateTime && s.InOutDate <= shiftEndDateTime
                                  group s by true into r
                                  select new

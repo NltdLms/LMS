@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace NLTD.EmployeePortal.LMS.Common.DisplayModel
 {
@@ -15,7 +11,7 @@ namespace NLTD.EmployeePortal.LMS.Common.DisplayModel
         public DateTime InOutDate { get; set; }
         
 
-        public string AttendenceDate { get; set; }
+        public string AttendanceDate { get; set; }
         public string INOutTime { get; set; }
         public string InOut { get; set; }
 

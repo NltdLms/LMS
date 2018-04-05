@@ -1,13 +1,13 @@
 ﻿using NLTD.EmployeePortal.LMS.Client;
 using NLTD.EmployeePortal.LMS.Common.DisplayModel;
 using NLTD.EmployeePortal.LMS.Common.QueryModel;
+using NLTD.EmployeePortal.LMS.Repository;
 using NLTD.EmployeePortal.LMS.Ux.AppHelpers;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Web.Mvc;
-using NLTD.EmployeePortal.LMS.Repository;
 
 namespace NLTD.EmployeePortal.LMS.Ux.Controllers
 {
@@ -484,16 +484,16 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
         }
 
 
-        public ActionResult loadEmployeeAttendence(string ID, string FromDate, string ToDate,string requestLevelPerson,bool myDirectEmployees)
+        public ActionResult loadEmployeeAttendance(string ID, string FromDate, string ToDate,string requestLevelPerson,bool myDirectEmployees)
         {
             string errorMessage = string.Empty;
-            IList<EmployeeAttendanceModel> employeeAttendanceModelList = GetEmployeeAttendenceList(ID,FromDate, ToDate, requestLevelPerson, myDirectEmployees);
+            IList<EmployeeAttendanceModel> employeeAttendanceModelList = GetEmployeeAttendanceList(ID,FromDate, ToDate, requestLevelPerson, myDirectEmployees);
             ViewBag.RequestLevelPerson = requestLevelPerson;
-            return PartialView("EmployeeAttendenceDtlPartial", employeeAttendanceModelList);
+            return PartialView("EmployeeAttendanceDtlPartial", employeeAttendanceModelList);
         }
        
 
-        private IList<EmployeeAttendanceModel> GetEmployeeAttendenceList(string ID,string FromDate, string ToDate,string requestLevelPerson,bool IsDirectEmployees)
+        private IList<EmployeeAttendanceModel> GetEmployeeAttendanceList(string ID,string FromDate, string ToDate,string requestLevelPerson,bool IsDirectEmployees)
         {
             IList<EmployeeAttendanceModel> employeeAttendanceModelList = null;
             DateTime startDateFormatted, endDateFormatted;
@@ -517,8 +517,8 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
                 endDateFormatted = DateTime.Parse(ToDate, new CultureInfo("en-GB", true)).Add(new TimeSpan(23,59,59)); ;
             }
            
-            IEmployeeAttendanceHelper employeeAttendanceHelper = new EmplyeeAttendenceClient();
-            employeeAttendanceModelList = employeeAttendanceHelper.GetAttendenceForRange(userID, startDateFormatted, endDateFormatted, requestLevelPerson, IsDirectEmployees);
+            IEmployeeAttendanceHelper employeeAttendanceHelper = new EmplyeeAttendanceClient();
+            employeeAttendanceModelList = employeeAttendanceHelper.GetAttendanceForRange(userID, startDateFormatted, endDateFormatted, requestLevelPerson, IsDirectEmployees);
             requestLevelPerson = tempRequestLevelPerson;
             return employeeAttendanceModelList;
         }
@@ -547,7 +547,7 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
                 TimeSheetQueryModelObj.UserID = profile.UserId;
                 if (TimeSheetQueryModelObj.FromDate == DateTime.MinValue)
                 {
-                    // For Last 30 days Attendence
+                    // For Last 30 days Attendance
                     TimeSheetQueryModelObj.FromDate = currentDate.AddDays(-30);
                     TimeSheetQueryModelObj.ToDate = currentDate;
                 }
@@ -636,7 +636,7 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
             List<TimeSheetModel> excelData = timeSheetModelList.ToList();
             if (excelData.Count > 0)
             {
-                List<string> columns = new List<string>(){ "Date", "Shift", "In Time", "Out Time", "Working Hours", "Status", "Requests", "Day", "Late In", "Early Out", "Name" };
+                List<string> columns = new List<string>(){ "Date", "Shift", "In Time", "Out Time", "Working Hours", "Status", "Requests", "Day", "Late In", "Early Out", "Name", "Reporting Manager" };
                 string fileName = string.Format("Timesheet_{0}{1}", DateTime.Now.ToString("ddMMyyyyHHmmss"), ".xlsx");
 
                 //if (RequestLevelPerson == "My")
@@ -659,38 +659,38 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
                     ViewBag.YearsInLeaveBal = result;
                 }
                 ViewBag.RequestLevelPerson = RequestLevelPerson;
-                EmployeeAttendenceQueryModel data = new EmployeeAttendenceQueryModel();
+                EmployeeAttendanceQueryModel data = new EmployeeAttendanceQueryModel();
                 data.ErrorMsg = "Excel file is not generated as no data returned.";
-                return View("~/Views/Attendence/TimeSheet.cshtml", data);
+                return View("~/Views/Attendance/TimeSheet.cshtml", data);
             }
         }
 
-        public ActionResult ExportAttendenceToExcel(EmployeeAttendenceQueryModel EmployeeAttendenceQueryModelObj, string RequestLevelPerson)
+        public ActionResult ExportAttendanceToExcel(EmployeeAttendanceQueryModel EmployeeAttendanceQueryModelObj, string RequestLevelPerson)
         {
 
-            List<EmployeeAttendanceModel> excelData = GetEmployeeAttendenceList(EmployeeAttendenceQueryModelObj.UserID.ToString(), (EmployeeAttendenceQueryModelObj.FromDate == DateTime.MinValue ? "" : EmployeeAttendenceQueryModelObj.FromDate.ToString()),
-                (EmployeeAttendenceQueryModelObj.ToDate == DateTime.MinValue ? "" : EmployeeAttendenceQueryModelObj.ToDate.ToString()), RequestLevelPerson, EmployeeAttendenceQueryModelObj.DirectEmployees).ToList();
+            List<EmployeeAttendanceModel> excelData = GetEmployeeAttendanceList(EmployeeAttendanceQueryModelObj.UserID.ToString(), (EmployeeAttendanceQueryModelObj.FromDate == DateTime.MinValue ? "" : EmployeeAttendanceQueryModelObj.FromDate.ToString()),
+                (EmployeeAttendanceQueryModelObj.ToDate == DateTime.MinValue ? "" : EmployeeAttendanceQueryModelObj.ToDate.ToString()), RequestLevelPerson, EmployeeAttendanceQueryModelObj.DirectEmployees).ToList();
 
             if (excelData.Count > 0)
             {
-                List<string>  columns = new List<string>(){"AttendenceDate", "INOutTime", "InOut","Name" };
+                List<string>  columns = new List<string>(){"AttendanceDate", "INOutTime", "InOut","Name" };
                // string fileName = "Attendance.xlsx";
                 string fileName = string.Format("Attendance_{0}{1}", DateTime.Now.ToString("ddMMyyyyHHmmss"), ".xlsx");
-                if (EmployeeAttendenceQueryModelObj.RequestLevelPerson=="My")
+                if (EmployeeAttendanceQueryModelObj.RequestLevelPerson=="My")
                 {
-                    columns = new List<string>() { "AttendenceDate", "INOutTime", "InOut"};
+                    columns = new List<string>() { "AttendanceDate", "INOutTime", "InOut"};
                     EmployeeProfile profile = (EmployeeProfile)Session["Profile"];
                    // fileName = string.Format("{0} {1}{2}{3}", profile.FirstName , profile.LastName, DateTime.Now.ToString("ddMMyyyyHHmmss"), ".xlsx");
                 }
                 
-                byte[] filecontent = ExcelExportHelper.ExportExcelAttendence(excelData, "", false, columns.ToArray());
+                byte[] filecontent = ExcelExportHelper.ExportExcelAttendance(excelData, "", false, columns.ToArray());
                 return File(filecontent, ExcelExportHelper.ExcelContentType, fileName);
             }
             else
             {
 
                 ViewBag.RequestLevelPerson = RequestLevelPerson;
-                EmployeeAttendenceQueryModel data = new EmployeeAttendenceQueryModel();
+                EmployeeAttendanceQueryModel data = new EmployeeAttendanceQueryModel();
                 data.ErrorMsg = "Excel file is not generated as no data returned.";
                 return View("~/Views/Attendance/MyAttendance.cshtml", data);
             }

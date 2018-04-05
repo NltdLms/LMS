@@ -1,5 +1,4 @@
-﻿
-using NLTD.EmployeePortal.LMS.Client;
+﻿using NLTD.EmployeePortal.LMS.Client;
 using NLTD.EmployeePortal.LMS.Common.DisplayModel;
 using NLTD.EmployeePortal.LMS.Ux.Models;
 using System;
@@ -35,8 +34,9 @@ namespace NLTD.EmployeePortal.LMS.Ux.AppHelpers
                 string menu = string.Empty;
 
                 var windowsLoginName = identity.Name.ToUpper();
-                //var windowsLoginName = "CORP\\SKMASETTI";
-                
+#if DEBUG
+                windowsLoginName = "CORP\\UMageswari";
+#endif
                 if (Request.QueryString["Username"] != null)
                 {
                     windowsLoginName = Convert.ToString(Request.QueryString["Username"]).Replace(".", "\\");
@@ -108,10 +108,7 @@ namespace NLTD.EmployeePortal.LMS.Ux.AppHelpers
                     ViewBag.MenuText = "NoProfile";
 
                 }
-
-                //
-            }
-            
+            }            
         }
     }
 }

@@ -16,8 +16,10 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
         {
            
             ViewBag.PageTile = "Apply For Leave";
+
             var request = new LeaveRequestModel();
             request.UserId = this.UserId;
+
             if (StartDate != null)
             {
                 request.LeaveFrom = StartDate.Value;
@@ -27,10 +29,16 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
                 request.NumberOfDays = 1;
                 request.LeaveFrom = System.DateTime.Now;
             }
+
             if (LeaveUpto != null)
+            {
                 request.LeaveUpto = LeaveUpto.Value;
+            }
             else
+            {
                 request.LeaveUpto = System.DateTime.Now;
+            }
+
             using (var Client = new LeaveClient())
             {
                 var commonData = Client.ApplyLeaveCommonData(this.OfficeId, this.UserId);
@@ -42,6 +50,7 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
             }
             
             request.ReportingToName = this.ReportingToName;
+
             return View(request);
         }
         public ActionResult LoadAppyOnBehalf(DateTime? StartDate, DateTime? LeaveUpto)
@@ -124,24 +133,31 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
             {
                 if (data.ApplyMode == "Others")
                 {
-                    if(this.Role=="HR" || this.Role == "Admin") { }
-                    else{
+                    if(this.Role=="HR" || this.Role == "Admin")
+                    {
+                    }
+                    else
+                    {
                         data.ErrorMesage = "You are not authorized to apply request on behalf of others.";
                         isValid = false;
                     }
                 }
 
                 if (data.ApplyMode == "Others")
+                {
                     userId = data.ApplyForUserId;
+                }
                 else
+                {
                     userId = this.UserId;
+                }
 
                 if (data.LeaveFrom > data.LeaveUpto)
                 {
                     data.ErrorMesage = "Please select correct From and To dates for the request.";
-                    isValid = false;
-                    
+                    isValid = false;                    
                 }
+
                 if (data.Reason != null)
                 {
                     if (data.Reason.Trim() == string.Empty)
@@ -177,13 +193,19 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
                         }
                     }
                 }
+
                 if (data.LeaveFrom == data.LeaveUpto)
                 {
                     if (data.LeaveFromTime == "F")
+                    {
                         data.LeaveUptoTime = "F";
+                    }
                     else if (data.LeaveFromTime == "S")
+                    {
                         data.LeaveUptoTime = "S";
+                    }
                 }
+
                 using (var client = new LeaveClient())
                 {
                     data.UserId = userId;
@@ -200,14 +222,22 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
                             if (result.IndexOf("$") > 0)
                             {
                                 data.ErrorMesage = "Saved";
-
+                                
                                 try
-                                {
-                                    EmailHelper emailHelp = new EmailHelper();
-                                    BackgroundJob.Enqueue(() => emailHelp.SendEmail(Convert.ToInt64(result.Substring(6)), "Applied"));
-                                }
-                                catch { data.ErrorMesage = "EmailFailed"; }
+                                {                                    
+                                    EmailHelper emailHelper = new EmailHelper();
+                                    emailHelper.SendEmail(Convert.ToInt64(result.Substring(6)), "Applied");
+//#if DEBUG
+//                                    emailHelper.SendEmail(Convert.ToInt64(result.Substring(6)), "Applied");
+//#else
 
+//                                    //BackgroundJob.Enqueue(() => emailHelper.SendEmail(Convert.ToInt64(result.Substring(6)), "Applied"));
+//#endif
+                                }
+                                catch
+                                {
+                                    data.ErrorMesage = "EmailFailed";
+                                }                                
                                
                             }
                             else if (result == "Duplicate")
@@ -215,21 +245,19 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
                             else if (result.Contains("LeaveExceeded"))
                                 data.ErrorMesage = "You cannot apply for days more than the available leaves. Number of leaves available are " + result.Substring(14) + ".";
                             else if (result == "Leave balance profile not created")
-                                data.ErrorMesage = "Leave balance has not yet been credited for this employee.";
+                                data.ErrorMesage = "Leave balance has not yet been credited for you.";
                             else if (result == "HolidayFromDate")
                                 data.ErrorMesage = "Leave from date is a holiday. Please select working day.";
                             else if (result == "HolidayToDate")
                                 data.ErrorMesage = "Leave upto date is a holiday. Please select working day.";
                             else if (result == "PermissionProperDateRange")
-                                data.ErrorMesage = "Select correct dates from date list boxes.";
+                                data.ErrorMesage = "Please select correct date.";
                             else if (result == "PermissionProperTime")
-                                data.ErrorMesage = "Please select the correct time duration for the request.";
+                                data.ErrorMesage = "Please select the correct time duration.";
                             else if (result == "PermissionDateTobeSame")
-                                data.ErrorMesage = "The From and To dates should be same for this typeof request.";
-                            //else if (result == "PermissionDurationTime")
-                            //    data.ErrorMesage = "Permission duration is more than 4 hours.";
+                                data.ErrorMesage = "The From and To dates should be same for this type of request.";
                             else if (result.Contains("ExceedMaxPerRequest"))
-                                data.ErrorMesage = "Number of days allowed per request are " + result.Substring(19) + ".";
+                                data.ErrorMesage = "Maximum number of days allowed per request are " + result.Substring(19) + ".";
                         }
                     }                          
                 }
@@ -252,9 +280,13 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
                 data.ReportingToName = Client.ReportingToName(data.UserId);
             }
             if (data.ApplyMode == "Others")
+            {
                 return View("ApplyFor", data);
+            }
             else
+            {
                 return Json(data.ErrorMesage);
+            }
         }
                 
         public ActionResult ManageLeaveRequest()
@@ -376,8 +408,7 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
             {
                 string Status = client.ChangeStatus(obj);
                 if (Status == "Saved")
-                {
-                    
+                {                    
                         string action = string.Empty;
                         if (obj.Status == "R")
                             action = "Rejected";
@@ -385,14 +416,19 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
                             action = "Approved";
                         else if (obj.Status == "C")
                             action = "Cancelled";
-
-
                     try
                     {
                         EmailHelper emailHelp = new EmailHelper();
-                        BackgroundJob.Enqueue(() => emailHelp.SendEmail(Convert.ToInt64(obj.LeaveId), action));
+                        emailHelp.SendEmail(Convert.ToInt64(obj.LeaveId), action);
+//#if DEBUG
+//                        emailHelp.SendEmail(Convert.ToInt64(obj.LeaveId), action);
+//#else
+//                        BackgroundJob.Enqueue(() => emailHelp.SendEmail(Convert.ToInt64(obj.LeaveId), action));
+//#endif
                     }
-                    catch {  }
+                    catch
+                    {
+                    }
                     
                 }
                 return Json(Status);
@@ -446,9 +482,14 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
                     }
                 }
             }
+
             if (startDateFormatted > endDateFormatted)
-                return 0; 
+            {
+                return 0;
+            }
+
             int holidayCount = 0;
+
             using (var client = new LeaveClient())
             {
                 holidayCount = client.GetHolidayCount(startDateFormatted, endDateFormatted, UserId);
@@ -476,12 +517,17 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
                 }
             }
             if (startDateFormatted > endDateFormatted)
+            {
                 return 0;
+            }
+
             decimal duration = 0;
+
             using (var client = new LeaveClient())
             {
                 duration = client.ReturnDuration(startDateFormatted, endDateFormatted, LeaveFromTime, LeaveUptoTime, UserId);
             }
+
             return duration;
         }
         public ActionResult GetLeaveDetailCalculation(string LeaveFrom, string LeaveUpto, string LeaveFromTime, string LeaveUptoTime, Int64 LeaveTyp)

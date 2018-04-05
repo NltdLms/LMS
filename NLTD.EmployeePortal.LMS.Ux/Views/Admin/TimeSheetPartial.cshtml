@@ -5,7 +5,7 @@
 @model IList<TimeSheetModel>
 
 
-<script type="text/javascript" src="~/Scripts/lms.js?v=1.05"></script>
+<script type="text/javascript" src="~/Scripts/lms.js?v=1.06"></script>
 
 
 <style type="text/css">
@@ -150,18 +150,18 @@ else
                             @GetWeeklyHoursHTML(TimeSheetConsolidateObj);
 
                         }
-                       
+
                         <tr>
 
 
                             <td>
                                 @if (Model[i].WorkingDate != null)
                                 {
-                                @Model[i].WorkingDate.ToString("dd-MM-yyyy")
+                                    @Model[i].WorkingDate.ToString("dd-MM-yyyy")
                                 }
                                 else
                                 {
-                                @Html.DisplayName("-")
+                                    @Html.DisplayName("-")
                                 }
                             </td>
                             <td>
@@ -176,31 +176,31 @@ else
                             <td>
                                 @if (Model[i].InTime == DateTime.MinValue)
                                 {
-                                @Html.DisplayName("-")
+                                    @Html.DisplayName("-")
                                 }
                                 else if (@Model[i].InTime != null)
-                {
-                                @Model[i].InTime.ToString("HH:mm:ss");
-                }
+                                {
+                                    @Model[i].InTime.ToString("HH:mm:ss");
+                                }
 
-                else
-                {
-                                @Html.DisplayName("-")
+                                else
+                                {
+                                    @Html.DisplayName("-")
                                 }
                             </td>
                             <td>
 
                                 @if (Model[i].OutTime == DateTime.MinValue)
                                 {
-                                @Html.DisplayName("-")
+                                    @Html.DisplayName("-")
                                 }
                                 else if (@Model[i].OutTime != null)
-                {
-                                @Model[i].OutTime.ToString("HH:mm:ss")
+                                {
+                                    @Model[i].OutTime.ToString("HH:mm:ss")
                                 }
-                else
-                {
-                                @Html.DisplayName("-")
+                                else
+                                {
+                                    @Html.DisplayName("-")
                                 }
                             </td>
                             <td class="@statusStyle">
@@ -219,7 +219,7 @@ else
                                 @Model[i].EarlyOut
                             </td>
                         </tr>
-                       
+
                     }
                 }
             </tbody>
@@ -303,11 +303,11 @@ else
                                         {
                                             TimeSheetConsolidateObj = GetWeeklyHoursConsolidation(Model.ToList(), Model[i].WorkingDate, Model[i].userID, "Monthly");
                                             @*@GetMonthlyHoursHTML(TimeSheetConsolidateObj);*@
-                                            TimeSheetConsolidateObj = GetWeeklyHoursConsolidation(Model.ToList(), Model[i].WorkingDate, Model[i].userID, "Weekly");
-                                            @GetWeeklyHoursHTML(TimeSheetConsolidateObj);
-                                            
+                                    TimeSheetConsolidateObj = GetWeeklyHoursConsolidation(Model.ToList(), Model[i].WorkingDate, Model[i].userID, "Weekly");
+                                    @GetWeeklyHoursHTML(TimeSheetConsolidateObj);
+
                                         }
-                                       
+
 
                                         if (Model[j].WorkingDate.Day == DateTime.DaysInMonth(Model[j].WorkingDate.Year, Model[j].WorkingDate.Month) && j != i)
                                         {
@@ -386,8 +386,8 @@ else
                                                 @Model[j].EarlyOut
                                             </td>
                                         </tr>
-                                       
-                                        if (j == Model.Count-1)
+
+                                        if (j == Model.Count - 1)
                                         {
                                             i = j;
                                             break;
@@ -486,8 +486,8 @@ else
                                                         select new TimeSheetConsolidate
                                                         {
                                                             hours = new TimeSpan(g.Sum(r => r.WorkingHours.Ticks)),
-                                                            permissionCount = g.Count(k => k.Requests.Contains("Permission")),
-                                                            leaveCount = (g.Where(k => k. Requests.Contains("Leave")).Select(x=>x.LeaveDayQty)).Sum(),
+                                                            permissionCount = g.Sum(r => r.PermissionCount),
+                                                            leaveCount = (g.Where(k => k.Requests.Contains("Leave")).Select(x => x.LeaveDayQty)).Sum(),
                                                             lateCount = g.Count(k => k.LateIn > new TimeSpan()),
                                                             earlyCount = g.Count(k => k.EarlyOut > new TimeSpan()),
                                                             fromDatetime = g.Min(k => k.WorkingDate),
@@ -498,7 +498,7 @@ else
         return TimeSheetConsolidateObj;
     }
 
-    public  DateTime Previous( DateTime from, DayOfWeek dayOfWeek)
+    public DateTime Previous(DateTime from, DayOfWeek dayOfWeek)
     {
         int start = (int)from.DayOfWeek;
         int target = (int)dayOfWeek;
@@ -515,34 +515,36 @@ else
             @Html.DisplayName("Summary")
         </td>
         <td>
-            @Html.DisplayName(string.Format("{0} {1} - {2} {3}", TimeSheetConsolidateObj.fromDatetime.Day, TimeSheetConsolidateObj.fromDatetime.ToString("MMM"),
-            TimeSheetConsolidateObj.toDatetime.Day, TimeSheetConsolidateObj.toDatetime.ToString("MMM")))
+            @string.Format("{0} {1} - {2} {3}", TimeSheetConsolidateObj.fromDatetime.Day, TimeSheetConsolidateObj.fromDatetime.ToString("MMM"),
+        TimeSheetConsolidateObj.toDatetime.Day, TimeSheetConsolidateObj.toDatetime.ToString("MMM"))
         </td>
-        <td>@Html.DisplayName("Work From Home : ")
-        @Convert.ToString(TimeSheetConsolidateObj.WFHCount)</td>
+        <td>
+            @Html.DisplayName("Work From Home : ")
+            @Convert.ToString(TimeSheetConsolidateObj.WFHCount)
+        </td>
         <td></td>
         <td></td>
         <td>
-            @Html.DisplayName(@GetWeeklyWorkingHours(TimeSheetConsolidateObj.hours))
+            @GetWeeklyWorkingHours(TimeSheetConsolidateObj.hours)
         </td>
         <td>
             @Html.DisplayName("Permission : ")
-            @Html.DisplayName(Convert.ToString(TimeSheetConsolidateObj.permissionCount))
+            @Convert.ToString(TimeSheetConsolidateObj.permissionCount)
+            hrs
         </td>
         <td>
             @Html.DisplayName("Leave : ")
-        @Convert.ToString(TimeSheetConsolidateObj.leaveCount)
-    </td>
-    <td>
-        @Html.DisplayName("Late In : ")
-        @Html.DisplayName(Convert.ToString(TimeSheetConsolidateObj.lateCount))
-
-    </td>
-    <td>
-        @Html.DisplayName("Early Out : ")
-        @Html.DisplayName(Convert.ToString(TimeSheetConsolidateObj.earlyCount))
-    </td>
-</tr>
+            @Convert.ToString(TimeSheetConsolidateObj.leaveCount)
+        </td>
+        <td>
+            @Html.DisplayName("Late In : ")
+            @Convert.ToString(TimeSheetConsolidateObj.lateCount)
+        </td>
+        <td>
+            @Html.DisplayName("Early Out : ")
+            @Convert.ToString(TimeSheetConsolidateObj.earlyCount)
+        </td>
+    </tr>
 }
 @helper GetMonthlyHoursHTML(TimeSheetConsolidate TimeSheetConsolidateObj)
 {
@@ -552,7 +554,7 @@ else
             @Html.DisplayName("Monthly Summary")
         </td>
         <td>
-            @Html.DisplayName(TimeSheetConsolidateObj.toDatetime.ToString("MMMM"))
+            @TimeSheetConsolidateObj.toDatetime.ToString("MMMM")
         </td>
         <td>
             @Html.DisplayName("Work From Home : ")
@@ -561,12 +563,12 @@ else
         <td></td>
         <td></td>
         <td>
-            @Html.DisplayName(@GetWeeklyWorkingHours(TimeSheetConsolidateObj.hours))
-
+            @GetWeeklyWorkingHours(TimeSheetConsolidateObj.hours)
         </td>
         <td>
             @Html.DisplayName("Permission : ")
-            @Html.DisplayName(Convert.ToString(TimeSheetConsolidateObj.permissionCount))
+            @Convert.ToString(TimeSheetConsolidateObj.permissionCount)
+            hrs
         </td>
         <td>
             @Html.DisplayName("Leave : ")
@@ -574,12 +576,12 @@ else
         </td>
         <td>
             @Html.DisplayName("Late In : ")
-            @Html.DisplayName(Convert.ToString(TimeSheetConsolidateObj.lateCount))
+            @Convert.ToString(TimeSheetConsolidateObj.lateCount)
 
         </td>
         <td>
             @Html.DisplayName("Early out")
-            @Html.DisplayName(Convert.ToString(TimeSheetConsolidateObj.earlyCount))
+            @Convert.ToString(TimeSheetConsolidateObj.earlyCount)
         </td>
     </tr>
 

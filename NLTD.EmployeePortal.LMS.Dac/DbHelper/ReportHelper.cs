@@ -1,10 +1,7 @@
-﻿using NLTD.EmployeePortal.LMS.Repository;
+﻿using NLTD.EmployeePortal.LMS.Common.DisplayModel;
+using NLTD.EmployeePortal.LMS.Repository;
 using System;
 using System.Collections.Generic;
-using System.Text;
-using NLTD.EmployeePortal.LMS.Dac.DbModel;
-using NLTD.EmployeePortal.LMS.Common.DisplayModel;
-using NLTD.EmployeePortal.LMS.Common.QueryModel;
 
 namespace NLTD.EmployeePortal.LMS.Dac.DbHelper
 {
@@ -15,7 +12,7 @@ namespace NLTD.EmployeePortal.LMS.Dac.DbHelper
             //Nothing to dispose...
         }
 
-        public List<LateAndEarltRpt> GetLateAndEarlyEmployees(DateTime FromDate, DateTime ToDate, Int64 UserId, bool OnlyReportedToMe)
+        public List<lateAndEarlyRpt> GetLateAndEarlyEmployees(DateTime FromDate, DateTime ToDate, Int64 UserId, bool OnlyReportedToMe)
         {
             using (var dac = new ReportDac())
             {

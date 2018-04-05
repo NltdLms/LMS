@@ -1,4 +1,5 @@
-﻿using OfficeOpenXml;
+﻿using NLTD.EmployeePortal.LMS.Common.DisplayModel;
+using OfficeOpenXml;
 using OfficeOpenXml.Style;
 using System;
 using System.Collections.Generic;
@@ -6,7 +7,6 @@ using System.ComponentModel;
 using System.Data;
 using System.Linq;
 using System.Web;
-using NLTD.EmployeePortal.LMS.Common.DisplayModel;
 
 namespace NLTD.EmployeePortal.LMS.Ux.AppHelpers
 {
@@ -71,7 +71,6 @@ namespace NLTD.EmployeePortal.LMS.Ux.AppHelpers
                 dataTable.Columns["LeaveStatus"].ColumnName = "Status";
                 dataTable.Columns["LeaveReason"].ColumnName = "Reason";
                 dataTable.Columns["ApproverComments"].ColumnName = "Approver Comments";
-                dataTable.Columns["LeaveBalanace"].ColumnName = "Leave Balance";
 
                 
                 // add the content into the Excel file  
@@ -623,14 +622,14 @@ namespace NLTD.EmployeePortal.LMS.Ux.AppHelpers
 
 
 
-        public static byte[] ExportExcelAttendence(List<EmployeeAttendanceModel> data, string Heading = "", bool showSlno = false, params string[] ColumnsToTake)
+        public static byte[] ExportExcelAttendance(List<EmployeeAttendanceModel> data, string Heading = "", bool showSlno = false, params string[] ColumnsToTake)
         {
             List<EmployeeAttendanceModel> employeeAttendanceModelListObj = (from at in data
                                                                             select new EmployeeAttendanceModel
                                                                             {
                                                                                 UserID = at.UserID,
                                                                                 InOut = at.InOut,
-                                                                                AttendenceDate = at.InOutDate.ToString("dd-MM-yyyy"),
+                                                                                AttendanceDate = at.InOutDate.ToString("dd-MM-yyyy"),
                                                                                 INOutTime = at.InOutDate.ToString("hh:mm:ss"),
                                                                                 Name = at.Name
                                                                             }).ToList();
@@ -646,6 +645,7 @@ namespace NLTD.EmployeePortal.LMS.Ux.AppHelpers
             {
                 DataTable dataTable = ListToDataTable<TimeSheetModel>(TimeSheetModelObj);
                 dataTable.Columns["WorkingDate"].ColumnName = "Date";
+                dataTable.Columns["ReportingManager"].ColumnName = "Reporting Manager";
                 dataTable.Columns["InTime"].ColumnName = "In Time";
                 dataTable.Columns["OutTime"].ColumnName = "Out Time";
                 dataTable.Columns["WorkingHours"].ColumnName = "Working Hours";
@@ -728,12 +728,12 @@ namespace NLTD.EmployeePortal.LMS.Ux.AppHelpers
                 }
                 using (ExcelRange col = workSheet.Cells[2, 6, 1 + dataTable.Rows.Count, 8])
                 {
-                    col.Style.Numberformat.Format = "hh:mm:ss";
+                    col.Style.Numberformat.Format = "HH:mm:ss";
                     col.Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
                 }
                 using (ExcelRange col = workSheet.Cells[2, 11, 1 + dataTable.Rows.Count, 12])
                 {
-                    col.Style.Numberformat.Format = "hh:mm:ss";
+                    col.Style.Numberformat.Format = "HH:mm:ss";
                     col.Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
                 }
                 if (!String.IsNullOrEmpty(heading))
@@ -754,11 +754,12 @@ namespace NLTD.EmployeePortal.LMS.Ux.AppHelpers
                 dataTable = ListToDataTable<ConsolidateReport>(weeklyTimeSheetConsolidateList);
                 dataTable.Columns["DateRange"].ColumnName = "Date";
                 dataTable.Columns["TotalWorkingHours"].ColumnName = "Total Working Hours";
-                dataTable.Columns["PermissionCount"].ColumnName = "No. Of Permission";
+                dataTable.Columns["PermissionCount"].ColumnName = "Total Permission Hours";
                 dataTable.Columns["LeaveCount"].ColumnName = "No .Of Leaves";
                 dataTable.Columns["LateCount"].ColumnName = "No. Of Late In";
                 dataTable.Columns["WorkFromHomeCount"].ColumnName = "No. Of Work From Home";
                 dataTable.Columns["EarlyCount"].ColumnName = "No. Of Early out";
+                dataTable.Columns["ReportingManager"].ColumnName = "Reporting Manager";
                 workSheet = package.Workbook.Worksheets.Add("Summary");
                 startRowFrom = String.IsNullOrEmpty(heading) ? 1 : 3;
                 if (showSrNo)
@@ -834,6 +835,7 @@ namespace NLTD.EmployeePortal.LMS.Ux.AppHelpers
 
                         weeklyConsolidateReport.DateRange = string.Format("{0} to {1}", timeSheet[i].WorkingDate.ToString("dd/MM/yyyy"), weeklyFromDate.ToString("dd/MM/yyyy"));
                         weeklyConsolidateReport.Name = timeSheet[i].Name;
+                        weeklyConsolidateReport.ReportingManager = timeSheet[i].ReportingManager;
                         weeklyConsolidateReport.TotalWorkingHours = GetWorkingHours(weeklyConsolidateReport.WorkingHours);
                         weeklyTimeSheetConsolidateList.Add(weeklyConsolidateReport);
                         weeklyConsolidateReport = new ConsolidateReport();
@@ -843,6 +845,7 @@ namespace NLTD.EmployeePortal.LMS.Ux.AppHelpers
                     {
                         monthlyConsolidateReport.DateRange = string.Format("{0} to {1}", timeSheet[i].WorkingDate.ToString("dd/MM/yyyy"), monthlyFromDate.ToString("dd/MM/yyyy"));
                         monthlyConsolidateReport.Name = timeSheet[i].Name;
+                        monthlyConsolidateReport.ReportingManager = timeSheet[i].ReportingManager;
                         monthlyConsolidateReport.TotalWorkingHours = GetWorkingHours(monthlyConsolidateReport.WorkingHours);
                         monthlyTimeSheetConsolidateList.Add(monthlyConsolidateReport);
                         monthlyConsolidateReport = new ConsolidateReport();
@@ -850,8 +853,9 @@ namespace NLTD.EmployeePortal.LMS.Ux.AppHelpers
                     }
                     if(i== timeSheet.Count-1 && timeSheet[i].WorkingDate.ToString("ddd") != "Mon")
                     {
-                        weeklyConsolidateReport.DateRange = string.Format("{0} to {1}", timeSheet[i].WorkingDate.ToString("dd/MM/yyyy"), monthlyFromDate.ToString("dd/MM/yyyy"));
+                        weeklyConsolidateReport.DateRange = string.Format("{0} to {1}", timeSheet[i].WorkingDate.ToString("dd/MM/yyyy"), weeklyFromDate.ToString("dd/MM/yyyy"));
                         weeklyConsolidateReport.Name = timeSheet[i].Name;
+                        weeklyConsolidateReport.ReportingManager = timeSheet[i].ReportingManager;
                         weeklyConsolidateReport.TotalWorkingHours = GetWorkingHours(weeklyConsolidateReport.WorkingHours);
                         weeklyTimeSheetConsolidateList.Add(weeklyConsolidateReport);
                     }
@@ -859,6 +863,7 @@ namespace NLTD.EmployeePortal.LMS.Ux.AppHelpers
                     {
                         monthlyConsolidateReport.DateRange = string.Format("{0} to {1}", timeSheet[i].WorkingDate.ToString("dd/MM/yyyy"), monthlyFromDate.ToString("dd/MM/yyyy"));
                         monthlyConsolidateReport.Name = timeSheet[i].Name;
+                        monthlyConsolidateReport.ReportingManager = timeSheet[i].ReportingManager;
                         monthlyConsolidateReport.TotalWorkingHours = GetWorkingHours(monthlyConsolidateReport.WorkingHours);
                         monthlyTimeSheetConsolidateList.Add(monthlyConsolidateReport);
                     }
@@ -905,7 +910,7 @@ namespace NLTD.EmployeePortal.LMS.Ux.AppHelpers
             // Formating Working Hours 
             using (ExcelRange col = workSheet.Cells[2, 4, 1 + dataTable.Rows.Count, 4])
             {
-                col.Style.Numberformat.Format = "hh:mm:ss";
+                col.Style.Numberformat.Format = "HH:mm:ss";
                 col.Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
             }
             string[] columnsToRemove = { "WorkingHours", "FromDate" };
@@ -937,7 +942,7 @@ namespace NLTD.EmployeePortal.LMS.Ux.AppHelpers
             if (!string.IsNullOrEmpty(TimeSheetModelObj.Requests) &&
                     TimeSheetModelObj.Requests.Contains("Permission"))
             {
-                TimeSheetConsolidateObj.PermissionCount = TimeSheetConsolidateObj.PermissionCount + 1;
+                TimeSheetConsolidateObj.PermissionCount = TimeSheetConsolidateObj.PermissionCount + TimeSheetModelObj.PermissionCount;
             }
             if (!string.IsNullOrEmpty(TimeSheetModelObj.Requests) && TimeSheetModelObj.Requests.Contains("Leave"))
             {
@@ -1049,7 +1054,7 @@ namespace NLTD.EmployeePortal.LMS.Ux.AppHelpers
                 //}
                 //using (ExcelRange col = workSheet.Cells[2, 5, 1 + dataTable.Rows.Count, 7])
                 //{
-                //    col.Style.Numberformat.Format = "hh:mm:ss";
+                //    col.Style.Numberformat.Format = "HH:mm:ss";
                 //    col.Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
                 //}
                 if (!String.IsNullOrEmpty(heading))
@@ -1081,12 +1086,13 @@ namespace NLTD.EmployeePortal.LMS.Ux.AppHelpers
         public decimal LeaveCount { get; set; }
 
         public decimal WorkFromHomeCount { get; set; }
-        public int PermissionCount { get; set; }
+        public decimal PermissionCount { get; set; }
         public int LateCount { get; set; }
         public int EarlyCount { get; set; }
-
-       
+               
         public DateTime FromDate { get; set; }
+
+        public string ReportingManager { get; set; }
 
     }
 

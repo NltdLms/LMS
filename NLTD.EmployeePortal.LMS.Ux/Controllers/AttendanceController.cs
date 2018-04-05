@@ -1,12 +1,12 @@
-﻿using System;
+﻿using NLTD.EmployeePortal.LMS.Client;
+using NLTD.EmployeePortal.LMS.Common.DisplayModel;
+using NLTD.EmployeePortal.LMS.Repository;
+using NLTD.EmployeePortal.LMS.Ux.AppHelpers;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using NLTD.EmployeePortal.LMS.Client;
-using NLTD.EmployeePortal.LMS.Common.DisplayModel;
-using NLTD.EmployeePortal.LMS.Repository;
-using NLTD.EmployeePortal.LMS.Ux.AppHelpers;
 
 namespace NLTD.EmployeePortal.LMS.Ux.Controllers
 {
@@ -16,7 +16,7 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
         // GET: Attentance
         public AttendanceController()
         {
-            EmployeeAttendanceHelper = new EmplyeeAttendenceClient();
+            EmployeeAttendanceHelper = new EmplyeeAttendanceClient();
         }
 
         public ActionResult MyAttendance()
@@ -24,7 +24,7 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
             EmployeeProfile employeeProfileObj = (EmployeeProfile) Session["Profile"];
             ViewBag.RequestLevelPerson = "My";
            // List<EmployeeAttendanceModel> employeeAttendanceModelObj =
-             //   EmployeeAttendanceHelper.GetAttendence(employeeProfileObj.UserId);
+             //   EmployeeAttendanceHelper.GetAttendance(employeeProfileObj.UserId);
             return View();
         }
         public ActionResult MyTeamAttendance()

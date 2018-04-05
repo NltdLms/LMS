@@ -1,4 +1,4 @@
-﻿@model NLTD.EmployeePortal.LMS.Common.QueryModel.EmployeeAttendenceQueryModel
+﻿@model NLTD.EmployeePortal.LMS.Common.QueryModel.EmployeeAttendanceQueryModel
 
 <style type="text/css">
     .ui-autocomplete {
@@ -34,7 +34,7 @@
 @section scripts
 {
     <script src="~/Scripts/jquery-2.2.4.js"></script>
-    <script src="~/Scripts/lms.js?v=1.05"></script>
+    <script src="~/Scripts/lms.js?v=1.06"></script>
     <script type="text/javascript" src="~/Scripts/bootstrap.js"></script>
     <script src="~/Scripts/bootstrap-datetimepicker.js"></script>
     <link href="~/Content/bootstrap-datetimepicker.css" rel="stylesheet" />
@@ -118,8 +118,8 @@
             {
                 myDirectEmployees = true;
             }
-            $("#divForEmployeeAttendence")
-                .load('/Admin/loadEmployeeAttendence?FromDate=Nodate&ToDate=Nodate&requestLevelPerson=' + $("#RequestLevelPerson").val() + '&myDirectEmployees=' + myDirectEmployees,
+            $("#divForEmployeeAttendance")
+                .load('/Admin/loadEmployeeAttendance?FromDate=Nodate&ToDate=Nodate&requestLevelPerson=' + $("#RequestLevelPerson").val() + '&myDirectEmployees=' + myDirectEmployees,
                 function () {
 
                      $(".dtatable").dataTable({ "aaSorting": [] });
@@ -188,7 +188,7 @@
                     <h3 class="box-title">@heading</h3>
                 </div>
                 <div class="box-body">
-                    <form id='your-range-form' action='@Url.Action("ExportAttendenceToExcel","Admin", new { RequestLevelPerson = (string)ViewBag.RequestLevelPerson })' method='post'>
+                    <form id='your-range-form' action='@Url.Action("ExportAttendanceToExcel","Admin", new { RequestLevelPerson = (string)ViewBag.RequestLevelPerson })' method='post'>
 
                         @{
                             @Html.Hidden("RequestLevelPerson", (string)ViewBag.RequestLevelPerson)
@@ -208,7 +208,7 @@
                                     <div class="col-sm-6"></div>
                                     <div class="col-sm-3" style="text-align:right">
                                         <br />
-                                        <button type="button" class="btn btn-primary" onclick="loadAttendenceRangeSummary()">SEARCH</button>
+                                        <button type="button" class="btn btn-primary" onclick="loadAttendanceRangeSummary()">SEARCH</button>
                                         <button type="submit" class="btn btn-primary" onclick="return ValidateName()">EXPORT TO EXCEL</button>
                                     </div>
 
@@ -243,7 +243,7 @@
                                     </div>
                                     <div class="col-sm-3" style="text-align:right">
                                         <br />
-                                        <button style="margin: 6px 12px " type="button" class="btn btn-primary" onclick="loadAttendenceRangeSummary()">SEARCH</button>
+                                        <button style="margin: 6px 12px " type="button" class="btn btn-primary" onclick="loadAttendanceRangeSummary()">SEARCH</button>
                                         <button type="submit" class="btn btn-primary" onclick="return ValidateName()">EXPORT TO EXCEL</button>
                                     </div>
                                 </div>
@@ -261,7 +261,7 @@
         </div>
     </div>
 
-    <div id="divForEmployeeAttendence"></div>
+    <div id="divForEmployeeAttendance"></div>
 
 }
 

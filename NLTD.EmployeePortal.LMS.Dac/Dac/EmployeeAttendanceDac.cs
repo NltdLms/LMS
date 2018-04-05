@@ -1,11 +1,8 @@
-﻿using System;
+﻿using NLTD.EmployeePortal.LMS.Common.DisplayModel;
+using NLTD.EmployeePortal.LMS.Repository;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using NLTD.EmployeePortal.LMS.Common.DisplayModel;
-using NLTD.EmployeePortal.LMS.Repository;
-using NLTD.EmployeePortal.LMS.Dac.DbModel;
 
 namespace NLTD.EmployeePortal.LMS.Dac.Dac
 {
@@ -16,7 +13,7 @@ namespace NLTD.EmployeePortal.LMS.Dac.Dac
 
         }
 
-        public List<EmployeeAttendanceModel> GetAttendence(Int64 UserID)
+        public List<EmployeeAttendanceModel> GetAttendance(Int64 UserID)
         {
             List<EmployeeAttendanceModel> employeeAttendanceModelList = new List<EmployeeAttendanceModel>();
             try
@@ -42,7 +39,7 @@ namespace NLTD.EmployeePortal.LMS.Dac.Dac
         }
 
 
-        public List<EmployeeAttendanceModel> GetAttendenceForRange(Int64 UserID, DateTime FromDateTime, DateTime ToDateTime, string requestLevelPerson,bool isDirectEmployees)
+        public List<EmployeeAttendanceModel> GetAttendanceForRange(Int64 UserID, DateTime FromDateTime, DateTime ToDateTime, string requestLevelPerson,bool isDirectEmployees)
         {
             List<EmployeeAttendanceModel> employeeAttendanceModelList = new List<EmployeeAttendanceModel>();
             try

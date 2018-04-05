@@ -1,9 +1,7 @@
-﻿using NLTD.EmployeePortal.LMS.Repository;
-using System;
-using System.Collections.Generic;
-using System.Text;
-using NLTD.EmployeePortal.LMS.Common.DisplayModel;
+﻿using NLTD.EmployeePortal.LMS.Common.DisplayModel;
 using NLTD.EmployeePortal.LMS.Dac.DbHelper;
+using NLTD.EmployeePortal.LMS.Repository;
+using System.Collections.Generic;
 
 namespace NLTD.EmployeePortal.LMS.Client
 {
