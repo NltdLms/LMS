@@ -21,7 +21,7 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
             //IList<Shifts> shiftMaster = null;
             using (var client = new ShiftClient())
             {
-                shiftEmployees.Shifts = client.GetShiftMaster();
+                shiftEmployees.Shifts = client.GetShiftMaster().OrderBy(p => p.FromTime).ToList();
                 shiftEmployees.shiftEmployees = client.GetShiftDetailsForUsers(this.UserId, "Team");
             }
             return View("ShiftAllocation", shiftEmployees);
@@ -30,12 +30,11 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
         public ActionResult AdminShiftAllocation()
         {
             ViewBag.RequestLevelPerson = "Admin";
-            //IList<Shifts> shiftMaster = null;
             EmployeeShifts shiftEmployees = new EmployeeShifts();
 
             using (var client = new ShiftClient())
             {
-                shiftEmployees.Shifts = client.GetShiftMaster();
+                shiftEmployees.Shifts = client.GetShiftMaster().OrderBy(p => p.FromTime).ToList();
                 shiftEmployees.shiftEmployees = client.GetShiftDetailsForUsers(this.UserId, "Admin");
             }
             return View("ShiftAllocation", shiftEmployees);
@@ -84,8 +83,6 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
 
         public ActionResult GetShiftMasterDetailwithId(Int64 shiftId)
         {
-            // IList<Shifts> shiftMaster = null;
-
             Shifts objShifts = new Shifts();
             if (shiftId != 0)
             {
@@ -135,14 +132,7 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
         public ActionResult SaveShiftMaster(int shiftId, string shiftName, TimeSpan fromTime, TimeSpan toTime)
         {
             string result = "";
-            //TimeSpan tempToTime = toTime;
-            //if (toTime < fromTime)
-            //    tempToTime = toTime.Add(TimeSpan.FromHours(24));
 
-            //TimeSpan duration = tempToTime - fromTime;
-            //int workinghours = Math.Abs(Convert.ToInt32(duration.TotalHours));
-            //if (workinghours == 9)
-            //{
             if (ModelState.IsValid)
             {
                 using (var client = new ShiftClient())
@@ -150,11 +140,7 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
                     result = client.SaveShiftMaster(shiftId, shiftName, fromTime, toTime, this.UserId);
                 }
             }
-            //}
-            //else
-            //{
-            //    result = "Woking hours should be 9 hours only ";
-            //}
+
             return Json(result);
         }
 

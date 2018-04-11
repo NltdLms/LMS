@@ -15,5 +15,7 @@ namespace NLTD.EmployeePortal.LMS.Common.DisplayModel
        public DateTime fromDatetime { get; set; }
         public DateTime toDatetime { get; set; }
         public decimal WFHCount { get; set; }
+
+        public string ReportingManager { get; set; }
     }
 }

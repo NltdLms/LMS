@@ -18,6 +18,9 @@
                 @Html.DisplayName("Name")
             </th>
             <th>
+                @Html.DisplayName("Shift From")
+            </th>
+            <th>
                 @Html.DisplayName("In Time")
             </th>
             <th>
@@ -38,7 +41,7 @@
                     <td>
                         @item.Name
                     </td>
-
+                    <td>@item.Shift.Split('-')[0]</td>
                     @if (item.InTime == DateTime.MinValue)
                     {
                         <td style="text-align: center"> @Html.DisplayName("-")</td>

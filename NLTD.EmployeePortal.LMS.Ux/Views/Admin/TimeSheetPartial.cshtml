@@ -486,7 +486,7 @@ else
                                                         select new TimeSheetConsolidate
                                                         {
                                                             hours = new TimeSpan(g.Sum(r => r.WorkingHours.Ticks)),
-                                                            permissionCount = g.Sum(r => r.permissionCount),
+                                                            permissionCount = g.Sum(r => r.PermissionCount),
                                                             leaveCount = (g.Where(k => k.Requests.Contains("Leave")).Select(x => x.LeaveDayQty)).Sum(),
                                                             lateCount = g.Count(k => k.LateIn > new TimeSpan()),
                                                             earlyCount = g.Count(k => k.EarlyOut > new TimeSpan()),

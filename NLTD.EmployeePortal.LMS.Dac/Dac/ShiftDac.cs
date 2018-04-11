@@ -401,7 +401,7 @@ namespace NLTD.EmployeePortal.LMS.Dac
                         retModel.shiftDetail = lstshiftDetails;
                         retModel.ReportingTo = ReportingTo;
 
-                        var lstShift = context.ShiftMaster.AsEnumerable().Select(s => new Shifts
+                        var lstShift = context.ShiftMaster.AsEnumerable().OrderBy(x => x.FromTime).Select(s => new Shifts
                         {
                             ShiftId = s.ShiftID,
                             ShiftName = string.Format("{0:hh\\:mm}", s.FromTime) + " - " + string.Format("{0:hh\\:mm}", s.ToTime),
