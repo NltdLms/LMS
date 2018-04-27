@@ -98,10 +98,10 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
         {
             string result = "";
             EmployeeProfile EmployeeProfileObj = (EmployeeProfile)Session["Profile"];
-            
+
             if (ModelState.IsValid)
             {
-                if(EmployeeProfileObj.RoleText == "Employee")
+                if (EmployeeProfileObj.RoleText == "Employee")
                 {
                     if (RequestMenuUser == "Team" && (FromDate <= DateTime.Now.AddDays(-7) || ToDate <= DateTime.Now.AddDays(-7)))
                     {
@@ -122,12 +122,10 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
                         result = client.SaveEmployeeShift(UserId, Shift, FromDate, ToDate, this.UserId);
                     }
                 }
-
             }
 
             return Json(result);
         }
-
 
         public ActionResult SaveShiftMaster(int shiftId, string shiftName, TimeSpan fromTime, TimeSpan toTime)
         {
@@ -143,8 +141,6 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
 
             return Json(result);
         }
-
-
 
         public ActionResult EmployeeShiftAllocation()
         {
@@ -170,12 +166,12 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
         public ActionResult GetEmployeeShiftDetails(Int64 UserId, string RequestMenuUser, string FromDate, string ToDate, string Shift)
         {
             EmpShift shiftDetail = null;
-            
+
             using (var client = new ShiftClient())
             {
-                if(RequestMenuUser == "My" && UserId == 0)
+                if (RequestMenuUser == "My" && UserId == 0)
                     UserId = this.UserId;
-              
+
                 shiftDetail = client.GetEmployeeShiftDetails(UserId, RequestMenuUser, this.UserId);
                 ViewBag.FromDate = FromDate;
                 ViewBag.ToDate = ToDate;
@@ -217,6 +213,5 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
 
             return Json(result);
         }
-
     }
 }

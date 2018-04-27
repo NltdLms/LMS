@@ -43,6 +43,7 @@ namespace NLTD.EmployeePortal.LMS.Dac.DbHelper
                 return dac.SaveShiftMaster(shiftId, shiftName, fromTime, ToTime, MgrId);
             }
         }
+
         public List<Shifts> GetShiftMaster()
         {
             using (var dac = new ShiftDac())
@@ -50,6 +51,7 @@ namespace NLTD.EmployeePortal.LMS.Dac.DbHelper
                 return dac.GetShiftMaster();
             }
         }
+
         public Shifts GetShiftMasterWithId(Int64 shiftId)
         {
             using (var dac = new ShiftDac())

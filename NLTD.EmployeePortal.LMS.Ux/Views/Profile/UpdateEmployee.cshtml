@@ -31,7 +31,7 @@
                         dataType: "json",
                         data: { term: request.term },
                         success: function (data) {
-                            
+
                             response($.map(data, function (item) {
                                 return { label: item.Name, value: item.Name };
                             }))
@@ -42,7 +42,7 @@
         });
     </script>
 }
-@{  
+@{
     <div id="@("alert_placeholder")"></div>
     <div class="row">
         <div class="col-sm-12">
@@ -53,32 +53,23 @@
 
                 <div class="box-body">
                     <div class="row">
-                        <form id="frmYearSummary" method="post">                            
-                            <div class="col-sm-6">                                
+                        <form id="frmYearSummary" method="post">
+                            <div class="col-sm-6">
                                         @Html.Label("Name", new { @class = "required" })
-                                        @Html.TextBox("Name", Model.Name, new { @class = "form-control" })                                    
+                                        @Html.TextBox("Name", Model.Name, new { @class = "form-control" })
                             </div>
                             <div class="col-sm-4"></div>
                             <div class="col-sm-2" style="padding-top:25px;">
                                 <button type="button" class="btn btn-primary pull-right" onclick="callProfileEdit()">EDIT</button>
                                 @*<button type="button" class="btn btn-primary pull-right" onclick="callProfileView()">VIEW</button>*@
                             </div>
-
-
-
                         </form>
                     </div>
                 </div>
-
             </div>
         </div>
     </div>
     <div id="alert_placeholder"></div>
     <div id="divForEmpProfile"></div>
 
-
-
 }
-
-
-

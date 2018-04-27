@@ -15,11 +15,5 @@ namespace NLTD.EmployeePortal.LMS.Dac.DbModel
         public string TimeTo { get; set; }
 
         public string Remarks { get; set; }
-
-        
-
-
-
-
     }
 }

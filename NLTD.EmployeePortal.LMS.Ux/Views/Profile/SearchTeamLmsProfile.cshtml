@@ -1,5 +1,4 @@
-﻿
-<style type="text/css">
+﻿<style type="text/css">
     .ui-autocomplete {
         height: 220px;
         overflow-y: scroll;
@@ -32,7 +31,6 @@
                                 return { label: item.Name, value: item.UserId };
                             }))
 
-
                         }
                     })
                 },
@@ -49,7 +47,6 @@
                     $("#SearchUserID").val("");
                 }
             });
-
 
         });
 
@@ -83,10 +80,9 @@
                 <div class="box-body">
                     <div class="row">
                         <div class="col-sm-5">
-                           
+
                                     @Html.LabelFor(x => x.Name)
                                     @Html.TextBoxFor(m => m.Name, new { @class = "form-control" })
-                                
                         </div>
                         <div class="col-sm-4">
                             @{ if (Model.RequestLevelPerson == "Team")
@@ -109,7 +105,6 @@
     </div>
                                 }
 
-
     <div id="divEmpProfile"></div>
 
 }
@@ -123,7 +118,4 @@
                 });
     </script>
 
-
 }
-
-

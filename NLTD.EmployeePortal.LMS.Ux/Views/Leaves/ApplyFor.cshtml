@@ -1,6 +1,5 @@
 ﻿@model NLTD.EmployeePortal.LMS.Common.DisplayModel.LeaveRequestModel
 
-
 @section scripts
 {
     <script src="~/Scripts/jquery-2.2.4.js"></script>
@@ -15,7 +14,6 @@
     <link href="~/lib/jquery/dist/jquery.timepicker.css" rel="stylesheet" />
     <script src="~/Scripts/jquery.timepicker.min.js"></script>
     <script src="~/Scripts/bootbox.min.js"></script>
-
 
 <script type="text/JavaScript">
 
@@ -45,7 +43,6 @@
         });
 </script>
 
-
 }
 
 @using (Html.BeginForm("SaveLeaveRequest", "Leaves", FormMethod.Post, new { id = "frmSubmitLeave" }))
@@ -63,7 +60,7 @@
     @Html.HiddenFor(m => m.ApplyForUserId)
     @Html.HiddenFor(m => m.ViewTitle)
     {
-        <div id = "@("alert_placeholder")" ></div >
+        <div id = "@("alert_placeholder")" ></div>
         if (Model.ErrorMesage == "Saved")
         {
             <div class="alert alert-success">
@@ -84,7 +81,6 @@
             </div>
         }
     }
-
 
     <div class="row">
         <div class="col-sm-12">
@@ -137,9 +133,7 @@
                                     <option value="F">First Half</option>
 
                                     <option value="S">Second Half</option>
-
                                 </select>
-
                             </div>
                         </div>
 
@@ -165,7 +159,6 @@
                             @Html.Label("To Time")
                             @Html.TextBoxFor(e => e.PermissionTimeTo, null, new { @class = "form-control timepicker" })
                         </div>
-
                     </div>
                     <div class="row" style="padding-bottom:1em">
                         <div class="col-sm-2 duration">
@@ -176,13 +169,8 @@
                             <br />
                             <button type="button" id="btnShowDaysCalc" class="btn btn-link" style="padding-top:8px;" onclick="LoadLeaveDtlSplit()">Show Days Calculation</button>
                             <div id="LeaveDtlSplit" style="position:absolute; width:520px; background-color:white; z-index:9999;float:left;display:none;">
-
                             </div>
-
                         </div>
-
-
-
                     </div>
                     <div class="row">
                         <div class="col-sm-12">
@@ -217,8 +205,6 @@
 @section readyscript{
     <script>
         $("document").ready(function () {
-
-
 
             InitDateTimeDropdown($("#hdnLeaveFromTime").val(), $("#hdnLeaveUptoTime").val())
             //OnApplyLeaveLoad();

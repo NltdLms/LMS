@@ -11,13 +11,15 @@ namespace NLTD.EmployeePortal.LMS.Dac.Dac
         {
             //Nothing to implement...
         }
-        public List<OfficeHoliday> GetOfficeHoliday(Int64 userID=0)
+
+        public List<OfficeHoliday> GetOfficeHoliday(Int64 userID = 0)
         {
             List<OfficeHoliday> officeHolidayList = new List<OfficeHoliday>();
             using (var context = new NLTDDbContext())
             {
-                officeHolidayList = (from oh in context.OfficeHoliday join e in context.Employee on oh.OfficeId equals e.OfficeHolidayId
-                                     where e.UserId == userID  || userID ==0
+                officeHolidayList = (from oh in context.OfficeHoliday
+                                     join e in context.Employee on oh.OfficeId equals e.OfficeHolidayId
+                                     where e.UserId == userID || userID == 0
                                      select oh).ToList();
             }
             return officeHolidayList;

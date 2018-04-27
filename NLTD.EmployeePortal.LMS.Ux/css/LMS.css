@@ -18,18 +18,17 @@
     float:left;
 }
 .btn{
-    font-size:12px !important;    
+    font-size:12px !important;
 }
 .box-title{
     font-size:14px !important;
-    
 }
 input[type='text'] { font-size: 12px !important; }
 select {
     font-size: 12px !important;
 }
 
-.required:after 
+.required:after
 {
     content: "*";
     font-weight: bold;
@@ -38,4 +37,3 @@ select {
 .table-condensed th {
     padding-left: 10px !important;
 }
-

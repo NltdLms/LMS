@@ -24,7 +24,7 @@ namespace NLTD.EmployeePortal.LMS.Client
             }
         }
 
-            public void Dispose()
+        public void Dispose()
         {
             //Nothing to impement...
         }

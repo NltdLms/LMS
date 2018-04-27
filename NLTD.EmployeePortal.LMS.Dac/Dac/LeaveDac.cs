@@ -10,11 +10,13 @@ using System.Data.Entity;
 using System.Globalization;
 using System.Linq;
 using System.Text;
+
 namespace NLTD.EmployeePortal.LMS.Dac
 {
     public class LeaveDac : ILeaveHelper
     {
-        int BSB = Convert.ToInt32(ConfigurationManager.AppSettings["BeforeShiftBuffer"]);
+        private int BSB = Convert.ToInt32(ConfigurationManager.AppSettings["BeforeShiftBuffer"]);
+
         public string ChangeStatus(LeaveStatusModel status)
         {
             int isSaved = 0;
@@ -34,11 +36,9 @@ namespace NLTD.EmployeePortal.LMS.Dac
                             if (existingStatus == "A")
                             {
                                 leave.Comments = leave.Comments + "   (Cancellation Comments :" + status.Comment + ")";
-
                             }
                             else
                             {
-
                                 leave.Comments = status.Comment;
                             }
                             leave.ApprovedBy = status.UserId;
@@ -113,13 +113,11 @@ namespace NLTD.EmployeePortal.LMS.Dac
                                             retValue = "NotSaved";
                                         //}
                                     }
-
                                 }
                                 else
                                 {
                                     retValue = "NotSaved";
                                 }
-
                             }
                             else
                             {
@@ -147,6 +145,7 @@ namespace NLTD.EmployeePortal.LMS.Dac
             }
             return retValue;
         }
+
         public IList<LeaveSummary> GetLeaveSumary(long UserId, Int32 summaryYear)
         {
             IList<LeaveSummary> lstSummary;
@@ -171,10 +170,10 @@ namespace NLTD.EmployeePortal.LMS.Dac
                                            LeavesBalance = bal.BalanceDays ?? 0
                                        }).AsQueryable();
                 lstSummary = LeaveItemsquery.ToList();
-
             }
             return lstSummary;
         }
+
         public IList<EmployeeWiseLeaveSummaryModel> GetEmployeeWiseLeaveSumary(Int64 UserId, int Year, string reqUsr, Int64? paramUserId, bool OnlyReportedToMe)
         {
             IList<Int64> empList = GetEmployeesReporting(UserId);
@@ -212,7 +211,6 @@ namespace NLTD.EmployeePortal.LMS.Dac
                                         where emp.UserId == UserId
                                         select new { RoleName = role.Role }).FirstOrDefault();
 
-
                         if (leadinfo != null)
                         {
                             if (reqUsr == "Team")
@@ -222,7 +220,6 @@ namespace NLTD.EmployeePortal.LMS.Dac
                                 {
                                     if (paramUserId > 0)
                                     {
-
                                         lstSummary = LeaveItemsquery.Where(x => x.UserId == paramUserId).ToList();
                                     }
                                     else
@@ -230,12 +227,10 @@ namespace NLTD.EmployeePortal.LMS.Dac
                                         if (OnlyReportedToMe)
                                         {
                                             lstSummary = LeaveItemsquery.Where(x => x.ReportingToId == UserId).ToList();
-
                                         }
                                         else
                                         {
                                             lstSummary = LeaveItemsquery.ToList();
-
                                         }
                                     }
                                 }
@@ -252,12 +247,10 @@ namespace NLTD.EmployeePortal.LMS.Dac
                                         if (OnlyReportedToMe)
                                         {
                                             lstSummary = LeaveItemsquery.Where(x => x.ReportingToId == UserId).ToList();
-
                                         }
                                         else
                                         {
                                             lstSummary = LeaveItemsquery.Where(t => empList.Contains(t.UserId)).ToList();
-
                                         }
                                     }
                                 }
@@ -266,7 +259,6 @@ namespace NLTD.EmployeePortal.LMS.Dac
                     }
                     //if (paramUserId != null && paramUserId != 0)
                     //{
-
                     //        if (lstSummary.Count > 0)
                     //        {
                     //            lstSummary = lstSummary.Where(x => x.UserId == paramUserId).ToList();
@@ -276,13 +268,13 @@ namespace NLTD.EmployeePortal.LMS.Dac
 
                     lstSummary = lstSummary.OrderBy(x => x.Name).ToList();
                 }
-
             }
             if (lstSummary.Count > 0)
                 lstSummary = lstSummary.OrderBy(x => x.EmpID).ToList();
 
             return lstSummary;
         }
+
         public int GetHolidayCount(DateTime startDate, DateTime endDate, long userId)
         {
             int retCount = 0;
@@ -361,6 +353,7 @@ namespace NLTD.EmployeePortal.LMS.Dac
 
             return holidays;
         }
+
         public IList<HolidayModel> GetHolidays(long userId, Int32 holYear)
         {
             IList<HolidayModel> holidays;
@@ -381,6 +374,7 @@ namespace NLTD.EmployeePortal.LMS.Dac
             }
             return holidays;
         }
+
         public string GetHolidayDates(long userId, Int32 holYear)
         {
             IList<HolidayModel> holidays;
@@ -395,7 +389,6 @@ namespace NLTD.EmployeePortal.LMS.Dac
                                   select new HolidayModel
                                   {
                                       HolidayDate = h.Holiday
-
                                   }).AsQueryable();
                 holidays = holidayQry.ToList();
                 foreach (var item in holidays)
@@ -407,6 +400,7 @@ namespace NLTD.EmployeePortal.LMS.Dac
             }
             return retStr;
         }
+
         public IList<DropDownItem> GetWeekOffs(long userId)
         {
             IList<DropDownItem> weekOffs;
@@ -424,6 +418,7 @@ namespace NLTD.EmployeePortal.LMS.Dac
             }
             return weekOffs;
         }
+
         public int CheckHoliday(DateTime dateValue, long userId)
         {
             int retCount = 0;
@@ -447,6 +442,7 @@ namespace NLTD.EmployeePortal.LMS.Dac
             }
             return retCount;
         }
+
         public IList<EmployeeList> GetEmployeeList(string param, Int64 userId)
         {
             IList<EmployeeList> empList = new List<EmployeeList>();
@@ -454,7 +450,6 @@ namespace NLTD.EmployeePortal.LMS.Dac
             IList<Int64> empReporting = new List<Int64>();
             using (var context = new NLTDDbContext())
             {
-
                 var employees = context.Employee
                                       .Where(e => e.ReportingToId == userId && e.IsActive == true)
                                       .ToList();
@@ -480,7 +475,6 @@ namespace NLTD.EmployeePortal.LMS.Dac
                                 select new { RoleName = role.Role }).FirstOrDefault();
                 if (leadinfo != null)
                 {
-
                     if (leadinfo.RoleName.ToUpper() == "ADMIN" || leadinfo.RoleName.ToUpper() == "HR")
                     {
                         empployees = empployees.Where(x => x.Name.ToUpper().Contains(param.ToUpper())).ToList();
@@ -490,14 +484,11 @@ namespace NLTD.EmployeePortal.LMS.Dac
                         empployees = empployees.Where(x => x.Name.ToUpper().Contains(param.ToUpper())).ToList();
                         empployees = empployees.Where(t => empReporting.Contains(t.UserId)).ToList();
                     }
-
                 }
-
 
                 empList = empployees.OrderBy(e => e.Name).ToList();
             }
             return empList;
-
         }
 
         public IList<Int64> GetEmployeesReporting(long leadId)
@@ -516,6 +507,7 @@ namespace NLTD.EmployeePortal.LMS.Dac
             }
             return result;
         }
+
         public IList<string> GetHigherApproversEmailIds(long? leadId)
         {
             var result = new List<string>();
@@ -530,10 +522,10 @@ namespace NLTD.EmployeePortal.LMS.Dac
                     if (reporting.ReportingToId != null)
                         result.AddRange(GetHigherApproversEmailIds(reporting.ReportingToId));
                 }
-
             }
             return result;
         }
+
         public IList<TeamLeaves> GetLeaveRequests(ManageTeamLeavesQueryModel qryMdl)
         {
             IList<Int64> empList = GetEmployeesReporting(qryMdl.LeadId);
@@ -581,7 +573,6 @@ namespace NLTD.EmployeePortal.LMS.Dac
                                            AppliedById = leave.AppliedBy
                                        }).AsQueryable();
 
-
                 List<LeaveItem> LeaveItems = new List<LeaveItem>();
                 if (qryMdl.OnlyReportedToMe)
                 {
@@ -589,7 +580,6 @@ namespace NLTD.EmployeePortal.LMS.Dac
                 }
                 else
                 {
-
                     LeaveItems = LeaveItemsquery.Where(t => empList.Contains(t.UserId)).ToList();
                 }
 
@@ -616,7 +606,6 @@ namespace NLTD.EmployeePortal.LMS.Dac
                                   AppliedByName = e.FirstName + " " + e.LastName
                               }).ToList();
 
-
                 var pdLeaveId = (from items in LeaveItems
                                  where items.isTimeBased == true
                                  select items.LeaveId).Distinct().ToList();
@@ -636,9 +625,7 @@ namespace NLTD.EmployeePortal.LMS.Dac
                     {
                         var pdRec = pdTime.Where(x => x.leaveId == LeaveItems[i].LeaveId).FirstOrDefault();
                         LeaveItems[i].PermissionTime = pdRec.fromTime + " to " + pdRec.toTime;
-
                     }
-
                 }
 
                 IList<TeamLeaves> retList = new List<TeamLeaves>();
@@ -657,8 +644,8 @@ namespace NLTD.EmployeePortal.LMS.Dac
                 retList = retList.OrderBy(x => x.Name).ToList();
                 return retList;
             }
-
         }
+
         public string ReturnPermissionHoursPerMonth(int month, Int64 userId)
         {
             string retSring = string.Empty;
@@ -678,7 +665,6 @@ namespace NLTD.EmployeePortal.LMS.Dac
                     {
                         totalDuration = totalDuration + calculateDuration(permissions[i].TimeFrom, permissions[i].TimeTo);
                     }
-
                 }
 
                 if (totalDuration == TimeSpan.Zero)
@@ -687,10 +673,8 @@ namespace NLTD.EmployeePortal.LMS.Dac
                 }
                 else
                     retSring = totalDuration.ToString(@"hh\:mm");
-
             }
             return retSring;
-
         }
 
         public TimeSpan calculateDuration(string permissionTimeFrom, string permissionTimeTo)
@@ -717,7 +701,6 @@ namespace NLTD.EmployeePortal.LMS.Dac
             duration = permissionDateToTime.Subtract(permissionDateFromTime);
 
             return duration;
-
         }
 
         public IList<TeamLeaves> GetTeamLeaveHistory(ManageTeamLeavesQueryModel qryMdl)
@@ -732,7 +715,7 @@ namespace NLTD.EmployeePortal.LMS.Dac
                 var LeaveItemsquery = (from leave in context.Leave
                                        join types in context.LeaveType on leave.LeaveTypeId equals types.LeaveTypeId
                                        join user in context.Employee on leave.UserId equals user.UserId
-                                       join apprv in context.Employee on leave.ApprovedBy equals apprv.UserId into leaves//TODO check suresh    
+                                       join apprv in context.Employee on leave.ApprovedBy equals apprv.UserId into leaves//TODO check suresh
                                        where
                                        ((qryMdl.FromDate == null || qryMdl.ToDate == null) || (
                                        (leave.StartDate >= QryFromDate && leave.StartDate <= QryToDate) ||
@@ -763,8 +746,6 @@ namespace NLTD.EmployeePortal.LMS.Dac
                                            AppliedById = leave.AppliedBy
                                        }).AsQueryable();
 
-
-
                 if (qryMdl.IsLeaveOnly)
                 {
                     LeaveItemsquery = LeaveItemsquery.Where(x => x.IsLeave == true);
@@ -783,7 +764,6 @@ namespace NLTD.EmployeePortal.LMS.Dac
                                     select new { RoleName = role.Role }).FirstOrDefault();
                     if (leadinfo != null)
                     {
-
                         if (leadinfo.RoleName.ToUpper() == "ADMIN" || leadinfo.RoleName.ToUpper() == "HR")
                         {
                             if (qryMdl.SearchUserID > 0)
@@ -822,7 +802,6 @@ namespace NLTD.EmployeePortal.LMS.Dac
                                 }
                             }
                         }
-
                     }
                 }
                 if (qryMdl.ShowApprovedLeaves)
@@ -831,12 +810,10 @@ namespace NLTD.EmployeePortal.LMS.Dac
                 }
                 if (qryMdl.SearchUserID != null && qryMdl.SearchUserID != 0)
                 {
-
                     if (LeaveItems.Count > 0)
                     {
                         LeaveItems = LeaveItems.Where(x => x.UserId == qryMdl.SearchUserID).ToList();
                     }
-
                 }
                 LeaveItems = (from l in LeaveItems
                               join e in context.Employee on l.AppliedById equals e.UserId
@@ -884,9 +861,7 @@ namespace NLTD.EmployeePortal.LMS.Dac
                     {
                         var pdRec = pdTime.Where(x => x.leaveId == LeaveItems[i].LeaveId).FirstOrDefault();
                         LeaveItems[i].PermissionTime = pdRec.fromTime + " to " + pdRec.toTime;
-
                     }
-
                 }
 
                 IList<TeamLeaves> retList = new List<TeamLeaves>();
@@ -907,6 +882,7 @@ namespace NLTD.EmployeePortal.LMS.Dac
                 return retList;
             }
         }
+
         public List<LeaveTypesModel> GetLeaveTypes(long OfficeId, Int64 userId)
         {
             using (var context = new NLTDDbContext())
@@ -923,6 +899,7 @@ namespace NLTD.EmployeePortal.LMS.Dac
                 return LeaveTypes;
             }
         }
+
         public string GetTimeBasedLeaveTypesString(long OfficeId, Int64 userId)
         {
             StringBuilder strTypes = new StringBuilder();
@@ -942,7 +919,6 @@ namespace NLTD.EmployeePortal.LMS.Dac
                     {
                         strTypes.Append(Convert.ToString(item.LeaveTypeId) + ",");
                     }
-
                 }
             }
             retTypes = strTypes.ToString();
@@ -950,6 +926,7 @@ namespace NLTD.EmployeePortal.LMS.Dac
                 retTypes = retTypes.Remove(retTypes.LastIndexOf(","));
             return retTypes;
         }
+
         public List<DropDownItem> GetYearsFromLeaveBalance()
         {
             using (var context = new NLTDDbContext())
@@ -964,6 +941,7 @@ namespace NLTD.EmployeePortal.LMS.Dac
                 return years;
             }
         }
+
         public string SaveLeaveRequest(LeaveRequestModel request)
         {
             int isSaved = 0;
@@ -1076,13 +1054,11 @@ namespace NLTD.EmployeePortal.LMS.Dac
                                             duplicateRequest = "Duplicate";
                                         }
                                     }
-
                                 }
                                 if (duplicateRequest == "Duplicate")
                                 {
                                     break;
                                 }
-
                             }
 
                             //duplicateRequest = "Duplicate";
@@ -1108,8 +1084,6 @@ namespace NLTD.EmployeePortal.LMS.Dac
 
                         if (request.LeaveFromTime == "S" && (request.LeaveFrom == request.LeaveUpto))
                             isHalfdayRequest = true;
-
-
 
                         if (lstSummary.Count > 0)
                         {
@@ -1174,7 +1148,6 @@ namespace NLTD.EmployeePortal.LMS.Dac
                             {
                                 return "PermissionProperTime";
                             }
-
                         }
 
                         if (isTimeBased == false)
@@ -1208,7 +1181,6 @@ namespace NLTD.EmployeePortal.LMS.Dac
                         leave.Remarks = request.Reason;
                         if (isTimeBased)
                         {
-
                             leave.EndDateType = "A";
                             leave.StartDateType = "A";
                         }
@@ -1336,7 +1308,6 @@ namespace NLTD.EmployeePortal.LMS.Dac
                             transaction.Rollback();
                             return "NotSaved";
                         }
-
                     }
                     catch
                     {
@@ -1346,6 +1317,7 @@ namespace NLTD.EmployeePortal.LMS.Dac
                 }
             }
         }
+
         public IList<LeaveDtl> GetLeaveDetailCalculation(DateTime LeaveFrom, DateTime LeaveUpto, string LeaveFromTime, string LeaveUptoTime, Int64 UserId, Int64 LeaveTyp)
         {
             string LeaveTypText = string.Empty;
@@ -1441,6 +1413,7 @@ namespace NLTD.EmployeePortal.LMS.Dac
                 leaveDetail[0].Total = totalCount;
             return leaveDetail;
         }
+
         public bool SaveTransactionLog(TransactionHistoryModel histModel)
         {
             int isSaved = 0;
@@ -1463,9 +1436,9 @@ namespace NLTD.EmployeePortal.LMS.Dac
             else
                 return false;
         }
+
         public IList<DaywiseLeaveDtlModel> GetDaywiseLeaveDtl(DateTime? FromDate, DateTime? ToDate, bool IsLeaveOnly, Int64 LeadId, bool OnlyReportedToMe, Int64? paramUserId, string reqUsr, bool DonotShowRejected)
         {
-
             IList<Int64> empList = GetEmployeesReporting(LeadId);
             IList<DaywiseLeaveDtlModel> retList;
             using (var context = new NLTDDbContext())
@@ -1521,7 +1494,6 @@ namespace NLTD.EmployeePortal.LMS.Dac
                             {
                                 if (paramUserId > 0)
                                 {
-
                                     retList = retList.Where(x => x.UserId == paramUserId).ToList();
                                 }
                                 else
@@ -1561,7 +1533,6 @@ namespace NLTD.EmployeePortal.LMS.Dac
                     }
                 }
 
-
                 for (int i = 0; i < retList.Count; i++)
                 {
                     retList[i].LeaveStatus = ReturnStatus(retList[i].LeaveStatus);
@@ -1572,12 +1543,12 @@ namespace NLTD.EmployeePortal.LMS.Dac
                     else if (retList[i].PartOfDay == "S")
                         retList[i].PartOfDay = "Second Half";
                 }
-
             }
             if (retList.Count > 0)
                 retList = retList.OrderBy(x => x.EmpId).ThenByDescending(x => x.LeaveDate).ToList();
             return retList;
         }
+
         public string ReturnStatus(string status)
         {
             if (status == "P")
@@ -1590,6 +1561,7 @@ namespace NLTD.EmployeePortal.LMS.Dac
                 return "Cancelled";
             return status;
         }
+
         public IList<LeaveHeaderModel> GetLeaveHederDtl(Int64 UserId)
         {
             LeaveHeaderModel headMdl = new LeaveHeaderModel();
@@ -1631,12 +1603,12 @@ namespace NLTD.EmployeePortal.LMS.Dac
                 {
                     item.LeaveTypeName = leaveTypes.Where(x => x.LeaveTypeId == item.LeaveTypeId).FirstOrDefault().LeaveTypeName;
                     lstRetMdl.Add(item);
-
                 }
             }
 
             return lstRetMdl;
         }
+
         public string ReturnWeekOff(Int64 UserId)
         {
             string retOffs = string.Empty;
@@ -1657,6 +1629,7 @@ namespace NLTD.EmployeePortal.LMS.Dac
                 return retOffs;
             }
         }
+
         public IList<WeekOffDayModel> ReturnWeekOffDays(Int64 UserId)
         {
             IList<WeekOffDayModel> lstDayOff;
@@ -1673,6 +1646,7 @@ namespace NLTD.EmployeePortal.LMS.Dac
             }
             return lstDayOff;
         }
+
         public IList<PermissionDetailsModel> GetPermissionDetail(Int64? paramUserId, string reqUsr, DateTime? startDate, DateTime? endDate, bool OnlyReportedToMe, Int64 LeadId)
         {
             IList<PermissionDetailsModel> permissions = new List<PermissionDetailsModel>();
@@ -1760,7 +1734,6 @@ namespace NLTD.EmployeePortal.LMS.Dac
                             }
                         }
                     }
-
                 }
             }
 
@@ -1787,39 +1760,52 @@ namespace NLTD.EmployeePortal.LMS.Dac
             }
             return permissions;
         }
+
         public string ReturnMonthName(int month)
         {
             switch (month)
             {
                 case 1:
                     return "January";
+
                 case 2:
                     return "February";
+
                 case 3:
                     return "March";
+
                 case 4:
                     return "April";
+
                 case 5:
                     return "May";
+
                 case 6:
                     return "June";
+
                 case 7:
                     return "July";
+
                 case 8:
                     return "August";
+
                 case 9:
                     return "September";
+
                 case 10:
                     return "October";
+
                 case 11:
                     return "November";
+
                 case 12:
                     return "December";
+
                 default:
                     return null;
-
             }
         }
+
         public decimal ReturnDuration(DateTime LeaveFrom, DateTime LeaveUpto, string LeaveFromTime, string LeaveUptoTime, Int64 UserId)
         {
             IList<LeaveDtl> leaveDetail = new List<LeaveDtl>();
@@ -1887,6 +1873,7 @@ namespace NLTD.EmployeePortal.LMS.Dac
             while (addDays <= leaveDuration);
             return leaveCount;
         }
+
         public DashBoardModel GetDashboardData(Int64 UserId, Int64 OfficeId)
         {
             bool previousYear = false, nextYear = false;
@@ -1939,7 +1926,7 @@ namespace NLTD.EmployeePortal.LMS.Dac
                            where emp.OfficeId == OfficeId && DbFunctions.TruncateTime(e.InOutDate) == DbFunctions.TruncateTime(dateTime)
                                  && DbFunctions.TruncateTime(s.ShiftDate) == DbFunctions.TruncateTime(dateTime)
                                  && (DbFunctions.CreateTime(e.InOutDate.Hour > (23 - BSB) ? 23 : e.InOutDate.Hour + BSB, e.InOutDate.Minute, e.InOutDate.Second) >= sm.FromTime
-                                 && DbFunctions.CreateTime(e.InOutDate.Hour, e.InOutDate.Minute, e.InOutDate.Second) <= (sm.ToTime.Hours > 9 ? sm.ToTime : new TimeSpan(23, 59, 59)) )
+                                 && DbFunctions.CreateTime(e.InOutDate.Hour, e.InOutDate.Minute, e.InOutDate.Second) <= (sm.ToTime.Hours > 9 ? sm.ToTime : new TimeSpan(23, 59, 59)))
                            select new { userID = e.UserID }
                 );
 
@@ -1961,11 +1948,10 @@ namespace NLTD.EmployeePortal.LMS.Dac
                          ).AsQueryable();
 
                 count = qry.Count();
-
             }
             return count;
-
         }
+
         public LeaveRequestModel ApplyLeaveCommonData(Int64 OfficeId, Int64 UserId)
         {
             LeaveRequestModel lrm = new LeaveRequestModel();
@@ -1976,6 +1962,7 @@ namespace NLTD.EmployeePortal.LMS.Dac
             lrm.TimebasedLeaveTypeIds = GetTimeBasedLeaveTypesString(OfficeId, UserId);
             return lrm;
         }
+
         public IList<LeaveDetailModel> ShowLeaveDetail(Int64 LeaveId)
         {
             IList<LeaveDetailModel> lstDtl;
@@ -1993,9 +1980,9 @@ namespace NLTD.EmployeePortal.LMS.Dac
                 lstDtl = qry.ToList();
             }
 
-
             return lstDtl;
         }
+
         public IList<MonthwiseLeavesCountModel> GetMonthwiseLeavesCount(Int32 year, Int64 LeadId, bool OnlyReportedToMe, Int64? paramUserId, string reqUsr)
         {
             IList<Int64> empList = GetEmployeesReporting(LeadId);
@@ -2098,12 +2085,9 @@ namespace NLTD.EmployeePortal.LMS.Dac
                              }
                              ).ToList();
                     }
-
-
                 }
                 else
                 {
-
                     newList = retList.GroupBy(x => new { x.EmpId, x.Name, x.LeaveType, x.LeaveDate.Month })
                  .Select(y => new MonthwiseCountEmp
                  {
@@ -2139,7 +2123,6 @@ namespace NLTD.EmployeePortal.LMS.Dac
                                             emp.Name = item.FirstName + " " + item.LastName;
                                             newList.Add(emp);
                                         }
-
                                     }
                                 }
                                 else
@@ -2154,7 +2137,6 @@ namespace NLTD.EmployeePortal.LMS.Dac
                                             emp.Name = item.FirstName + " " + item.LastName;
                                             newList.Add(emp);
                                         }
-
                                     }
                                 }
                             }
@@ -2172,7 +2154,6 @@ namespace NLTD.EmployeePortal.LMS.Dac
                                             emp.Name = item.FirstName + " " + item.LastName;
                                             newList.Add(emp);
                                         }
-
                                     }
                                 }
                                 else
@@ -2187,13 +2168,11 @@ namespace NLTD.EmployeePortal.LMS.Dac
                                             emp.Name = item.FirstName + " " + item.LastName;
                                             newList.Add(emp);
                                         }
-
                                     }
                                 }
                             }
                         }
                     }
-
                 }
                 if (newList.Count > 0)
                 {
@@ -2271,7 +2250,6 @@ namespace NLTD.EmployeePortal.LMS.Dac
                         mdl.LWP11 = newList.Where(x => x.Month == 11 && x.LeaveType == "Leave Without Pay" && x.EmpId == item.EmpId).FirstOrDefault() == null ? 0 : newList.Where(x => x.Month == 11 && x.LeaveType == "Leave Without Pay" && x.EmpId == item.EmpId).FirstOrDefault().Duration;
                         mdl.CO11 = newList.Where(x => x.Month == 11 && x.LeaveType == "Compensatory Off" && x.EmpId == item.EmpId).FirstOrDefault() == null ? 0 : newList.Where(x => x.Month == 11 && x.LeaveType == "Compensatory Off" && x.EmpId == item.EmpId).FirstOrDefault().Duration;
 
-
                         mdl.CL12 = newList.Where(x => x.Month == 12 && x.LeaveType == "Casual/Sick Leave" && x.EmpId == item.EmpId).FirstOrDefault() == null ? 0 : newList.Where(x => x.Month == 12 && x.LeaveType == "Casual/Sick Leave" && x.EmpId == item.EmpId).FirstOrDefault().Duration;
                         mdl.PL12 = newList.Where(x => x.Month == 12 && x.LeaveType == "Earned Leave" && x.EmpId == item.EmpId).FirstOrDefault() == null ? 0 : newList.Where(x => x.Month == 12 && x.LeaveType == "Earned Leave" && x.EmpId == item.EmpId).FirstOrDefault().Duration;
                         mdl.DL12 = newList.Where(x => x.Month == 12 && x.LeaveType == "Debit Leave" && x.EmpId == item.EmpId).FirstOrDefault() == null ? 0 : newList.Where(x => x.Month == 12 && x.LeaveType == "Debit Leave" && x.EmpId == item.EmpId).FirstOrDefault().Duration;
@@ -2281,20 +2259,17 @@ namespace NLTD.EmployeePortal.LMS.Dac
                         lstMdl.Add(mdl);
                     }
                 }
-
-
             }
             if (lstMdl.Count > 0)
                 lstMdl = lstMdl.OrderBy(x => x.EmpId).ToList();
             return lstMdl;
         }
+
         public string CheckIfAuthLeaveId(Int64 leaveId, Int64 userId)
         {
             string retString = string.Empty;
             using (var context = new NLTDDbContext())
             {
-
-
                 var leaveQry = (from leave in context.Leave
                                 join types in context.LeaveType on leave.LeaveTypeId equals types.LeaveTypeId
                                 join user in context.Employee on leave.UserId equals user.UserId
@@ -2319,6 +2294,7 @@ namespace NLTD.EmployeePortal.LMS.Dac
                 retString = "Valid";
             return retString;
         }
+
         public EmailDataModel GetEmailData(Int64 leaveId, string actionName)
         {
             EmailDataModel retMdl = new EmailDataModel();
@@ -2326,7 +2302,6 @@ namespace NLTD.EmployeePortal.LMS.Dac
             {
                 using (var context = new NLTDDbContext())
                 {
-
                     var qry = (from e in context.Employee
                                join l in context.Leave on e.UserId equals l.UserId
                                join lt in context.LeaveType on l.LeaveTypeId equals lt.LeaveTypeId
@@ -2361,7 +2336,6 @@ namespace NLTD.EmployeePortal.LMS.Dac
                         qry.CcEmailIds.Add(item.EmailId);
                     }
 
-
                     var qryReportingTo = context.Employee.Where(x => x.UserId == qry.ReportingToId).FirstOrDefault();
                     if (qryReportingTo == null)
                     {
@@ -2384,7 +2358,6 @@ namespace NLTD.EmployeePortal.LMS.Dac
 
                     if (qry.IsTimeBased)
                     {
-
                         var TimeDuration = context.PermissionDetail.Where(x => x.LeaveId == leaveId).FirstOrDefault();
                         qry.Date = TimeDuration.PermissionDate.Date.ToString("dd-MM-yyyy");
                         qry.Duration = TimeDuration.TimeFrom + " to " + TimeDuration.TimeTo;
@@ -2424,13 +2397,13 @@ namespace NLTD.EmployeePortal.LMS.Dac
                 }
 
                 return retMdl;
-
             }
             catch (Exception)
             {
                 throw;
             }
         }
+
         public EmailDataModel ViewLeaveFromEmail(Int64 leaveId, Int64 userId)
         {
             EmailDataModel retMdl = new EmailDataModel();
@@ -2441,7 +2414,6 @@ namespace NLTD.EmployeePortal.LMS.Dac
                 {
                     using (var context = new NLTDDbContext())
                     {
-
                         var qry = (from e in context.Employee
                                    join l in context.Leave on e.UserId equals l.UserId
                                    join lt in context.LeaveType on l.LeaveTypeId equals lt.LeaveTypeId
@@ -2466,15 +2438,11 @@ namespace NLTD.EmployeePortal.LMS.Dac
                                  ).FirstOrDefault();
                         if (qry.ReportingToId != null)
                         {
-
                             var qryReportingTo = context.Employee.Where(x => x.UserId == qry.ReportingToId).FirstOrDefault();
                             qry.ReportingToName = qryReportingTo.FirstName + " " + qryReportingTo.LastName;
-
-
                         }
                         if (qry.IsTimeBased)
                         {
-
                             var TimeDuration = context.PermissionDetail.Where(x => x.LeaveId == leaveId).FirstOrDefault();
                             qry.Date = TimeDuration.PermissionDate.Date.ToString("dd-MM-yyyy");
                             qry.Duration = TimeDuration.TimeFrom + " to " + TimeDuration.TimeTo;
@@ -2487,8 +2455,6 @@ namespace NLTD.EmployeePortal.LMS.Dac
                                 qry.FromType = "First Half";
                             else if (qry.FromType == "S")
                                 qry.FromType = "Second Half";
-
-
 
                             if (qry.ToType == "A")
                                 qry.ToType = "Full Day";
@@ -2506,20 +2472,17 @@ namespace NLTD.EmployeePortal.LMS.Dac
                                 qry.Date = qry.DateFrom.Date.ToString("dd-MM-yyyy") + "(" + qry.FromType + ")" + " to " + qry.DateTo.Date.ToString("dd-MM-yyyy") + "(" + qry.ToType + ")";
                             }
 
-
                             qry.Date = qry.DateFrom.Date.ToString("dd-MM-yyyy") + "(" + qry.FromType + ")" + " to " + qry.DateTo.Date.ToString("dd-MM-yyyy") + "(" + qry.ToType + ")";
                             qry.Duration = Convert.ToString(qry.NoOfDays);
                         }
                         retMdl = qry;
                     }
-
                 }
                 else
                 {
                     retMdl.AuthError = checkAuth;
                 }
                 return retMdl;
-
             }
             catch (Exception)
             {

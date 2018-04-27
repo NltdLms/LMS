@@ -1,6 +1,5 @@
 ﻿@model NLTD.EmployeePortal.LMS.Common.DisplayModel.LeaveRequestModel
 
-
 @section scripts
 {
     <script src="~/Scripts/jquery-2.2.4.js"></script>
@@ -15,7 +14,6 @@
     <link href="~/lib/jquery/dist/jquery.timepicker.css" rel="stylesheet" />
     <script src="~/Scripts/jquery.timepicker.min.js"></script>
     <script src="~/Scripts/bootbox.min.js"></script>
-
 
     <script type="text/JavaScript">
 
@@ -45,7 +43,6 @@
         });
     </script>
 
-
 }
 
 @using (Ajax.BeginForm("SaveLeaveRequest", "Leaves", FormMethod.Post,
@@ -55,7 +52,6 @@
                   OnComplete="applyComplete"
               }, new { id = "frmSubmitLeave" }))
 {
-
 
     @Html.Hidden("hdnLeaveFromTime", Model.LeaveFromTime)
     @Html.Hidden("hdnLeaveUptoTime", Model.LeaveUptoTime)
@@ -97,8 +93,6 @@
                             @Model.ErrorMesage
                         </div>
             }*@
-
-
 
         <div class="row">
             <div class="col-sm-12">
@@ -151,9 +145,7 @@
                                         <option value="F">First Half</option>
 
                                         <option value="S">Second Half</option>
-
                                     </select>
-
                                 </div>
                             </div>
 
@@ -179,7 +171,6 @@
                                 @Html.Label("To Time")
                                 @Html.TextBoxFor(e => e.PermissionTimeTo, null, new { @class = "form-control timepicker" })
                             </div>
-
                         </div>
                         <div class="row" style="padding-bottom:1em">
                             <div class="col-sm-2 duration">

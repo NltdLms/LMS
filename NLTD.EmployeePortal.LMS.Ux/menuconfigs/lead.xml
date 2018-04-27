@@ -53,7 +53,7 @@
       <title>My Team Requests</title>
       <url>#</url>
       <icon>fa fa-users</icon>
-      <level1item>        
+      <level1item>
         <MenuItem>
           <title>Manage Requests</title>
           <url>/Leaves/ManageLeaveRequest</url>
@@ -94,7 +94,6 @@
           <url>/Admin/TeamTransactionLogs</url>
           <icon></icon>
         </MenuItem>
-        
       </level1item>
     </MenuItem>
 
@@ -120,7 +119,7 @@
         </MenuItem>
       </level1item>
     </MenuItem>
-    
+
     <MenuItem>
       <title>My Team Timesheet</title>
       <url>#</url>

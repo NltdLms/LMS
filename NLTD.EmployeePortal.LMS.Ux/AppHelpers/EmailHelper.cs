@@ -14,15 +14,15 @@ namespace NLTD.EmployeePortal.LMS.Ux.AppHelpers
 {
     public class EmailHelper
     {
-        string mailUserName = ConfigurationManager.AppSettings["UserName"];
-        string mailHost = ConfigurationManager.AppSettings["Host"];
-        bool mailEnableSsl = Convert.ToBoolean(ConfigurationManager.AppSettings["EnableSsl"]);
-        string mailPassword = ConfigurationManager.AppSettings["Password"];
-        int mailPort = int.Parse(ConfigurationManager.AppSettings["Port"]);
-        string mailBaseUrl = ConfigurationManager.AppSettings["LMSUrl"];
+        private string mailUserName = ConfigurationManager.AppSettings["UserName"];
+        private string mailHost = ConfigurationManager.AppSettings["Host"];
+        private bool mailEnableSsl = Convert.ToBoolean(ConfigurationManager.AppSettings["EnableSsl"]);
+        private string mailPassword = ConfigurationManager.AppSettings["Password"];
+        private int mailPort = int.Parse(ConfigurationManager.AppSettings["Port"]);
+        private string mailBaseUrl = ConfigurationManager.AppSettings["LMSUrl"];
 
-        private void SendHtmlFormattedEmail(string recepientEmail,IList<string>ccEmail, string subject, string body)
-        {           
+        private void SendHtmlFormattedEmail(string recepientEmail, IList<string> ccEmail, string subject, string body)
+        {
             using (MailMessage mailMessage = new MailMessage())
             {
                 mailMessage.From = new MailAddress(mailUserName);
@@ -30,7 +30,7 @@ namespace NLTD.EmployeePortal.LMS.Ux.AppHelpers
                 mailMessage.Body = body;
                 mailMessage.IsBodyHtml = true;
                 mailMessage.To.Add(new MailAddress(recepientEmail));
-                                
+
                 foreach (var item in ccEmail)
                 {
                     mailMessage.CC.Add(item);
@@ -48,6 +48,7 @@ namespace NLTD.EmployeePortal.LMS.Ux.AppHelpers
                 smtp.Send(mailMessage);
             }
         }
+
         private string PopulateBody(string userName, string description, string requestFor, string empId, string requestType, string range, string duration, string reason, string approverName, string approverComments, string actionName)
         {
             string body = string.Empty;
@@ -59,7 +60,6 @@ namespace NLTD.EmployeePortal.LMS.Ux.AppHelpers
                     StreamReader reader = new StreamReader(stream);
                     body = reader.ReadToEnd();
                 }
-               
             }
             else
             {
@@ -128,7 +128,7 @@ namespace NLTD.EmployeePortal.LMS.Ux.AppHelpers
             }
         }
 
-        private void LogError(Exception ex,Int64 leaveId)
+        private void LogError(Exception ex, Int64 leaveId)
         {
             try
             {

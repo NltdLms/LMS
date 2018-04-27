@@ -130,7 +130,6 @@
 
                 });
 
-
         });
 
         function Validate() {
@@ -150,7 +149,7 @@
             if ($("#RequestLevelPerson").val() === "My") {
             }
             else {
-                if (!ValidateAutocompleteName($("#Name").val(), $("#UserID").val())) {   
+                if (!ValidateAutocompleteName($("#Name").val(), $("#UserID").val())) {
                     Clearshowalert("Please Choose a valid Username from the List.", "alert alert-danger");
                     return false;
                 }
@@ -161,10 +160,6 @@
 }
 
 @{
-
-
-
-
 
     string heading = string.Empty;
     string exportExcel = string.Empty;
@@ -201,8 +196,6 @@
 
                                         @Html.Label("Date Range")
                                         @Html.TextBoxFor(m => m.DateRange, new { @class = "form-control" })
-
-
                                     </div>
                                     <div class="col-sm-6"></div>
                                     <div class="col-sm-3" style="text-align:right">
@@ -210,9 +203,7 @@
                                         <button type="button" class="btn btn-primary" onclick="loadAttendanceRangeSummary()">SEARCH</button>
                                         <button type="submit" class="btn btn-primary" onclick="return ValidateName()">EXPORT TO EXCEL</button>
                                     </div>
-
                                 </div>
-
 
                             }
                             else
@@ -222,14 +213,11 @@
 
                                         @Html.Label("Date Range")
                                         @Html.TextBoxFor(m => m.DateRange, new { @class = "form-control" })
-
-
                                     </div>
                                     <div class="col-sm-3">
 
                                         @Html.LabelFor(x => x.Name)
                                         @Html.TextBoxFor(m => m.Name, new { @class = "form-control" })
-
                                     </div>
                                     <div class="col-sm-3" style="padding-top:10px">
                                         @if ((string)ViewBag.RequestLevelPerson == "Team")
@@ -251,10 +239,8 @@
                         }
                         <br />
                         <div id="alert_placeholder">
-
                         </div>
                     </form>
-
                 </div>
             </div>
         </div>
@@ -263,6 +249,3 @@
     <div id="divForEmployeeAttendance"></div>
 
 }
-
-
-

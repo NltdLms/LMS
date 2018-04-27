@@ -12,11 +12,12 @@ namespace NLTD.EmployeePortal.LMS.Dac.DbHelper
 
         public EmployeeAttendanceHelper()
         {
-            employeeAttendanceHelper =new EmployeeAttendanceDac();
+            employeeAttendanceHelper = new EmployeeAttendanceDac();
         }
+
         public void Dispose()
         {
-          //  throw new NotImplementedException();
+            //  throw new NotImplementedException();
         }
 
         public List<EmployeeAttendanceModel> GetAttendance(Int64 UserID)
@@ -24,11 +25,9 @@ namespace NLTD.EmployeePortal.LMS.Dac.DbHelper
             return employeeAttendanceHelper.GetAttendance(UserID);
         }
 
-
-        public List<EmployeeAttendanceModel> GetAttendanceForRange(Int64 UserID, DateTime FromDateTime,DateTime ToDateTime,string requestLevelUser,bool IsDirectEmployees)
+        public List<EmployeeAttendanceModel> GetAttendanceForRange(Int64 UserID, DateTime FromDateTime, DateTime ToDateTime, string requestLevelUser, bool IsDirectEmployees)
         {
             return employeeAttendanceHelper.GetAttendanceForRange(UserID, FromDateTime, ToDateTime, requestLevelUser, IsDirectEmployees);
         }
-
     }
 }

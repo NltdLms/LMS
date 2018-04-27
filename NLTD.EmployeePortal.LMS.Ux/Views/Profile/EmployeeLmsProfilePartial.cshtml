@@ -27,7 +27,6 @@
                             <div class="form-group">
                                 @Html.Label("Last Name")
                                 @Html.TextBoxFor(e => e.LastName, null, new { @class = "form-control", @readonly = true })
-
                             </div>
                         </div>
                         <div class="col-sm-3">
@@ -49,9 +48,7 @@
 
                                 @Html.Label("Email")
                                 @Html.TextBoxFor(e => e.EmailAddress, null, new { @class = "form-control", @readonly = true })
-
                             </div>
-
                         </div>
 
                         <div class="col-sm-3">
@@ -75,7 +72,6 @@
                                     <div class="form-group">
                                         @Html.Label("Employee Shift")
                                         @Html.TextBoxFor(e => e.Shift, null, new { @class = "form-control", @readonly = true })
-
                                     </div>
                                 </div>
                             </div>
@@ -87,31 +83,25 @@
                             <div class="form-group">
                                 @Html.Label("LMS Role")
                                 @Html.TextBoxFor(e => e.RoleText, null, new { @class = "form-control", @readonly = true })
-
                             </div>
                         </div>
                         <div class="col-sm-3">
                             <div class="form-group">
                                 @Html.Label("Reporting To")
                                 @Html.TextBoxFor(e => e.ReportedToName, null, new { @class = "form-control", @readonly = true })
-
                             </div>
                         </div>
                         <div class="col-sm-3">
                             <div class="form-group">
                                 @Html.Label("Office")
                                 @Html.TextBoxFor(e => e.OfficeName, null, new { @class = "form-control", @readonly = true })
-
                             </div>
                         </div>
 
                         <div class="col-sm-3">
                             @Html.Label("Holiday Calendar")
                             @Html.TextBoxFor(e => e.HolidayOfficeName, null, new { @class = "form-control", @readonly = true })
-
                         </div>
-
-
                     </div>
                     <div class="row">
 
@@ -119,38 +109,32 @@
                             <div class="form-group">
                                 @Html.Label("Joining Date")
                                 @Html.TextBoxFor(e => e.DOJ, null, new { @class = "form-control", @readonly = true })
-
                             </div>
                         </div>
                         <div class="col-sm-3">
                             <div class="form-group">
                                 @Html.Label("Confirmation Date")
                                 @Html.TextBoxFor(e => e.ConfirmationDate, null, new { @class = "form-control", @readonly = true })
-
                             </div>
                         </div>
                         <div class="col-sm-3">
                             <div class="form-group">
                                 @Html.Label("Relieving Date")
                                 @Html.TextBoxFor(e => e.RelievingDate, null, new { @class = "form-control", @readonly = true })
-
                             </div>
                         </div>
 
                         <div class="col-sm-3">
                             @Html.Label("Mobile Number")
                             @Html.TextBoxFor(e => e.MobileNumber, null, new { @class = "form-control", @readonly = true })
-
                         </div>
-
-
                     </div>
                     <div class="row">
                         <div class="col-sm-12 pull-left"> @Html.Label("Weekly Off(s)")</div>
                     </div>
                     <div class="row" style="padding-top:10px;padding-bottom:10px;">
                         <div class="col-sm-6">
-                           
+
                             <div class="col-sm-3">
                                 @Html.CheckBoxFor(e => e.Monday, new { @disabled = true })
                                 @Html.LabelFor(e => e.Monday, new { style = "font-weight:normal" })
@@ -169,7 +153,7 @@
                             </div>
                         </div>
                         <div class="col-sm-6">
-                            
+
                             <div class="col-sm-3">
                                 @Html.CheckBoxFor(e => e.Friday, new { @disabled = true })
                                 @Html.LabelFor(e => e.Friday, new { style = "font-weight:normal" })
@@ -186,12 +170,8 @@
                             </div>
                         </div>
                     </div>
-
-
                 </div>
             </form>
         </div>
     </div>
 </div>
-
-

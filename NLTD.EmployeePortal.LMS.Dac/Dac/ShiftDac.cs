@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Data.Entity.Migrations;
 using System.Linq;
+
 namespace NLTD.EmployeePortal.LMS.Dac
 {
     public class ShiftDac : IShiftHelper
@@ -54,7 +55,6 @@ namespace NLTD.EmployeePortal.LMS.Dac
             }
             catch (Exception)
             {
-
                 throw;
             }
             return lstShiftAllocation;
@@ -77,12 +77,10 @@ namespace NLTD.EmployeePortal.LMS.Dac
                                     ToTime = s.ToTime,
                                     Shift = string.Format("{0:hh\\:mm}", s.FromTime) + " - " + string.Format("{0:hh\\:mm}", s.ToTime)
                                 }).ToList();
-
                 }
             }
             catch (Exception)
             {
-
                 throw;
             }
             return lstShift;
@@ -120,7 +118,6 @@ namespace NLTD.EmployeePortal.LMS.Dac
             }
             catch (Exception)
             {
-
                 throw;
             }
             return lstShiftEmployees;
@@ -167,7 +164,7 @@ namespace NLTD.EmployeePortal.LMS.Dac
             }
         }
 
-        List<ShiftEmployees> GetEmployees(NLTDDbContext context, Int64 UserId)
+        private List<ShiftEmployees> GetEmployees(NLTDDbContext context, Int64 UserId)
         {
             var result = new List<ShiftEmployees>();
 
@@ -190,14 +187,13 @@ namespace NLTD.EmployeePortal.LMS.Dac
             }
             catch (Exception)
             {
-
                 throw;
             }
 
             return result;
         }
 
-        List<ShiftAllocation> GetShiftEmployees(NLTDDbContext context, Int64 UserId)
+        private List<ShiftAllocation> GetShiftEmployees(NLTDDbContext context, Int64 UserId)
         {
             var result = new List<ShiftAllocation>();
 
@@ -235,7 +231,6 @@ namespace NLTD.EmployeePortal.LMS.Dac
             }
             catch (Exception)
             {
-
                 throw;
             }
 
@@ -262,12 +257,10 @@ namespace NLTD.EmployeePortal.LMS.Dac
                                          ToTime = s.ToTime
                                      }).SingleOrDefault();
                     }
-
                 }
             }
             catch (Exception)
             {
-
                 throw;
             }
             return objShifts;
@@ -319,8 +312,6 @@ namespace NLTD.EmployeePortal.LMS.Dac
             }
         }
 
-
-
         public EmpShift GetEmployeeShiftDetails(Int64 UserId, string RequestMenuUser, long LeaduserId)
         {
             EmpShift retModel = new EmpShift();
@@ -355,7 +346,6 @@ namespace NLTD.EmployeePortal.LMS.Dac
                             Name = empPrf.FirstName + " " + empPrf.LastName;
                         }
                     }
-
 
                     if (userId > 0 || (RequestMenuUser == "My" && LeaduserId > 0))
                     {
@@ -414,11 +404,9 @@ namespace NLTD.EmployeePortal.LMS.Dac
                     retModel.EmpId = EmpId;
                     retModel.UserId = userId;
                 }
-
             }
             catch (Exception)
             {
-
                 throw;
             }
             return retModel;

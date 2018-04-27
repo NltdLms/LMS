@@ -22,15 +22,16 @@ namespace NLTD.EmployeePortal.LMS.Ux.AppHelpers
         public string Role { get; set; }
 
         public string IsAuthorized { get; set; }
+
         public BaseController()
         {
-
         }
+
         protected override void OnActionExecuting(ActionExecutingContext filterContext)
         {
             using (var client = new EmployeeClient())
             {
-                var identity = (WindowsIdentity)System.Web.HttpContext.Current.User.Identity;               
+                var identity = (WindowsIdentity)System.Web.HttpContext.Current.User.Identity;
                 string menu = string.Empty;
 
                 var windowsLoginName = identity.Name.ToUpper();
@@ -44,7 +45,7 @@ namespace NLTD.EmployeePortal.LMS.Ux.AppHelpers
                 if (windowsLoginName != "")
                 {
                     ViewBag.DisplayName = windowsLoginName;
-                    
+
                     EmployeeProfile profile = new EmployeeProfile();
                     if (Session["Profile"] == null)
                     {
@@ -81,14 +82,15 @@ namespace NLTD.EmployeePortal.LMS.Ux.AppHelpers
                         {
                             ViewBag.MenuText = MenuHelper.GetMenu("", false);
                         }
-                        ViewBag.DisplayName = profile.FirstName + " " + profile.LastName;                        
+                        ViewBag.DisplayName = profile.FirstName + " " + profile.LastName;
                         ViewBag.EmpId = profile.EmployeeId;
 
                         string requestUrl = Request.Url.AbsolutePath;
                         string menuTxt = (string)ViewBag.MenuText;
 
                         if (menuTxt.Contains(requestUrl)) { }
-                        else {
+                        else
+                        {
                             IsAuthorized = "NoAuth";
                         }
                     }
@@ -97,18 +99,15 @@ namespace NLTD.EmployeePortal.LMS.Ux.AppHelpers
                         this.UserId = 0;
                         this.OfficeId = 0;
                         ViewBag.MenuText = "NoProfile";
-
                     }
                 }
-
                 else
                 {
                     this.UserId = 0;
                     this.OfficeId = 0;
                     ViewBag.MenuText = "NoProfile";
-
                 }
-            }            
+            }
         }
     }
 }

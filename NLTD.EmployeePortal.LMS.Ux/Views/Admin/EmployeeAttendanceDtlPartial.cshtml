@@ -108,7 +108,6 @@ else
                         <i class="more-less glyphicon glyphicon-plus"></i>
                         @Model[i].Name
                     </a>
-
                 </h4>
             </div>
             <div id="@("collapse" + Model[i].UserID)" style="background-color:#ecf0f5" class="panel-collapse collapse" role="tabpanel" aria-labelledby="@("heading" + Model[i].Name)">
@@ -140,7 +139,7 @@ else
                                         i = j-1;
                                         break;
                                     }
-                                    
+
                                 <tr>
                                     <td>
                                         @Model[j].InOutDate.ToString("dd-MM-yyyy")

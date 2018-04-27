@@ -15,6 +15,7 @@ namespace NLTD.EmployeePortal.LMS.Client
                 return helper.GetShiftAllocation(userId, RequestMenuUser);
             }
         }
+
         public List<ShiftEmployees> GetShiftDetailsForUsers(Int64 userId, string RequestMenuUser)
         {
             using (IShiftHelper helper = new ShiftHelper())
@@ -22,6 +23,7 @@ namespace NLTD.EmployeePortal.LMS.Client
                 return helper.GetShiftDetailsForUsers(userId, RequestMenuUser);
             }
         }
+
         public string SaveEmployeeShift(List<Int64> UserId, int Shift, DateTime FromDate, DateTime ToDate, Int64 MgrId)
         {
             using (IShiftHelper helper = new ShiftHelper())
@@ -29,6 +31,7 @@ namespace NLTD.EmployeePortal.LMS.Client
                 return helper.SaveEmployeeShift(UserId, Shift, FromDate, ToDate, MgrId);
             }
         }
+
         public List<Shifts> GetShiftMaster()
         {
             using (IShiftHelper helper = new ShiftHelper())

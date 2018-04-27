@@ -8,13 +8,13 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Threading;
 using System.Web.Mvc;
+
 namespace NLTD.EmployeePortal.LMS.Ux.Controllers
 {
     public class LeavesController : BaseController
     {
         public ActionResult Apply(DateTime? StartDate, DateTime? LeaveUpto)
         {
-           
             ViewBag.PageTile = "Apply For Leave";
 
             var request = new LeaveRequestModel();
@@ -48,18 +48,18 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
                 request.holidayDates = commonData.holidayDates;
                 request.TimebasedLeaveTypeIds = commonData.TimebasedLeaveTypeIds;
             }
-            
+
             request.ReportingToName = this.ReportingToName;
 
             return View(request);
         }
+
         public ActionResult LoadAppyOnBehalf(DateTime? StartDate, DateTime? LeaveUpto)
         {
-
             ViewBag.PageTile = "Apply For Leave Others";
             var request = new LeaveRequestModel();
             Int64 userId = (Int64)TempData["ApplyForUserId"];
-            
+
             request.UserId = userId;
             if (StartDate != null)
             {
@@ -83,24 +83,25 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
                 request.holidayDates = commonData.holidayDates;
                 request.TimebasedLeaveTypeIds = commonData.TimebasedLeaveTypeIds;
             }
-            using(var Client=new EmployeeClient())
+            using (var Client = new EmployeeClient())
             {
                 request.ReportingToName = Client.ReportingToName(userId);
             }
-            
+
             request.ViewTitle = "Apply Request For " + TempData["ApplyForName"].ToString();
             request.ApplyMode = "Others";
             request.ApplyForUserId = userId;
-            return View("ApplyFor",request);
-        }        
+            return View("ApplyFor", request);
+        }
+
         public ActionResult ApplyOnBehalfSearch()
         {
-            
             ApplyOnBehalfSearchModel qryMdl = new ApplyOnBehalfSearchModel();
             qryMdl.ApplyMode = "Other";
-            
-            return View("ApplyOnBehalfMainView",qryMdl);
+
+            return View("ApplyOnBehalfMainView", qryMdl);
         }
+
         public ActionResult CallApplyFor(string name)
         {
             Int64 userId = 0;
@@ -124,6 +125,7 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
                 return Json(new { redirectToUrl = Url.Action("LoadAppyOnBehalf", "Leaves") });
             }
         }
+
         [HttpPost]
         public ActionResult SaveLeaveRequest(LeaveRequestModel data)
         {
@@ -133,7 +135,7 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
             {
                 if (data.ApplyMode == "Others")
                 {
-                    if(this.Role=="HR" || this.Role == "Admin")
+                    if (this.Role == "HR" || this.Role == "Admin")
                     {
                     }
                     else
@@ -155,7 +157,7 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
                 if (data.LeaveFrom > data.LeaveUpto)
                 {
                     data.ErrorMesage = "Please select correct From and To dates for the request.";
-                    isValid = false;                    
+                    isValid = false;
                 }
 
                 if (data.Reason != null)
@@ -180,7 +182,6 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
                 {
                     if (isValid)
                     {
-
                         if (data.LeaveFrom.Year != data.LeaveUpto.Year)
                         {
                             data.ErrorMesage = "The leave request duration should be within the same year.";
@@ -222,23 +223,22 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
                             if (result.IndexOf("$") > 0)
                             {
                                 data.ErrorMesage = "Saved";
-                                
+
                                 try
-                                {                                    
+                                {
                                     EmailHelper emailHelper = new EmailHelper();
                                     emailHelper.SendEmail(Convert.ToInt64(result.Substring(6)), "Pending");
-//#if DEBUG
-//                                    emailHelper.SendEmail(Convert.ToInt64(result.Substring(6)), "Pending");
-//#else
+                                    //#if DEBUG
+                                    //                                    emailHelper.SendEmail(Convert.ToInt64(result.Substring(6)), "Pending");
+                                    //#else
 
-//                                    //BackgroundJob.Enqueue(() => emailHelper.SendEmail(Convert.ToInt64(result.Substring(6)), "Pending"));
-//#endif
+                                    //                                    //BackgroundJob.Enqueue(() => emailHelper.SendEmail(Convert.ToInt64(result.Substring(6)), "Pending"));
+                                    //#endif
                                 }
                                 catch
                                 {
                                     data.ErrorMesage = "EmailFailed";
-                                }                                
-                               
+                                }
                             }
                             else if (result == "Duplicate")
                                 data.ErrorMesage = "There is a previously applied request falling within this date range.";
@@ -259,7 +259,7 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
                             else if (result.Contains("ExceedMaxPerRequest"))
                                 data.ErrorMesage = "Maximum number of days allowed per request are " + result.Substring(19) + ".";
                         }
-                    }                          
+                    }
                 }
             }
             else
@@ -288,16 +288,17 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
                 return Json(data.ErrorMesage);
             }
         }
-                
+
         public ActionResult ManageLeaveRequest()
-        {           
-            ManageTeamLeavesQueryModel qryMdl = new ManageTeamLeavesQueryModel();          
+        {
+            ManageTeamLeavesQueryModel qryMdl = new ManageTeamLeavesQueryModel();
             qryMdl.OnlyReportedToMe = true;
             qryMdl.IsAuthorized = this.IsAuthorized;
             return View(qryMdl);
         }
+
         public ActionResult MyLeaveHistory()
-        {  
+        {
             ViewBag.RequestLevelPerson = "My";
             ManageTeamLeavesQueryModel qyMdl = new ManageTeamLeavesQueryModel();
             qyMdl.OnlyReportedToMe = true;
@@ -308,8 +309,9 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
             qyMdl.ToDate = lastDay;
             return View("TeamHistory", qyMdl);
         }
+
         public ActionResult TeamLeaveHistory()
-        {          
+        {
             ViewBag.RequestLevelPerson = "Team";
             ManageTeamLeavesQueryModel qyMdl = new ManageTeamLeavesQueryModel();
             qyMdl.OnlyReportedToMe = true;
@@ -320,8 +322,9 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
             qyMdl.ToDate = lastDay;
             return View("TeamHistory", qyMdl);
         }
+
         public ActionResult AdminLeaveHistory()
-        {          
+        {
             ViewBag.RequestLevelPerson = "Admin";
             ManageTeamLeavesQueryModel qyMdl = new ManageTeamLeavesQueryModel();
             qyMdl.OnlyReportedToMe = true;
@@ -332,7 +335,7 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
             qyMdl.ToDate = lastDay;
             return View("TeamHistory", qyMdl);
         }
-       
+
         public ActionResult LoadManageLeavePartial(bool ShowOnlyReportedToMe, bool ShowApprovedLeaves, string FromDate, string ToDate, string RequestMenuUser)
         {
             DateTime? startDateFormatted = null;
@@ -344,7 +347,8 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
                     startDateFormatted = DateTime.Parse(FromDate, new CultureInfo("en-GB", true));
                     endDateFormatted = DateTime.Parse(ToDate, new CultureInfo("en-GB", true));
                 }
-                catch (Exception ex) {
+                catch (Exception ex)
+                {
                     throw;
                 }
             }
@@ -362,11 +366,12 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
             }
             return PartialView("ManageLeaveDetailPartial", LeaveRequests);
         }
-        public ActionResult ViewLeaveHistory(bool OnlyReportedToMe, string FromDate,string ToDate, bool IsLeaveOnly,Int64? paramUserId, string RequestMenuUser)
+
+        public ActionResult ViewLeaveHistory(bool OnlyReportedToMe, string FromDate, string ToDate, bool IsLeaveOnly, Int64? paramUserId, string RequestMenuUser)
         {
             DateTime? startDateFormatted = null;
             DateTime? endDateFormatted = null;
-           
+
             if (FromDate != "")
             {
                 try
@@ -374,7 +379,7 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
                     startDateFormatted = DateTime.Parse(FromDate, new CultureInfo("en-GB", true));
                     endDateFormatted = DateTime.Parse(ToDate, new CultureInfo("en-GB", true));
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     throw;
                 }
@@ -385,7 +390,7 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
                 endDateFormatted = System.DateTime.Now.Date;
             }
             ManageTeamLeavesQueryModel qryMdl = new ManageTeamLeavesQueryModel();
-            qryMdl.OnlyReportedToMe = OnlyReportedToMe;            
+            qryMdl.OnlyReportedToMe = OnlyReportedToMe;
             qryMdl.FromDate = startDateFormatted;
             qryMdl.ToDate = endDateFormatted;
             qryMdl.RequestMenuUser = RequestMenuUser;
@@ -399,7 +404,7 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
             }
             return PartialView("TeamHistoryDetailPartial", LeaveRequests);
         }
-        
+
         [HttpPost]
         public ActionResult ChangeStatus(LeaveStatusModel obj)
         {
@@ -408,33 +413,32 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
             {
                 string Status = client.ChangeStatus(obj);
                 if (Status == "Saved")
-                {                    
-                        string action = string.Empty;
-                        if (obj.Status == "R")
-                            action = "Rejected";
-                        else if (obj.Status == "A")
-                            action = "Approved";
-                        else if (obj.Status == "C")
-                            action = "Cancelled";
+                {
+                    string action = string.Empty;
+                    if (obj.Status == "R")
+                        action = "Rejected";
+                    else if (obj.Status == "A")
+                        action = "Approved";
+                    else if (obj.Status == "C")
+                        action = "Cancelled";
                     try
                     {
                         EmailHelper emailHelper = new EmailHelper();
                         emailHelper.SendEmail(Convert.ToInt64(obj.LeaveId), action);
-//#if DEBUG
-//                        emailHelper.SendEmail(Convert.ToInt64(obj.LeaveId), action);
-//#else
-//                        BackgroundJob.Enqueue(() => emailHelper.SendEmail(Convert.ToInt64(obj.LeaveId), action));
-//#endif
+                        //#if DEBUG
+                        //                        emailHelper.SendEmail(Convert.ToInt64(obj.LeaveId), action);
+                        //#else
+                        //                        BackgroundJob.Enqueue(() => emailHelper.SendEmail(Convert.ToInt64(obj.LeaveId), action));
+                        //#endif
                     }
                     catch
                     {
                     }
-                    
                 }
                 return Json(Status);
             }
         }
-        
+
         public ActionResult LoadLeaveSummaryFull(Int64 userId)
         {
             IList<LeaveSummary> LeaveRequests = null;
@@ -444,6 +448,7 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
             }
             return PartialView("LeaveSummaryFullPartial", LeaveRequests);
         }
+
         public ActionResult LoadApplyLeaveSummary()
         {
             IList<LeaveSummary> LeaveRequests = null;
@@ -453,16 +458,17 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
             }
             return PartialView("LeaveSummaryFullPartial", LeaveRequests);
         }
+
         public ActionResult GetLeaveSumary()
-        {           
-            IList <LeaveSummary> LeaveRequests = null;
+        {
+            IList<LeaveSummary> LeaveRequests = null;
             using (var client = new LeaveClient())
             {
-                LeaveRequests = client.GetLeaveSumary(UserId,System.DateTime.Now.Year);
+                LeaveRequests = client.GetLeaveSumary(UserId, System.DateTime.Now.Year);
             }
             return View(LeaveRequests);
         }
-       
+
         public int GetHolidayCount(string startDate, string endDate)
         {
             DateTime startDateFormatted = System.DateTime.Now;
@@ -476,7 +482,7 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
                         startDateFormatted = DateTime.Parse(startDate, new CultureInfo("en-GB", true));
                         endDateFormatted = DateTime.Parse(endDate, new CultureInfo("en-GB", true));
                     }
-                    catch(Exception ex)
+                    catch (Exception ex)
                     {
                         throw;
                     }
@@ -496,6 +502,7 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
             }
             return holidayCount;
         }
+
         [HttpPost]
         public decimal ReturnDuration(string LeaveFrom, string LeaveUpto, string LeaveFromTime, string LeaveUptoTime)
         {
@@ -512,7 +519,6 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
                     }
                     catch (Exception ex)
                     {
-                        
                     }
                 }
             }
@@ -530,6 +536,7 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
 
             return duration;
         }
+
         public ActionResult GetLeaveDetailCalculation(string LeaveFrom, string LeaveUpto, string LeaveFromTime, string LeaveUptoTime, Int64 LeaveTyp)
         {
             DateTime startDateFormatted = System.DateTime.Now;
@@ -557,8 +564,9 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
                     LeaveRequests = client.GetLeaveDetailCalculation(startDateFormatted, endDateFormatted, LeaveFromTime, LeaveUptoTime, UserId, LeaveTyp);
                 }
             }
-            return PartialView("LeaveDetailSplitPartial",LeaveRequests);
+            return PartialView("LeaveDetailSplitPartial", LeaveRequests);
         }
+
         public ActionResult ShowLeaveDetail(Int64 LeaveId)
         {
             IList<LeaveDetailModel> LeaveRequests = null;

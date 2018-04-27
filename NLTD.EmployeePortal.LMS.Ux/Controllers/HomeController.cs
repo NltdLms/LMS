@@ -8,6 +8,7 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
         {
             return RedirectToAction("Index", "Dashboard");
         }
+
         public ActionResult Unauthorized()
         {
             return View();

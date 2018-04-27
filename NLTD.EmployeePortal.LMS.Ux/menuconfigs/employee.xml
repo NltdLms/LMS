@@ -3,9 +3,9 @@
   <menuitem>
     <MenuItem>
       <title>Dashboard</title>
-      <url>/Dashboard</url>      
+      <url>/Dashboard</url>
       <icon>fa fa-tachometer</icon>
-    </MenuItem>  
+    </MenuItem>
     <MenuItem>
       <title>My Requests</title>
       <url>#</url>
@@ -15,7 +15,7 @@
           <title>Apply New Request</title>
           <url>/Leaves/Apply</url>
           <icon></icon>
-        </MenuItem>        
+        </MenuItem>
         <MenuItem>
           <title>Request History</title>
           <url>/Leaves/MyLeaveHistory</url>

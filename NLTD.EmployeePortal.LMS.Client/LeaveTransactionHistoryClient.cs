@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace NLTD.EmployeePortal.LMS.Client
 {
-    public class LeaveTransactionHistoryClient:ILeaveTransactionHisotryHelper
+    public class LeaveTransactionHistoryClient : ILeaveTransactionHisotryHelper
     {
         public void Dispose()
         {

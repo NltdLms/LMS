@@ -6,12 +6,14 @@ using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
+
 namespace NLTD.EmployeePortal.LMS.Dac
 {
     public class ReportDac : IReportHelper
     {
-        int BeforeShiftBuffer = Convert.ToInt32(ConfigurationManager.AppSettings["BeforeShiftBuffer"]);
-        int AfterShiftBuffer = Convert.ToInt32(ConfigurationManager.AppSettings["AfterShiftBuffer"]);
+        private int BeforeShiftBuffer = Convert.ToInt32(ConfigurationManager.AppSettings["BeforeShiftBuffer"]);
+        private int AfterShiftBuffer = Convert.ToInt32(ConfigurationManager.AppSettings["AfterShiftBuffer"]);
+
         public List<lateAndEarlyRpt> GetLateAndEarlyEmployees(DateTime FromDate, DateTime ToDate, Int64 UserId, bool OnlyReportedToMe)
         {
             List<lateAndEarlyRpt> lateAndEarlyRpt = new List<lateAndEarlyRpt>();
@@ -26,19 +28,18 @@ namespace NLTD.EmployeePortal.LMS.Dac
                     List<TimeSheetModel> timeSheetModelListTemp = timeSheetDac.GetMyTeamTimeSheet(UserId, FromDate, ToDate, OnlyReportedToMe);
                     timeSheetModelList.AddRange(timeSheetModelListTemp);
 
-                   var shiftQueryModelList = (from sm in context.ShiftMaster
-                                           join smp in context.ShiftMapping on sm.ShiftID equals smp.ShiftID
-                                           join e in context.Employee on smp.UserID equals e.UserId
-                                           where smp.UserID == UserId && smp.ShiftDate >= FromDate && smp.ShiftDate <= ToDate
-                                           select new ShiftQueryModel
-                                           {
-                                               UserID = smp.UserID,
-                                               Employeename = e.FirstName + " " + e.LastName,
-                                               ShiftFromtime = sm.FromTime,
-                                               ShiftTotime = sm.ToTime,
-                                               ShiftDate = smp.ShiftDate,
-
-                                           }).ToList();
+                    var shiftQueryModelList = (from sm in context.ShiftMaster
+                                               join smp in context.ShiftMapping on sm.ShiftID equals smp.ShiftID
+                                               join e in context.Employee on smp.UserID equals e.UserId
+                                               where smp.UserID == UserId && smp.ShiftDate >= FromDate && smp.ShiftDate <= ToDate
+                                               select new ShiftQueryModel
+                                               {
+                                                   UserID = smp.UserID,
+                                                   Employeename = e.FirstName + " " + e.LastName,
+                                                   ShiftFromtime = sm.FromTime,
+                                                   ShiftTotime = sm.ToTime,
+                                                   ShiftDate = smp.ShiftDate,
+                                               }).ToList();
                 }
             }
             catch (Exception)
@@ -100,7 +101,8 @@ namespace NLTD.EmployeePortal.LMS.Dac
             List<ShiftQueryModel> ShiftQueryModelList = timeSheetDac.GetShiftDetails(UserID, FromDate, ToDate);
             try
             {
-                var toDateShift = (from m in ShiftQueryModelList where m.ShiftDate == ToDate
+                var toDateShift = (from m in ShiftQueryModelList
+                                   where m.ShiftDate == ToDate
                                    select new { fromTime = m.ShiftFromtime, toTime = m.ShiftTotime }).FirstOrDefault();
                 TimeSpan fromTime = toDateShift.fromTime;
                 TimeSpan toTime = toDateShift.toTime;
@@ -136,9 +138,9 @@ namespace NLTD.EmployeePortal.LMS.Dac
                     }
 
                     reportLateMonth.UserID = UserID;
-                    reportLateMonth.ReportingTo =ReportingTo;
-                    reportLateMonth.Name =Name;
-                    reportLateMonth.EmpId=EmpId;
+                    reportLateMonth.ReportingTo = ReportingTo;
+                    reportLateMonth.Name = Name;
+                    reportLateMonth.EmpId = EmpId;
                     var maxmin = from s in EmployeeAttendanceList
                                  where s.InOutDate >= shiftFromDateTime && s.InOutDate <= shiftEndDateTime
                                  group s by true into r
@@ -148,13 +150,13 @@ namespace NLTD.EmployeePortal.LMS.Dac
                                  };
 
                     if (maxmin != null && maxmin.Count() > 0)
-                    {   
+                    {
                         if (maxmin.ToList()[0].min.TimeOfDay > ShiftQueryModelList[i].ShiftFromtime)
                         {
                             reportLateMonth.LateEntry = maxmin.ToList()[0].min.TimeOfDay - ShiftQueryModelList[i].ShiftFromtime;
                             reportLateMonthlst.Add(reportLateMonth);
                         }
-                    }                       
+                    }
                 }
             }
             catch (Exception)

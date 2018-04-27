@@ -10,10 +10,6 @@ namespace NLTD.EmployeePortal.LMS.Dac
             return;
         }
 
-      
-
-
-
         //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         //{
         //    //optionsBuilder.UseSqlServer(new Startup().Configuration.GetSection("Data:DefaultConnection:NLTDDbContext").Value.ToString());
@@ -34,7 +30,7 @@ namespace NLTD.EmployeePortal.LMS.Dac
         public DbSet<OfficeLocation> OfficeLocation { get; set; }
         public DbSet<OfficeHoliday> OfficeHoliday { get; set; }
 
-        public DbSet<EmployeeTransactionHistory>EmployeeTransactionHistory { get; set; }
+        public DbSet<EmployeeTransactionHistory> EmployeeTransactionHistory { get; set; }
         public DbSet<EmployeeWeekOff> EmployeeWeekOff { get; set; }
 
         public DbSet<DaysOfWeek> DayOfWeek { get; set; }
@@ -45,6 +41,7 @@ namespace NLTD.EmployeePortal.LMS.Dac
 
         public DbSet<ShiftMapping> ShiftMapping { get; set; }
         public DbSet<ShiftTransaction> ShiftTransaction { get; set; }
+
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Employee>().HasKey(e => e.UserId).ToTable("Employee");
@@ -60,14 +57,13 @@ namespace NLTD.EmployeePortal.LMS.Dac
             modelBuilder.Entity<LeaveType>().HasKey(e => e.LeaveTypeId).ToTable("LeaveType");
             modelBuilder.Entity<OfficeLocation>().HasKey(e => e.OfficeId).ToTable("OfficeLocation");
             modelBuilder.Entity<OfficeHoliday>().HasKey(e => e.OfficeHolodayId).ToTable("OfficeHoliday");
-            
+
             modelBuilder.Entity<EmployeeWeekOff>().HasKey(e => e.EmployeeWeekOffId).ToTable("EmployeeWeekOff");
             modelBuilder.Entity<DaysOfWeek>().HasKey(e => e.DaysOfWeekId).ToTable("DaysOfWeek");
             modelBuilder.Entity<EmployeeAttendance>().HasKey(e => e.ID).ToTable("EmployeeAttendance");
             modelBuilder.Entity<ShiftMaster>().HasKey(e => e.ShiftID).ToTable("ShiftMaster");
             modelBuilder.Entity<ShiftMapping>().HasKey(e => e.ShiftMappingID).ToTable("ShiftMapping");
             modelBuilder.Entity<ShiftTransaction>().HasKey(e => e.ShiftTransactionID).ToTable("ShiftTransaction");
-
         }
     }
 }

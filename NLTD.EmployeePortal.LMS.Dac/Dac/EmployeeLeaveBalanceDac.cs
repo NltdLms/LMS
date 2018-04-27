@@ -12,6 +12,7 @@ namespace NLTD.EmployeePortal.LMS.Dac.Dac
         {
             //Nothing to implement...
         }
+
         //Added by Tamil
         public IList<LeaveBalanceEmpProfile> GetLeaveBalanceEmpProfile(Int64 userId)
         {
@@ -19,7 +20,6 @@ namespace NLTD.EmployeePortal.LMS.Dac.Dac
 
             using (var context = new NLTDDbContext())
             {
-
                 if (userId > 0)
                 {
                     var employeeLeaveBalanceProfile = (from employee in context.Employee
@@ -90,11 +90,11 @@ namespace NLTD.EmployeePortal.LMS.Dac.Dac
 
                     if (isAuthorizedRole)
                     {
-                         foreach (var item in empLeaveBalanceDetails)
+                        foreach (var item in empLeaveBalanceDetails)
                         {
                             if (item.NoOfDays > 0)
                             {
-                                EmployeeLeaveBalance leaveBalance = context.EmployeeLeaveBalance.Where(x => x.UserId == UserId && x.LeaveTypeId == item.LeaveTypeId 
+                                EmployeeLeaveBalance leaveBalance = context.EmployeeLeaveBalance.Where(x => x.UserId == UserId && x.LeaveTypeId == item.LeaveTypeId
                                 && x.LeaveBalanceId == item.LeaveBalanceId && x.Year == DateTime.Now.Year).FirstOrDefault();
 
                                 if (leaveBalance != null)
@@ -141,7 +141,6 @@ namespace NLTD.EmployeePortal.LMS.Dac.Dac
                     {
                         return "Need Role";
                     }
-
                 }
                 if (isSaved > 0)
                     return "Saved";

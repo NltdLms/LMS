@@ -13,6 +13,7 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
     public class AttendanceController : BaseController
     {
         private IEmployeeAttendanceHelper EmployeeAttendanceHelper;
+
         // GET: Attentance
         public AttendanceController()
         {
@@ -21,37 +22,41 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
 
         public ActionResult MyAttendance()
         {
-            EmployeeProfile employeeProfileObj = (EmployeeProfile) Session["Profile"];
+            EmployeeProfile employeeProfileObj = (EmployeeProfile)Session["Profile"];
             ViewBag.RequestLevelPerson = "My";
-           // List<EmployeeAttendanceModel> employeeAttendanceModelObj =
-             //   EmployeeAttendanceHelper.GetAttendance(employeeProfileObj.UserId);
+            // List<EmployeeAttendanceModel> employeeAttendanceModelObj =
+            //   EmployeeAttendanceHelper.GetAttendance(employeeProfileObj.UserId);
             return View();
         }
+
         public ActionResult MyTeamAttendance()
         {
             ViewBag.RequestLevelPerson = "Team";
             return View("MyAttendance");
         }
+
         public ActionResult MyTimeSheet()
         {
             ViewBag.RequestLevelPerson = "My";
             return View("TimeSheet");
         }
+
         public ActionResult MyTeamTimeSheet()
         {
             ViewBag.RequestLevelPerson = "Team";
             return View("TimeSheet");
         }
+
         public ActionResult EmployeeTimeSheet()
         {
             ViewBag.RequestLevelPerson = "Admin";
             return View("TimeSheet");
         }
+
         public ActionResult EmployeeAttendance()
         {
             ViewBag.RequestLevelPerson = "Admin";
             return View("MyAttendance");
         }
-
     }
 }

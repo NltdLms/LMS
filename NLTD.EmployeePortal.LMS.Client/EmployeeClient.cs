@@ -20,6 +20,7 @@ namespace NLTD.EmployeePortal.LMS.Client
                 return helper.GetEmployeeId(LogonId);
             }
         }
+
         public string ReportingToName(Int64 userId)
         {
             using (IEmployeeHelper helper = new EmployeeHelper())
@@ -27,6 +28,7 @@ namespace NLTD.EmployeePortal.LMS.Client
                 return helper.ReportingToName(userId);
             }
         }
+
         public string GetNewEmpId(Int64 OfficeId)
         {
             using (IEmployeeHelper helper = new EmployeeHelper())
@@ -34,6 +36,7 @@ namespace NLTD.EmployeePortal.LMS.Client
                 return helper.GetNewEmpId(OfficeId);
             }
         }
+
         public long GetUserId(string name)
         {
             using (IEmployeeHelper helper = new EmployeeHelper())
@@ -41,31 +44,31 @@ namespace NLTD.EmployeePortal.LMS.Client
                 return helper.GetUserId(name);
             }
         }
+
         public EmployeeProfile GetEmployeeProfile(Int64 userId)
         {
             using (IEmployeeHelper helper = new EmployeeHelper())
             {
                 return helper.GetEmployeeProfile(userId);
             }
-
         }
+
         public ViewEmployeeProfileModel ViewEmployeeProfile(Int64 userId)
         {
             using (IEmployeeHelper helper = new EmployeeHelper())
             {
                 return helper.ViewEmployeeProfile(userId);
             }
-
         }
+
         public EmployeeProfile GetEmployeeLoginProfile(string LogonId)
         {
             using (IEmployeeHelper helper = new EmployeeHelper())
             {
                 return helper.GetEmployeeLoginProfile(LogonId);
             }
-
         }
-        
+
         public List<DropDownItem> GetReportToList(long OfficeId)
         {
             using (IEmployeeHelper helper = new EmployeeHelper())
@@ -73,6 +76,7 @@ namespace NLTD.EmployeePortal.LMS.Client
                 return helper.GetReportToList(OfficeId);
             }
         }
+
         public List<DropDownItem> GetActiveEmpList(long OfficeId, Int64? exceptUserId)
         {
             using (IEmployeeHelper helper = new EmployeeHelper())
@@ -89,14 +93,12 @@ namespace NLTD.EmployeePortal.LMS.Client
             }
         }
 
-        public IList<ViewEmployeeProfileModel> GetTeamProfiles(Int64 userId, bool onlyReportedToMe, Int64? paramUserId, string requestMenuUser,bool hideInactiveEmp)
+        public IList<ViewEmployeeProfileModel> GetTeamProfiles(Int64 userId, bool onlyReportedToMe, Int64? paramUserId, string requestMenuUser, bool hideInactiveEmp)
         {
             using (IEmployeeHelper helper = new EmployeeHelper())
             {
-                return helper.GetTeamProfiles(userId, onlyReportedToMe, paramUserId,  requestMenuUser, hideInactiveEmp);
+                return helper.GetTeamProfiles(userId, onlyReportedToMe, paramUserId, requestMenuUser, hideInactiveEmp);
             }
         }
-
-
     }
 }

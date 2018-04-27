@@ -9,7 +9,7 @@ namespace NLTD.EmployeePortal.LMS.Dac.DbModel
         public Decimal? TotalDays { get; set; }
         public Decimal? LeaveTakenDays { get; set; }
 
-        public Decimal? PendingApprovalDays { get; set; }       
+        public Decimal? PendingApprovalDays { get; set; }
 
         public Int64 UserId { get; set; }
 

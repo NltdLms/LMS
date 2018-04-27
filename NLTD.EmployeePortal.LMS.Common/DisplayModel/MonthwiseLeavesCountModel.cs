@@ -66,15 +66,14 @@
         public decimal DL12 { get; set; }
         public decimal LWP12 { get; set; }
         public decimal CO12 { get; set; }
-
     }
+
     public class MonthwiseCountEmp
     {
         public string EmpId { get; set; }
         public string Name { get; set; }
         public string LeaveType { get; set; }
         public int Month { get; set; }
-        public decimal Duration { get; set; } 
-
+        public decimal Duration { get; set; }
     }
 }

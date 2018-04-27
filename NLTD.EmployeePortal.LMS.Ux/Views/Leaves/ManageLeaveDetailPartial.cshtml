@@ -57,7 +57,7 @@
         <div class="panel panel-default">
             <div class="panel-heading" role="tab" id="@("heading"+Model[i].UserId)">
                 <h4 class="panel-title">
-                    <a role="button" data-toggle="collapse" data-parent="#accordion" href="@("#"+"collapse"+Model[i].UserId)" aria-expanded="false" aria-controls="@("collapse"+Model[i].UserId)" >
+                    <a role="button" data-toggle="collapse" data-parent="#accordion" href="@("#"+"collapse"+Model[i].UserId)" aria-expanded="false" aria-controls="@("collapse"+Model[i].UserId)">
                         <i class="more-less glyphicon glyphicon-plus"></i>
                         @Model[i].Name
                     </a>
@@ -71,7 +71,6 @@
                     </div>
 
                     @Html.Partial("~/Views/Leaves/ManageLeaveSubdetailPartial.cshtml", Model[i].TeamLeaveList)
-
                 </div>
             </div>
         </div>
@@ -80,9 +79,3 @@
     </div>
 
 }
-
-
-
-
-
-

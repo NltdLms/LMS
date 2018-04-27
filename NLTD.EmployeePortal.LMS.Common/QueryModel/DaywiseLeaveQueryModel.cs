@@ -4,7 +4,6 @@ namespace NLTD.EmployeePortal.LMS.Common.QueryModel
 {
     public class DaywiseLeaveQueryModel
     {
-       
         public DateTime? FromDate { get; set; }
 
         public DateTime? ToDate { get; set; }
@@ -22,6 +21,5 @@ namespace NLTD.EmployeePortal.LMS.Common.QueryModel
         public bool DonotShowRejected { get; set; }
 
         public Int64? SearchUserID { get; set; }
-
     }
 }
