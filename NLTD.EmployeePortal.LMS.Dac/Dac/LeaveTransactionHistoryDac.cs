@@ -175,7 +175,7 @@ namespace NLTD.EmployeePortal.LMS.Dac.Dac
                                                           }
                                  ).ToList();
 
-                    PermissionList.ForEach(pl => pl.PermissionCount = (decimal)(lv.calculateDuration(pl.TimeFrom, pl.TimeTo).TotalMinutes) / 60);
+                    PermissionList.ForEach(pl => pl.PermissionCount = Math.Round((decimal)(lv.calculateDuration(pl.TimeFrom, pl.TimeTo).TotalMinutes) / 60,2));
 
                     if (PermissionList.Count > 0)
                         leaveList.AddRange(PermissionList);
