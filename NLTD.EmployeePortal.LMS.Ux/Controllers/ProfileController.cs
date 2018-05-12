@@ -9,15 +9,16 @@ using System.Linq;
 using System.Net.Mail;
 using System.Text.RegularExpressions;
 using System.Web.Mvc;
+
 namespace NLTD.EmployeePortal.LMS.Ux.Controllers
 {
     public class ProfileController : BaseController
     {
         public ActionResult Index()
         {
-
             return RedirectToAction("Index", "Dashboard");
         }
+
         public ActionResult ViewProfile()
         {
             ViewBag.PageTile = "Employee Profile";
@@ -35,7 +36,6 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
             using (var client = new EmployeeClient())
             {
                 profile = client.GetEmployeeProfile(userIdForProfile);
-
             }
             using (var client = new ShiftClient())
             {
@@ -74,6 +74,7 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
 
             return View("EmployeeProfile", profile);
         }
+
         public ActionResult AddNewEmployee()
         {
             EmployeeProfile profile = new EmployeeProfile();
@@ -122,8 +123,8 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
                 profile.Saturday = true;
                 return View("EmployeeProfile", profile);
             }
-
         }
+
         public ActionResult UpdateEmployee()
         {
             YearwiseLeaveSummaryQueryModel emp = new YearwiseLeaveSummaryQueryModel();
@@ -134,8 +135,8 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
             }
             else
                 return View("UpdateEmployee", emp);
-
         }
+
         public ActionResult CallProfileEdit(string name)
         {
             Int64 userId = 0;
@@ -159,6 +160,7 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
                 return Json(new { redirectToUrl = Url.Action("ViewProfile", "Profile") });
             }
         }
+
         public ActionResult CallProfileView(string name)
         {
             Int64 userId = 0;
@@ -181,6 +183,7 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
                 return Json(new { redirectToUrl = Url.Action("ViewEmployeeProfile", "Profile") });
             }
         }
+
         public ActionResult ViewEmployeeProfile()
         {
             ViewBag.PageTile = "Employee Profile";
@@ -201,6 +204,7 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
 
             return View("ViewEmployeeProfile", profile);
         }
+
         public ActionResult SaveProfile(EmployeeProfile employee)
         {
             bool isValid = true;
@@ -275,7 +279,6 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
                             employee.ErrorMesage = "The card number was already assigned to another employee.";
                     }
                 }
-
             }
             else
             {
@@ -313,17 +316,13 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
                     ViewBag.ReportToList = client.GetActiveEmpList(employee.OfficeId, employee.UserId);
                 }
 
-
                 DropDownItem di = new DropDownItem();
                 di.Key = "";
                 di.Value = "";
                 reptList.Insert(0, di);
-
             }
             return View("EmployeeProfile", employee);
-
         }
-
 
         public ActionResult MyLmsProfile()
         {
@@ -332,6 +331,7 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
 
             return View("SearchTeamLmsProfile", mdl);
         }
+
         public ActionResult TeamLmsProfile()
         {
             EmployeeProfileSearchModel mdl = new EmployeeProfileSearchModel();
@@ -343,6 +343,7 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
             }
             return View("SearchTeamLmsProfile", mdl);
         }
+
         public ActionResult AdminLmsProfile()
         {
             EmployeeProfileSearchModel mdl = new EmployeeProfileSearchModel();
@@ -350,10 +351,11 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
             mdl.HideInactiveEmp = true;
             return View("SearchTeamLmsProfile", mdl);
         }
+
         public ActionResult TeamProfileData(bool onlyReportedToMe, Int64? paramUserId, string requestMenuUser, bool hideInactiveEmp)
         {
             IList<ViewEmployeeProfileModel> lstProfile = new List<ViewEmployeeProfileModel>();
-           
+
             using (var client = new EmployeeClient())
             {
                 lstProfile = client.GetTeamProfiles(this.UserId, onlyReportedToMe, paramUserId, requestMenuUser, hideInactiveEmp);
@@ -361,6 +363,7 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
 
             return PartialView("EmployeeLmsProfileNamesPartial", lstProfile);
         }
+
         //Added by Tamil
         public ActionResult SearchLeaveBalanceProfile()
         {
@@ -391,7 +394,6 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
 
         public ActionResult SaveLeaveBalance(List<EmployeeLeaveBalanceDetails> lst, Int64 EmpUserid)
         {
-
             string result = "";
             if (ModelState.IsValid)
             {

@@ -45,7 +45,6 @@ namespace NLTD.EmployeePortal.LMS.Ux.AppHelpers
 
         public static byte[] ExportExcel(DataTable dataTable, string heading = "", bool showSrNo = false, params string[] columnsToTake)
         {
-
             byte[] result = null;
             using (ExcelPackage package = new ExcelPackage())
             {
@@ -72,11 +71,10 @@ namespace NLTD.EmployeePortal.LMS.Ux.AppHelpers
                 dataTable.Columns["LeaveReason"].ColumnName = "Reason";
                 dataTable.Columns["ApproverComments"].ColumnName = "Approver Comments";
 
-                
-                // add the content into the Excel file  
+                // add the content into the Excel file
                 workSheet.Cells["A" + startRowFrom].LoadFromDataTable(dataTable, true);
 
-                // autofit width of cells with small content  
+                // autofit width of cells with small content
                 int columnIndex = 1;
                 foreach (DataColumn column in dataTable.Columns)
                 {
@@ -87,11 +85,10 @@ namespace NLTD.EmployeePortal.LMS.Ux.AppHelpers
                     workSheet.Column(columnIndex).AutoFit();
                     //}
 
-
                     columnIndex++;
                 }
 
-                // format header - bold, yellow on black  
+                // format header - bold, yellow on black
                 using (ExcelRange r = workSheet.Cells[startRowFrom, 1, startRowFrom, dataTable.Columns.Count])
                 {
                     r.Style.Font.Color.SetColor(System.Drawing.Color.White);
@@ -100,7 +97,7 @@ namespace NLTD.EmployeePortal.LMS.Ux.AppHelpers
                     r.Style.Fill.BackgroundColor.SetColor(System.Drawing.ColorTranslator.FromHtml("#1fb5ad"));
                 }
 
-                // format cells - add borders  
+                // format cells - add borders
                 using (ExcelRange r = workSheet.Cells[startRowFrom + 1, 1, startRowFrom + dataTable.Rows.Count, dataTable.Columns.Count])
                 {
                     r.Style.Border.Top.Style = ExcelBorderStyle.Thin;
@@ -114,7 +111,7 @@ namespace NLTD.EmployeePortal.LMS.Ux.AppHelpers
                     r.Style.Border.Right.Color.SetColor(System.Drawing.Color.Black);
                 }
 
-                // removed ignored columns  
+                // removed ignored columns
                 for (int i = dataTable.Columns.Count - 1; i >= 0; i--)
                 {
                     if (i == 0 && showSrNo)
@@ -150,7 +147,6 @@ namespace NLTD.EmployeePortal.LMS.Ux.AppHelpers
             return result;
         }
 
-
         public static byte[] ExportExcel<T>(List<T> data, string Heading = "", bool showSlno = false, params string[] ColumnsToTake)
         {
             return ExportExcel(ListToDataTable<T>(data), Heading, showSlno, ColumnsToTake);
@@ -158,7 +154,6 @@ namespace NLTD.EmployeePortal.LMS.Ux.AppHelpers
 
         public static byte[] ExportPermissionsExcel(DataTable dataTable, string heading = "", bool showSrNo = false, params string[] columnsToTake)
         {
-
             byte[] result = null;
             using (ExcelPackage package = new ExcelPackage())
             {
@@ -177,11 +172,10 @@ namespace NLTD.EmployeePortal.LMS.Ux.AppHelpers
                     }
                 }
 
-
-                // add the content into the Excel file  
+                // add the content into the Excel file
                 workSheet.Cells["A" + startRowFrom].LoadFromDataTable(dataTable, true);
 
-                // autofit width of cells with small content  
+                // autofit width of cells with small content
                 int columnIndex = 1;
                 foreach (DataColumn column in dataTable.Columns)
                 {
@@ -196,7 +190,7 @@ namespace NLTD.EmployeePortal.LMS.Ux.AppHelpers
                     columnIndex++;
                 }
 
-                // format header - bold, yellow on black  
+                // format header - bold, yellow on black
                 using (ExcelRange r = workSheet.Cells[startRowFrom, 1, startRowFrom, dataTable.Columns.Count])
                 {
                     r.Style.Font.Color.SetColor(System.Drawing.Color.White);
@@ -205,7 +199,7 @@ namespace NLTD.EmployeePortal.LMS.Ux.AppHelpers
                     r.Style.Fill.BackgroundColor.SetColor(System.Drawing.ColorTranslator.FromHtml("#1fb5ad"));
                 }
 
-                // format cells - add borders  
+                // format cells - add borders
                 using (ExcelRange r = workSheet.Cells[startRowFrom + 1, 1, startRowFrom + dataTable.Rows.Count, dataTable.Columns.Count])
                 {
                     r.Style.Border.Top.Style = ExcelBorderStyle.Thin;
@@ -219,7 +213,7 @@ namespace NLTD.EmployeePortal.LMS.Ux.AppHelpers
                     r.Style.Border.Right.Color.SetColor(System.Drawing.Color.Black);
                 }
 
-                // removed ignored columns  
+                // removed ignored columns
                 for (int i = dataTable.Columns.Count - 1; i >= 0; i--)
                 {
                     if (i == 0 && showSrNo)
@@ -259,9 +253,9 @@ namespace NLTD.EmployeePortal.LMS.Ux.AppHelpers
         {
             return ExportPermissionsExcel(ListToDataTable<T>(data), Heading, showSlno, ColumnsToTake);
         }
+
         public static byte[] ExportExcelYearSummary(DataTable dataTable, string heading = "", bool showSrNo = false, params string[] columnsToTake)
         {
-
             byte[] result = null;
             using (ExcelPackage package = new ExcelPackage())
             {
@@ -286,10 +280,10 @@ namespace NLTD.EmployeePortal.LMS.Ux.AppHelpers
                 dataTable.Columns["UsedLeaves"].ColumnName = "Used Leaves";
                 dataTable.Columns["PendingApproval"].ColumnName = "Pending Approval";
                 dataTable.Columns["BalanceLeaves"].ColumnName = "Balance Leaves";
-                // add the content into the Excel file  
+                // add the content into the Excel file
                 workSheet.Cells["A" + startRowFrom].LoadFromDataTable(dataTable, true);
 
-                // autofit width of cells with small content  
+                // autofit width of cells with small content
                 int columnIndex = 1;
                 foreach (DataColumn column in dataTable.Columns)
                 {
@@ -300,11 +294,10 @@ namespace NLTD.EmployeePortal.LMS.Ux.AppHelpers
                         workSheet.Column(columnIndex).AutoFit();
                     }
 
-
                     columnIndex++;
                 }
 
-                // format header - bold, yellow on black  
+                // format header - bold, yellow on black
                 using (ExcelRange r = workSheet.Cells[startRowFrom, 1, startRowFrom, dataTable.Columns.Count])
                 {
                     r.Style.Font.Color.SetColor(System.Drawing.Color.White);
@@ -313,7 +306,7 @@ namespace NLTD.EmployeePortal.LMS.Ux.AppHelpers
                     r.Style.Fill.BackgroundColor.SetColor(System.Drawing.ColorTranslator.FromHtml("#1fb5ad"));
                 }
 
-                // format cells - add borders  
+                // format cells - add borders
                 using (ExcelRange r = workSheet.Cells[startRowFrom + 1, 1, startRowFrom + dataTable.Rows.Count, dataTable.Columns.Count])
                 {
                     r.Style.Border.Top.Style = ExcelBorderStyle.Thin;
@@ -327,7 +320,7 @@ namespace NLTD.EmployeePortal.LMS.Ux.AppHelpers
                     r.Style.Border.Right.Color.SetColor(System.Drawing.Color.Black);
                 }
 
-                // removed ignored columns  
+                // removed ignored columns
                 for (int i = dataTable.Columns.Count - 1; i >= 0; i--)
                 {
                     if (i == 0 && showSrNo)
@@ -339,7 +332,6 @@ namespace NLTD.EmployeePortal.LMS.Ux.AppHelpers
                         workSheet.DeleteColumn(i + 1);
                     }
                 }
-
 
                 if (!String.IsNullOrEmpty(heading))
                 {
@@ -362,10 +354,8 @@ namespace NLTD.EmployeePortal.LMS.Ux.AppHelpers
             return ExportExcelYearSummary(ListToDataTable<T>(data), Heading, showSlno, ColumnsToTake);
         }
 
-
-        public static byte[] ExportExcelMonthSummary(DataTable dataTable,int year, string heading = "", bool showSrNo = false, params string[] columnsToTake)
+        public static byte[] ExportExcelMonthSummary(DataTable dataTable, int year, string heading = "", bool showSrNo = false, params string[] columnsToTake)
         {
-
             byte[] result = null;
             using (ExcelPackage package = new ExcelPackage())
             {
@@ -384,77 +374,87 @@ namespace NLTD.EmployeePortal.LMS.Ux.AppHelpers
                     }
                 }
 
-
                 workSheet.Cells["A1"].Value = "Year";
                 workSheet.Cells["B1"].Value = year;
-                // add the content into the Excel file  
+                // add the content into the Excel file
                 workSheet.Cells["A2"].Value = "Emp Id";
                 workSheet.Cells["B2"].Value = "Name";
 
                 workSheet.Cells["C2"].Value = "CL/SL";
                 workSheet.Cells["D2"].Value = "EL";
-                workSheet.Cells["E2"].Value = "LWP";
-                workSheet.Cells["F2"].Value = "CompOff";;
+                workSheet.Cells["E2"].Value = "Debit";
+                workSheet.Cells["F2"].Value = "LWP";
+                workSheet.Cells["G2"].Value = "CompOff";
 
-                workSheet.Cells["G2"].Value = "CL/SL";
-                workSheet.Cells["H2"].Value = "EL";
-                workSheet.Cells["I2"].Value = "LWP";
-                workSheet.Cells["J2"].Value = "CompOff";;
+                workSheet.Cells["H2"].Value = "CL/SL";
+                workSheet.Cells["I2"].Value = "EL";
+                workSheet.Cells["J2"].Value = "Debit";
+                workSheet.Cells["K2"].Value = "LWP";
+                workSheet.Cells["L2"].Value = "CompOff";
 
-                workSheet.Cells["K2"].Value = "CL/SL";
-                workSheet.Cells["L2"].Value = "EL";
-                workSheet.Cells["M2"].Value = "LWP";
-                workSheet.Cells["N2"].Value = "CompOff";;
+                workSheet.Cells["M2"].Value = "CL/SL";
+                workSheet.Cells["N2"].Value = "EL";
+                workSheet.Cells["O2"].Value = "Debit";
+                workSheet.Cells["P2"].Value = "LWP";
+                workSheet.Cells["Q2"].Value = "CompOff";
 
-                workSheet.Cells["O2"].Value = "CL/SL";
-                workSheet.Cells["P2"].Value = "EL";
-                workSheet.Cells["Q2"].Value = "LWP";
-                workSheet.Cells["R2"].Value = "CompOff";;
-
-                workSheet.Cells["S2"].Value = "CL/SL";
-                workSheet.Cells["T2"].Value = "EL";
+                workSheet.Cells["R2"].Value = "CL/SL";
+                workSheet.Cells["S2"].Value = "EL";
+                workSheet.Cells["T2"].Value = "Debit";
                 workSheet.Cells["U2"].Value = "LWP";
-                workSheet.Cells["V2"].Value = "CompOff";;
+                workSheet.Cells["V2"].Value = "CompOff";
 
                 workSheet.Cells["W2"].Value = "CL/SL";
                 workSheet.Cells["X2"].Value = "EL";
-                workSheet.Cells["Y2"].Value = "LWP";
-                workSheet.Cells["Z2"].Value = "CompOff";;
+                workSheet.Cells["Y2"].Value = "Debit";
+                workSheet.Cells["Z2"].Value = "LWP";
+                workSheet.Cells["AA2"].Value = "CompOff";
 
-                workSheet.Cells["AA2"].Value = "CL/SL";
-                workSheet.Cells["AB2"].Value = "EL";
-                workSheet.Cells["AC2"].Value = "LWP";
-                workSheet.Cells["AD2"].Value = "CompOff";;
+                workSheet.Cells["AB2"].Value = "CL/SL";
+                workSheet.Cells["AC2"].Value = "EL";
+                workSheet.Cells["AD2"].Value = "Debit";
+                workSheet.Cells["AE2"].Value = "LWP";
+                workSheet.Cells["AF2"].Value = "CompOff";
 
-                workSheet.Cells["AE2"].Value = "CL/SL";
-                workSheet.Cells["AF2"].Value = "EL";
-                workSheet.Cells["AG2"].Value = "LWP";
-                workSheet.Cells["AH2"].Value = "CompOff";;
+                workSheet.Cells["AG2"].Value = "CL/SL";
+                workSheet.Cells["AH2"].Value = "EL";
+                workSheet.Cells["AI2"].Value = "Debit";
+                workSheet.Cells["AJ2"].Value = "LWP";
+                workSheet.Cells["AK2"].Value = "CompOff";
 
-                workSheet.Cells["AI2"].Value = "CL/SL";
-                workSheet.Cells["AJ2"].Value = "EL";
-                workSheet.Cells["AK2"].Value = "LWP";
-                workSheet.Cells["AL2"].Value = "CompOff";;
-
-                workSheet.Cells["AM2"].Value = "CL/SL";
-                workSheet.Cells["AN2"].Value = "EL";
+                workSheet.Cells["AL2"].Value = "CL/SL";
+                workSheet.Cells["AM2"].Value = "EL";
+                workSheet.Cells["AN2"].Value = "Debit";
                 workSheet.Cells["AO2"].Value = "LWP";
-                workSheet.Cells["AP2"].Value = "CompOff";;
+                workSheet.Cells["AP2"].Value = "CompOff";
 
                 workSheet.Cells["AQ2"].Value = "CL/SL";
                 workSheet.Cells["AR2"].Value = "EL";
-                workSheet.Cells["AS2"].Value = "LWP";
-                workSheet.Cells["AT2"].Value = "CompOff";;
+                workSheet.Cells["AS2"].Value = "Debit";
+                workSheet.Cells["AT2"].Value = "LWP";
+                workSheet.Cells["AU2"].Value = "CompOff";
 
-                workSheet.Cells["AU2"].Value = "CL/SL";
-                workSheet.Cells["AV2"].Value = "EL";
-                workSheet.Cells["AW2"].Value = "LWP";
-                workSheet.Cells["AX2"].Value = "CompOff";;
+                workSheet.Cells["AV2"].Value = "CL/SL";
+                workSheet.Cells["AW2"].Value = "EL";
+                workSheet.Cells["AX2"].Value = "Debit";
+                workSheet.Cells["AY2"].Value = "LWP";
+                workSheet.Cells["AZ2"].Value = "CompOff";
 
+                workSheet.Cells["BA2"].Value = "CL/SL";
+                workSheet.Cells["BB2"].Value = "EL";
+                workSheet.Cells["BC2"].Value = "Debit";
+                workSheet.Cells["BD2"].Value = "LWP";
+                workSheet.Cells["BE2"].Value = "CompOff";
+
+                workSheet.Cells["BF2"].Value = "CL/SL";
+                workSheet.Cells["BG2"].Value = "EL";
+                workSheet.Cells["BH2"].Value = "Debit";
+                workSheet.Cells["BI2"].Value = "LWP";
+                workSheet.Cells["BJ2"].Value = "CompOff";
 
                 workSheet.Cells["A" + startRowFrom].LoadFromDataTable(dataTable, false);
 
-                // autofit width of cells with small content  
+                // autofit width of cells with small content
                 int columnIndex = 1;
                 foreach (DataColumn column in dataTable.Columns)
                 {
@@ -465,99 +465,94 @@ namespace NLTD.EmployeePortal.LMS.Ux.AppHelpers
                         workSheet.Column(columnIndex).AutoFit();
                     }
 
-
                     columnIndex++;
                 }
 
+                workSheet.Cells[1, 3, 1, 7].Merge = true;
+                workSheet.Cells[1, 3, 1, 7].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                workSheet.Cells[1, 3, 1, 7].Value = "January";
+                workSheet.Cells[1, 3, 1, 7].Style.Font.Bold = true;
+                workSheet.Cells[1, 3, 1, 7].Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
+                workSheet.Cells[1, 3, 1, 7].Style.Fill.BackgroundColor.SetColor(System.Drawing.ColorTranslator.FromHtml("#ffff00"));
 
-                workSheet.Cells[1, 3, 1, 6].Merge = true;
-                workSheet.Cells[1, 1, 1, 6].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
-                workSheet.Cells[1, 3, 1, 6].Value = "January";
-                workSheet.Cells[1, 3, 1, 6].Style.Font.Bold = true;
-                //                workSheet.Cells[1, 3, 1, 6].Style.Border.BorderAround(ExcelBorderStyle.Thick);
-                workSheet.Cells[1, 3, 1, 6].Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
-                workSheet.Cells[1, 3, 1, 6].Style.Fill.BackgroundColor.SetColor(System.Drawing.ColorTranslator.FromHtml("#ffff00"));
+                workSheet.Cells[1, 8, 1, 12].Merge = true;
+                workSheet.Cells[1, 8, 1, 12].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                workSheet.Cells[1, 8, 1, 12].Value = "February";
+                workSheet.Cells[1, 8, 1, 12].Style.Font.Bold = true;
+                workSheet.Cells[1, 8, 1, 12].Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
+                workSheet.Cells[1, 8, 1, 12].Style.Fill.BackgroundColor.SetColor(System.Drawing.ColorTranslator.FromHtml("#ffff00"));
 
-                workSheet.Cells[1, 7, 1, 10].Merge = true;
-                workSheet.Cells[1, 7, 1, 10].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
-                workSheet.Cells[1, 7, 1, 10].Value = "February";
-                workSheet.Cells[1, 7, 1, 10].Style.Font.Bold = true;
-                //                workSheet.Cells[1, 7, 1, 10].Style.Border.BorderAround(ExcelBorderStyle.Thick);
-                workSheet.Cells[1, 7, 1, 10].Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
-                workSheet.Cells[1, 7, 1, 10].Style.Fill.BackgroundColor.SetColor(System.Drawing.ColorTranslator.FromHtml("#ffff00"));
+                workSheet.Cells[1, 13, 1, 17].Merge = true;
+                workSheet.Cells[1, 13, 1, 17].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                workSheet.Cells[1, 13, 1, 17].Value = "March";
+                workSheet.Cells[1, 13, 1, 17].Style.Font.Bold = true;
+                workSheet.Cells[1, 13, 1, 17].Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
+                workSheet.Cells[1, 13, 1, 17].Style.Fill.BackgroundColor.SetColor(System.Drawing.ColorTranslator.FromHtml("#ffff00"));
 
-                workSheet.Cells[1, 11, 1, 14].Merge = true;
-                workSheet.Cells[1, 11, 1, 14].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
-                workSheet.Cells[1, 11, 1, 14].Value = "March";
-                workSheet.Cells[1, 11, 1, 14].Style.Font.Bold = true;
-                workSheet.Cells[1, 11, 1, 14].Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
-                workSheet.Cells[1, 11, 1, 14].Style.Fill.BackgroundColor.SetColor(System.Drawing.ColorTranslator.FromHtml("#ffff00"));
+                workSheet.Cells[1, 18, 1, 22].Merge = true;
+                workSheet.Cells[1, 18, 1, 22].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                workSheet.Cells[1, 18, 1, 22].Value = "April";
+                workSheet.Cells[1, 18, 1, 22].Style.Font.Bold = true;
+                workSheet.Cells[1, 18, 1, 22].Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
+                workSheet.Cells[1, 18, 1, 22].Style.Fill.BackgroundColor.SetColor(System.Drawing.ColorTranslator.FromHtml("#ffff00"));
 
-                workSheet.Cells[1, 15, 1, 18].Merge = true;
-                workSheet.Cells[1, 15, 1, 18].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
-                workSheet.Cells[1, 15, 1, 18].Value = "April";
-                workSheet.Cells[1, 15, 1, 18].Style.Font.Bold = true;
-                workSheet.Cells[1, 15, 1, 18].Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
-                workSheet.Cells[1, 15, 1, 18].Style.Fill.BackgroundColor.SetColor(System.Drawing.ColorTranslator.FromHtml("#ffff00"));
+                workSheet.Cells[1, 23, 1, 27].Merge = true;
+                workSheet.Cells[1, 23, 1, 27].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                workSheet.Cells[1, 23, 1, 27].Value = "May";
+                workSheet.Cells[1, 23, 1, 27].Style.Font.Bold = true;
+                workSheet.Cells[1, 23, 1, 27].Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
+                workSheet.Cells[1, 23, 1, 27].Style.Fill.BackgroundColor.SetColor(System.Drawing.ColorTranslator.FromHtml("#ffff00"));
 
-                workSheet.Cells[1, 19, 1, 22].Merge = true;
-                workSheet.Cells[1, 19, 1, 22].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
-                workSheet.Cells[1, 19, 1, 22].Value = "May";
-                workSheet.Cells[1, 19, 1, 22].Style.Font.Bold = true;
-                workSheet.Cells[1, 19, 1, 22].Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
-                workSheet.Cells[1, 19, 1, 22].Style.Fill.BackgroundColor.SetColor(System.Drawing.ColorTranslator.FromHtml("#ffff00"));
+                workSheet.Cells[1, 28, 1, 32].Merge = true;
+                workSheet.Cells[1, 28, 1, 32].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                workSheet.Cells[1, 28, 1, 32].Value = "June";
+                workSheet.Cells[1, 28, 1, 32].Style.Font.Bold = true;
+                workSheet.Cells[1, 28, 1, 32].Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
+                workSheet.Cells[1, 28, 1, 32].Style.Fill.BackgroundColor.SetColor(System.Drawing.ColorTranslator.FromHtml("#ffff00"));
 
-                workSheet.Cells[1, 23, 1, 26].Merge = true;
-                workSheet.Cells[1, 23, 1, 26].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
-                workSheet.Cells[1, 23, 1, 26].Value = "June";
-                workSheet.Cells[1, 23, 1, 26].Style.Font.Bold = true;
-                workSheet.Cells[1, 23, 1, 26].Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
-                workSheet.Cells[1, 23, 1, 26].Style.Fill.BackgroundColor.SetColor(System.Drawing.ColorTranslator.FromHtml("#ffff00"));
+                workSheet.Cells[1, 33, 1, 37].Merge = true;
+                workSheet.Cells[1, 33, 1, 37].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                workSheet.Cells[1, 33, 1, 37].Value = "July";
+                workSheet.Cells[1, 33, 1, 37].Style.Font.Bold = true;
+                workSheet.Cells[1, 33, 1, 37].Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
+                workSheet.Cells[1, 33, 1, 37].Style.Fill.BackgroundColor.SetColor(System.Drawing.ColorTranslator.FromHtml("#ffff00"));
 
-                workSheet.Cells[1, 27, 1, 30].Merge = true;
-                workSheet.Cells[1, 27, 1, 30].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
-                workSheet.Cells[1, 27, 1, 30].Value = "July";
-                workSheet.Cells[1, 27, 1, 30].Style.Font.Bold = true;
-                workSheet.Cells[1, 27, 1, 30].Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
-                workSheet.Cells[1, 27, 1, 30].Style.Fill.BackgroundColor.SetColor(System.Drawing.ColorTranslator.FromHtml("#ffff00"));
+                workSheet.Cells[1, 38, 1, 42].Merge = true;
+                workSheet.Cells[1, 38, 1, 42].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                workSheet.Cells[1, 38, 1, 42].Value = "August";
+                workSheet.Cells[1, 38, 1, 42].Style.Font.Bold = true;
+                workSheet.Cells[1, 38, 1, 42].Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
+                workSheet.Cells[1, 38, 1, 42].Style.Fill.BackgroundColor.SetColor(System.Drawing.ColorTranslator.FromHtml("#ffff00"));
 
-                workSheet.Cells[1, 31, 1, 34].Merge = true;
-                workSheet.Cells[1, 31, 1, 34].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
-                workSheet.Cells[1, 31, 1, 34].Value = "August";
-                workSheet.Cells[1, 31, 1, 34].Style.Font.Bold = true;
-                workSheet.Cells[1, 31, 1, 34].Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
-                workSheet.Cells[1, 31, 1, 34].Style.Fill.BackgroundColor.SetColor(System.Drawing.ColorTranslator.FromHtml("#ffff00"));
+                workSheet.Cells[1, 43, 1, 47].Merge = true;
+                workSheet.Cells[1, 43, 1, 47].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                workSheet.Cells[1, 43, 1, 47].Value = "September";
+                workSheet.Cells[1, 43, 1, 47].Style.Font.Bold = true;
+                workSheet.Cells[1, 43, 1, 47].Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
+                workSheet.Cells[1, 43, 1, 47].Style.Fill.BackgroundColor.SetColor(System.Drawing.ColorTranslator.FromHtml("#ffff00"));
 
-                workSheet.Cells[1, 35, 1, 38].Merge = true;
-                workSheet.Cells[1, 35, 1, 38].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
-                workSheet.Cells[1, 35, 1, 38].Value = "September";
-                workSheet.Cells[1, 35, 1, 38].Style.Font.Bold = true;
-                workSheet.Cells[1, 35, 1, 38].Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
-                workSheet.Cells[1, 35, 1, 38].Style.Fill.BackgroundColor.SetColor(System.Drawing.ColorTranslator.FromHtml("#ffff00"));
+                workSheet.Cells[1, 48, 1, 52].Merge = true;
+                workSheet.Cells[1, 48, 1, 52].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                workSheet.Cells[1, 48, 1, 52].Value = "October";
+                workSheet.Cells[1, 48, 1, 52].Style.Font.Bold = true;
+                workSheet.Cells[1, 48, 1, 52].Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
+                workSheet.Cells[1, 48, 1, 52].Style.Fill.BackgroundColor.SetColor(System.Drawing.ColorTranslator.FromHtml("#ffff00"));
 
-                workSheet.Cells[1, 39, 1, 42].Merge = true;
-                workSheet.Cells[1, 39, 1, 42].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
-                workSheet.Cells[1, 39, 1, 42].Value = "October";
-                workSheet.Cells[1, 39, 1, 42].Style.Font.Bold = true;
-                workSheet.Cells[1, 39, 1, 42].Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
-                workSheet.Cells[1, 39, 1, 42].Style.Fill.BackgroundColor.SetColor(System.Drawing.ColorTranslator.FromHtml("#ffff00"));
+                workSheet.Cells[1, 53, 1, 57].Merge = true;
+                workSheet.Cells[1, 53, 1, 57].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                workSheet.Cells[1, 53, 1, 57].Value = "November";
+                workSheet.Cells[1, 53, 1, 57].Style.Font.Bold = true;
+                workSheet.Cells[1, 53, 1, 57].Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
+                workSheet.Cells[1, 53, 1, 57].Style.Fill.BackgroundColor.SetColor(System.Drawing.ColorTranslator.FromHtml("#ffff00"));
 
-                workSheet.Cells[1, 43, 1, 46].Merge = true;
-                workSheet.Cells[1, 43, 1, 46].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
-                workSheet.Cells[1, 43, 1, 46].Value = "November";
-                workSheet.Cells[1, 43, 1, 46].Style.Font.Bold = true;
-                workSheet.Cells[1, 43, 1, 46].Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
-                workSheet.Cells[1, 43, 1, 46].Style.Fill.BackgroundColor.SetColor(System.Drawing.ColorTranslator.FromHtml("#ffff00"));
+                workSheet.Cells[1, 58, 1, 62].Merge = true;
+                workSheet.Cells[1, 58, 1, 62].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                workSheet.Cells[1, 58, 1, 62].Value = "December";
+                workSheet.Cells[1, 58, 1, 62].Style.Font.Bold = true;
+                workSheet.Cells[1, 58, 1, 62].Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
+                workSheet.Cells[1, 58, 1, 62].Style.Fill.BackgroundColor.SetColor(System.Drawing.ColorTranslator.FromHtml("#ffff00"));
 
-                workSheet.Cells[1, 47, 1, 50].Merge = true;
-                workSheet.Cells[1, 47, 1, 50].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
-                workSheet.Cells[1, 47, 1, 50].Value = "December";
-                workSheet.Cells[1, 47, 1, 50].Style.Font.Bold = true;
-                workSheet.Cells[1, 47, 1, 50].Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
-                workSheet.Cells[1, 47, 1, 50].Style.Fill.BackgroundColor.SetColor(System.Drawing.ColorTranslator.FromHtml("#ffff00"));
-
-
-                // format header - bold, yellow on black  
+                // format header - bold, yellow on black
                 using (ExcelRange r = workSheet.Cells[2, 1, 2, dataTable.Columns.Count])
                 {
                     r.Style.Font.Color.SetColor(System.Drawing.Color.White);
@@ -566,7 +561,7 @@ namespace NLTD.EmployeePortal.LMS.Ux.AppHelpers
                     r.Style.Fill.BackgroundColor.SetColor(System.Drawing.ColorTranslator.FromHtml("#1fb5ad"));
                 }
 
-                // format cells - add borders  
+                // format cells - add borders
                 using (ExcelRange r = workSheet.Cells[1, 1, 1 + dataTable.Rows.Count + 1, dataTable.Columns.Count])
                 {
                     r.Style.Border.Top.Style = ExcelBorderStyle.Thin;
@@ -585,7 +580,7 @@ namespace NLTD.EmployeePortal.LMS.Ux.AppHelpers
                 {
                     r.Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
                 }
-                // removed ignored columns  
+                // removed ignored columns
                 for (int i = dataTable.Columns.Count - 1; i >= 0; i--)
                 {
                     if (i == 0 && showSrNo)
@@ -597,7 +592,6 @@ namespace NLTD.EmployeePortal.LMS.Ux.AppHelpers
                         workSheet.DeleteColumn(i + 1);
                     }
                 }
-
 
                 if (!String.IsNullOrEmpty(heading))
                 {
@@ -615,12 +609,10 @@ namespace NLTD.EmployeePortal.LMS.Ux.AppHelpers
             return result;
         }
 
-        public static byte[] ExportExcelMonthSummary<T>(List<T> data,int year, string Heading = "", bool showSlno = false, params string[] ColumnsToTake)
+        public static byte[] ExportExcelMonthSummary<T>(List<T> data, int year, string Heading = "", bool showSlno = false, params string[] ColumnsToTake)
         {
-            return ExportExcelMonthSummary(ListToDataTable<T>(data),year, Heading, showSlno, ColumnsToTake);
+            return ExportExcelMonthSummary(ListToDataTable<T>(data), year, Heading, showSlno, ColumnsToTake);
         }
-
-
 
         public static byte[] ExportExcelAttendance(List<EmployeeAttendanceModel> data, string Heading = "", bool showSlno = false, params string[] ColumnsToTake)
         {
@@ -639,7 +631,6 @@ namespace NLTD.EmployeePortal.LMS.Ux.AppHelpers
 
         public static byte[] ExportTimesheetExcel(List<TimeSheetModel> TimeSheetModelObj, string heading = "", bool showSrNo = false, params string[] columnsToTake)
         {
-
             byte[] result = null;
             using (ExcelPackage package = new ExcelPackage())
             {
@@ -665,15 +656,13 @@ namespace NLTD.EmployeePortal.LMS.Ux.AppHelpers
                         item[0] = index;
                         item["Day"] = Convert.ToDateTime(item["Date"]).DayOfWeek.ToString();
                         index++;
-
                     }
                 }
 
-
-                // add the content into the Excel file  
+                // add the content into the Excel file
                 workSheet.Cells["A" + startRowFrom].LoadFromDataTable(dataTable, true);
 
-                // autofit width of cells with small content  
+                // autofit width of cells with small content
                 int columnIndex = 1;
                 foreach (DataColumn column in dataTable.Columns)
                 {
@@ -682,7 +671,7 @@ namespace NLTD.EmployeePortal.LMS.Ux.AppHelpers
                     columnIndex++;
                 }
 
-                // format header - bold, yellow on black  
+                // format header - bold, yellow on black
                 using (ExcelRange r = workSheet.Cells[startRowFrom, 1, startRowFrom, dataTable.Columns.Count])
                 {
                     r.Style.Font.Color.SetColor(System.Drawing.Color.White);
@@ -691,7 +680,7 @@ namespace NLTD.EmployeePortal.LMS.Ux.AppHelpers
                     r.Style.Fill.BackgroundColor.SetColor(System.Drawing.ColorTranslator.FromHtml("#1fb5ad"));
                 }
 
-                // format cells - add borders  
+                // format cells - add borders
                 using (ExcelRange r = workSheet.Cells[startRowFrom + 1, 1, startRowFrom + dataTable.Rows.Count, dataTable.Columns.Count])
                 {
                     r.Style.Border.Top.Style = ExcelBorderStyle.Thin;
@@ -706,7 +695,7 @@ namespace NLTD.EmployeePortal.LMS.Ux.AppHelpers
                 }
 
                 //
-                // removed ignored columns  
+                // removed ignored columns
                 for (int i = dataTable.Columns.Count - 1; i >= 0; i--)
                 {
                     if (i == 0 && showSrNo)
@@ -722,7 +711,6 @@ namespace NLTD.EmployeePortal.LMS.Ux.AppHelpers
                 //format the datetime field
                 using (ExcelRange col = workSheet.Cells[2, 4, 1 + dataTable.Rows.Count, 4])
                 {
-
                     col.Style.Numberformat.Format = "dd/MM/yyyy";
                     col.Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
                 }
@@ -774,12 +762,10 @@ namespace NLTD.EmployeePortal.LMS.Ux.AppHelpers
                     }
                 }
 
-
-                // add the content into the Excel file  
+                // add the content into the Excel file
                 workSheet.Cells["A" + startRowFrom].LoadFromDataTable(dataTable, true);
-                workSheet=FormatConsolidateExcel(workSheet, dataTable, startRowFrom, showSrNo);
-                // autofit width of cells with small content  
-
+                workSheet = FormatConsolidateExcel(workSheet, dataTable, startRowFrom, showSrNo);
+                // autofit width of cells with small content
 
                 //dataTable = ListToDataTable<ConsolidateReport>(monthlyTimeSheetConsolidateList);
                 //workSheet = package.Workbook.Worksheets.Add("Monthly Report");
@@ -796,10 +782,9 @@ namespace NLTD.EmployeePortal.LMS.Ux.AppHelpers
                 //    }
                 //}
 
-
-                //// add the content into the Excel file  
+                //// add the content into the Excel file
                 //workSheet.Cells["A" + startRowFrom].LoadFromDataTable(dataTable, true);
-                //// autofit width of cells with small content  
+                //// autofit width of cells with small content
                 //workSheet = FormatConsolidateExcel(workSheet, dataTable, startRowFrom, showSrNo);
                 result = package.GetAsByteArray();
             }
@@ -832,7 +817,6 @@ namespace NLTD.EmployeePortal.LMS.Ux.AppHelpers
                     monthlyConsolidateReport = CalculateTimeSheetConsolidation(timeSheet[i], monthlyConsolidateReport);
                     if (timeSheet[i].WorkingDate.ToString("ddd") == "Mon")
                     {
-
                         weeklyConsolidateReport.DateRange = string.Format("{0} to {1}", timeSheet[i].WorkingDate.ToString("dd/MM/yyyy"), weeklyFromDate.ToString("dd/MM/yyyy"));
                         weeklyConsolidateReport.Name = timeSheet[i].Name;
                         weeklyConsolidateReport.ReportingManager = timeSheet[i].ReportingManager;
@@ -841,7 +825,7 @@ namespace NLTD.EmployeePortal.LMS.Ux.AppHelpers
                         weeklyConsolidateReport = new ConsolidateReport();
                         weeklyFromDate = timeSheet[i].WorkingDate.AddDays(-1);
                     }
-                    if(timeSheet[i].WorkingDate.Day==1)
+                    if (timeSheet[i].WorkingDate.Day == 1)
                     {
                         monthlyConsolidateReport.DateRange = string.Format("{0} to {1}", timeSheet[i].WorkingDate.ToString("dd/MM/yyyy"), monthlyFromDate.ToString("dd/MM/yyyy"));
                         monthlyConsolidateReport.Name = timeSheet[i].Name;
@@ -851,7 +835,7 @@ namespace NLTD.EmployeePortal.LMS.Ux.AppHelpers
                         monthlyConsolidateReport = new ConsolidateReport();
                         monthlyFromDate = timeSheet[i].WorkingDate.AddDays(-1);
                     }
-                    if(i== timeSheet.Count-1 && timeSheet[i].WorkingDate.ToString("ddd") != "Mon")
+                    if (i == timeSheet.Count - 1 && timeSheet[i].WorkingDate.ToString("ddd") != "Mon")
                     {
                         weeklyConsolidateReport.DateRange = string.Format("{0} to {1}", timeSheet[i].WorkingDate.ToString("dd/MM/yyyy"), weeklyFromDate.ToString("dd/MM/yyyy"));
                         weeklyConsolidateReport.Name = timeSheet[i].Name;
@@ -867,15 +851,14 @@ namespace NLTD.EmployeePortal.LMS.Ux.AppHelpers
                         monthlyConsolidateReport.TotalWorkingHours = GetWorkingHours(monthlyConsolidateReport.WorkingHours);
                         monthlyTimeSheetConsolidateList.Add(monthlyConsolidateReport);
                     }
-
                 }
             }
         }
 
-        public static ExcelWorksheet FormatConsolidateExcel(ExcelWorksheet workSheet,DataTable dataTable, int startRowFrom,bool showSrNo)
+        public static ExcelWorksheet FormatConsolidateExcel(ExcelWorksheet workSheet, DataTable dataTable, int startRowFrom, bool showSrNo)
         {
-            // removed ignored columns  
-            
+            // removed ignored columns
+
             int columnIndex = 1;
             foreach (DataColumn column in dataTable.Columns)
             {
@@ -884,7 +867,7 @@ namespace NLTD.EmployeePortal.LMS.Ux.AppHelpers
                 columnIndex++;
             }
 
-            // format header - bold, yellow on black  
+            // format header - bold, yellow on black
             using (ExcelRange r = workSheet.Cells[startRowFrom, 1, startRowFrom, dataTable.Columns.Count])
             {
                 r.Style.Font.Color.SetColor(System.Drawing.Color.White);
@@ -893,7 +876,7 @@ namespace NLTD.EmployeePortal.LMS.Ux.AppHelpers
                 r.Style.Fill.BackgroundColor.SetColor(System.Drawing.ColorTranslator.FromHtml("#1fb5ad"));
             }
 
-            // format cells - add borders  
+            // format cells - add borders
             using (ExcelRange r = workSheet.Cells[startRowFrom + 1, 1, startRowFrom + dataTable.Rows.Count, dataTable.Columns.Count])
             {
                 r.Style.Border.Top.Style = ExcelBorderStyle.Thin;
@@ -907,7 +890,7 @@ namespace NLTD.EmployeePortal.LMS.Ux.AppHelpers
                 r.Style.Border.Right.Color.SetColor(System.Drawing.Color.Black);
             }
 
-            // Formating Working Hours 
+            // Formating Working Hours
             using (ExcelRange col = workSheet.Cells[2, 4, 1 + dataTable.Rows.Count, 4])
             {
                 col.Style.Numberformat.Format = "HH:mm:ss";
@@ -928,6 +911,7 @@ namespace NLTD.EmployeePortal.LMS.Ux.AppHelpers
             return workSheet;
             //For Monthly report
         }
+
         public static ConsolidateReport CalculateTimeSheetConsolidation(TimeSheetModel TimeSheetModelObj, ConsolidateReport TimeSheetConsolidateObj)
         {
             TimeSheetConsolidateObj.WorkingHours = TimeSheetConsolidateObj.WorkingHours + TimeSheetModelObj.WorkingHours;
@@ -948,13 +932,14 @@ namespace NLTD.EmployeePortal.LMS.Ux.AppHelpers
             {
                 TimeSheetConsolidateObj.LeaveCount = TimeSheetConsolidateObj.LeaveCount + TimeSheetModelObj.LeaveDayQty;
             }
-           
+
             if (!string.IsNullOrEmpty(TimeSheetModelObj.Requests) && TimeSheetModelObj.Requests.Contains("Work From Home"))
             {
                 TimeSheetConsolidateObj.WorkFromHomeCount = TimeSheetConsolidateObj.WorkFromHomeCount + TimeSheetModelObj.LeaveDayQty;
             }
             return TimeSheetConsolidateObj;
         }
+
         public static string GetWorkingHours(TimeSpan t)
         {
             string totalHours = Math.Floor(t.TotalHours).ToString();
@@ -964,9 +949,9 @@ namespace NLTD.EmployeePortal.LMS.Ux.AppHelpers
             }
             return string.Format("{0}:{1}", totalHours, t.ToString("mm\\:ss"));
         }
+
         public static byte[] ExportAttendanceExcel(List<EmployeeAttendanceModel> data, string heading = "", bool showSrNo = false, params string[] columnsToTake)
         {
-
             byte[] result = null;
 
             using (ExcelPackage package = new ExcelPackage())
@@ -986,14 +971,13 @@ namespace NLTD.EmployeePortal.LMS.Ux.AppHelpers
                         item[0] = index;
 
                         index++;
-
                     }
                 }
 
-                // add the content into the Excel file  
+                // add the content into the Excel file
                 workSheet.Cells["A" + startRowFrom].LoadFromDataTable(dataTable, true);
 
-                // autofit width of cells with small content  
+                // autofit width of cells with small content
                 int columnIndex = 1;
                 foreach (DataColumn column in dataTable.Columns)
                 {
@@ -1004,11 +988,10 @@ namespace NLTD.EmployeePortal.LMS.Ux.AppHelpers
                     workSheet.Column(columnIndex).AutoFit();
                     //}
 
-
                     columnIndex++;
                 }
 
-                // format header - bold, yellow on black  
+                // format header - bold, yellow on black
                 using (ExcelRange r = workSheet.Cells[startRowFrom, 1, startRowFrom, dataTable.Columns.Count])
                 {
                     r.Style.Font.Color.SetColor(System.Drawing.Color.White);
@@ -1017,7 +1000,7 @@ namespace NLTD.EmployeePortal.LMS.Ux.AppHelpers
                     r.Style.Fill.BackgroundColor.SetColor(System.Drawing.ColorTranslator.FromHtml("#1fb5ad"));
                 }
 
-                // format cells - add borders  
+                // format cells - add borders
                 using (ExcelRange r = workSheet.Cells[startRowFrom + 1, 1, startRowFrom + dataTable.Rows.Count, dataTable.Columns.Count])
                 {
                     r.Style.Border.Top.Style = ExcelBorderStyle.Thin;
@@ -1032,7 +1015,7 @@ namespace NLTD.EmployeePortal.LMS.Ux.AppHelpers
                 }
 
                 //
-                // removed ignored columns  
+                // removed ignored columns
                 for (int i = dataTable.Columns.Count - 1; i >= 0; i--)
                 {
                     if (i == 0 && showSrNo)
@@ -1048,7 +1031,6 @@ namespace NLTD.EmployeePortal.LMS.Ux.AppHelpers
                 //format the datetime field
                 //using (ExcelRange col = workSheet.Cells[2, 3, 1 + dataTable.Rows.Count, 3])
                 //{
-
                 //    col.Style.Numberformat.Format = "dd/MM/yyyy";
                 //    col.Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
                 //}
@@ -1070,8 +1052,6 @@ namespace NLTD.EmployeePortal.LMS.Ux.AppHelpers
             }
             return result;
         }
-
-
     }
 
     public class ConsolidateReport
@@ -1082,21 +1062,15 @@ namespace NLTD.EmployeePortal.LMS.Ux.AppHelpers
 
         public string TotalWorkingHours { get; set; }
 
-       
         public decimal LeaveCount { get; set; }
 
         public decimal WorkFromHomeCount { get; set; }
         public decimal PermissionCount { get; set; }
         public int LateCount { get; set; }
         public int EarlyCount { get; set; }
-               
+
         public DateTime FromDate { get; set; }
 
         public string ReportingManager { get; set; }
-
     }
-
-
-
 }
-

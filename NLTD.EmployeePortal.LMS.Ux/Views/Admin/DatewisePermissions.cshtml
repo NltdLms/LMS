@@ -16,7 +16,6 @@
     }
 </style>
 
-
 <script src="~/Scripts/DataTables/jquery.dataTables.min.js"></script>
 <link href="~/Content/DataTables/css/jquery.dataTables.min.css" rel="stylesheet" />
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
@@ -100,7 +99,6 @@
                 }
             });
 
-
         });
 
         function CheckAutoCompleteName() {
@@ -129,7 +127,6 @@
         </div>
     }
     <div id="alert_placeholder" class="col-sm-12">
-
     </div>
     @Html.Hidden("RequestLevelPerson", (string)ViewBag.RequestLevelPerson)
 
@@ -150,8 +147,6 @@
 
                                 @Html.Label("Date Range")
                                 @Html.TextBoxFor(m => m.DateRange, new { @class = "form-control" })
-
-
                             </div>
                             <div class="col-sm-4">
                                 @{ if ((string)ViewBag.RequestLevelPerson != "My")
@@ -160,7 +155,6 @@
                                         @Html.TextBoxFor(m => m.Name, new { @class = "form-control" })
                                     }
                                 }
-
                             </div>
                             <div class="col-sm-2">
                                 @{ if ((string)ViewBag.RequestLevelPerson == "Team")
@@ -177,10 +171,7 @@
                             <div class="col-sm-2" style="padding-top:23px;">
                                 <input type='submit' class="btn btn-primary pull-right" value='EXPORT TO EXCEL' onclick="return CheckAutoCompleteName()" />
                             </div>
-
-
                         </form>
-
                     </div>
                 </div>
             </div>
@@ -190,6 +181,3 @@
     <div id="divForPermissionDetail" class="col-sm-12"></div>
 
 }
-
-
-

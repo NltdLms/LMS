@@ -29,7 +29,6 @@ namespace NLTD.EmployeePortal.LMS.Common.DisplayModel
         public String OfficeName { get; set; }
         public String HolidayOfficeName { get; set; }
 
-
         public bool Sunday { get; set; }
 
         public bool Monday { get; set; }
@@ -53,6 +52,5 @@ namespace NLTD.EmployeePortal.LMS.Common.DisplayModel
         public String DOJ { get; set; }
         public String ConfirmationDate { get; set; }
         public String RelievingDate { get; set; }
-
     }
 }

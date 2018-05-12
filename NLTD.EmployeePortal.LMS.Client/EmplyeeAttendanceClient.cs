@@ -14,18 +14,19 @@ namespace NLTD.EmployeePortal.LMS.Client
         {
             employeeAttendanceHelper = new EmployeeAttendanceHelper();
         }
+
         public void Dispose()
         {
-          
         }
+
         public List<EmployeeAttendanceModel> GetAttendance(Int64 EmployeeID)
         {
             return employeeAttendanceHelper.GetAttendance(EmployeeID);
         }
 
-        public List<EmployeeAttendanceModel> GetAttendanceForRange(Int64 EmployeeID, DateTime FromDateTime, DateTime ToDateTime,string requestLevelPerson,bool IsDirectEmployees)
+        public List<EmployeeAttendanceModel> GetAttendanceForRange(Int64 EmployeeID, DateTime FromDateTime, DateTime ToDateTime, string requestLevelPerson, bool IsDirectEmployees)
         {
-            return employeeAttendanceHelper.GetAttendanceForRange(EmployeeID, FromDateTime,ToDateTime, requestLevelPerson, IsDirectEmployees);
+            return employeeAttendanceHelper.GetAttendanceForRange(EmployeeID, FromDateTime, ToDateTime, requestLevelPerson, IsDirectEmployees);
         }
     }
 }

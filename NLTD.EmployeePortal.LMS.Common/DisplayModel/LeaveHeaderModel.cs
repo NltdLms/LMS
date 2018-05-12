@@ -19,12 +19,13 @@ namespace NLTD.EmployeePortal.LMS.Common.DisplayModel
 
         public string LeaveTypeName { get; set; }
 
-        public  decimal Duration { get; set; }
+        public decimal Duration { get; set; }
 
         public string Status { get; set; }
 
         public IList<LeaveDetailModel> lstDetail { get; set; }
     }
+
     public class LeaveDetailModel
     {
         public Int64 LeaveId { get; set; }
@@ -38,7 +39,5 @@ namespace NLTD.EmployeePortal.LMS.Common.DisplayModel
         public decimal LeaveDayItemQty { get; set; }
 
         public string Remarks { get; set; }
-
-
     }
 }

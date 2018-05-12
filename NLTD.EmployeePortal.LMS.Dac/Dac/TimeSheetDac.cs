@@ -11,8 +11,9 @@ namespace NLTD.EmployeePortal.LMS.Dac.Dac
 {
     public class TimeSheetDac : ITimesheetHelper
     {
-        int BeforeShiftBuffer = Convert.ToInt32(ConfigurationManager.AppSettings["BeforeShiftBuffer"]);
-        int AfterShiftBuffer = Convert.ToInt32(ConfigurationManager.AppSettings["AfterShiftBuffer"]);
+        private int BeforeShiftBuffer = Convert.ToInt32(ConfigurationManager.AppSettings["BeforeShiftBuffer"]);
+        private int AfterShiftBuffer = Convert.ToInt32(ConfigurationManager.AppSettings["AfterShiftBuffer"]);
+
         public List<ShiftQueryModel> GetShiftDetails(Int64 UserID, DateTime FromDate, DateTime ToDate)
         {
             List<ShiftQueryModel> shiftQueryModelList = new List<ShiftQueryModel>();
@@ -20,7 +21,6 @@ namespace NLTD.EmployeePortal.LMS.Dac.Dac
             {
                 using (var entity = new NLTDDbContext())
                 {
-
                     shiftQueryModelList = (from sm in entity.ShiftMaster
                                            join smp in entity.ShiftMapping on sm.ShiftID equals smp.ShiftID
                                            join e in entity.Employee on smp.UserID equals e.UserId
@@ -32,13 +32,11 @@ namespace NLTD.EmployeePortal.LMS.Dac.Dac
                                                ShiftFromtime = sm.FromTime,
                                                ShiftTotime = sm.ToTime,
                                                ShiftDate = smp.ShiftDate,
-
                                            }).ToList();
                 }
             }
             catch (Exception)
             {
-
                 throw;
             }
             return shiftQueryModelList.OrderBy(m => m.ShiftDate).ToList();
@@ -81,20 +79,17 @@ namespace NLTD.EmployeePortal.LMS.Dac.Dac
             }
             catch (Exception)
             {
-
                 throw;
             }
 
             return status;
         }
 
-
-
         public List<TimeSheetModel> GetMyTimeSheet(Int64 UserID, DateTime FromDate, DateTime ToDate)
         {
             List<TimeSheetModel> timeSheetModelList = new List<TimeSheetModel>();
             List<ShiftQueryModel> ShiftQueryModelList = GetShiftDetails(UserID, FromDate, ToDate);
-            
+
             var toDateShift = (from m in ShiftQueryModelList where m.ShiftDate == ToDate select new { fromTime = m.ShiftFromtime, toTime = m.ShiftTotime }).FirstOrDefault();
 
             if (toDateShift != null)
@@ -130,7 +125,7 @@ namespace NLTD.EmployeePortal.LMS.Dac.Dac
             OfficeWeekOffDac officeWeekOffDacObj = new OfficeWeekOffDac();
             List<string> officeWeekOffDayList = officeWeekOffDacObj.GetEmployeeWeekOffDay(UserID);
 
-            // To get the employee Holiday List 
+            // To get the employee Holiday List
             OfficeHolidayDac officeHolidayDacObj = new OfficeHolidayDac();
             List<OfficeHoliday> officeHolidayList = officeHolidayDacObj.GetOfficeHoliday(UserID);
 
@@ -148,7 +143,7 @@ namespace NLTD.EmployeePortal.LMS.Dac.Dac
                 {
                     shiftEndDateTime = shiftEndDateTime.AddDays(1);
                 }
-                // To add the employee basic details 
+                // To add the employee basic details
                 TimeSheetModelObj.Shift = ShiftQueryModelList[i].ShiftFromtime.ToString(@"hh\:mm") + '-' + ShiftQueryModelList[i].ShiftTotime.ToString(@"hh\:mm");
                 TimeSheetModelObj.userID = UserID;
                 TimeSheetModelObj.Name = name;
@@ -184,13 +179,11 @@ namespace NLTD.EmployeePortal.LMS.Dac.Dac
                     if (shiftToTime > TimeSheetModelObj.OutTime)
                     {
                         TimeSheetModelObj.EarlyOut = ShiftQueryModelList[i].ShiftTotime - TimeSheetModelObj.OutTime.TimeOfDay;
-
                     }
-
                 }
-                else// If no record found in the employee for the given date 
+                else// If no record found in the employee for the given date
                 {
-                    // Get Absent Details 
+                    // Get Absent Details
                     TimeSheetModelObj.Status = GetAbsentStatus(ShiftQueryModelList[i].ShiftDate, officeWeekOffDayList, officeHolidayList);
                 }
                 decimal LeaveDayQty = 0;
@@ -206,7 +199,7 @@ namespace NLTD.EmployeePortal.LMS.Dac.Dac
             return timeSheetModelList.OrderByDescending(m => m.WorkingDate).ToList();
         }
 
-        public List<TimeSheetModel> GetMyTeamTimeSheet(Int64 UserID, DateTime FromDate, DateTime ToDate,bool myDirectEmployees)
+        public List<TimeSheetModel> GetMyTeamTimeSheet(Int64 UserID, DateTime FromDate, DateTime ToDate, bool myDirectEmployees)
         {
             List<TimeSheetModel> timeSheetModelList = new List<TimeSheetModel>();
             // To Get all the employee profile under the manager or lead
@@ -222,7 +215,7 @@ namespace NLTD.EmployeePortal.LMS.Dac.Dac
                                 where emp.UserId == UserID
                                 select role.Role).FirstOrDefault();
                 }
-                List<EmployeeProfile> employeeProfileListUnderManager = EmployeeDacObj.GetReportingEmployeeProfile(UserID, userRole,myDirectEmployees).OrderBy(m => m.FirstName).ToList();
+                List<EmployeeProfile> employeeProfileListUnderManager = EmployeeDacObj.GetReportingEmployeeProfile(UserID, userRole, myDirectEmployees).OrderBy(m => m.FirstName).ToList();
                 for (int i = 0; i < employeeProfileListUnderManager.Count; i++)
                 {
                     List<TimeSheetModel> timeSheetModelListTemp = GetMyTimeSheet(employeeProfileListUnderManager[i].UserId, FromDate, ToDate);
@@ -232,12 +225,11 @@ namespace NLTD.EmployeePortal.LMS.Dac.Dac
             }
             catch (Exception)
             {
-
                 throw;
             }
         }
 
-        public string GetLMSStatus(List<EmployeeLeave> employeeLeaveList,DateTime statusDate,out decimal LeaveDayQty, out decimal PermissionCount)
+        public string GetLMSStatus(List<EmployeeLeave> employeeLeaveList, DateTime statusDate, out decimal LeaveDayQty, out decimal PermissionCount)
         {
             LeaveDayQty = 0;
             PermissionCount = 0;
@@ -247,14 +239,13 @@ namespace NLTD.EmployeePortal.LMS.Dac.Dac
             {
                 if (employeeLeaveList.Count > 0)
                 {
-                 var  Status = (from e in employeeLeaveList where statusDate >= e.StartDate && statusDate <= e.EndDate select new { e.LeaveType, e.LeaveDayQty,e.PermissionCount });
-                    if(Status != null && Status.Count() > 0)
+                    var Status = (from e in employeeLeaveList where statusDate >= e.StartDate && statusDate <= e.EndDate select new { e.LeaveType, e.LeaveDayQty, e.PermissionCount });
+                    if (Status != null && Status.Count() > 0)
                     {
                         LMSStatus = string.Join(", ", Status.Select(p => p.LeaveType));
                         LeaveDayQty = Status.Sum(p => p.LeaveDayQty);
                         PermissionCount = Status.Sum(p => p.PermissionCount);
                     }
-                    
                 }
             }
             catch (Exception)
@@ -263,8 +254,8 @@ namespace NLTD.EmployeePortal.LMS.Dac.Dac
             }
             return LMSStatus;
         }
-        
     }
+
     public class EmployeeLeave
     {
         public Int64 LeaveId { get; set; }

@@ -20,6 +20,7 @@ namespace NLTD.EmployeePortal.LMS.Common.DisplayModel
         public int PermissionMonth { get; set; }
 
         public string Month { get; set; }
+
         [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}")]
         public DateTime PermissionDate { get; set; }
 
@@ -31,6 +32,7 @@ namespace NLTD.EmployeePortal.LMS.Common.DisplayModel
         {
             get; set;
         }
+
         public string Status { get; set; }
         public string Reason { get; set; }
 

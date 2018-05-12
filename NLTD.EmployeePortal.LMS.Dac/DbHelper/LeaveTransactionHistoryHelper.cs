@@ -12,6 +12,7 @@ namespace NLTD.EmployeePortal.LMS.Dac.DbHelper
         {
             //Nothing to implement...
         }
+
         public IList<LeaveTransactionDetail> GetTransactionLog(string Name, string RequestMenuUser, long userId)
         {
             using (var dac = new LeaveTransactionHistoryDac())

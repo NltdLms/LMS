@@ -4,7 +4,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-
 namespace NLTD.EmployeePortal.LMS.Dac.Dac
 {
     public class LeaveTransactionHistoryDac : IDisposable
@@ -13,6 +12,7 @@ namespace NLTD.EmployeePortal.LMS.Dac.Dac
         {
             //Nothing to dispose..
         }
+
         public IList<LeaveTransactionDetail> GetTransactionLog(string Name, string RequestMenuUser, long LeaduserId)
         {
             IList<LeaveTransactionDetail> retModel = new List<LeaveTransactionDetail>();
@@ -27,7 +27,6 @@ namespace NLTD.EmployeePortal.LMS.Dac.Dac
 
                     if (RequestMenuUser != "My")
                         userId = employeeDac.GetUserId(Name);
-
 
                     if (userId > 0 || (RequestMenuUser == "My" && LeaduserId > 0))
                     {
@@ -55,7 +54,7 @@ namespace NLTD.EmployeePortal.LMS.Dac.Dac
 
                                 //var found = FindControlRecursively(user, userId);
 
-                                if (user>0)
+                                if (user > 0)
                                 {
                                     transactionDetails = getTransactionDetails(context, userId);
                                 }
@@ -80,14 +79,13 @@ namespace NLTD.EmployeePortal.LMS.Dac.Dac
             }
             catch (Exception)
             {
-
                 throw;
             }
 
             return retModel;
         }
-		
-		public static Employee FindControlRecursively(List<Employee> root, Int64 id)
+
+        public static Employee FindControlRecursively(List<Employee> root, Int64 id)
         {
             try
             {
@@ -108,11 +106,11 @@ namespace NLTD.EmployeePortal.LMS.Dac.Dac
             }
             catch (Exception)
             {
-
                 throw;
             }
             return null;
         }
+
         public List<LeaveTransactionHistoryModel> getTransactionDetails(NLTDDbContext context, long userId)
         {
             var transactionDetails = (from lth in context.LeaveTransactionHistory
@@ -152,7 +150,7 @@ namespace NLTD.EmployeePortal.LMS.Dac.Dac
                                  join lt in context.LeaveType on l.LeaveTypeId equals lt.LeaveTypeId
                                  join ld in context.LeaveDetail on l.LeaveId equals ld.LeaveId
                                  where l.UserId == UserID && l.Status == "A" && ld.IsDayOff == false && ld.LeaveDate >= FromDate && ld.LeaveDate <= ToDate
-                                 select new EmployeeLeave 
+                                 select new EmployeeLeave
                                  {
                                      UserId = l.UserId,
                                      StartDate = ld.LeaveDate,
@@ -177,16 +175,14 @@ namespace NLTD.EmployeePortal.LMS.Dac.Dac
                                                           }
                                  ).ToList();
 
-                    PermissionList.ForEach(pl => pl.PermissionCount = (decimal)(lv.calculateDuration(pl.TimeFrom, pl.TimeTo).TotalMinutes)/60);
+                    PermissionList.ForEach(pl => pl.PermissionCount = Math.Round((decimal)(lv.calculateDuration(pl.TimeFrom, pl.TimeTo).TotalMinutes) / 60,2));
 
                     if (PermissionList.Count > 0)
                         leaveList.AddRange(PermissionList);
-
                 }
             }
             catch (Exception)
             {
-
                 throw;
             }
             return leaveList;

@@ -93,7 +93,6 @@
           <url>/Admin/TeamTransactionLogs</url>
           <icon></icon>
         </MenuItem>
-
       </level1item>
     </MenuItem>
     <MenuItem>
@@ -173,6 +172,5 @@
         </MenuItem>
       </level1item>
     </MenuItem>
-  
   </menuitem>
 </Menu>

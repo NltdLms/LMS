@@ -8,20 +8,22 @@ namespace NLTD.EmployeePortal.LMS.Client
 {
     public class TimesheetClient : ITimesheetHelper
     {
-        ITimesheetHelper TimesheetHelper ;
+        private ITimesheetHelper TimesheetHelper;
 
         public TimesheetClient()
         {
             TimesheetHelper = new TimesheetHelper();
         }
+
         public List<TimeSheetModel> GetMyTimeSheet(Int64 UserID, DateTime FromDate, DateTime ToDate)
         {
-            List<TimeSheetModel> timeSheetModelList=  TimesheetHelper.GetMyTimeSheet(UserID, FromDate, ToDate);
+            List<TimeSheetModel> timeSheetModelList = TimesheetHelper.GetMyTimeSheet(UserID, FromDate, ToDate);
             return timeSheetModelList;
         }
+
         public List<TimeSheetModel> GetMyTeamTimeSheet(Int64 UserID, DateTime FromDate, DateTime ToDate, bool myDirectEmployees)
         {
-            List<TimeSheetModel> timeSheetModelList = TimesheetHelper.GetMyTeamTimeSheet(UserID, FromDate, ToDate,myDirectEmployees);
+            List<TimeSheetModel> timeSheetModelList = TimesheetHelper.GetMyTeamTimeSheet(UserID, FromDate, ToDate, myDirectEmployees);
             return timeSheetModelList;
         }
     }

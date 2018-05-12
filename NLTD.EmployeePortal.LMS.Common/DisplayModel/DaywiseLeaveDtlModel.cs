@@ -9,14 +9,14 @@ namespace NLTD.EmployeePortal.LMS.Common.DisplayModel
 
         public string EmpId { get; set; }
 
-        public string Name { get; set; } 
+        public string Name { get; set; }
 
         public string LeaveType { get; set; }
 
         public Int64 LeaveTypeId { get; set; }
 
         public bool IsLeave { get; set; }
-        
+
         [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}")]
         public DateTime LeaveDate { get; set; }
 
@@ -24,6 +24,7 @@ namespace NLTD.EmployeePortal.LMS.Common.DisplayModel
 
         //public DateTime LeaveTo { get; set; }
         public bool IsDayOff { get; set; }
+
         public decimal Duration { get; set; }
 
         public string LeaveStatus { get; set; }

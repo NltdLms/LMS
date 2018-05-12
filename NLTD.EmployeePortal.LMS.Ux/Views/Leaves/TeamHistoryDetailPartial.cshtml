@@ -1,8 +1,4 @@
-﻿
-
-
-
-@model List<NLTD.EmployeePortal.LMS.Common.DisplayModel.TeamLeaves>
+﻿@model List<NLTD.EmployeePortal.LMS.Common.DisplayModel.TeamLeaves>
 <script type="text/javascript" src="~/Scripts/lms.js?v=1.06"></script>
 
 <style type="text/css">
@@ -18,7 +14,7 @@
         color: #FFFFFF;
         background-color: #4894B3;
         border-color: #EEEEEE;
-        
+
     }
 
     .panel-title {
@@ -46,7 +42,6 @@
     }
 </style>
 
-
 @{
     if (Model.Count==0)
     {
@@ -61,7 +56,6 @@
 
         @for (int i = 0; i < Model.Count; i++)
         {
-
 
         <div class="panel panel-default">
             <div class="panel-heading" role="tab" id="@("heading"+Model[i].UserId)">
@@ -80,19 +74,11 @@
                     </div>
 
                     @Html.Partial("~/Views/Leaves/TeamHistorySubdetailPartial.cshtml", Model[i].TeamLeaveList)
-
                 </div>
             </div>
         </div>
-
 
         }
     </div>
 
 }
-
-
-
-
-
-

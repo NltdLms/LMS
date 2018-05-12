@@ -4,13 +4,13 @@ using NLTD.EmployeePortal.LMS.Repository;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+
 namespace NLTD.EmployeePortal.LMS.Dac.Dac
 {
     public class EmployeeDac : IEmployeeHelper
     {
         public EmployeeProfile GetEmployeeProfile(Int64 userId)
         {
-
             EmployeeProfile profile = null;
             try
             {
@@ -42,7 +42,6 @@ namespace NLTD.EmployeePortal.LMS.Dac.Dac
                                    RelievingDate = employee.RelievingDate,
                                    LogonId = employee.LoginId,
                                    IsActive = employee.IsActive
-
                                }).FirstOrDefault();
                     if (profile != null)
                     {
@@ -61,7 +60,6 @@ namespace NLTD.EmployeePortal.LMS.Dac.Dac
                                         select new { Day = w.Day }
                                       ).ToList();
 
-
                         if (weekOffs.Count > 0)
                         {
                             foreach (var item in weekOffs)
@@ -71,31 +69,36 @@ namespace NLTD.EmployeePortal.LMS.Dac.Dac
                                     case "SUNDAY":
                                         profile.Sunday = true;
                                         break;
+
                                     case "MONDAY":
                                         profile.Monday = true;
                                         break;
+
                                     case "TUESDAY":
                                         profile.Tuesday = true;
                                         break;
+
                                     case "WEDNESDAY":
                                         profile.Wednesday = true;
                                         break;
+
                                     case "THURSDAY":
                                         profile.Thursday = true;
                                         break;
+
                                     case "FRIDAY":
                                         profile.Friday = true;
                                         break;
+
                                     case "SATURDAY":
                                         profile.Saturday = true;
                                         break;
+
                                     default:
                                         break;
                                 }
                             }
-
                         }
-
                     }
                 }
             }
@@ -114,7 +117,7 @@ namespace NLTD.EmployeePortal.LMS.Dac.Dac
                 using (var context = new NLTDDbContext())
                 {
                     if (role.ToUpper() == "ADMIN" || role.ToUpper() == "HR")
-                    {// If the user role is admin we retrieve all the employees in the company 
+                    {// If the user role is admin we retrieve all the employees in the company
                         employeeProfileList = (from employee in context.Employee
                                                join rt in context.EmployeeRole on employee.EmployeeRoleId equals rt.RoleId
                                                where employee.IsActive == true
@@ -196,10 +199,10 @@ namespace NLTD.EmployeePortal.LMS.Dac.Dac
             }
             catch (Exception)
             {
-
             }
             return employeeProfileList;
         }
+
         public IList<Int64> GetEmployeesReporting(long leadId)
         {
             var result = new List<Int64>();
@@ -219,11 +222,11 @@ namespace NLTD.EmployeePortal.LMS.Dac.Dac
             }
             catch (Exception)
             {
-
                 throw;
             }
             return result;
         }
+
         public IList<ViewEmployeeProfileModel> GetTeamProfiles(Int64 userId, bool onlyReportedToMe, Int64? paramUserId, string requestMenuUser, bool hideInactiveEmp)
         {
             IList<ViewEmployeeProfileModel> retModel = new List<ViewEmployeeProfileModel>();
@@ -239,7 +242,6 @@ namespace NLTD.EmployeePortal.LMS.Dac.Dac
                                orderby e.FirstName
                                select new { userId = e.UserId, iactive = e.IsActive, reportingToId = e.ReportingToId, name = e.FirstName + " " + e.LastName, Shift = s.FromTime + "-" + s.ToTime }
                              ).ToList();
-
 
                     if (requestMenuUser == "My")
                     {
@@ -292,14 +294,13 @@ namespace NLTD.EmployeePortal.LMS.Dac.Dac
                                                 ids = ids.Where(x => x.iactive == true).ToList();
                                         }
                                     }
-                                    
-                                    
                                 }
                                 else
                                 {
-                                    if (paramUserId > 0) {
+                                    if (paramUserId > 0)
+                                    {
                                         ids = ids.Where(t => empList.Contains(t.userId) && t.iactive == true).ToList();
-                                        if(ids.Count>0)
+                                        if (ids.Count > 0)
                                             ids = ids.Where(x => x.userId == paramUserId).ToList();
                                     }
                                     else
@@ -318,11 +319,8 @@ namespace NLTD.EmployeePortal.LMS.Dac.Dac
                         }
                     }
 
-                    
-
                     foreach (var memId in ids)
                     {
-
                         profile = (from employee in context.Employee.AsEnumerable()
                                    join rt in context.EmployeeRole on employee.EmployeeRoleId equals rt.RoleId
                                    join o in context.OfficeLocation on employee.OfficeId equals o.OfficeId
@@ -346,11 +344,10 @@ namespace NLTD.EmployeePortal.LMS.Dac.Dac
                                        LogonId = employee.LoginId,
                                        IsActive = employee.IsActive,
                                        CardId = employee.Cardid,
-                                       DOJ = String.Format("{0:dd-MM-yyyy}", employee.DOJ)  ,
-                                       RelievingDate = String.Format("{0:dd-MM-yyyy}", employee.RelievingDate) ,
+                                       DOJ = String.Format("{0:dd-MM-yyyy}", employee.DOJ),
+                                       RelievingDate = String.Format("{0:dd-MM-yyyy}", employee.RelievingDate),
                                        ConfirmationDate = String.Format("{0:dd-MM-yyyy}", employee.ConfirmationDate),
                                        Shift = string.Format("{0:hh\\:mm}", s.FromTime) + " - " + string.Format("{0:hh\\:mm}", s.ToTime)
-
                                    }).FirstOrDefault();
                         if (profile != null)
                         {
@@ -367,7 +364,6 @@ namespace NLTD.EmployeePortal.LMS.Dac.Dac
                                             select new { Day = w.Day }
                                           ).ToList();
 
-
                             if (weekOffs.Count > 0)
                             {
                                 foreach (var item in weekOffs)
@@ -377,31 +373,36 @@ namespace NLTD.EmployeePortal.LMS.Dac.Dac
                                         case "SUNDAY":
                                             profile.Sunday = true;
                                             break;
+
                                         case "MONDAY":
                                             profile.Monday = true;
                                             break;
+
                                         case "TUESDAY":
                                             profile.Tuesday = true;
                                             break;
+
                                         case "WEDNESDAY":
                                             profile.Wednesday = true;
                                             break;
+
                                         case "THURSDAY":
                                             profile.Thursday = true;
                                             break;
+
                                         case "FRIDAY":
                                             profile.Friday = true;
                                             break;
+
                                         case "SATURDAY":
                                             profile.Saturday = true;
                                             break;
+
                                         default:
                                             break;
                                     }
                                 }
-
                             }
-
                         }
 
                         retModel.Add(profile);
@@ -410,7 +411,6 @@ namespace NLTD.EmployeePortal.LMS.Dac.Dac
             }
             catch (Exception)
             {
-
                 throw;
             }
 
@@ -419,7 +419,6 @@ namespace NLTD.EmployeePortal.LMS.Dac.Dac
 
         public ViewEmployeeProfileModel ViewEmployeeProfile(Int64 userId)
         {
-
             ViewEmployeeProfileModel profile = null;
             try
             {
@@ -445,7 +444,6 @@ namespace NLTD.EmployeePortal.LMS.Dac.Dac
                                    UserId = employee.UserId,
                                    LogonId = employee.LoginId,
                                    IsActive = employee.IsActive
-
                                }).FirstOrDefault();
                     if (profile != null)
                     {
@@ -462,7 +460,6 @@ namespace NLTD.EmployeePortal.LMS.Dac.Dac
                                         select new { Day = w.Day }
                                       ).ToList();
 
-
                         if (weekOffs.Count > 0)
                         {
                             foreach (var item in weekOffs)
@@ -472,31 +469,36 @@ namespace NLTD.EmployeePortal.LMS.Dac.Dac
                                     case "SUNDAY":
                                         profile.Sunday = true;
                                         break;
+
                                     case "MONDAY":
                                         profile.Monday = true;
                                         break;
+
                                     case "TUESDAY":
                                         profile.Tuesday = true;
                                         break;
+
                                     case "WEDNESDAY":
                                         profile.Wednesday = true;
                                         break;
+
                                     case "THURSDAY":
                                         profile.Thursday = true;
                                         break;
+
                                     case "FRIDAY":
                                         profile.Friday = true;
                                         break;
+
                                     case "SATURDAY":
                                         profile.Saturday = true;
                                         break;
+
                                     default:
                                         break;
                                 }
                             }
-
                         }
-
                     }
                 }
             }
@@ -556,6 +558,7 @@ namespace NLTD.EmployeePortal.LMS.Dac.Dac
             catch { throw; }
             return profile;
         }
+
         public List<DropDownItem> GetReportToList(Int64 OfficeId)
         {
             using (var context = new NLTDDbContext())
@@ -576,6 +579,7 @@ namespace NLTD.EmployeePortal.LMS.Dac.Dac
                 return ReportToPersons;
             }
         }
+
         public List<DropDownItem> GetActiveEmpList(Int64 OfficeId, Int64? exceptUserId)
         {
             List<DropDownItem> AllEmp = new List<DropDownItem>();
@@ -583,7 +587,6 @@ namespace NLTD.EmployeePortal.LMS.Dac.Dac
             {
                 using (var context = new NLTDDbContext())
                 {
-
                     if (exceptUserId == null || exceptUserId == 0)
                     {
                         var emp = (from employee in context.Employee
@@ -607,19 +610,11 @@ namespace NLTD.EmployeePortal.LMS.Dac.Dac
                                    }).ToList();
 
                         AllEmp = emp.OrderBy(x => x.Value).ToList();
-
                     }
-
-
-
-
-
-
                 }
             }
             catch (Exception)
             {
-
                 throw;
             }
             return AllEmp;
@@ -634,7 +629,6 @@ namespace NLTD.EmployeePortal.LMS.Dac.Dac
                 {
                     if (mode == "Add")
                     {
-
                         DateTime fromdate = new DateTime(DateTime.Now.Year, 1, 1);
                         DateTime todate = new DateTime(DateTime.Now.Year, 12, 31);
                         var listofDays = Enumerable.Range(0, (todate - fromdate).Days + 1).Select(d => fromdate.AddDays(d));
@@ -652,7 +646,6 @@ namespace NLTD.EmployeePortal.LMS.Dac.Dac
                                            };
                         context.ShiftMapping.AddRange(shiftMapping);
                         isSaved = context.SaveChanges();
-
                     }
                     else
                     {
@@ -668,7 +661,6 @@ namespace NLTD.EmployeePortal.LMS.Dac.Dac
                 }
                 catch (Exception)
                 {
-
                     throw;
                 }
 
@@ -676,15 +668,14 @@ namespace NLTD.EmployeePortal.LMS.Dac.Dac
             }
         }
 
-
         public void Dispose()
         {
             //Nothing to dispose...
         }
+
         public string UpdateEmployeeProfile(EmployeeProfile profile, Int64 ModifiedBy)
         {
             //check if ModifiedBy user is HR
-
 
             Employee employee = null;
             int isSaved = 0;
@@ -718,8 +709,6 @@ namespace NLTD.EmployeePortal.LMS.Dac.Dac
                             }
                         }
 
-
-
                         if (profile.Mode == "Add")
                         {
                             var isCorpIdExits = context.Employee.Where(e => e.LoginId == profile.LogonId.ToUpper()).FirstOrDefault();
@@ -735,7 +724,6 @@ namespace NLTD.EmployeePortal.LMS.Dac.Dac
                             {
                                 return "DupCard";
                             }
-
                         }
                         else
                         {
@@ -746,8 +734,6 @@ namespace NLTD.EmployeePortal.LMS.Dac.Dac
                                 {
                                     return "DupCorp";
                                 }
-
-
                             }
                             var isCardIdExits = context.Employee.Where(e => e.Cardid == profile.CardId && e.Cardid != null && e.EmployeeId != employee.EmployeeId && e.IsActive).FirstOrDefault();
                             if (isCardIdExits != null)
@@ -850,7 +836,6 @@ namespace NLTD.EmployeePortal.LMS.Dac.Dac
                                 hist.Remarks = remarks;
                                 context.EmployeeTransactionHistory.Add(hist);
                                 isSaved = context.SaveChanges();
-
                             }
                             if (isSaved > 0)
                                 retMsg = "Saved";
@@ -863,7 +848,6 @@ namespace NLTD.EmployeePortal.LMS.Dac.Dac
                         }
                         else
                         {
-
                             Employee oldEmpData = new Employee();
                             oldEmpData = context.Employee.Where(x => x.UserId == profile.UserId).FirstOrDefault();
 
@@ -942,7 +926,6 @@ namespace NLTD.EmployeePortal.LMS.Dac.Dac
                                 employee.ModifiedBy = ModifiedBy;
                                 isSaved = context.SaveChanges();
 
-
                                 if (isSaved > 0)
                                 {
                                     isSaved = AddOrUpdateEmployeeDefaultShift(profile.Mode, employee.UserId, employee.ShiftId, ModifiedBy,
@@ -991,19 +974,14 @@ namespace NLTD.EmployeePortal.LMS.Dac.Dac
                                             if (isSameWeekoff == "")
                                             {
                                                 isSameWeekoff = "Yes";
-
                                             }
-
-
                                         }
                                         else
                                         {
                                             isSameWeekoff = "No";
                                             dicttUpdateExisting.Add(item.EmpWeekOffId, prepareList.Where(x => x != item.Day).FirstOrDefault());
                                             prepareList.Remove(dicttUpdateExisting[item.EmpWeekOffId]);
-
                                         }
-
                                     }
                                 }
                             }
@@ -1055,17 +1033,12 @@ namespace NLTD.EmployeePortal.LMS.Dac.Dac
                                             updtExist.ModifiedOn = System.DateTime.Now;
                                             isSaved = context.SaveChanges();
                                         }
-
                                     }
                                 }
                             }
 
                             if (isSaved > 0)
                             {
-
-
-
-
                                 EmployeeTransactionHistory hist = new EmployeeTransactionHistory();
                                 hist.UserId = profile.UserId;
                                 hist.TransactionDate = System.DateTime.Now;
@@ -1074,7 +1047,6 @@ namespace NLTD.EmployeePortal.LMS.Dac.Dac
                                 hist.Remarks = remarks;
                                 context.EmployeeTransactionHistory.Add(hist);
                                 isSaved = context.SaveChanges();
-
                             }
                             if (isSaved > 0)
                                 retMsg = "Saved";
@@ -1090,7 +1062,6 @@ namespace NLTD.EmployeePortal.LMS.Dac.Dac
 
                             return retMsg;
                         }
-
                     }
                     else
                     {
@@ -1100,11 +1071,9 @@ namespace NLTD.EmployeePortal.LMS.Dac.Dac
             }
             catch (Exception)
             {
-
                 throw;
             }
         }
-
 
         public long GetEmployeeId(string LogonId)
         {
@@ -1120,11 +1089,11 @@ namespace NLTD.EmployeePortal.LMS.Dac.Dac
                 }
                 catch (Exception)
                 {
-
                     throw;
                 }
             }
         }
+
         public long GetUserId(string name)
         {
             using (var context = new NLTDDbContext())
@@ -1139,11 +1108,11 @@ namespace NLTD.EmployeePortal.LMS.Dac.Dac
                 }
                 catch (Exception)
                 {
-
                     throw;
                 }
             }
         }
+
         public string GetNewEmpId(Int64 OfficeId)
         {
             Int32 newEmpId = 0;
@@ -1170,11 +1139,11 @@ namespace NLTD.EmployeePortal.LMS.Dac.Dac
                 }
                 catch (Exception)
                 {
-
                     throw;
                 }
             }
         }
+
         public string ReportingToName(Int64 userId)
         {
             using (var context = new NLTDDbContext())
@@ -1193,7 +1162,6 @@ namespace NLTD.EmployeePortal.LMS.Dac.Dac
                 }
                 catch (Exception)
                 {
-
                     throw;
                 }
             }
@@ -1211,11 +1179,9 @@ namespace NLTD.EmployeePortal.LMS.Dac.Dac
             }
             catch (Exception)
             {
-
                 throw;
             }
             return userIDList;
         }
-
     }
 }

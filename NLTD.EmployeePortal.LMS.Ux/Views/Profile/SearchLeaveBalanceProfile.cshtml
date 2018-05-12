@@ -1,5 +1,4 @@
-﻿
-<style type="text/css">
+﻿<style type="text/css">
     .ui-autocomplete {
         height: 220px;
         overflow-y: scroll;
@@ -44,7 +43,6 @@
                 select: function (event, ui) {
                     event.preventDefault();
                     $("#UserID").val(ui.item.value);
-                    console.log("Select");
                 },
                 focus: function (event, ui) {
                     event.preventDefault();
@@ -74,10 +72,8 @@
                                <input type="hidden" id="UserID" />
                                 @Html.LabelFor(x => x.Name, new { @class = "required" })
                                 @Html.TextBoxFor(m => m.Name, new { @class = "form-control" })
-
                             </div>
                             <div class="col-sm-2">
-
                             </div>
                             <div class="col-sm-5" style="padding-top:27px;">
                                 <button type="button" class="btn btn-primary pull-right" onclick="loadLeaveBalanceProfile()">SEARCH</button>
@@ -90,8 +86,6 @@
         <div id="alert_placeholder"></div>
     }
 
-
     <div id="divEmpProfile"></div>
 
 }
-

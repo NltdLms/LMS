@@ -1,5 +1,4 @@
-﻿
-@{
+﻿@{
     ViewBag.Title = "ShiftMaster";
 }
 @if (ViewBag.Authorize == "NoAuth")
@@ -62,8 +61,6 @@ else
 
     }
 
-
-
     <div class="row">
         <div class="col-sm-12">
             <div class="box box-primary">
@@ -79,7 +76,6 @@ else
                 </div>
             </div>
         </div>
-
     </div>
 
         <div id="divForShiftAllocation"></div>
@@ -104,12 +100,11 @@ else
                     <div id="divForAddShift" class="modal-body">
                     </div>
                     <div class="modal-footer">
-                        
+
                         <button type="button" class="btn btn-primary" data-dismiss="modal">CLOSE</button>
                         <button type="button" class="btn btn-primary" onclick="SaveShiftMaster();">SAVE</button>
                     </div>
                 </div>
-
             </div>
         </div>
 

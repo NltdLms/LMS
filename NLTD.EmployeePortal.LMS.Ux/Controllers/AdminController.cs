@@ -17,14 +17,17 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
         {
             return View();
         }
+
         public ActionResult PublicHolidays()
         {
             return View();
         }
+
         public ActionResult MapTeam()
         {
             return View();
         }
+
         public ActionResult MyYearWiseLeaveSumary()
         {
             using (var Client = new LeaveClient())
@@ -37,6 +40,7 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
             qryMdl.OnlyReportedToMe = true;
             return View("ViewEmployeeWiseLeaveSummary", qryMdl);
         }
+
         public ActionResult TeamYearWiseLeaveSumary()
         {
             using (var Client = new LeaveClient())
@@ -49,6 +53,7 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
             qryMdl.OnlyReportedToMe = true;
             return View("ViewEmployeeWiseLeaveSummary", qryMdl);
         }
+
         public ActionResult AdminYearWiseLeaveSumary()
         {
             using (var Client = new LeaveClient())
@@ -61,16 +66,18 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
             qryMdl.OnlyReportedToMe = true;
             return View("ViewEmployeeWiseLeaveSummary", qryMdl);
         }
+
         public ActionResult loadYearwiseLeaveSummary(int Year, string reqUsr, Int64? paramUserId, bool OnlyReportedToMe)
         {
             IList<EmployeeWiseLeaveSummaryModel> LeaveRequests = null;
-            
+
             using (var client = new LeaveClient())
             {
                 LeaveRequests = client.GetEmployeeWiseLeaveSumary(UserId, Year, reqUsr, paramUserId, OnlyReportedToMe);
             }
             return PartialView("YearwiseSummaryPartial", LeaveRequests);
         }
+
         public ActionResult ExportYearSummaryToExcel(YearwiseLeaveSummaryQueryModel data, string RequestLevelPerson)
         {
             IList<EmployeeWiseLeaveSummaryModel> LeaveRequests = null;
@@ -83,7 +90,7 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
             if (excelData.Count > 0)
             {
                 string[] columns = { "Emp Id", "Name", "Request Type", "Total Leaves", "Used Leaves", "Pending Approval", "Balance Leaves" };
-                byte[] filecontent = ExcelExportHelper.ExportExcelYearSummary(excelData,  "", false, columns);
+                byte[] filecontent = ExcelExportHelper.ExportExcelYearSummary(excelData, "", false, columns);
                 return File(filecontent, ExcelExportHelper.ExcelContentType, "LeaveBalanceReport_" + System.DateTime.Now + ".xlsx");
             }
             else
@@ -98,6 +105,7 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
                 return View("ViewEmployeeWiseLeaveSummary", data);
             }
         }
+
         public ActionResult MyMonthWiseLeaves()
         {
             using (var Client = new LeaveClient())
@@ -111,6 +119,7 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
             qryMdl.OnlyReportedToMe = true;
             return View("MonthwiseLeaveCount", qryMdl);
         }
+
         public ActionResult TeamMonthWiseLeaves()
         {
             using (var Client = new LeaveClient())
@@ -124,6 +133,7 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
             qryMdl.OnlyReportedToMe = true;
             return View("MonthwiseLeaveCount", qryMdl);
         }
+
         public ActionResult AdminMonthWiseLeaves()
         {
             using (var Client = new LeaveClient())
@@ -137,10 +147,11 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
             qryMdl.OnlyReportedToMe = true;
             return View("MonthwiseLeaveCount", qryMdl);
         }
+
         public ActionResult LoadMonthWiseLeaveCount(int Year, string reqUsr, Int64? paramUserId, bool OnlyReportedToMe)
         {
             IList<MonthwiseLeavesCountModel> LeaveRequests = null;
-           
+
             using (var client = new LeaveClient())
             {
                 LeaveRequests = client.GetMonthwiseLeavesCount(Year, UserId, OnlyReportedToMe, paramUserId, reqUsr);
@@ -154,14 +165,13 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
             using (var client = new LeaveClient())
             {
                 LeaveRequests = client.GetMonthwiseLeavesCount(data.Year, UserId, data.OnlyReportedToMe, data.SearchUserID, RequestLevelPerson);
-
             }
             List<MonthwiseLeavesCountModel> excelData = new List<MonthwiseLeavesCountModel>();
             excelData = LeaveRequests.ToList();
             if (excelData.Count > 0)
             {
-                string[] columns = { "EmpId", "Name", "CL1", "PL1", "LWP1", "CO1", "CL2", "PL2", "LWP2", "CO2", "CL3", "PL3", "LWP3", "CO3", "CL4", "PL4", "LWP4", "CO4", "CL5", "PL5", "LWP5", "CO5", "CL6", "PL6", "LWP6", "CO6", "CL7", "PL7", "LWP7", "CO7", "CL8", "PL8", "LWP8", "CO8", "CL9", "PL9", "LWP9", "CO9", "CL10", "PL10", "LWP10", "CO10", "CL11", "PL11", "LWP11", "CO11", "CL12", "PL12", "LWP12", "CO12" };
-                byte[] filecontent = ExcelExportHelper.ExportExcelMonthSummary(excelData,data.Year, "", false, columns);
+                string[] columns = { "EmpId", "Name", "CL1", "PL1", "DL1", "LWP1", "CO1", "CL2", "PL2", "DL2", "LWP2", "CO2", "CL3", "PL3", "DL3", "LWP3", "CO3", "CL4", "PL4", "DL4", "LWP4", "CO4", "CL5", "PL5", "DL5", "LWP5", "CO5", "CL6", "PL6", "DL6", "LWP6", "CO6", "CL7", "PL7", "DL7", "LWP7", "CO7", "CL8", "PL8", "DL8", "LWP8", "CO8", "CL9", "PL9", "DL9", "LWP9", "CO9", "CL10", "PL10", "DL10", "LWP10", "CO10", "CL11", "PL11", "DL11", "LWP11", "CO11", "CL12", "PL12", "DL12", "LWP12", "CO12" };
+                byte[] filecontent = ExcelExportHelper.ExportExcelMonthSummary(excelData, data.Year, "", false, columns);
                 return File(filecontent, ExcelExportHelper.ExcelContentType, "MonthwiseReport_" + System.DateTime.Now + ".xlsx");
             }
             else
@@ -177,7 +187,6 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
             }
         }
 
-
         public ActionResult MyDaywiseLeaves()
         {
             DaywiseLeaveQueryModel mdl = new DaywiseLeaveQueryModel();
@@ -186,6 +195,7 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
             mdl.DonotShowRejected = true;
             return View("DaywiseLeaveDateRangeView", mdl);
         }
+
         public ActionResult TeamDaywiseLeaves()
         {
             DaywiseLeaveQueryModel mdl = new DaywiseLeaveQueryModel();
@@ -194,6 +204,7 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
             mdl.DonotShowRejected = true;
             return View("DaywiseLeaveDateRangeView", mdl);
         }
+
         public ActionResult AdminDaywiseLeaves()
         {
             DaywiseLeaveQueryModel mdl = new DaywiseLeaveQueryModel();
@@ -202,11 +213,12 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
             mdl.DonotShowRejected = true;
             return View("DaywiseLeaveDateRangeView", mdl);
         }
+
         public ActionResult loadDaywiseLeaves(Int64? paramUserId, string FromDate, string ToDate, bool IsLeaveOnly, bool OnlyReportedToMe, string reqUsr, bool DonotShowRejected)
         {
             DateTime? startDateFormatted = null;
             DateTime? endDateFormatted = null;
-            
+
             if (FromDate != null)
             {
                 if (FromDate.Trim() != "")
@@ -249,10 +261,10 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
                         LeaveRequests[i].CommentsShort = LeaveRequests[i].ApproverComments;
                     }
                 }
-
             }
             return PartialView("DaywiseLeaveDateRangeDtlPartial", LeaveRequests);
         }
+
         public ActionResult ExportToExcel(DaywiseLeaveQueryModel data, string RequestLevelPerson)
         {
             IList<DaywiseLeaveDtlModel> LeaveRequests = null;
@@ -304,6 +316,7 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
             mdl.OnlyReportedToMe = true;
             return View("DatewisePermissions", mdl);
         }
+
         public ActionResult TeamPermissions()
         {
             PermissionQueryModel mdl = new PermissionQueryModel();
@@ -316,6 +329,7 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
             mdl.OnlyReportedToMe = true;
             return View("DatewisePermissions", mdl);
         }
+
         public ActionResult AdminPermissions()
         {
             PermissionQueryModel mdl = new PermissionQueryModel();
@@ -328,12 +342,13 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
             mdl.OnlyReportedToMe = true;
             return View("DatewisePermissions", mdl);
         }
+
         public ActionResult GetPermissionDetail(Int64? paramUserId, string reqUsr, string startDate, string endDate, bool OnlyReportedToMe)
         {
             IList<PermissionDetailsModel> LeaveRequests = null;
             DateTime? startDateFormatted = null;
             DateTime? endDateFormatted = null;
-            
+
             if (startDate != "")
             {
                 try
@@ -379,12 +394,9 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
                         LeaveRequests[i].CommentsShort = LeaveRequests[i].ApproverComments;
                     }
                 }
-
             }
             return PartialView("ViewPermissionDetailPartial", LeaveRequests);
         }
-
-
 
         public ActionResult ExportPermissionsExcel(PermissionQueryModel qryMdl, string RequestLevelPerson)
         {
@@ -425,16 +437,17 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
                 return View("DatewisePermissions", qryMdl);
             }
         }
+
         public ActionResult GetEmployeeList(string term)
         {
             IList<EmployeeList> mdl;
             using (var Client = new LeaveClient())
             {
                 mdl = Client.GetEmployeeList(term, UserId);
-
             }
             return Json(mdl);
         }
+
         public ActionResult ViewTransactionLog()
         {
             ViewBag.RequestLevelPerson = "Admin";
@@ -483,45 +496,43 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
             return PartialView("ViewTransactionLogPartial", transactionHistory);
         }
 
-
-        public ActionResult loadEmployeeAttendance(string ID, string FromDate, string ToDate,string requestLevelPerson,bool myDirectEmployees)
+        public ActionResult loadEmployeeAttendance(string ID, string FromDate, string ToDate, string requestLevelPerson, bool myDirectEmployees)
         {
             string errorMessage = string.Empty;
-            IList<EmployeeAttendanceModel> employeeAttendanceModelList = GetEmployeeAttendanceList(ID,FromDate, ToDate, requestLevelPerson, myDirectEmployees);
+            IList<EmployeeAttendanceModel> employeeAttendanceModelList = GetEmployeeAttendanceList(ID, FromDate, ToDate, requestLevelPerson, myDirectEmployees);
             ViewBag.RequestLevelPerson = requestLevelPerson;
             return PartialView("EmployeeAttendanceDtlPartial", employeeAttendanceModelList);
         }
-       
 
-        private IList<EmployeeAttendanceModel> GetEmployeeAttendanceList(string ID,string FromDate, string ToDate,string requestLevelPerson,bool IsDirectEmployees)
+        private IList<EmployeeAttendanceModel> GetEmployeeAttendanceList(string ID, string FromDate, string ToDate, string requestLevelPerson, bool IsDirectEmployees)
         {
             IList<EmployeeAttendanceModel> employeeAttendanceModelList = null;
             DateTime startDateFormatted, endDateFormatted;
             string tempRequestLevelPerson = requestLevelPerson;
             EmployeeProfile profile = (EmployeeProfile)Session["Profile"];
             Int64 userID = profile.UserId;
-            if(!string.IsNullOrEmpty(ID) && ID!="0")
+            if (!string.IsNullOrEmpty(ID) && ID != "0")
             {
-
                 userID = Convert.ToInt32(ID);
                 requestLevelPerson = "My";// If we are not change the requst level person, If we pass any manager ID it will return all timesheet who are all under the manager
             }
-            if (string.IsNullOrEmpty(FromDate)|| FromDate== "Nodate")
+            if (string.IsNullOrEmpty(FromDate) || FromDate == "Nodate")
             {
                 startDateFormatted = DateTime.Now.AddDays(-30).Date;
                 endDateFormatted = DateTime.Now;
             }
             else
             {
-                 startDateFormatted = DateTime.Parse(FromDate, new CultureInfo("en-GB", true));
-                endDateFormatted = DateTime.Parse(ToDate, new CultureInfo("en-GB", true)).Add(new TimeSpan(23,59,59)); ;
+                startDateFormatted = DateTime.Parse(FromDate, new CultureInfo("en-GB", true));
+                endDateFormatted = DateTime.Parse(ToDate, new CultureInfo("en-GB", true)).Add(new TimeSpan(23, 59, 59)); ;
             }
-           
+
             IEmployeeAttendanceHelper employeeAttendanceHelper = new EmplyeeAttendanceClient();
             employeeAttendanceModelList = employeeAttendanceHelper.GetAttendanceForRange(userID, startDateFormatted, endDateFormatted, requestLevelPerson, IsDirectEmployees);
             requestLevelPerson = tempRequestLevelPerson;
             return employeeAttendanceModelList;
         }
+
         private DateTime ChangeTime(DateTime dateTime, int hours, int minutes, int seconds, int milliseconds)
         {
             return new DateTime(
@@ -535,7 +546,7 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
                 dateTime.Kind);
         }
 
-        public List<TimeSheetModel> GetEmployeeTimeSheet(TimeSheetQueryModel TimeSheetQueryModelObj,out string errorMessage,string requestLevelPerson)
+        public List<TimeSheetModel> GetEmployeeTimeSheet(TimeSheetQueryModel TimeSheetQueryModelObj, out string errorMessage, string requestLevelPerson)
         {
             errorMessage = string.Empty;
             List<EmployeeAttendanceModel> employeeAttendanceModelList = new List<EmployeeAttendanceModel>();
@@ -553,34 +564,33 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
                 }
                 else
                 {
-                    TimeSheetQueryModelObj.ToDate=TimeSheetQueryModelObj.ToDate;
+                    TimeSheetQueryModelObj.ToDate = TimeSheetQueryModelObj.ToDate;
                 }
             }
             else if (!string.IsNullOrEmpty(TimeSheetQueryModelObj.Name))
             {
                 //IEmployeeHelper EmployeeHelper = new EmployeeClient();
-               // Int64 UserID = TimeSheetQueryModelObj.UserID;
-                
+                // Int64 UserID = TimeSheetQueryModelObj.UserID;
+
                 if (TimeSheetQueryModelObj.FromDate == DateTime.MinValue)
                 {
                     TimeSheetQueryModelObj.FromDate = currentDate.AddDays(-30);
                     TimeSheetQueryModelObj.ToDate = currentDate;
-
                 }
                 else
                 {
                     TimeSheetQueryModelObj.ToDate = TimeSheetQueryModelObj.ToDate;
                 }
                 requestLevelPerson = "My";
-                
+
                 //TimeSheetQueryModelObj.UserID = UserID;
             }
-            if(TimeSheetQueryModelObj.ToDate>=DateTime.Now)
+            if (TimeSheetQueryModelObj.ToDate >= DateTime.Now)
             {
                 TimeSheetQueryModelObj.ToDate = currentDate;
             }
             List<TimeSheetModel> timeSheetModelList = new List<TimeSheetModel>();
-            if(requestLevelPerson=="My")
+            if (requestLevelPerson == "My")
             {
                 timeSheetModelList = EmployeeAttendanceHelperObj.GetMyTimeSheet(TimeSheetQueryModelObj.UserID, TimeSheetQueryModelObj.FromDate, TimeSheetQueryModelObj.ToDate);
             }
@@ -588,17 +598,18 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
             {
                 timeSheetModelList = EmployeeAttendanceHelperObj.GetMyTeamTimeSheet(TimeSheetQueryModelObj.UserID, TimeSheetQueryModelObj.FromDate, TimeSheetQueryModelObj.ToDate, TimeSheetQueryModelObj.MyDirectEmployees);
             }
-            
+
             return timeSheetModelList;
         }
+
         public ActionResult LoadMyTimesheet(TimeSheetQueryModel TimeSheetQueryModelObj)
         {
             string errorMessage = string.Empty;
-            List<TimeSheetModel> timeSheetModelList = GetEmployeeTimeSheet(TimeSheetQueryModelObj,out errorMessage, "My");
+            List<TimeSheetModel> timeSheetModelList = GetEmployeeTimeSheet(TimeSheetQueryModelObj, out errorMessage, "My");
             ViewBag.RequestLevelPerson = "My";
             return PartialView("TimeSheetPartial", timeSheetModelList);
-
         }
+
         public ActionResult LoadMyTeamTimesheet(TimeSheetQueryModel TimeSheetQueryModelObj)
         {
             string errorMessage = string.Empty;
@@ -609,7 +620,6 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
             }
             ViewBag.RequestLevelPerson = "Team";
             return PartialView("TimeSheetPartial", timeSheetModelList);
-
         }
 
         public ActionResult ExportTimeSheetToExcel(TimeSheetQueryModel TimeSheetQueryModelObj, string RequestLevelPerson)
@@ -624,7 +634,6 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
                 {
                     TimeSheetQueryModelObj.FromDate = DateTime.Parse(startDate, new CultureInfo("en-GB", true));
                     TimeSheetQueryModelObj.ToDate = DateTime.Parse(endDate, new CultureInfo("en-GB", true));
-                    
                 }
                 catch (Exception ex)
                 {
@@ -632,11 +641,11 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
                 }
             }
 
-            List<TimeSheetModel> timeSheetModelList = GetEmployeeTimeSheet(TimeSheetQueryModelObj,out errorMessage, RequestLevelPerson);
+            List<TimeSheetModel> timeSheetModelList = GetEmployeeTimeSheet(TimeSheetQueryModelObj, out errorMessage, RequestLevelPerson);
             List<TimeSheetModel> excelData = timeSheetModelList.ToList();
             if (excelData.Count > 0)
             {
-                List<string> columns = new List<string>(){ "Date", "Shift", "In Time", "Out Time", "Working Hours", "Status", "Requests", "Day", "Late In", "Early Out", "Name", "Reporting Manager" };
+                List<string> columns = new List<string>() { "Date", "Shift", "In Time", "Out Time", "Working Hours", "Status", "Requests", "Day", "Late In", "Early Out", "Name", "Reporting Manager" };
                 string fileName = string.Format("Timesheet_{0}{1}", DateTime.Now.ToString("ddMMyyyyHHmmss"), ".xlsx");
 
                 //if (RequestLevelPerson == "My")
@@ -649,7 +658,7 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
                 //fileName = string.Format("TimeSheet_{0}{1}", DateTime.Now.ToString("ddMMyyyyHHmmss"), ".xlsx");
                 //}
                 byte[] filecontent = ExcelExportHelper.ExportTimesheetExcel(excelData, "", true, columns.ToArray());
-                return File(filecontent, ExcelExportHelper.ExcelContentType,fileName);
+                return File(filecontent, ExcelExportHelper.ExcelContentType, fileName);
             }
             else
             {
@@ -667,28 +676,26 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
 
         public ActionResult ExportAttendanceToExcel(EmployeeAttendanceQueryModel EmployeeAttendanceQueryModelObj, string RequestLevelPerson)
         {
-
             List<EmployeeAttendanceModel> excelData = GetEmployeeAttendanceList(EmployeeAttendanceQueryModelObj.UserID.ToString(), (EmployeeAttendanceQueryModelObj.FromDate == DateTime.MinValue ? "" : EmployeeAttendanceQueryModelObj.FromDate.ToString()),
                 (EmployeeAttendanceQueryModelObj.ToDate == DateTime.MinValue ? "" : EmployeeAttendanceQueryModelObj.ToDate.ToString()), RequestLevelPerson, EmployeeAttendanceQueryModelObj.DirectEmployees).ToList();
 
             if (excelData.Count > 0)
             {
-                List<string>  columns = new List<string>(){"AttendanceDate", "INOutTime", "InOut","Name" };
-               // string fileName = "Attendance.xlsx";
+                List<string> columns = new List<string>() { "AttendanceDate", "INOutTime", "InOut", "Name" };
+                // string fileName = "Attendance.xlsx";
                 string fileName = string.Format("Attendance_{0}{1}", DateTime.Now.ToString("ddMMyyyyHHmmss"), ".xlsx");
-                if (EmployeeAttendanceQueryModelObj.RequestLevelPerson=="My")
+                if (EmployeeAttendanceQueryModelObj.RequestLevelPerson == "My")
                 {
-                    columns = new List<string>() { "AttendanceDate", "INOutTime", "InOut"};
+                    columns = new List<string>() { "AttendanceDate", "INOutTime", "InOut" };
                     EmployeeProfile profile = (EmployeeProfile)Session["Profile"];
-                   // fileName = string.Format("{0} {1}{2}{3}", profile.FirstName , profile.LastName, DateTime.Now.ToString("ddMMyyyyHHmmss"), ".xlsx");
+                    // fileName = string.Format("{0} {1}{2}{3}", profile.FirstName , profile.LastName, DateTime.Now.ToString("ddMMyyyyHHmmss"), ".xlsx");
                 }
-                
+
                 byte[] filecontent = ExcelExportHelper.ExportExcelAttendance(excelData, "", false, columns.ToArray());
                 return File(filecontent, ExcelExportHelper.ExcelContentType, fileName);
             }
             else
             {
-
                 ViewBag.RequestLevelPerson = RequestLevelPerson;
                 EmployeeAttendanceQueryModel data = new EmployeeAttendanceQueryModel();
                 data.ErrorMsg = "Excel file is not generated as no data returned.";

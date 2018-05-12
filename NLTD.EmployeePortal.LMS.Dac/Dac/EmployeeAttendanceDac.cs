@@ -10,7 +10,6 @@ namespace NLTD.EmployeePortal.LMS.Dac.Dac
     {
         public void Dispose()
         {
-
         }
 
         public List<EmployeeAttendanceModel> GetAttendance(Int64 UserID)
@@ -28,7 +27,6 @@ namespace NLTD.EmployeePortal.LMS.Dac.Dac
                                                        InOutDate = ea.InOutDate,
                                                        InOut = (ea.InOut ? "OUT" : "IN")
                                                    }).OrderByDescending(e => e.InOutDate).ToList();
-
                 }
             }
             catch (Exception)
@@ -38,8 +36,7 @@ namespace NLTD.EmployeePortal.LMS.Dac.Dac
             return employeeAttendanceModelList;
         }
 
-
-        public List<EmployeeAttendanceModel> GetAttendanceForRange(Int64 UserID, DateTime FromDateTime, DateTime ToDateTime, string requestLevelPerson,bool isDirectEmployees)
+        public List<EmployeeAttendanceModel> GetAttendanceForRange(Int64 UserID, DateTime FromDateTime, DateTime ToDateTime, string requestLevelPerson, bool isDirectEmployees)
         {
             List<EmployeeAttendanceModel> employeeAttendanceModelList = new List<EmployeeAttendanceModel>();
             try
@@ -57,11 +54,10 @@ namespace NLTD.EmployeePortal.LMS.Dac.Dac
                                                            InOutDate = ea.InOutDate,
                                                            //InOut = GetInOut(ea.InOut)
                                                            InOut = (ea.InOut ? "Out" : "In"),
-                                                           Name = (e.FirstName + " " +e.LastName)
+                                                           Name = (e.FirstName + " " + e.LastName)
                                                        }).OrderByDescending(e => e.InOutDate).ToList();
                     }
                 }
-
                 else
                 {
                     using (var context = new NLTDDbContext())
@@ -72,12 +68,11 @@ namespace NLTD.EmployeePortal.LMS.Dac.Dac
                                         select new { RoleName = role.Role }).FirstOrDefault();
                         if (leadinfo != null)
                         {
-
-
                             if (leadinfo.RoleName.ToUpper() == "ADMIN" || leadinfo.RoleName.ToUpper() == "HR")
                             {
                                 // We need to get all the employee List
-                                employeeAttendanceModelList = (from ea in context.EmployeeAttendance join e in context.Employee on ea.UserID equals e.UserId
+                                employeeAttendanceModelList = (from ea in context.EmployeeAttendance
+                                                               join e in context.Employee on ea.UserID equals e.UserId
                                                                where ea.InOutDate >= FromDateTime && ea.InOutDate <= ToDateTime
                                                                select new EmployeeAttendanceModel
                                                                {
@@ -85,14 +80,14 @@ namespace NLTD.EmployeePortal.LMS.Dac.Dac
                                                                    InOutDate = ea.InOutDate,
                                                                    //InOut = GetInOut(ea.InOut)
                                                                    InOut = (ea.InOut ? "Out" : "In"),
-                                                                   Name = (e.FirstName+ " " + e.LastName)
+                                                                   Name = (e.FirstName + " " + e.LastName)
                                                                }).OrderBy(e => e.Name).ThenByDescending(e => e.InOutDate).ToList();
                             }
                             else
                             {
                                 IList<Int64> employeeIDs = null;
                                 EmployeeDac EmployeeHelperObj = new EmployeeDac();
-                                if(isDirectEmployees)
+                                if (isDirectEmployees)
                                 {
                                     employeeIDs = EmployeeHelperObj.GetDirectEmployees(UserID);
                                 }
@@ -100,11 +95,10 @@ namespace NLTD.EmployeePortal.LMS.Dac.Dac
                                 {
                                     employeeIDs = EmployeeHelperObj.GetEmployeesReporting(UserID); // to get the employee Under the manager
                                 }
-                                
-                                
+
                                 employeeAttendanceModelList = (from ea in context.EmployeeAttendance
                                                                join e in context.Employee on ea.UserID equals e.UserId
-                                                               where employeeIDs.Contains(ea.UserID??0) && ea.InOutDate >= FromDateTime && ea.InOutDate <= ToDateTime
+                                                               where employeeIDs.Contains(ea.UserID ?? 0) && ea.InOutDate >= FromDateTime && ea.InOutDate <= ToDateTime
                                                                select new EmployeeAttendanceModel
                                                                {
                                                                    UserID = ea.UserID,
@@ -126,7 +120,6 @@ namespace NLTD.EmployeePortal.LMS.Dac.Dac
             return employeeAttendanceModelList;
         }
 
-       
         //private string GetInOut(bool InOut)
         //{
         //    return InOut ? "IN" : "OUT";

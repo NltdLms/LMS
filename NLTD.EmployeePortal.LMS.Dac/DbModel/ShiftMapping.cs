@@ -12,6 +12,5 @@ namespace NLTD.EmployeePortal.LMS.Dac.DbModel
         public Int64? CreatedBy { get; set; }
         public DateTime? ModifiedDate { get; set; }
         public Int64? ModifiedBy { get; set; }
-
     }
 }

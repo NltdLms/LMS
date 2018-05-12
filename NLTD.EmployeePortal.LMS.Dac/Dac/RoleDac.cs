@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+
 namespace NLTD.EmployeePortal.LMS.Dac.Dac
 {
     public class RoleDac : IDisposable
@@ -19,6 +20,7 @@ namespace NLTD.EmployeePortal.LMS.Dac.Dac
                 return RoleList;
             }
         }
+
         public Int64 GetRoleOfEmployee(Int64 EmployeeId)
         {
             using (var context = new NLTDDbContext())
@@ -30,6 +32,7 @@ namespace NLTD.EmployeePortal.LMS.Dac.Dac
                     return 0;
             }
         }
+
         public void Dispose()
         {
             //Nothing to implement...

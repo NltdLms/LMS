@@ -11,7 +11,7 @@ namespace NLTD.EmployeePortal.LMS.Dac.Dac
         {
             using (var context = new NLTDDbContext())
             {
-                List<DropDownItem> OfficeLocations = (from office in context.OfficeLocation                                                      
+                List<DropDownItem> OfficeLocations = (from office in context.OfficeLocation
                                                       select new DropDownItem
                                                       {
                                                           Key = office.OfficeId.ToString(),
@@ -20,6 +20,7 @@ namespace NLTD.EmployeePortal.LMS.Dac.Dac
                 return OfficeLocations;
             }
         }
+
         public void Dispose()
         {
             //Nothing to dispose...

@@ -1,6 +1,4 @@
-﻿
-@model List<NLTD.EmployeePortal.LMS.Common.DisplayModel.LeaveSummary>
-
+﻿@model List<NLTD.EmployeePortal.LMS.Common.DisplayModel.LeaveSummary>
 
 <div class="box-body">
     <div class="row">
@@ -21,7 +19,6 @@
         </div>
     </div>
 
-
     @{
         foreach (var item in Model)
         {
@@ -41,12 +38,8 @@
                 <div class="col-sm-3" style="text-align: justify;">
                     @Html.Label("", item.LeavesBalance.ToString())
                 </div>
-
             </div>
 
         }
     }
-
 </div>
-
-

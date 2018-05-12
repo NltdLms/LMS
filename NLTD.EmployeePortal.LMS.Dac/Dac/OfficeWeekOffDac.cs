@@ -10,6 +10,7 @@ namespace NLTD.EmployeePortal.LMS.Dac.Dac
         {
             //Nothing to implement...
         }
+
         public List<string> GetEmployeeWeekOffDay(Int64 UserID)
         {
             List<string> weekOffDaysList = new List<string>();
@@ -26,7 +27,6 @@ namespace NLTD.EmployeePortal.LMS.Dac.Dac
             }
             catch (Exception)
             {
-
                 throw;
             }
             return weekOffDaysList;

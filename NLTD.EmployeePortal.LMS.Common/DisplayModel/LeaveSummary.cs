@@ -4,7 +4,6 @@ namespace NLTD.EmployeePortal.LMS.Common.DisplayModel
 {
     public class LeaveSummary
     {
-        
         public string LeaveType { get; set; }
 
         public decimal TotalLeaves { get; set; }
@@ -24,7 +23,5 @@ namespace NLTD.EmployeePortal.LMS.Common.DisplayModel
 
         //public Int64? ReportingToId { get; set; }
         //public string ReportingToName { get; set; }
-
-
     }
 }

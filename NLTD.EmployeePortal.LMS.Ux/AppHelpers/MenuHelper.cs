@@ -14,8 +14,8 @@ namespace NLTD.EmployeePortal.LMS.Ux.AppHelpers
     {
         public static string GetMenu(string RoleText, bool IsHandlingTeam)
         {
-            Menu menu = new Menu();           
-                
+            Menu menu = new Menu();
+
             String path = "";
             string path1 = HostingEnvironment.MapPath("~/menuconfigs/employee.xml");
             string path2 = HostingEnvironment.MapPath("~/menuconfigs/lead.xml");
@@ -25,13 +25,15 @@ namespace NLTD.EmployeePortal.LMS.Ux.AppHelpers
             switch (RoleText.ToUpper())
             {
                 case "ADMIN":
-                    path = path3;                             
+                    path = path3;
                     break;
+
                 case "HR":
                     path = path4;
                     break;
-                case "EMPLOYEE":                    
-                    if(IsHandlingTeam)
+
+                case "EMPLOYEE":
+                    if (IsHandlingTeam)
                     {
                         path = path2;
                     }
@@ -40,24 +42,22 @@ namespace NLTD.EmployeePortal.LMS.Ux.AppHelpers
                         path = path1;
                     }
                     break;
-                default://check and remove this   
+
+                default://check and remove this
                     break;
             }
-                if (true)     //!String.IsNullOrEmpty(path))
+            if (true)     //!String.IsNullOrEmpty(path))
+            {
+                menu.menuitem = new List<MenuItem>();
+                Menu menuPerPath = null;
+                XmlSerializer serializer = new XmlSerializer(typeof(Menu));
+
+                using (var stream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read))
                 {
-                    
-                    menu.menuitem = new List<MenuItem>();
-                    Menu menuPerPath = null;
-                    XmlSerializer serializer = new XmlSerializer(typeof(Menu));
-
-                    
-                            using (var stream = new FileStream(path, FileMode.Open,FileAccess.Read,FileShare.Read))
-                            {
-                                StreamReader reader = new StreamReader(stream);
-                                menuPerPath = (Menu)serializer.Deserialize(reader);
-                                menu.menuitem.AddRange(menuPerPath.menuitem);
-                            }
-
+                    StreamReader reader = new StreamReader(stream);
+                    menuPerPath = (Menu)serializer.Deserialize(reader);
+                    menu.menuitem.AddRange(menuPerPath.menuitem);
+                }
 
                 using (var stream = new FileStream(path5, FileMode.Open, FileAccess.Read, FileShare.Read))
                 {
@@ -99,6 +99,7 @@ namespace NLTD.EmployeePortal.LMS.Ux.AppHelpers
             MenuBuilder.Append("</ul>");
             return MenuBuilder.ToString();
         }
+
         private static string FormatMenuItemForAdminLTE(List<MenuItem> menuList)
         {
             StringBuilder MenuBuilder = new StringBuilder();
@@ -110,6 +111,7 @@ namespace NLTD.EmployeePortal.LMS.Ux.AppHelpers
             }
             return MenuBuilder.ToString();
         }
+
         private static string FormatMenuItemForAdminLTE(MenuItem item, Boolean IsParent = false)
         {
             StringBuilder MenuBuilder = new StringBuilder();
@@ -132,7 +134,5 @@ namespace NLTD.EmployeePortal.LMS.Ux.AppHelpers
             MenuBuilder.Append("</a>");
             return MenuBuilder.ToString();
         }
-
-      
     }
 }

@@ -19,7 +19,7 @@ namespace NLTD.EmployeePortal.LMS.Common.DisplayModel
 
         [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}")]
         public DateTime LeaveFrom { get; set; }
-        
+
         public DateTime LeaveUpto { get; set; }
         public Int64 LeaveType { get; set; }
         public String LeaveFromTime { get; set; }
@@ -53,8 +53,8 @@ namespace NLTD.EmployeePortal.LMS.Common.DisplayModel
         public Int64 ApplyForUserId { get; set; }
 
         public Int64 AppliedByUserId { get; set; }
-
     }
+
     public class LeaveDtl
     {
         public Int64 LeaveId { get; set; }
@@ -69,7 +69,5 @@ namespace NLTD.EmployeePortal.LMS.Common.DisplayModel
         public Decimal Total { get; set; }
 
         public string PartOfDay { get; set; }
-
     }
-
 }

@@ -9,6 +9,5 @@ namespace NLTD.EmployeePortal.LMS.Common.QueryModel
         public TimeSpan ShiftFromtime { get; set; }
         public TimeSpan ShiftTotime { get; set; }
         public DateTime ShiftDate { get; set; }
-        
     }
 }
