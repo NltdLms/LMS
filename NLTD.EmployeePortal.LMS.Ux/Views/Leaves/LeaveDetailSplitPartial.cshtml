@@ -10,7 +10,7 @@ border-color:#207aa5;
       <div class="box-body" id ="splitDiv" style="height:270px;overflow-y:auto;">
           <button class="close" id="closeButton" type="button" style="position:absolute;top:2px;right:7px;" onclick="hideLeaveCalculation()">x</button>
 
-              <div class="col-sm-12" >
+              <div class="col-sm-12">
                   <div class="row">
                       <div class="col-sm-3">
                           <h6 class="box-title">Date</h6>
@@ -21,9 +21,7 @@ border-color:#207aa5;
                       <div class="col-sm-7">
                           <h6 class="box-title">Remarks</h6>
                       </div>
-
                   </div>
-
 
                   @{
                       foreach (var item in Model)
@@ -42,7 +40,6 @@ border-color:#207aa5;
 
                       }
                   }
-
 
                   <div class="row">
                       <div class="col-sm-3">
@@ -65,19 +62,13 @@ border-color:#207aa5;
                                   <p style="font-weight:bold">   @Model[0].Total</p>
                               }
 
-
                           }
                       </div>
                       <div class="col-sm-7">
-
                       </div>
-
                   </div>
-
               </div>
-
           </div>
-
 
 @*@section readyscript{
     <script>
@@ -90,7 +81,3 @@ border-color:#207aa5;
         });
     </script>
 }*@
-
-
-
-

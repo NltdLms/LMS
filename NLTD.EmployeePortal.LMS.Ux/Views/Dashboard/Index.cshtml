@@ -27,7 +27,6 @@
                     @Html.Partial("~/Views/Leaves/EmployeeLeaveSumaryPartial.cshtml", Model.lstLeaveSummary)
                 </div>
             </div>
-
         </div>
 
         <div class="row">
@@ -48,8 +47,6 @@
                 </div>
             </div>
         </div>
-
-
     </section>
     @* Team Detail Section *@
     <section class="col-sm-6">
@@ -61,7 +58,7 @@
                         <h3 class="box-title">Office Attendance</h3>
                     </div>
                     <div class="box-body">
-                        <span class="box-title">No. of Employees present in office today : </span>
+                        <span class="box-title">No. of employees present in office today : </span>
                         <span style="font-weight: bold;">@ViewBag.OfficeAttendance</span>
                     </div>
                 </div>
@@ -78,7 +75,6 @@
                                 <h3 class="box-title">Team Requests</h3>
                             </div>
                             <div id="divPendingCount">
-
                             </div>
                         </div>
                     </div>
@@ -110,8 +106,6 @@
                 </div>
             }
         }
-
-
     </section>
     @if (!Model.IsLMSApprover && Model.UserRole != "HR")
     {
@@ -134,14 +128,13 @@
 
 @section readyscript{
     <script>
-        
+
         $("document").ready(function () {
-            
+
             LoadDashboardCalender();
             loadPendingCount();
             LoadTeamStatus();
 
         });
-
     </script>
 }

@@ -1,6 +1,4 @@
-﻿
-
-@model IList<NLTD.EmployeePortal.LMS.Common.DisplayModel.ShiftAllocation>
+﻿@model IList<NLTD.EmployeePortal.LMS.Common.DisplayModel.ShiftAllocation>
 
 <table id="ShiftDetail"
        class="table table-condensed table-striped table-hover">
@@ -23,10 +21,10 @@
             </th>
             <th>
                 @Html.DisplayName("ToTime")
-            </th>           
+            </th>
             <th class="no-sort">
                 @Html.DisplayName("Action")
-            </th> 
+            </th>
         </tr>
     </thead>
 
@@ -47,7 +45,7 @@
                 @*<td>
                     @Html.DisplayFor(modelItem => item.ShiftID)
                 </td>*@
-                <td>                 
+                <td>
                     @Html.DisplayFor(modelItem => ShiftDate)
                 </td>
                 <td>
@@ -55,7 +53,7 @@
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.ToTime)
-                </td>                 
+                </td>
                 <td>
                 <button type="button" class="btn btn-primary" onclick="AddPopup(@item.ShiftMappingID)">EDIT</button>
                 </td>

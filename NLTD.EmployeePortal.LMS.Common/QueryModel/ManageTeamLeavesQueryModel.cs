@@ -5,7 +5,7 @@ namespace NLTD.EmployeePortal.LMS.Common.QueryModel
 {
     public class ManageTeamLeavesQueryModel
     {
-        public bool OnlyReportedToMe { get; set; }        
+        public bool OnlyReportedToMe { get; set; }
 
         public bool ShowApprovedLeaves { get; set; }
 

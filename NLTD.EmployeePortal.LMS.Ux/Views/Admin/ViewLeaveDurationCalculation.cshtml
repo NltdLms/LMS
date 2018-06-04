@@ -1,7 +1,5 @@
 ﻿@model IList<NLTD.EmployeePortal.LMS.Common.DisplayModel.LeaveHeaderModel>
 
-
-
 @section onReady{
 
     var oTable;
@@ -34,7 +32,6 @@
 
 }
 
-
 http://live.datatables.net/bihawepu/1/edit
 
 <div id="demo">
@@ -64,7 +61,6 @@ http://live.datatables.net/bihawepu/1/edit
                 <th>
                     @Html.DisplayNameFor(model => model[0].Status)
                 </th>
-
             </tr>
         </thead>
 
@@ -94,7 +90,6 @@ http://live.datatables.net/bihawepu/1/edit
                     <td>
                         @Html.DisplayFor(modelItem => item.Status)
                     </td>
-
                 </tr>
             }
         </tbody>

@@ -1,10 +1,7 @@
-﻿
-
-@model IList<NLTD.EmployeePortal.LMS.Common.DisplayModel.MonthwiseLeavesCountModel>
+﻿@model IList<NLTD.EmployeePortal.LMS.Common.DisplayModel.MonthwiseLeavesCountModel>
 
 <table id="Monthwisetable_id"
        class="table table-condensed table-striped table-hover">
-
 
     <thead>
         <tr>
@@ -23,7 +20,7 @@
             <th colspan="4" style="text-align:center;">November</th>
             <th colspan="4" style="text-align:center;">December</th>
         </tr>
-        <tr>            
+        <tr>
             <th style="border-left:1px solid;">CL/SL</th>
             <th>EL</th>
             <th>LWP</th>
@@ -72,12 +69,8 @@
             <th>EL</th>
             <th>LWP</th>
             <th style="border-right:1px solid;">CO</th>
-            
         </tr>
     </thead>
-
-
-
 
     <tbody>
         @foreach (var item in Model)
@@ -93,7 +86,7 @@
                     @Html.Label("", item.CL1.ToString("#.#"))
                 </td>
                 <td>
-                    @Html.Label("", item.PL1.ToString("#.#"))                   
+                    @Html.Label("", item.PL1.ToString("#.#"))
                 </td>
                 <td>
                     @Html.Label("", item.LWP1.ToString("#.#"))
@@ -102,7 +95,6 @@
                     @Html.Label("", item.CO1.ToString("#.#"))
                 </td>
 
-               
                 <td>
                     @Html.Label("", item.CL2.ToString("#.#"))
                 </td>
@@ -245,9 +237,7 @@
                 <td style="border-right:1px solid">
                     @Html.Label("", item.CO12.ToString("#.#"))
                 </td>
-
             </tr>
                         }
     </tbody>
 </table>
-

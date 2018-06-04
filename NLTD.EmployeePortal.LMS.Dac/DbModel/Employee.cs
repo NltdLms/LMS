@@ -18,11 +18,12 @@ namespace NLTD.EmployeePortal.LMS.Dac.DbModel
         public Int64? ReportingToId { get; set; }
         public Int64 OfficeHolidayId { get; set; }
         public Int64? EmployeeRoleId { get; set; }
+
         //public Boolean IsHandleMembers { get; set; }
         public Boolean IsInProbationaryPeriod { get; set; }
-        public Boolean CanAvailYearlyLeave { get; set; }        
 
-        
+        public Boolean CanAvailYearlyLeave { get; set; }
+
         public Int64 CreatedBy { get; set; }
         public DateTime CreatedOn { get; set; }
         public Int64 ModifiedBy { get; set; }
@@ -31,7 +32,7 @@ namespace NLTD.EmployeePortal.LMS.Dac.DbModel
         public Int32? ShiftId { get; set; }
         public Int64? Cardid { get; set; }
         public DateTime? DOJ { get; set; }
-       public DateTime? ConfirmationDate { get; set; }
+        public DateTime? ConfirmationDate { get; set; }
         public DateTime? RelievingDate { get; set; }
     }
 }

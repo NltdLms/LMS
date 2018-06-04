@@ -54,8 +54,7 @@
         @for (int i = 0; i < Model.Count; i++)
         {
             <div class="panel panel-default">
-               
-                
+
                     <div class="panel-body">
                         @*@Html.Partial("~/Views/Profile/EmployeeLmsProfilePartial.cshtml", Model[i])*@
                         <div class="row">
@@ -141,19 +140,13 @@
                                                     <button type="button" id="btnsave" class="btn btn-primary pull-right" onclick="SubmitLeaveBalanceForm(@Model[i].lstEmployeeLeaveBalance.Count)">SAVE</button>
                                                 </div>
                                             </div>
-
                                         </div>
                                     </form>
                                 </div>
                             </div>
                         </div>
                     </div>
-              
             </div>
         }
     </div>
 }
-
-
-
-

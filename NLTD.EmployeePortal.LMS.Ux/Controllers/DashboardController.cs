@@ -14,11 +14,11 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
     {
         public ActionResult Index()
         {
-            DashBoardModel dbMdl = new DashBoardModel();             
-            
+            DashBoardModel dbMdl = new DashBoardModel();
+
             using (var client = new LeaveClient())
             {
-                dbMdl= client.GetDashboardData(UserId, OfficeId);
+                dbMdl = client.GetDashboardData(UserId, OfficeId);
             }
             dbMdl.IsLMSApprover = IsLMSApprover;
             dbMdl.UserRole = Role;
@@ -34,7 +34,7 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
 
             return View(dbMdl);
         }
-        
+
         public ActionResult LoadPendingCount()
         {
             int count = 0;
@@ -44,7 +44,7 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
             }
             return PartialView("PendingApprovalCountPartial", count);
         }
-        
+
         public ActionResult LoadTeamStatus()
         {
             List<TimeSheetModel> timeSheetModelList;
@@ -63,7 +63,7 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
             bool nextYear = false;
             using (var client = new LeaveClient())
             {
-                holidayModelList  = client.GetHolidaysDetails(UserId, holidayYear, ref previousYear, ref nextYear);
+                holidayModelList = client.GetHolidaysDetails(UserId, holidayYear, ref previousYear, ref nextYear);
             }
             ViewBag.PreviousYear = previousYear ? "" : "disabled";
             ViewBag.NextYear = nextYear ? "" : "disabled";
@@ -74,6 +74,5 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
             }
             return PartialView("~/Views/Dashboard/HolidayListPartial.cshtml", holidayModelList);
         }
-
     }
 }

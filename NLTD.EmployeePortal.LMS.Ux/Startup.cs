@@ -9,6 +9,7 @@ using System.Linq;
 using System.Web;
 
 [assembly: OwinStartup(typeof(NLTD.EmployeePortal.LMS.Ux.Startup))]
+
 namespace NLTD.EmployeePortal.LMS.Ux
 {
     public class Startup
@@ -20,8 +21,7 @@ namespace NLTD.EmployeePortal.LMS.Ux
 
             //Fire and Forget
 
-
-           // app.UseHangfireDashboard();
+            // app.UseHangfireDashboard();
 
             app.UseHangfireDashboard("/hangfire", new DashboardOptions
             {

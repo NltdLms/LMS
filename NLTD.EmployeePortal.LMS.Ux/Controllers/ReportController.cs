@@ -36,7 +36,6 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
             DateTime startDateFormatted = DateTime.Now;
             DateTime endDateFormatted = DateTime.Now;
 
-
             if (FromDate != null)
             {
                 if (FromDate.Trim() != "")
@@ -89,7 +88,6 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
             }
             DateTime startDateFormatted = DateTime.Now;
             DateTime endDateFormatted = DateTime.Now;
-
 
             if (FromDate != null)
             {

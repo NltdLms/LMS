@@ -14,6 +14,5 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
                 return Json(ReportToList);
             }
         }
-       
     }
 }

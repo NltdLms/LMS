@@ -13,6 +13,5 @@ namespace NLTD.EmployeePortal.LMS.Common.QueryModel
         public bool HideInactiveEmp { get; set; }
 
         public Int64? SearchUserID { get; set; }
-        
     }
 }

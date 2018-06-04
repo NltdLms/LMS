@@ -9,6 +9,7 @@ namespace NLTD.EmployeePortal.LMS.Common.DisplayModel
         public string Name { get; set; }
         public IList<LeaveItem> TeamLeaveList { get; set; }
     }
+
     public class LeaveItem
     {
         public Int64 LeaveId { get; set; }

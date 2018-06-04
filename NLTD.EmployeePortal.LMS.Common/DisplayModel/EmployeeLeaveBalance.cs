@@ -27,9 +27,11 @@ namespace NLTD.EmployeePortal.LMS.Common.DisplayModel
         public Int32? Year { get; set; }
         public Decimal? BalanceDays { get; set; }
         public Decimal? TotalDays { get; set; }
+
         [Required(ErrorMessage = "Enter No Of Days.")]
         [Display(Name = "No of Days")]
         public Decimal NoOfDays { get; set; }
+
         public String CreditOrDebit { get; set; }
         public string Remarks { get; set; }
     }

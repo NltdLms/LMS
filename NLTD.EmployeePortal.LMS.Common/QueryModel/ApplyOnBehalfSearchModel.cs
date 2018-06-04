@@ -6,6 +6,6 @@
 
         public string ApplyMode { get; set; }
 
-       public string ErrorMsg { get; set; }
+        public string ErrorMsg { get; set; }
     }
 }

@@ -3,10 +3,8 @@
 namespace NLTD.EmployeePortal.LMS.Common.QueryModel
 {
     public class TransactionHistoryModel
-    {   
-
-
-         public Int64 EmployeeId { get; set; }
+    {
+        public Int64 EmployeeId { get; set; }
 
         public Int64 LeaveTypeId { get; set; }
 

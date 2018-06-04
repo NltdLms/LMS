@@ -4,8 +4,6 @@
     .ui-autocomplete { height: 220px; overflow-y: scroll; overflow-x: hidden;}
     th { font-size: 11px; }
     td { font-size: 12px; }
-
-   
  </style>
 
 <script src="~/Scripts/DataTables/jquery.dataTables.min.js"></script>
@@ -66,7 +64,6 @@
                                 return { label: item.Name, value: item.Name };
                             }))
 
-
                         }
                     })
                 },
@@ -74,7 +71,6 @@
                     noResults: "", results: ""
                 }
             });
-
 
         });
     </script>
@@ -104,20 +100,17 @@
                 </div>
                 <div class="box-body">
                     <form id='your-range-form' action='@Url.Action("ExportToExcel", new { RequestLevelPerson = (string)ViewBag.RequestLevelPerson })' method='post'>
-                           
+
                                 <div class="row">
                                     <div class="col-sm-3">
 
                                         @Html.Label("Date Range")
                                         @Html.TextBoxFor(m => m.DateRange, new { @class = "form-control" })
-
-
                                     </div>
                                     <div class="col-sm-4">
 
                                           @Html.LabelFor(x => x.Name)
                                           @Html.TextBoxFor(m => m.Name, new { @class = "form-control" })
-
                                     </div>
                                     <div class="col-sm-5">
                                         @{ if ((string)ViewBag.RequestLevelPerson == "Team")
@@ -132,21 +125,18 @@
                                             }
                                         }
                                     </div>
-
                                 </div>
                                     <div class="row">
                                         <div class="col-sm-9"></div>
                                         <div class="col-sm-1">
 
                                             <button type="button" class="btn btn-primary" onclick="LoadNoOfLateReport()">SEARCH</button>
-
                                         </div>
                                         <div class="col-sm-2">
                                             <input type='submit' class="btn btn-primary  pull-right" value='EXPORT TO EXCEL' />
                                         </div>
                                     </div>
                     </form>
-
                 </div>
             </div>
         </div>
@@ -155,6 +145,3 @@
     <div id="divForNoOfLateRpt"></div>
 
 }
-
-
-

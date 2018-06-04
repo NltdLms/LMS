@@ -4,9 +4,7 @@
 
 @model IList<TimeSheetModel>
 
-
 <script type="text/javascript" src="~/Scripts/lms.js?v=1.06"></script>
-
 
 <style type="text/css">
     .panel-group .panel {
@@ -153,7 +151,6 @@ else
 
                         <tr>
 
-
                             <td>
                                 @if (Model[i].WorkingDate != null)
                                 {
@@ -166,12 +163,10 @@ else
                             </td>
                             <td>
                                 @Model[i].WorkingDate.DayOfWeek
-
                             </td>
                             <td>
 
                                 @Model[i].Shift
-
                             </td>
                             <td>
                                 @if (Model[i].InTime == DateTime.MinValue)
@@ -240,7 +235,6 @@ else
                                 <i class="more-less glyphicon glyphicon-plus"></i>
                                 @Model[i].Name
                             </a>
-
                         </h4>
                     </div>
                     <div id="@("collapse" + Model[i].userID)" style="background-color:#ecf0f5" class="panel-collapse collapse" role="tabpanel" aria-labelledby="@("heading" + Model[i].userID)">
@@ -308,7 +302,6 @@ else
 
                                         }
 
-
                                         if (Model[j].WorkingDate.Day == DateTime.DaysInMonth(Model[j].WorkingDate.Year, Model[j].WorkingDate.Month) && j != i)
                                         {
                                             TimeSheetConsolidateObj = GetWeeklyHoursConsolidation(Model.ToList(), Model[j].WorkingDate, Model[j].userID, "Monthly");
@@ -333,12 +326,10 @@ else
                                             <td>
 
                                                 @Model[j].WorkingDate.DayOfWeek
-
                                             </td>
                                             <td>
 
                                                 @Model[j].Shift
-
                                             </td>
                                             <td>
                                                 @if (Model[j].InTime == DateTime.MinValue)
@@ -577,7 +568,6 @@ else
         <td>
             @Html.DisplayName("Late In : ")
             @Convert.ToString(TimeSheetConsolidateObj.lateCount)
-
         </td>
         <td>
             @Html.DisplayName("Early out")
