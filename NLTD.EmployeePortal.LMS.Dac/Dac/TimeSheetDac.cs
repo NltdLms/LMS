@@ -162,7 +162,22 @@ namespace NLTD.EmployeePortal.LMS.Dac.Dac
                 {
                     TimeSheetModelObj.InTime = maxmin.ToList()[0].min;
                     TimeSheetModelObj.OutTime = maxmin.ToList()[0].max;
-                    TimeSheetModelObj.WorkingHours = TimeSheetModelObj.OutTime - TimeSheetModelObj.InTime;
+                    if (employeeLeaveList.Select(e => e.LeaveType == "Permission - Official").Count() > 0)
+                    {
+                        foreach (var permissionTime in employeeLeaveList)
+                        {
+                            if (permissionTime.StartDate == TimeSheetModelObj.WorkingDate)
+                            {
+                                TimeSheetModelObj.WorkingHours = TimeSheetModelObj.OutTime - TimeSheetModelObj.InTime;
+                                TimeSpan ts = TimeSpan.FromHours(decimal.ToDouble(permissionTime.PermissionCount));
+                                TimeSheetModelObj.WorkingHours = TimeSheetModelObj.WorkingHours.Add(ts);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        TimeSheetModelObj.WorkingHours = TimeSheetModelObj.OutTime - TimeSheetModelObj.InTime;
+                    }
                     TimeSheetModelObj.Status = "Present";
 
                     if (TimeSheetModelObj.InTime.TimeOfDay > ShiftQueryModelList[i].ShiftFromtime)
@@ -185,6 +200,18 @@ namespace NLTD.EmployeePortal.LMS.Dac.Dac
                 {
                     // Get Absent Details
                     TimeSheetModelObj.Status = GetAbsentStatus(ShiftQueryModelList[i].ShiftDate, officeWeekOffDayList, officeHolidayList);
+                    if (employeeLeaveList.Select(e => e.LeaveType == "Permission - Official").Count() > 0)
+                    {
+                        foreach (var permissionTime in employeeLeaveList)
+                        {
+                            if (permissionTime.StartDate == TimeSheetModelObj.WorkingDate)
+                            {
+                                TimeSheetModelObj.WorkingHours = TimeSheetModelObj.OutTime - TimeSheetModelObj.InTime;
+                                TimeSpan ts = TimeSpan.FromHours(decimal.ToDouble(permissionTime.PermissionCount));
+                                TimeSheetModelObj.WorkingHours = TimeSheetModelObj.WorkingHours.Add(ts);
+                            }
+                        }
+                    }
                 }
                 decimal LeaveDayQty = 0;
                 decimal permissionCount = 0;
@@ -239,7 +266,7 @@ namespace NLTD.EmployeePortal.LMS.Dac.Dac
             {
                 if (employeeLeaveList.Count > 0)
                 {
-                    var Status = (from e in employeeLeaveList where statusDate >= e.StartDate && statusDate <= e.EndDate select new { e.LeaveType, e.LeaveDayQty, e.PermissionCount });
+                    var Status = (from e in employeeLeaveList where statusDate >= e.StartDate && statusDate <= e.EndDate && e.LeaveType != "Permission - Official" select new { e.LeaveType, e.LeaveDayQty, e.PermissionCount });
                     if (Status != null && Status.Count() > 0)
                     {
                         LMSStatus = string.Join(", ", Status.Select(p => p.LeaveType));
