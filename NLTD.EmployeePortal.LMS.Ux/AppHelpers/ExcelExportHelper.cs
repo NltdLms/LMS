@@ -742,7 +742,8 @@ namespace NLTD.EmployeePortal.LMS.Ux.AppHelpers
                 dataTable = ListToDataTable<ConsolidateReport>(weeklyTimeSheetConsolidateList);
                 dataTable.Columns["DateRange"].ColumnName = "Date";
                 dataTable.Columns["TotalWorkingHours"].ColumnName = "Total Working Hours";
-                dataTable.Columns["PermissionCount"].ColumnName = "Total Permission Hours";
+                dataTable.Columns["permissionCountOfficial"].ColumnName = "Total Permission Hours - Official";
+                dataTable.Columns["permissionCountPersonal"].ColumnName = "Total Permission Hours - Personal";
                 dataTable.Columns["LeaveCount"].ColumnName = "No .Of Leaves";
                 dataTable.Columns["LateCount"].ColumnName = "No. Of Late In";
                 dataTable.Columns["WorkFromHomeCount"].ColumnName = "No. Of Work From Home";
@@ -924,9 +925,14 @@ namespace NLTD.EmployeePortal.LMS.Ux.AppHelpers
                 TimeSheetConsolidateObj.EarlyCount = TimeSheetConsolidateObj.EarlyCount + 1;
             }
             if (!string.IsNullOrEmpty(TimeSheetModelObj.Requests) &&
-                    TimeSheetModelObj.Requests.Contains("Permission"))
+                    TimeSheetModelObj.Requests.Contains("Permission - Official"))
             {
-                TimeSheetConsolidateObj.PermissionCount = TimeSheetConsolidateObj.PermissionCount + TimeSheetModelObj.PermissionCount;
+                TimeSheetConsolidateObj.permissionCountOfficial = TimeSheetConsolidateObj.permissionCountOfficial + TimeSheetModelObj.permissionCountOfficial;
+            }
+            if (!string.IsNullOrEmpty(TimeSheetModelObj.Requests) &&
+                    TimeSheetModelObj.Requests.Contains("Permission - Personal"))
+            {
+                TimeSheetConsolidateObj.permissionCountPersonal = TimeSheetConsolidateObj.permissionCountPersonal + TimeSheetModelObj.permissionCountPersonal;
             }
             if (!string.IsNullOrEmpty(TimeSheetModelObj.Requests) && TimeSheetModelObj.Requests.Contains("Leave"))
             {
@@ -1065,7 +1071,8 @@ namespace NLTD.EmployeePortal.LMS.Ux.AppHelpers
         public decimal LeaveCount { get; set; }
 
         public decimal WorkFromHomeCount { get; set; }
-        public decimal PermissionCount { get; set; }
+        public decimal permissionCountOfficial { get; set; }
+        public decimal permissionCountPersonal { get; set; }
         public int LateCount { get; set; }
         public int EarlyCount { get; set; }
 

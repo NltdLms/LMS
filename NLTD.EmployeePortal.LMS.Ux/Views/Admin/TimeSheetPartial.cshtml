@@ -13,6 +13,9 @@
         border-color: #EEEEEE;
         font-weight: bold;
     }
+    .permissionStatus {
+        width: 18%;
+    }
 
     .panel-default > .panel-heading {
         padding: 0;
@@ -477,7 +480,8 @@ else
                                                         select new TimeSheetConsolidate
                                                         {
                                                             hours = new TimeSpan(g.Sum(r => r.WorkingHours.Ticks)),
-                                                            permissionCount = g.Sum(r => r.PermissionCount),
+                                                            permissionCountPersonal = g.Sum(r => r.permissionCountPersonal),
+                                                            permissionCountOfficial = g.Sum(r => r.permissionCountOfficial),
                                                             leaveCount = (g.Where(k => k.Requests.Contains("Leave")).Select(x => x.LeaveDayQty)).Sum(),
                                                             lateCount = g.Count(k => k.LateIn > new TimeSpan()),
                                                             earlyCount = g.Count(k => k.EarlyOut > new TimeSpan()),
@@ -518,12 +522,12 @@ else
         <td>
             @GetWeeklyWorkingHours(TimeSheetConsolidateObj.hours)
         </td>
-        <td>
-            @Html.DisplayName("Permission : ")
-            @Convert.ToString(TimeSheetConsolidateObj.permissionCount)
-            hrs
+        <td class="permissionStatus">
+            @Html.DisplayName("Permission (P:")
+            @Convert.ToString(TimeSheetConsolidateObj.permissionCountPersonal)hrs,O:
+            @Convert.ToString(TimeSheetConsolidateObj.permissionCountOfficial)hrs)
         </td>
-        <td>
+        <td class="permissionStatus">
             @Html.DisplayName("Leave : ")
             @Convert.ToString(TimeSheetConsolidateObj.leaveCount)
         </td>
@@ -557,8 +561,11 @@ else
             @GetWeeklyWorkingHours(TimeSheetConsolidateObj.hours)
         </td>
         <td>
-            @Html.DisplayName("Permission : ")
-            @Convert.ToString(TimeSheetConsolidateObj.permissionCount)
+            @Html.DisplayName("Permission-Personal : ")
+            @Convert.ToString(TimeSheetConsolidateObj.permissionCountPersonal)
+            hrs
+            @Html.DisplayName("Permission-Official : ")
+            @Convert.ToString(TimeSheetConsolidateObj.permissionCountOfficial)
             hrs
         </td>
         <td>
