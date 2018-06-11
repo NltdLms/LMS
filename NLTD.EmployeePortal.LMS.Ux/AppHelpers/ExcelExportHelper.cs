@@ -629,6 +629,22 @@ namespace NLTD.EmployeePortal.LMS.Ux.AppHelpers
             return ExportAttendanceExcel(employeeAttendanceModelListObj, Heading, showSlno, ColumnsToTake);
         }
 
+        public static byte[] ExportExcelAccessCardAttendance(List<EmployeeAttendanceModel> data, string Heading = "", bool showSlno = false, params string[] ColumnsToTake)
+        {
+            List<EmployeeAttendanceModel> employeeAttendanceModelListObj = (from at in data
+                                                                            select new EmployeeAttendanceModel
+                                                                            {
+                                                                                UserID = at.UserID,
+                                                                                InOut = at.InOut,
+                                                                                AttendanceDate = at.InOutDate.ToString("dd-MM-yyyy"),
+                                                                                INOutTime = at.InOutDate.ToString("hh:mm:ss"),
+                                                                                Name = at.Name,
+                                                                                CardID = at.CardID
+                                                                            }).ToList();
+
+            return ExportAttendanceExcel(employeeAttendanceModelListObj, Heading, showSlno, ColumnsToTake);
+        }
+
         public static byte[] ExportTimesheetExcel(List<TimeSheetModel> TimeSheetModelObj, string heading = "", bool showSrNo = false, params string[] columnsToTake)
         {
             byte[] result = null;
