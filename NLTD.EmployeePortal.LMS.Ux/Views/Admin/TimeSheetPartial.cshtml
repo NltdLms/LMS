@@ -13,9 +13,6 @@
         border-color: #EEEEEE;
         font-weight: bold;
     }
-    .permissionStatus {
-        width: 18%;
-    }
 
     .panel-default > .panel-heading {
         padding: 0;
@@ -517,17 +514,18 @@ else
             @Html.DisplayName("Work From Home : ")
             @Convert.ToString(TimeSheetConsolidateObj.WFHCount)
         </td>
-        <td></td>
-        <td></td>
         <td>
-            @GetWeeklyWorkingHours(TimeSheetConsolidateObj.hours)
-        </td>
-        <td class="permissionStatus">
             @Html.DisplayName("Permission (P:")
             @Convert.ToString(TimeSheetConsolidateObj.permissionCountPersonal)hrs,O:
             @Convert.ToString(TimeSheetConsolidateObj.permissionCountOfficial)hrs)
         </td>
-        <td class="permissionStatus">
+        <td>
+        </td>
+        <td>
+            @GetWeeklyWorkingHours(TimeSheetConsolidateObj.hours)
+        </td>
+        <td></td>
+        <td>
             @Html.DisplayName("Leave : ")
             @Convert.ToString(TimeSheetConsolidateObj.leaveCount)
         </td>
