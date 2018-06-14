@@ -1,4 +1,4 @@
-﻿using NLTD.EmployeePortal.LMS.Client;
+using NLTD.EmployeePortal.LMS.Client;
 using NLTD.EmployeePortal.LMS.Common.DisplayModel;
 using NLTD.EmployeePortal.LMS.Ux.Models;
 using System;
@@ -35,9 +35,9 @@ namespace NLTD.EmployeePortal.LMS.Ux.AppHelpers
                 string menu = string.Empty;
 
                 var windowsLoginName = identity.Name.ToUpper();
-#if DEBUG
+                #if DEBUG
                 windowsLoginName = "CORP\\UMAGESWARI";
-#endif
+                #endif
                 if (Request.QueryString["Username"] != null)
                 {
                     windowsLoginName = Convert.ToString(Request.QueryString["Username"]).Replace(".", "\\");
