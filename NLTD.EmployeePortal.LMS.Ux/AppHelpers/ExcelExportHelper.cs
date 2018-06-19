@@ -4,6 +4,7 @@ using OfficeOpenXml.Style;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Configuration;
 using System.Data;
 using System.Linq;
 using System.Web;
@@ -931,6 +932,9 @@ namespace NLTD.EmployeePortal.LMS.Ux.AppHelpers
 
         public static ConsolidateReport CalculateTimeSheetConsolidation(TimeSheetModel TimeSheetModelObj, ConsolidateReport TimeSheetConsolidateObj)
         {
+            string personalPermisionLabel = ConfigurationManager.AppSettings["PersonalPermission"].ToString();
+            string officialPermisionLabel = ConfigurationManager.AppSettings["PersonalOfficial"].ToString();
+
             TimeSheetConsolidateObj.WorkingHours = TimeSheetConsolidateObj.WorkingHours + TimeSheetModelObj.WorkingHours;
             if (TimeSheetModelObj.LateIn.Seconds > 0)
             {
@@ -941,12 +945,12 @@ namespace NLTD.EmployeePortal.LMS.Ux.AppHelpers
                 TimeSheetConsolidateObj.EarlyCount = TimeSheetConsolidateObj.EarlyCount + 1;
             }
             if (!string.IsNullOrEmpty(TimeSheetModelObj.Requests) &&
-                    TimeSheetModelObj.Requests.Contains("Permission - Official"))
+                    TimeSheetModelObj.Requests.Contains(officialPermisionLabel))
             {
                 TimeSheetConsolidateObj.permissionCountOfficial = TimeSheetConsolidateObj.permissionCountOfficial + TimeSheetModelObj.permissionCountOfficial;
             }
             if (!string.IsNullOrEmpty(TimeSheetModelObj.Requests) &&
-                    TimeSheetModelObj.Requests.Contains("Permission - Personal"))
+                    TimeSheetModelObj.Requests.Contains(personalPermisionLabel))
             {
                 TimeSheetConsolidateObj.permissionCountPersonal = TimeSheetConsolidateObj.permissionCountPersonal + TimeSheetModelObj.permissionCountPersonal;
             }
