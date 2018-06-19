@@ -90,6 +90,9 @@ namespace NLTD.EmployeePortal.LMS.Dac.Dac
             List<TimeSheetModel> timeSheetModelList = new List<TimeSheetModel>();
             List<ShiftQueryModel> ShiftQueryModelList = GetShiftDetails(UserID, FromDate, ToDate);
 
+            string personalPermisionLabel = ConfigurationManager.AppSettings["PersonalPermission"].ToString();
+            string officialPermisionLabel = ConfigurationManager.AppSettings["PersonalOfficial"].ToString();
+
             var toDateShift = (from m in ShiftQueryModelList where m.ShiftDate == ToDate select new { fromTime = m.ShiftFromtime, toTime = m.ShiftTotime }).FirstOrDefault();
 
             if (toDateShift != null)
@@ -163,20 +166,19 @@ namespace NLTD.EmployeePortal.LMS.Dac.Dac
                 {
                     TimeSheetModelObj.InTime = maxmin.ToList()[0].min;
                     TimeSheetModelObj.OutTime = maxmin.ToList()[0].max;
-                    if (employeeLeaveList.Select(e => e.LeaveType == "Permission - Official").Count() > 0)
+                    if (employeeLeaveList.Select(e => e.LeaveType == officialPermisionLabel).Count() > 0)
                     {
                         foreach (var permissionTime in employeeLeaveList)
                         {
-                            if (permissionTime.StartDate == TimeSheetModelObj.WorkingDate && permissionTime.LeaveType == "Permission - Official")
+                            if (permissionTime.StartDate == TimeSheetModelObj.WorkingDate && permissionTime.LeaveType == officialPermisionLabel)
                             {
                                 permissionCountOfficial = permissionTime.PermissionCount;
                             }
                         }
                     }
-                    else
-                    {
-                        TimeSheetModelObj.WorkingHours = TimeSheetModelObj.OutTime - TimeSheetModelObj.InTime;
-                    }
+                   
+                    TimeSheetModelObj.WorkingHours = TimeSheetModelObj.OutTime - TimeSheetModelObj.InTime;
+                    
                     TimeSheetModelObj.Status = "Present";
 
                     if (TimeSheetModelObj.InTime.TimeOfDay > ShiftQueryModelList[i].ShiftFromtime)
@@ -199,11 +201,11 @@ namespace NLTD.EmployeePortal.LMS.Dac.Dac
                 {
                     // Get Absent Details
                     TimeSheetModelObj.Status = GetAbsentStatus(ShiftQueryModelList[i].ShiftDate, officeWeekOffDayList, officeHolidayList);
-                    if (employeeLeaveList.Select(e => e.LeaveType == "Permission - Official").Count() > 0)
+                    if (employeeLeaveList.Select(e => e.LeaveType == officialPermisionLabel).Count() > 0)
                     {
                         foreach (var permissionTime in employeeLeaveList)
                         {
-                            if (permissionTime.StartDate == TimeSheetModelObj.WorkingDate && permissionTime.LeaveType == "Permission - Official")
+                            if (permissionTime.StartDate == TimeSheetModelObj.WorkingDate && permissionTime.LeaveType == officialPermisionLabel)
                             {
                                 permissionCountOfficial = permissionTime.PermissionCount;
                             }
@@ -260,6 +262,8 @@ namespace NLTD.EmployeePortal.LMS.Dac.Dac
             PermissionCount = 0;
             string LMSStatus = string.Empty;
             string LMSStatus_Final = string.Empty;
+            string personalPermisionLabel = ConfigurationManager.AppSettings["PersonalPermission"].ToString();
+            string officialPermisionLabel = ConfigurationManager.AppSettings["PersonalOfficial"].ToString();
             try
             {
                 if (employeeLeaveList.Count > 0)
@@ -271,13 +275,13 @@ namespace NLTD.EmployeePortal.LMS.Dac.Dac
                         {
                             LMSStatus = string.Join(", ", Status.LeaveType);
                             LeaveDayQty = Status.LeaveDayQty;
-                            if (LMSStatus != "Permission - Official")
+                            if (LMSStatus != officialPermisionLabel)
                             {
                                 PermissionCount = Status.PermissionCount;
                             }
                             if (string.IsNullOrEmpty(LMSStatus_Final))
                             {
-                                if (LMSStatus != "Permission - Personal")
+                                if (LMSStatus != personalPermisionLabel)
                                 {
                                     LMSStatus = "Permission (O: ";
                                     LMSStatus_Final = LMSStatus + Status.PermissionCount + "hrs)";
@@ -290,7 +294,7 @@ namespace NLTD.EmployeePortal.LMS.Dac.Dac
                             }
                             else
                             {
-                                if (LMSStatus != "Permission - Personal")
+                                if (LMSStatus != personalPermisionLabel)
                                 {
                                     LMSStatus = "O: ";
                                 }

@@ -515,9 +515,9 @@ else
             @Convert.ToString(TimeSheetConsolidateObj.WFHCount)
         </td>
         <td style="text-align: center;" colspan="2">
-            @Html.DisplayName("Permission (P:")
-            @Convert.ToString(TimeSheetConsolidateObj.permissionCountPersonal)hrs,O:
-            @Convert.ToString(TimeSheetConsolidateObj.permissionCountOfficial)hrs)
+            @Html.DisplayName("Permission (O:")
+            @Convert.ToString(TimeSheetConsolidateObj.permissionCountOfficial)hrs,P:
+            @Convert.ToString(TimeSheetConsolidateObj.permissionCountPersonal)hrs)
         </td>
         <td>
             @GetWeeklyWorkingHours(TimeSheetConsolidateObj.hours)
