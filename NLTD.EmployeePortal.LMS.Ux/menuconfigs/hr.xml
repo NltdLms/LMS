@@ -129,11 +129,6 @@
           <icon></icon>
         </MenuItem>
         <MenuItem>
-          <title>AccessCard Attendance</title>
-          <url>/Attendance/AccessCardAttendance</url>
-          <icon></icon>
-        </MenuItem>
-        <MenuItem>
           <title>Timesheet</title>
           <url>/Attendance/MyTeamTimeSheet</url>
           <icon></icon>
@@ -146,6 +141,11 @@
         <MenuItem>
           <title>Shift Allocation - Team</title>
           <url>/Shift/TeamShiftAllocation</url>
+          <icon></icon>
+        </MenuItem>
+              <MenuItem>
+          <title>AccessCard Attendance</title>
+          <url>/Attendance/AccessCardAttendance</url>
           <icon></icon>
         </MenuItem>
       </level1item>
