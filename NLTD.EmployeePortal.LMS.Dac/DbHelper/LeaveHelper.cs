@@ -173,6 +173,14 @@ namespace NLTD.EmployeePortal.LMS.Dac.DbHelper
             }
         }
 
+        public IList<PermissionDetailsModel> GetOverTimePermissionDetail(Int64? paramUserId, string reqUsr, DateTime? startDate, DateTime? endDate, bool OnlyReportedToMe, Int64 LeadId)
+        {
+            using (var dac = new LeaveDac())
+            {
+                return dac.GetOverTimePermissionDetail(paramUserId, reqUsr, startDate, endDate, OnlyReportedToMe, LeadId);
+            }
+        }
+
         public DashBoardModel GetDashboardData(Int64 UserId, Int64 OfficeId)
         {
             using (var dac = new LeaveDac())

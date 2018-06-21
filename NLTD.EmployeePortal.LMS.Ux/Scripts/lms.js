@@ -697,6 +697,40 @@ function loadPermissionDetail() {
             }, 400);
         });
 }
+function loadoverTimePermissionDetail() {
+    $("#alert_placeholder").empty();
+
+    if ($("#alert") != undefined) {
+        $("#alert").remove();
+    }
+
+    if ($("#OnlyReportedToMe").val() == undefined) {
+        var showTeam = false;
+    }
+    else {
+        var showTeam = $("#OnlyReportedToMe").prop('checked');
+    }
+    if ($("#Name").val() != undefined) {
+        if (!ValidateAutocompleteName($("#Name").val(), $("#SearchUserID").val())) {
+            Clearshowalert("Please Choose a valid Username from the List.", "alert alert-danger");
+            return;
+        }
+    }
+
+    $("#divLoading").show();
+    $("#divForPermissionDetail")
+        .load('/Admin/GetOverTimePermissionDetail?paramUserId=' + $("#SearchUserID").val() + '&reqUsr=' + $("#RequestLevelPerson").val() + '&startDate=' + $("#FromDate").val() + '&endDate=' + $("#ToDate").val() + '&OnlyReportedToMe=' + showTeam,
+            function () {
+                $("#Permissions_id").dataTable({
+                    columnDefs: [
+                        { type: 'date-eu', targets: 4 }]
+                });
+                $("#divLoading").hide();
+                $('html, body').animate({
+                    scrollTop: 230 // Means Less header height
+                }, 400);
+            });
+}
 
 function hideLeaveSplit(e) {
     $("#LeaveDtlSplit" + e).css("display", "none");

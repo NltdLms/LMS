@@ -120,11 +120,11 @@
     string title = string.Empty;
     if (ViewBag.RequestLevelPerson == "My")
     {
-        title = "My Permissions Report";
+        title = "My Over Time Report";
     }
     else
     {
-        title = "Team - Permissions Report";
+        title = "Team - Over Time Report";
     }
     if (Model.ErrorMsg != "" && Model.ErrorMsg != null)
     {
@@ -150,7 +150,7 @@
                 </div>
                 <div class="box-body">
                     <div class="row">
-                        <form id='your-range-form' action='@Url.Action("ExportPermissionsExcel", new { RequestLevelPerson = (string)ViewBag.RequestLevelPerson })' method='post'>
+                        <form id='your-range-form' action='@Url.Action("ExportOverTimePermissionsExcel", new { RequestLevelPerson = (string)ViewBag.RequestLevelPerson })' method='post'>
                             @Html.HiddenFor(x => x.SearchUserID)
                             <div class="col-sm-3">
 
@@ -175,7 +175,7 @@
                                 }
                             </div>
                             <div class="col-sm-1" style="padding-top:23px;">
-                                <button type="button" class="btn btn-primary" onclick="loadPermissionDetail()">SEARCH</button>
+                                <button type="button" class="btn btn-primary" onclick="loadoverTimePermissionDetail()">SEARCH</button>
                             </div>
                             <div class="col-sm-2" style="padding-top:23px;">
                                 <input type='submit' class="btn btn-primary pull-right" value='EXPORT TO EXCEL' onclick="return CheckAutoCompleteName()" />

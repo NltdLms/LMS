@@ -669,3 +669,101 @@ Source: System
 TargetSite: Int32 ReadCfwsAndThrowIfIncomplete(System.String, Int32)
 -----------------------------------------------------------
 
+Time: 20/06/2018 10:23:30 AM
+Leave ID:10
+-----------------------------------------------------------
+Message: The SMTP server requires a secure connection or the client was not authenticated. The server response was: 5.5.1 Authentication Required. Learn more at
+StackTrace:    at System.Net.Mail.MailCommand.CheckResponse(SmtpStatusCode statusCode, String response)
+   at System.Net.Mail.MailCommand.Send(SmtpConnection conn, Byte[] command, MailAddress from, Boolean allowUnicode)
+   at System.Net.Mail.SmtpTransport.SendMail(MailAddress sender, MailAddressCollection recipients, String deliveryNotify, Boolean allowUnicode, SmtpFailedRecipientException& exception)
+   at System.Net.Mail.SmtpClient.Send(MailMessage message)
+   at NLTD.EmployeePortal.LMS.Ux.AppHelpers.EmailHelper.SendHtmlFormattedEmail(String recepientEmail, IList`1 ccEmail, String subject, String body) in C:\Users\BRajan\Source\Repos\LMS\NLTD.EmployeePortal.LMS.Ux\AppHelpers\EmailHelper.cs:line 48
+   at NLTD.EmployeePortal.LMS.Ux.AppHelpers.EmailHelper.SendEmail(Int64 leaveId, String actionName) in C:\Users\BRajan\Source\Repos\LMS\NLTD.EmployeePortal.LMS.Ux\AppHelpers\EmailHelper.cs:line 121
+Source: System
+TargetSite: Void CheckResponse(System.Net.Mail.SmtpStatusCode, System.String)
+-----------------------------------------------------------
+
+Time: 20/06/2018 10:23:55 AM
+Leave ID:11
+-----------------------------------------------------------
+Message: The SMTP server requires a secure connection or the client was not authenticated. The server response was: 5.5.1 Authentication Required. Learn more at
+StackTrace:    at System.Net.Mail.MailCommand.CheckResponse(SmtpStatusCode statusCode, String response)
+   at System.Net.Mail.MailCommand.Send(SmtpConnection conn, Byte[] command, MailAddress from, Boolean allowUnicode)
+   at System.Net.Mail.SmtpTransport.SendMail(MailAddress sender, MailAddressCollection recipients, String deliveryNotify, Boolean allowUnicode, SmtpFailedRecipientException& exception)
+   at System.Net.Mail.SmtpClient.Send(MailMessage message)
+   at NLTD.EmployeePortal.LMS.Ux.AppHelpers.EmailHelper.SendHtmlFormattedEmail(String recepientEmail, IList`1 ccEmail, String subject, String body) in C:\Users\BRajan\Source\Repos\LMS\NLTD.EmployeePortal.LMS.Ux\AppHelpers\EmailHelper.cs:line 48
+   at NLTD.EmployeePortal.LMS.Ux.AppHelpers.EmailHelper.SendEmail(Int64 leaveId, String actionName) in C:\Users\BRajan\Source\Repos\LMS\NLTD.EmployeePortal.LMS.Ux\AppHelpers\EmailHelper.cs:line 121
+Source: System
+TargetSite: Void CheckResponse(System.Net.Mail.SmtpStatusCode, System.String)
+-----------------------------------------------------------
+
+Time: 20/06/2018 10:24:16 AM
+Leave ID:12
+-----------------------------------------------------------
+Message: The SMTP server requires a secure connection or the client was not authenticated. The server response was: 5.5.1 Authentication Required. Learn more at
+StackTrace:    at System.Net.Mail.MailCommand.CheckResponse(SmtpStatusCode statusCode, String response)
+   at System.Net.Mail.MailCommand.Send(SmtpConnection conn, Byte[] command, MailAddress from, Boolean allowUnicode)
+   at System.Net.Mail.SmtpTransport.SendMail(MailAddress sender, MailAddressCollection recipients, String deliveryNotify, Boolean allowUnicode, SmtpFailedRecipientException& exception)
+   at System.Net.Mail.SmtpClient.Send(MailMessage message)
+   at NLTD.EmployeePortal.LMS.Ux.AppHelpers.EmailHelper.SendHtmlFormattedEmail(String recepientEmail, IList`1 ccEmail, String subject, String body) in C:\Users\BRajan\Source\Repos\LMS\NLTD.EmployeePortal.LMS.Ux\AppHelpers\EmailHelper.cs:line 48
+   at NLTD.EmployeePortal.LMS.Ux.AppHelpers.EmailHelper.SendEmail(Int64 leaveId, String actionName) in C:\Users\BRajan\Source\Repos\LMS\NLTD.EmployeePortal.LMS.Ux\AppHelpers\EmailHelper.cs:line 121
+Source: System
+TargetSite: Void CheckResponse(System.Net.Mail.SmtpStatusCode, System.String)
+-----------------------------------------------------------
+
+Time: 20/06/2018 10:30:41 AM
+Leave ID:13
+-----------------------------------------------------------
+Message: The SMTP server requires a secure connection or the client was not authenticated. The server response was: 5.5.1 Authentication Required. Learn more at
+StackTrace:    at System.Net.Mail.MailCommand.CheckResponse(SmtpStatusCode statusCode, String response)
+   at System.Net.Mail.MailCommand.Send(SmtpConnection conn, Byte[] command, MailAddress from, Boolean allowUnicode)
+   at System.Net.Mail.SmtpTransport.SendMail(MailAddress sender, MailAddressCollection recipients, String deliveryNotify, Boolean allowUnicode, SmtpFailedRecipientException& exception)
+   at System.Net.Mail.SmtpClient.Send(MailMessage message)
+   at NLTD.EmployeePortal.LMS.Ux.AppHelpers.EmailHelper.SendHtmlFormattedEmail(String recepientEmail, IList`1 ccEmail, String subject, String body) in C:\Users\BRajan\Source\Repos\LMS\NLTD.EmployeePortal.LMS.Ux\AppHelpers\EmailHelper.cs:line 48
+   at NLTD.EmployeePortal.LMS.Ux.AppHelpers.EmailHelper.SendEmail(Int64 leaveId, String actionName) in C:\Users\BRajan\Source\Repos\LMS\NLTD.EmployeePortal.LMS.Ux\AppHelpers\EmailHelper.cs:line 121
+Source: System
+TargetSite: Void CheckResponse(System.Net.Mail.SmtpStatusCode, System.String)
+-----------------------------------------------------------
+
+Time: 20/06/2018 10:32:28 AM
+Leave ID:14
+-----------------------------------------------------------
+Message: The SMTP server requires a secure connection or the client was not authenticated. The server response was: 5.5.1 Authentication Required. Learn more at
+StackTrace:    at System.Net.Mail.MailCommand.CheckResponse(SmtpStatusCode statusCode, String response)
+   at System.Net.Mail.MailCommand.Send(SmtpConnection conn, Byte[] command, MailAddress from, Boolean allowUnicode)
+   at System.Net.Mail.SmtpTransport.SendMail(MailAddress sender, MailAddressCollection recipients, String deliveryNotify, Boolean allowUnicode, SmtpFailedRecipientException& exception)
+   at System.Net.Mail.SmtpClient.Send(MailMessage message)
+   at NLTD.EmployeePortal.LMS.Ux.AppHelpers.EmailHelper.SendHtmlFormattedEmail(String recepientEmail, IList`1 ccEmail, String subject, String body) in C:\Users\BRajan\Source\Repos\LMS\NLTD.EmployeePortal.LMS.Ux\AppHelpers\EmailHelper.cs:line 48
+   at NLTD.EmployeePortal.LMS.Ux.AppHelpers.EmailHelper.SendEmail(Int64 leaveId, String actionName) in C:\Users\BRajan\Source\Repos\LMS\NLTD.EmployeePortal.LMS.Ux\AppHelpers\EmailHelper.cs:line 121
+Source: System
+TargetSite: Void CheckResponse(System.Net.Mail.SmtpStatusCode, System.String)
+-----------------------------------------------------------
+
+Time: 20/06/2018 10:33:11 AM
+Leave ID:15
+-----------------------------------------------------------
+Message: The SMTP server requires a secure connection or the client was not authenticated. The server response was: 5.5.1 Authentication Required. Learn more at
+StackTrace:    at System.Net.Mail.MailCommand.CheckResponse(SmtpStatusCode statusCode, String response)
+   at System.Net.Mail.MailCommand.Send(SmtpConnection conn, Byte[] command, MailAddress from, Boolean allowUnicode)
+   at System.Net.Mail.SmtpTransport.SendMail(MailAddress sender, MailAddressCollection recipients, String deliveryNotify, Boolean allowUnicode, SmtpFailedRecipientException& exception)
+   at System.Net.Mail.SmtpClient.Send(MailMessage message)
+   at NLTD.EmployeePortal.LMS.Ux.AppHelpers.EmailHelper.SendHtmlFormattedEmail(String recepientEmail, IList`1 ccEmail, String subject, String body) in C:\Users\BRajan\Source\Repos\LMS\NLTD.EmployeePortal.LMS.Ux\AppHelpers\EmailHelper.cs:line 48
+   at NLTD.EmployeePortal.LMS.Ux.AppHelpers.EmailHelper.SendEmail(Int64 leaveId, String actionName) in C:\Users\BRajan\Source\Repos\LMS\NLTD.EmployeePortal.LMS.Ux\AppHelpers\EmailHelper.cs:line 121
+Source: System
+TargetSite: Void CheckResponse(System.Net.Mail.SmtpStatusCode, System.String)
+-----------------------------------------------------------
+
+Time: 20/06/2018 15:36:50 PM
+Leave ID:16
+-----------------------------------------------------------
+Message: The SMTP server requires a secure connection or the client was not authenticated. The server response was: 5.5.1 Authentication Required. Learn more at
+StackTrace:    at System.Net.Mail.MailCommand.CheckResponse(SmtpStatusCode statusCode, String response)
+   at System.Net.Mail.MailCommand.Send(SmtpConnection conn, Byte[] command, MailAddress from, Boolean allowUnicode)
+   at System.Net.Mail.SmtpTransport.SendMail(MailAddress sender, MailAddressCollection recipients, String deliveryNotify, Boolean allowUnicode, SmtpFailedRecipientException& exception)
+   at System.Net.Mail.SmtpClient.Send(MailMessage message)
+   at NLTD.EmployeePortal.LMS.Ux.AppHelpers.EmailHelper.SendHtmlFormattedEmail(String recepientEmail, IList`1 ccEmail, String subject, String body) in C:\Users\BRajan\Source\Repos\LMS\NLTD.EmployeePortal.LMS.Ux\AppHelpers\EmailHelper.cs:line 48
+   at NLTD.EmployeePortal.LMS.Ux.AppHelpers.EmailHelper.SendEmail(Int64 leaveId, String actionName) in C:\Users\BRajan\Source\Repos\LMS\NLTD.EmployeePortal.LMS.Ux\AppHelpers\EmailHelper.cs:line 121
+Source: System
+TargetSite: Void CheckResponse(System.Net.Mail.SmtpStatusCode, System.String)
+-----------------------------------------------------------
+
