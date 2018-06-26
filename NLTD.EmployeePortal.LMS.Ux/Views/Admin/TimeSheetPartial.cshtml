@@ -64,6 +64,9 @@
         background: #BBCDFD !important;
         font-weight: bold;
     }
+    .textWrap {
+        width: 17%;
+    }
 </style>
 
 @if (Model.Count == 0)
@@ -204,9 +207,54 @@ else
                             <td>
                                 @Model[i].Status
                             </td>
-                            <td>
-                                @Model[i].Requests
-                            </td>
+
+                            @if (Model[i].StartDateType == null && Model[i].EndDateType == null)
+                            {
+                                <td>
+                                    @Model[i].Requests
+                                </td>
+                            }
+
+                            else
+                            {
+                                if (Model[i].StartDateType == "F" && Model[i].EndDateType == "F")
+                                {
+                                    if (Model[i].Requests.Contains(','))
+                                    {
+                                        <td>
+                                            @string.Concat(Model[i].Requests.Split(',')[0], " (First Half)", ",", Model[i].Requests.Split(',')[1], " (Second Half)")
+                                        </td>
+                                    }
+                                    else
+                                    {
+                                        <td>
+                                            @string.Concat(Model[i].Requests, " (First Half)")
+                                        </td>
+                                    }
+                                }
+                                else if (@Model[i].StartDateType == "S" && @Model[i].EndDateType == "S")
+                                {
+                                    if (Model[i].Requests.Contains(','))
+                                    {
+                                        <td>
+                                            @string.Concat(Model[i].Requests.Split(',')[0], " (First Half)", ",", Model[i].Requests.Split(',')[1], " (Second Half)")
+                                        </td>
+                                    }
+                                    else
+                                    {
+                                        <td>
+                                            @string.Concat(Model[i].Requests, " (Second Half)")
+                                        </td>
+                                    }
+                                }
+                                else
+                                {
+                                    <td>
+                                        @Model[i].Requests
+                                    </td>
+                                }
+                            }
+
                             <td>
                                 @Model[i].LateIn
                             </td>
@@ -297,8 +345,8 @@ else
                                         {
                                             TimeSheetConsolidateObj = GetWeeklyHoursConsolidation(Model.ToList(), Model[i].WorkingDate, Model[i].userID, "Monthly");
                                             @*@GetMonthlyHoursHTML(TimeSheetConsolidateObj);*@
-                                    TimeSheetConsolidateObj = GetWeeklyHoursConsolidation(Model.ToList(), Model[i].WorkingDate, Model[i].userID, "Weekly");
-                                    @GetWeeklyHoursHTML(TimeSheetConsolidateObj);
+                                            TimeSheetConsolidateObj = GetWeeklyHoursConsolidation(Model.ToList(), Model[i].WorkingDate, Model[i].userID, "Weekly");
+                                            @GetWeeklyHoursHTML(TimeSheetConsolidateObj);
 
                                         }
 
@@ -367,9 +415,52 @@ else
                                             <td>
                                                 @Model[j].Status
                                             </td>
-                                            <td>
-                                                @Model[j].Requests
-                                            </td>
+                                            @if (Model[j].StartDateType == null && Model[j].EndDateType == null)
+                                            {
+                                                <td>
+                                                    @Model[j].Requests
+                                                </td>
+                                            }
+
+                                            else
+                                            {
+                                                if (Model[j].StartDateType == "F" && Model[j].EndDateType == "F")
+                                                {
+                                                    if (Model[j].Requests.Contains(','))
+                                                    {
+                                                        <td>
+                                                            @string.Concat(Model[j].Requests.Split(',')[0], " (First Half)", "," , Model[j].Requests.Split(',')[1], " (Second Half)")
+                                                        </td>
+                                                    }
+                                                    else
+                                                    {
+                                                        <td>
+                                                            @string.Concat(Model[j].Requests, " (First Half)")
+                                                        </td>
+                                                    }
+                                                }
+                                                else if (@Model[j].StartDateType == "S" && @Model[j].EndDateType == "S")
+                                                {
+                                                    if (Model[j].Requests.Contains(','))
+                                                    {
+                                                        <td>
+                                                            @string.Concat(Model[j].Requests.Split(',')[0], " (First Half)", ",", Model[j].Requests.Split(',')[1], " (Second Half)")
+                                                        </td>
+                                                    }
+                                                    else
+                                                    {
+                                                        <td>
+                                                            @string.Concat(Model[j].Requests, " (Second Half)")
+                                                        </td>
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    <td>
+                                                        @Model[j].Requests
+                                                    </td>
+                                                }
+                                            }
                                             <td>
                                                 @Model[j].LateIn
                                             </td>
@@ -501,7 +592,7 @@ else
 }
 
 @helper GetWeeklyHoursHTML(TimeSheetConsolidate TimeSheetConsolidateObj)
-        {
+{
     <tr class="weeklytotal">
         <td>
             @Html.DisplayName("Summary")
@@ -522,8 +613,9 @@ else
         <td>
             @GetWeeklyWorkingHours(TimeSheetConsolidateObj.hours)
         </td>
-        <td></td>
-        <td>
+
+        <td class="textWrap">
+
             @Html.DisplayName("Leave : ")
             @Convert.ToString(TimeSheetConsolidateObj.leaveCount)
         </td>

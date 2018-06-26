@@ -58,9 +58,53 @@
                     <td>
                         @item.Status
                     </td>
-                    <td>
-                        @item.Requests
-                    </td>
+                    @if (item.StartDateType == null && item.EndDateType == null)
+                    {
+                        <td>
+                            @item.Requests
+                        </td>
+                    }
+
+                    else
+                    {
+                        if (item.StartDateType == "F" && item.EndDateType == "F")
+                        {
+                            if (item.Requests.Contains(','))
+                            {
+                        <td>
+                            @string.Concat(item.Requests.Split(',')[0], " (First Half)", ",", item.Requests.Split(',')[1], " (Second Half)")
+                        </td>
+                            }
+                            else
+                            {
+                                <td>
+                                    @string.Concat(item.Requests, " (First Half)")
+                                </td>
+                            }
+                        }
+                        else if (@item.StartDateType == "S" && @item.EndDateType == "S")
+                        {
+                            if (item.Requests.Contains(','))
+                            {
+                                <td>
+                                    @string.Concat(item.Requests.Split(',')[0], " (First Half)",",",item.Requests.Split(',')[1], " (Second Half)")
+                                </td>
+                            }
+                            else
+                            {
+                                <td>
+                                    @string.Concat(item.Requests, " (Second Half)")
+                                </td>
+                            }
+                        }
+                        else
+                        {
+                            <td>
+                                @item.Requests
+                            </td>
+                        }
+                    }
+
                 </tr>
             }
         }

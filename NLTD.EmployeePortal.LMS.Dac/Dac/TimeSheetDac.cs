@@ -216,10 +216,18 @@ namespace NLTD.EmployeePortal.LMS.Dac.Dac
                 decimal permissionCountPersonal = 0;
 
                 // To get the employee Leave Details
-                TimeSheetModelObj.Requests = GetLMSStatus(employeeLeaveList, ShiftQueryModelList[i].ShiftDate, out LeaveDayQty, out permissionCountPersonal);
+
+                TimeSheetModelObj.Requests = GetLMSStatus(employeeLeaveList, ShiftQueryModelList[i].ShiftDate, out LeaveDayQty, out permissionCount);
+                TimeSheetModelObj.StartDateType = GetHalfDayLMSType(employeeLeaveList, ShiftQueryModelList[i].ShiftDate, out string StartDateType);
+                TimeSheetModelObj.EndDateType = GetHalfDayLMSType(employeeLeaveList, ShiftQueryModelList[i].ShiftDate, out string EndDateType);
+
                 TimeSheetModelObj.LeaveDayQty = LeaveDayQty;
+                TimeSheetModelObj.PermissionCount = permissionCount;
+           
+               
                 TimeSheetModelObj.permissionCountOfficial = permissionCountOfficial;
                 TimeSheetModelObj.permissionCountPersonal = permissionCountPersonal;
+
                 timeSheetModelList.Add(TimeSheetModelObj);
             }
 
@@ -313,6 +321,29 @@ namespace NLTD.EmployeePortal.LMS.Dac.Dac
                 throw;
             }
             return LMSStatus_Final;
+        }
+
+        public string GetHalfDayLMSType(List<EmployeeLeave> employeeLeaveList, DateTime statusDate, out string StartDateType)
+        {
+            StartDateType = string.Empty;
+            string LMSStatus = string.Empty;
+
+            try
+            {
+                if (employeeLeaveList.Count > 0)
+                {
+                    var Status = (from e in employeeLeaveList where statusDate >= e.StartDate && statusDate <= e.EndDate select new { e.StartDateType });
+                    if (Status != null && Status.Count() > 0)
+                    {
+                        StartDateType = Status.Select(p => p.StartDateType).FirstOrDefault();
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return StartDateType;
         }
     }
 

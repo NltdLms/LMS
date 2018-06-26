@@ -156,7 +156,9 @@ namespace NLTD.EmployeePortal.LMS.Dac.Dac
                                      StartDate = ld.LeaveDate,
                                      EndDate = ld.LeaveDate,
                                      LeaveType = lt.Type,
-                                     LeaveDayQty = ld.LeaveDayQty
+                                     LeaveDayQty = ld.LeaveDayQty,
+                                     StartDateType=l.StartDateType,
+                                     EndDateType=l.EndDateType
                                  }
                                  ).ToList();
 
