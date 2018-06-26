@@ -214,12 +214,15 @@ namespace NLTD.EmployeePortal.LMS.Dac.Dac
                 }
                 decimal LeaveDayQty = 0;
                 decimal permissionCountPersonal = 0;
+                decimal permissionCount = 0;
+                string StartDateType = "";
+                string EndDateType = "";
 
                 // To get the employee Leave Details
 
                 TimeSheetModelObj.Requests = GetLMSStatus(employeeLeaveList, ShiftQueryModelList[i].ShiftDate, out LeaveDayQty, out permissionCount);
-                TimeSheetModelObj.StartDateType = GetHalfDayLMSType(employeeLeaveList, ShiftQueryModelList[i].ShiftDate, out string StartDateType);
-                TimeSheetModelObj.EndDateType = GetHalfDayLMSType(employeeLeaveList, ShiftQueryModelList[i].ShiftDate, out string EndDateType);
+                TimeSheetModelObj.StartDateType = GetHalfDayLMSType(employeeLeaveList, ShiftQueryModelList[i].ShiftDate, out StartDateType);
+                TimeSheetModelObj.EndDateType = GetHalfDayLMSType(employeeLeaveList, ShiftQueryModelList[i].ShiftDate, out EndDateType);
 
                 TimeSheetModelObj.LeaveDayQty = LeaveDayQty;
                 TimeSheetModelObj.PermissionCount = permissionCount;
