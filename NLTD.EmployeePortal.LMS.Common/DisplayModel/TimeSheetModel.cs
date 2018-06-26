@@ -23,5 +23,8 @@ namespace NLTD.EmployeePortal.LMS.Common.DisplayModel
         public decimal PermissionCount { get; set; }
 
         public string ReportingManager { get; set; }
+
+        public String StartDateType { get; set; }
+        public String EndDateType { get; set; }
     }
 }
