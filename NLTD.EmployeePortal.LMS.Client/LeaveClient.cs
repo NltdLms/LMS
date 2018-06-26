@@ -180,6 +180,14 @@ namespace NLTD.EmployeePortal.LMS.Client
             }
         }
 
+        public IList<PermissionDetailsModel> GetOverTimePermissionDetail(Int64? paramUserId, string reqUsr, DateTime? startDate, DateTime? endDate, bool OnlyReportedToMe, Int64 LeadId)
+        {
+            using (ILeaveHelper helper = new LeaveHelper())
+            {
+                return helper.GetOverTimePermissionDetail(paramUserId, reqUsr, startDate, endDate, OnlyReportedToMe, LeadId);
+            }
+        }
+
         public IList<DropDownItem> GetWeekOffs(long UserId)
         {
             using (ILeaveHelper helper = new LeaveHelper())

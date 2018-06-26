@@ -394,6 +394,11 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
                         LeaveRequests[i].CommentsShort = LeaveRequests[i].ApproverComments;
                     }
                 }
+                if (LeaveRequests[i].PermissionType.Contains('-'))
+                {
+                    string[] strPermissionType = LeaveRequests[i].PermissionType.Split('-');
+                    LeaveRequests[i].PermissionType = strPermissionType[1].ToString().Trim();
+                }
             }
             return PartialView("ViewPermissionDetailPartial", LeaveRequests);
         }
@@ -426,7 +431,7 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
             excelData = LeaveRequests.ToList();
             if (excelData.Count > 0)
             {
-                string[] columns = { "EmpId", "Name", "Month", "PermissionType", "PermissionDate", "TimeFrom", "TimeTo", "Duration", "Status", "Reason", "ApproverComments" };
+                string[] columns = { "EmpId", "Name", "Month", "PermissionType", "PermissionDate", "TimeFrom", "TimeTo", "Duration",  "Reason", "Status", "ApproverComments" };
                 byte[] filecontent = ExcelExportHelper.ExportPermissionsExcel(excelData, "", false, columns);
                 return File(filecontent, ExcelExportHelper.ExcelContentType, "PermissionsReport_" + System.DateTime.Now + ".xlsx");
             }
@@ -740,7 +745,7 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
             }
         }
 
-        public ActionResult ExportAccessCardAttendanceToExcel(EmployeeAttendanceQueryModel EmployeeAttendanceQueryModelObj, string RequestLevelPerson)
+public ActionResult ExportAccessCardAttendanceToExcel(EmployeeAttendanceQueryModel EmployeeAttendanceQueryModelObj, string RequestLevelPerson)
         {
             List<EmployeeAttendanceModel> excelData = GetAccessCardEmployeeAttendanceList(EmployeeAttendanceQueryModelObj.CardID.ToString(), (EmployeeAttendanceQueryModelObj.FromDate == DateTime.MinValue ? "" : EmployeeAttendanceQueryModelObj.FromDate.ToString()),
                 (EmployeeAttendanceQueryModelObj.ToDate == DateTime.MinValue ? "" : EmployeeAttendanceQueryModelObj.ToDate.ToString()), RequestLevelPerson).ToList();
@@ -768,5 +773,140 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
                 return View("~/Views/Attendance/MyAttendance.cshtml", data);
             }
         }
+        public ActionResult MyOverTimePermissions()
+        {
+            PermissionQueryModel mdl = new PermissionQueryModel();
+            using (var Client = new LeaveClient())
+            {
+                var result = Client.GetYearsFromLeaveBalance();
+                ViewBag.YearsInLeaveBal = result;
+            }
+            ViewBag.RequestLevelPerson = "My";
+            mdl.OnlyReportedToMe = true;
+            return View("OverTimePermissions", mdl);
+        }
+
+        public ActionResult TeamOverTimePermissions()
+        {
+            PermissionQueryModel mdl = new PermissionQueryModel();
+            using (var Client = new LeaveClient())
+            {
+                var result = Client.GetYearsFromLeaveBalance();
+                ViewBag.YearsInLeaveBal = result;
+            }
+            ViewBag.RequestLevelPerson = "Team";
+            mdl.OnlyReportedToMe = true;
+            return View("OverTimePermissions", mdl);
+        }
+
+        public ActionResult AdminOverTimePermissions()
+        {
+            PermissionQueryModel mdl = new PermissionQueryModel();
+            using (var Client = new LeaveClient())
+            {
+                var result = Client.GetYearsFromLeaveBalance();
+                ViewBag.YearsInLeaveBal = result;
+            }
+            ViewBag.RequestLevelPerson = "Admin";
+            mdl.OnlyReportedToMe = true;
+            return View("OverTimePermissions", mdl);
+        }
+
+        public ActionResult GetOverTimePermissionDetail(Int64? paramUserId, string reqUsr, string startDate, string endDate, bool OnlyReportedToMe)
+        {
+            IList<PermissionDetailsModel> LeaveRequests = null;
+            DateTime? startDateFormatted = null;
+            DateTime? endDateFormatted = null;
+
+            if (startDate != "")
+            {
+                try
+                {
+                    startDateFormatted = DateTime.Parse(startDate, new CultureInfo("en-GB", true));
+                    endDateFormatted = DateTime.Parse(endDate, new CultureInfo("en-GB", true));
+                }
+                catch (Exception ex)
+                {
+                    throw;
+                }
+            }
+            if (startDate == "" || endDate == "")
+            {
+                startDateFormatted = System.DateTime.Now.Date;
+                endDateFormatted = System.DateTime.Now.Date;
+            }
+            using (var client = new LeaveClient())
+            {
+                LeaveRequests = client.GetOverTimePermissionDetail(paramUserId, reqUsr, startDateFormatted, endDateFormatted, OnlyReportedToMe, UserId);
+            }
+            for (int i = 0; i < LeaveRequests.Count; i++)
+            {
+                if (LeaveRequests[i].Reason != null)
+                {
+                    if (LeaveRequests[i].Reason.Length > 12)
+                    {
+                        LeaveRequests[i].ReasonShort = LeaveRequests[i].Reason.Substring(0, 12) + "...";
+                    }
+                    else
+                    {
+                        LeaveRequests[i].ReasonShort = LeaveRequests[i].Reason;
+                    }
+                }
+                if (LeaveRequests[i].ApproverComments != null)
+                {
+                    if (LeaveRequests[i].ApproverComments.Length > 12)
+                    {
+                        LeaveRequests[i].CommentsShort = LeaveRequests[i].ApproverComments.Substring(0, 12) + "...";
+                    }
+                    else
+                    {
+                        LeaveRequests[i].CommentsShort = LeaveRequests[i].ApproverComments;
+                    }
+                }
+            }
+            return PartialView("ViewOverTimePermissionDetailPartial", LeaveRequests);
+        }
+
+        public ActionResult ExportOverTimePermissionsExcel(PermissionQueryModel qryMdl, string RequestLevelPerson)
+        {
+            IList<PermissionDetailsModel> LeaveRequests = null;
+
+            DateTime? startDateFormatted = null;
+            DateTime? endDateFormatted = null;
+            string startDate = qryMdl.DateRange.Substring(0, 10);
+            string endDate = qryMdl.DateRange.Substring(12);
+            if (startDate != "")
+            {
+                try
+                {
+                    startDateFormatted = DateTime.Parse(startDate, new CultureInfo("en-GB", true));
+                    endDateFormatted = DateTime.Parse(endDate, new CultureInfo("en-GB", true));
+                }
+                catch (Exception ex)
+                {
+                    throw;
+                }
+            }
+            using (var client = new LeaveClient())
+            {
+                LeaveRequests = client.GetOverTimePermissionDetail(qryMdl.SearchUserID, RequestLevelPerson, startDateFormatted, endDateFormatted, qryMdl.OnlyReportedToMe, UserId);
+            }
+            List<PermissionDetailsModel> excelData = new List<PermissionDetailsModel>();
+            excelData = LeaveRequests.ToList();
+            if (excelData.Count > 0)
+            {
+                string[] columns = { "Emp Id", "Name", "Month", "Over Time Date", "Time From", "Time To", "Duration",  "Reason", "Status", "Approver Comments", "Reporting Manager" };
+                byte[] filecontent = ExcelExportHelper.ExportOverTimeExcel(excelData, "", false, columns);
+                return File(filecontent, ExcelExportHelper.ExcelContentType, "OverTimePermissionsReport_" + System.DateTime.Now + ".xlsx");
+            }
+            else
+            {
+                ViewBag.RequestLevelPerson = RequestLevelPerson;
+
+                qryMdl.ErrorMsg = "Excel file is not generated as no data returned.";
+                return View("OverTimePermissions", qryMdl);
+            }
+        }
+        
     }
 }

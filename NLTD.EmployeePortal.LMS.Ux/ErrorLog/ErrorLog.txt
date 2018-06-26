@@ -669,8 +669,6 @@ Source: System
 TargetSite: Int32 ReadCfwsAndThrowIfIncomplete(System.String, Int32)
 -----------------------------------------------------------
 
-Time: 07/06/2018 15:11:07 PM
-Leave ID:16
 -----------------------------------------------------------
 Message: The SMTP server requires a secure connection or the client was not authenticated. The server response was: 5.5.1 Authentication Required. Learn more at
 StackTrace:    at System.Net.Mail.MailCommand.CheckResponse(SmtpStatusCode statusCode, String response)
@@ -683,8 +681,6 @@ Source: System
 TargetSite: Void CheckResponse(System.Net.Mail.SmtpStatusCode, System.String)
 -----------------------------------------------------------
 
-Time: 07/06/2018 15:11:36 PM
-Leave ID:17
 -----------------------------------------------------------
 Message: The SMTP server requires a secure connection or the client was not authenticated. The server response was: 5.5.1 Authentication Required. Learn more at
 StackTrace:    at System.Net.Mail.MailCommand.CheckResponse(SmtpStatusCode statusCode, String response)
@@ -697,8 +693,6 @@ Source: System
 TargetSite: Void CheckResponse(System.Net.Mail.SmtpStatusCode, System.String)
 -----------------------------------------------------------
 
-Time: 07/06/2018 15:11:59 PM
-Leave ID:18
 -----------------------------------------------------------
 Message: The SMTP server requires a secure connection or the client was not authenticated. The server response was: 5.5.1 Authentication Required. Learn more at
 StackTrace:    at System.Net.Mail.MailCommand.CheckResponse(SmtpStatusCode statusCode, String response)
