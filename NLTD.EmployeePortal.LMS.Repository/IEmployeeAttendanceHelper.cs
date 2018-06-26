@@ -9,5 +9,7 @@ namespace NLTD.EmployeePortal.LMS.Repository
         List<EmployeeAttendanceModel> GetAttendance(Int64 UserID);
 
         List<EmployeeAttendanceModel> GetAttendanceForRange(Int64 UserID, DateTime FromDateTime, DateTime ToDateTime, string requestLevelUser, bool IsDirectEmployees);
+
+        List<EmployeeAttendanceModel> GetAccessCardAttendanceForRange(Int64 UserID, DateTime FromDateTime, DateTime ToDateTime, string requestLevelUser);
     }
 }

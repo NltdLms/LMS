@@ -28,6 +28,12 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
             //   EmployeeAttendanceHelper.GetAttendance(employeeProfileObj.UserId);
             return View();
         }
+        public ActionResult AccessCardAttendance()
+        {
+            EmployeeProfile employeeProfileObj = (EmployeeProfile)Session["Profile"];
+            ViewBag.RequestLevelPerson = "Team";
+            return View();
+        }
 
         public ActionResult MyTeamAttendance()
         {

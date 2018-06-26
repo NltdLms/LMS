@@ -509,6 +509,43 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
             return PartialView("EmployeeAttendanceDtlPartial", employeeAttendanceModelList);
         }
 
+        public ActionResult loadAccesCardEmployeeAttendance(string ID, string FromDate, string ToDate, string requestLevelPerson)
+        {
+            string errorMessage = string.Empty;
+            IList<EmployeeAttendanceModel> employeeAttendanceModelList = GetAccessCardEmployeeAttendanceList(ID, FromDate, ToDate, requestLevelPerson);
+            ViewBag.RequestLevelPerson = requestLevelPerson;
+            return PartialView("EmployeeAcessCardAttendanceDtlPartial", employeeAttendanceModelList);
+        }
+
+        private IList<EmployeeAttendanceModel> GetAccessCardEmployeeAttendanceList(string ID, string FromDate, string ToDate, string requestLevelPerson)
+        {
+            IList<EmployeeAttendanceModel> employeeAttendanceModelList = null;
+            DateTime startDateFormatted, endDateFormatted;
+            string tempRequestLevelPerson = requestLevelPerson;
+            EmployeeProfile profile = (EmployeeProfile)Session["Profile"];
+            Int64 userID = profile.UserId;
+            if (!string.IsNullOrEmpty(ID) && ID != "0")
+            {
+                userID = Convert.ToInt32(ID);
+                requestLevelPerson = "My";// If we are not change the requst level person, If we pass any manager ID it will return all timesheet who are all under the manager
+            }
+            if (string.IsNullOrEmpty(FromDate) || FromDate == "Nodate")
+            {
+                startDateFormatted = DateTime.Now.AddDays(-30).Date;
+                endDateFormatted = DateTime.Now;
+            }
+            else
+            {
+                startDateFormatted = DateTime.Parse(FromDate, new CultureInfo("en-GB", true));
+                endDateFormatted = DateTime.Parse(ToDate, new CultureInfo("en-GB", true)).Add(new TimeSpan(23, 59, 59));
+            }
+
+            IEmployeeAttendanceHelper employeeAttendanceHelper = new EmplyeeAttendanceClient();
+            employeeAttendanceModelList = employeeAttendanceHelper.GetAccessCardAttendanceForRange(userID, startDateFormatted, endDateFormatted, requestLevelPerson);
+            requestLevelPerson = tempRequestLevelPerson;
+            return employeeAttendanceModelList;
+        }
+
         private IList<EmployeeAttendanceModel> GetEmployeeAttendanceList(string ID, string FromDate, string ToDate, string requestLevelPerson, bool IsDirectEmployees)
         {
             IList<EmployeeAttendanceModel> employeeAttendanceModelList = null;
@@ -529,7 +566,7 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
             else
             {
                 startDateFormatted = DateTime.Parse(FromDate, new CultureInfo("en-GB", true));
-                endDateFormatted = DateTime.Parse(ToDate, new CultureInfo("en-GB", true)).Add(new TimeSpan(23, 59, 59)); ;
+                endDateFormatted = DateTime.Parse(ToDate, new CultureInfo("en-GB", true)).Add(new TimeSpan(23, 59, 59));
             }
 
             IEmployeeAttendanceHelper employeeAttendanceHelper = new EmplyeeAttendanceClient();
@@ -708,6 +745,34 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
             }
         }
 
+public ActionResult ExportAccessCardAttendanceToExcel(EmployeeAttendanceQueryModel EmployeeAttendanceQueryModelObj, string RequestLevelPerson)
+        {
+            List<EmployeeAttendanceModel> excelData = GetAccessCardEmployeeAttendanceList(EmployeeAttendanceQueryModelObj.CardID.ToString(), (EmployeeAttendanceQueryModelObj.FromDate == DateTime.MinValue ? "" : EmployeeAttendanceQueryModelObj.FromDate.ToString()),
+                (EmployeeAttendanceQueryModelObj.ToDate == DateTime.MinValue ? "" : EmployeeAttendanceQueryModelObj.ToDate.ToString()), RequestLevelPerson).ToList();
+
+            if (excelData.Count > 0)
+            {
+                List<string> columns = new List<string>() { "CardID", "AttendanceDate", "INOutTime", "InOut", "Name" };
+                // string fileName = "Attendance.xlsx";
+                string fileName = string.Format("Attendance_{0}{1}", DateTime.Now.ToString("ddMMyyyyHHmmss"), ".xlsx");
+                if (EmployeeAttendanceQueryModelObj.RequestLevelPerson == "My")
+                {
+                    columns = new List<string>() { "CardID", "AttendanceDate", "INOutTime", "InOut", "Name" };
+                    EmployeeProfile profile = (EmployeeProfile)Session["Profile"];
+                    // fileName = string.Format("{0} {1}{2}{3}", profile.FirstName , profile.LastName, DateTime.Now.ToString("ddMMyyyyHHmmss"), ".xlsx");
+                }
+
+                byte[] filecontent = ExcelExportHelper.ExportExcelAccessCardAttendance(excelData, "", false, columns.ToArray());
+                return File(filecontent, ExcelExportHelper.ExcelContentType, fileName);
+            }
+            else
+            {
+                ViewBag.RequestLevelPerson = RequestLevelPerson;
+                EmployeeAttendanceQueryModel data = new EmployeeAttendanceQueryModel();
+                data.ErrorMsg = "Excel file is not generated as no data returned.";
+                return View("~/Views/Attendance/MyAttendance.cshtml", data);
+            }
+        }
         public ActionResult MyOverTimePermissions()
         {
             PermissionQueryModel mdl = new PermissionQueryModel();
@@ -837,9 +902,11 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
             else
             {
                 ViewBag.RequestLevelPerson = RequestLevelPerson;
+
                 qryMdl.ErrorMsg = "Excel file is not generated as no data returned.";
                 return View("OverTimePermissions", qryMdl);
             }
         }
+        
     }
 }

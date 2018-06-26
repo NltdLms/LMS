@@ -4,6 +4,7 @@ using OfficeOpenXml.Style;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Configuration;
 using System.Data;
 using System.Linq;
 using System.Web;
@@ -740,6 +741,22 @@ namespace NLTD.EmployeePortal.LMS.Ux.AppHelpers
             return ExportAttendanceExcel(employeeAttendanceModelListObj, Heading, showSlno, ColumnsToTake);
         }
 
+        public static byte[] ExportExcelAccessCardAttendance(List<EmployeeAttendanceModel> data, string Heading = "", bool showSlno = false, params string[] ColumnsToTake)
+        {
+            List<EmployeeAttendanceModel> employeeAttendanceModelListObj = (from at in data
+                                                                            select new EmployeeAttendanceModel
+                                                                            {
+                                                                                UserID = at.UserID,
+                                                                                InOut = at.InOut,
+                                                                                AttendanceDate = at.InOutDate.ToString("dd-MM-yyyy"),
+                                                                                INOutTime = at.InOutDate.ToString("hh:mm:ss"),
+                                                                                Name = at.Name,
+                                                                                CardID = at.CardID
+                                                                            }).ToList();
+
+            return ExportAttendanceExcel(employeeAttendanceModelListObj, Heading, showSlno, ColumnsToTake);
+        }
+
         public static byte[] ExportTimesheetExcel(List<TimeSheetModel> TimeSheetModelObj, string heading = "", bool showSrNo = false, params string[] columnsToTake)
         {
             byte[] result = null;
@@ -853,7 +870,8 @@ namespace NLTD.EmployeePortal.LMS.Ux.AppHelpers
                 dataTable = ListToDataTable<ConsolidateReport>(weeklyTimeSheetConsolidateList);
                 dataTable.Columns["DateRange"].ColumnName = "Date";
                 dataTable.Columns["TotalWorkingHours"].ColumnName = "Total Working Hours";
-                dataTable.Columns["PermissionCount"].ColumnName = "Total Permission Hours";
+                dataTable.Columns["permissionCountOfficial"].ColumnName = "Total Permission Hours - Official";
+                dataTable.Columns["permissionCountPersonal"].ColumnName = "Total Permission Hours - Personal";
                 dataTable.Columns["LeaveCount"].ColumnName = "No .Of Leaves";
                 dataTable.Columns["LateCount"].ColumnName = "No. Of Late In";
                 dataTable.Columns["WorkFromHomeCount"].ColumnName = "No. Of Work From Home";
@@ -1025,6 +1043,9 @@ namespace NLTD.EmployeePortal.LMS.Ux.AppHelpers
 
         public static ConsolidateReport CalculateTimeSheetConsolidation(TimeSheetModel TimeSheetModelObj, ConsolidateReport TimeSheetConsolidateObj)
         {
+            string personalPermisionLabel = ConfigurationManager.AppSettings["PersonalPermission"].ToString();
+            string officialPermisionLabel = ConfigurationManager.AppSettings["PersonalOfficial"].ToString();
+
             TimeSheetConsolidateObj.WorkingHours = TimeSheetConsolidateObj.WorkingHours + TimeSheetModelObj.WorkingHours;
             if (TimeSheetModelObj.LateIn.Seconds > 0)
             {
@@ -1035,9 +1056,14 @@ namespace NLTD.EmployeePortal.LMS.Ux.AppHelpers
                 TimeSheetConsolidateObj.EarlyCount = TimeSheetConsolidateObj.EarlyCount + 1;
             }
             if (!string.IsNullOrEmpty(TimeSheetModelObj.Requests) &&
-                    TimeSheetModelObj.Requests.Contains("Permission"))
+                    TimeSheetModelObj.Requests.Contains(officialPermisionLabel))
             {
-                TimeSheetConsolidateObj.PermissionCount = TimeSheetConsolidateObj.PermissionCount + TimeSheetModelObj.PermissionCount;
+                TimeSheetConsolidateObj.permissionCountOfficial = TimeSheetConsolidateObj.permissionCountOfficial + TimeSheetModelObj.permissionCountOfficial;
+            }
+            if (!string.IsNullOrEmpty(TimeSheetModelObj.Requests) &&
+                    TimeSheetModelObj.Requests.Contains(personalPermisionLabel))
+            {
+                TimeSheetConsolidateObj.permissionCountPersonal = TimeSheetConsolidateObj.permissionCountPersonal + TimeSheetModelObj.permissionCountPersonal;
             }
             if (!string.IsNullOrEmpty(TimeSheetModelObj.Requests) && TimeSheetModelObj.Requests.Contains("Leave"))
             {
@@ -1176,7 +1202,8 @@ namespace NLTD.EmployeePortal.LMS.Ux.AppHelpers
         public decimal LeaveCount { get; set; }
 
         public decimal WorkFromHomeCount { get; set; }
-        public decimal PermissionCount { get; set; }
+        public decimal permissionCountOfficial { get; set; }
+        public decimal permissionCountPersonal { get; set; }
         public int LateCount { get; set; }
         public int EarlyCount { get; set; }
 

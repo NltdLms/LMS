@@ -13,5 +13,7 @@ namespace NLTD.EmployeePortal.LMS.Common.QueryModel
         public string RequestLevelPerson { get; set; }
 
         public bool DirectEmployees { get; set; }
+
+        public Int64? CardID { get; set; }
     }
 }
