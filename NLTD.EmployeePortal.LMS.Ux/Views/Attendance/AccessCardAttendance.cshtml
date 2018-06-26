@@ -118,7 +118,7 @@
                 myDirectEmployees = true;
             }
             $("#divForEmployeeAttendance")
-                .load('/Admin/loadEmployeeAttendance?FromDate=Nodate&ToDate=Nodate&requestLevelPerson=' + $("#RequestLevelPerson").val() + '&myDirectEmployees=' + myDirectEmployees,
+                .load('/Admin/loadAccesCardEmployeeAttendance?FromDate=Nodate&ToDate=Nodate&requestLevelPerson=' + $("#RequestLevelPerson").val(),
                 function () {
 
                      $(".dtatable").dataTable({ "aaSorting": [] });
@@ -130,6 +130,25 @@
 
                 });
 
+            $("#CardID").keydown(function (event) {
+                if (event.shiftKey) {
+                    event.preventDefault();
+                }
+                if (event.keyCode == 46 || event.keyCode == 8) {
+                }
+                else {
+                    if (event.keyCode < 95) {
+                        if (event.keyCode < 48 || event.keyCode > 57) {
+                            event.preventDefault();
+                        }
+                    }
+                    else {
+                        if (event.keyCode < 96 || event.keyCode > 105) {
+                            event.preventDefault();
+                        }
+                    }
+                }
+            });
         });
 
         function Validate() {
@@ -149,8 +168,8 @@
             if ($("#RequestLevelPerson").val() === "My") {
             }
             else {
-                if (!ValidateAutocompleteName($("#Name").val(), $("#UserID").val())) {
-                    Clearshowalert("Please Choose a valid Username from the List.", "alert alert-danger");
+                if (!ValidateAceessCardNumber($("#CardID").val(), $("#UserID").val())) {
+                    Clearshowalert("Please Entere valid AccessCard Number", "alert alert-danger");
                     return false;
                 }
             }
@@ -163,18 +182,9 @@
 
     string heading = string.Empty;
     string exportExcel = string.Empty;
-    if ((string)ViewBag.RequestLevelPerson == "Admin" || (string)ViewBag.RequestLevelPerson == "HR")
-    {
-        heading = "Employee Attendance";
-    }
-    else if ((string)ViewBag.RequestLevelPerson == "My")
-    {
-        heading = "My Attendance";
-    }
-    else if ((string)ViewBag.RequestLevelPerson == "Team")
-    {
-        heading = "Team - Attendance";
-    }
+
+    heading = "AccessCard Attendance";
+
     <div class="row">
         <div class="col-sm-12">
             <div class="box box-primary">
@@ -182,44 +192,25 @@
                     <h3 class="box-title">@heading</h3>
                 </div>
                 <div class="box-body">
-                    <form id='your-range-form' action='@Url.Action("ExportAttendanceToExcel","Admin", new { RequestLevelPerson = (string)ViewBag.RequestLevelPerson })' method='post'>
+                    <form id='your-range-form' action='@Url.Action("ExportAccessCardAttendanceToExcel","Admin", new { RequestLevelPerson = (string)ViewBag.RequestLevelPerson })' method='post'>
 
                         @{
                             @Html.Hidden("RequestLevelPerson", (string)ViewBag.RequestLevelPerson)
                             @Html.HiddenFor(x => x.FromDate)
                             @Html.HiddenFor(x => x.ToDate)
                             @Html.HiddenFor(x => x.UserID)
-                            if ((string)ViewBag.RequestLevelPerson == "My")
-                            {
-                                <div class="row">
-                                    <div class="col-sm-3">
+                            <div class="row">
+                                <div class="col-sm-3">
 
-                                        @Html.Label("Date Range")
-                                        @Html.TextBoxFor(m => m.DateRange, new { @class = "form-control", @readonly = "readonly" })
-                                    </div>
-                                    <div class="col-sm-6"></div>
-                                    <div class="col-sm-3" style="text-align:right">
-                                        <br />
-                                        <button type="button" class="btn btn-primary" onclick="loadAttendanceRangeSummary()">SEARCH</button>
-                                        <button type="submit" class="btn btn-primary" onclick="return ValidateName()">EXPORT TO EXCEL</button>
-                                    </div>
+                                    @Html.Label("Date Range")
+                                    @Html.TextBoxFor(m => m.DateRange, new { @class = "form-control" })
                                 </div>
+                                <div class="col-sm-3">
 
-                            }
-                            else
-                            {
-                                <div class="row">
-                                    <div class="col-sm-3">
-
-                                        @Html.Label("Date Range")
-                                        @Html.TextBoxFor(m => m.DateRange, new { @class = "form-control", @readonly = "readonly" })
-                                    </div>
-                                    <div class="col-sm-3">
-
-                                        @Html.LabelFor(x => x.Name)
-                                        @Html.TextBoxFor(m => m.Name, new { @class = "form-control" })
-                                    </div>
-                                    <div class="col-sm-3" style="padding-top:10px">
+                                    @Html.Label("AccessCard Number")
+                                    @Html.TextBoxFor(a =>a.CardID, null, new { @class = "form-control", @maxLength = "10" })
+                                </div>
+                                @*<div class="col-sm-3" style="padding-top:10px">
                                         @if ((string)ViewBag.RequestLevelPerson == "Team")
                                         {
                                             <br />
@@ -227,15 +218,15 @@
                                             @Html.Label("My Direct Reportees")
 
                                         }
-                                    </div>
-                                    <div class="col-sm-3" style="text-align:right">
-                                        <br />
-                                        <button style="margin: 6px 12px " type="button" class="btn btn-primary" onclick="loadAttendanceRangeSummary()">SEARCH</button>
-                                        <button type="submit" class="btn btn-primary" onclick="return ValidateName()">EXPORT TO EXCEL</button>
-                                    </div>
+                                    </div>*@
+                                <div class="col-sm-3" style="text-align:right">
+                                    <br />
+                                    <button style="margin: 6px 12px " type="button" class="btn btn-primary" onclick="loadAccesCardAttendanceRangeSummary()">SEARCH</button>
+                                    <button type="submit" class="btn btn-primary" onclick="return ValidateName()">EXPORT TO EXCEL</button>
                                 </div>
+                            </div>
 
-                            }
+
                         }
                         <br />
                         <div id="alert_placeholder">

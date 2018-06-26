@@ -1,4 +1,4 @@
-﻿@model NLTD.EmployeePortal.LMS.Common.QueryModel.DaywiseLeaveQueryModel
+﻿@model NLTD.EmployeePortal.LMS.Common.QueryModel.PermissionQueryModel
 
 <style type="text/css">
     .ui-autocomplete {
@@ -34,9 +34,10 @@
 
     <script src="~/Scripts/moment.js"></script>
     <link href="~/Content/bootstrap.css" rel="stylesheet" />
-    <script type="text/JavaScript">
+
+    <script type="text/javascript">
         var nameList = [];
-        $(document).ready(function () {
+        $(function () {
             $("#DateRange").daterangepicker({
                 locale: {
                     format: 'DD-MM-YYYY'
@@ -55,13 +56,13 @@
                     "Last 180 days": [moment().subtract(179, 'days'), moment()],
                     "Last 1 Year": [moment().subtract(1, 'year').add(1, 'day'), moment()]
                 }
+
             });
 
             $('#DateRange').on('apply.daterangepicker', function (ev, picker) {
                 $("#FromDate").val(picker.startDate.format('DD-MM-YYYY'));
                 $("#ToDate").val(picker.endDate.format('DD-MM-YYYY'));
             });
-
             $("#Name").keyup(function () {
                 if ($("#Name").val() == "") {
                     $("#SearchUserID").val("");
@@ -77,9 +78,8 @@
                         success: function (data) {
                             nameList = $.map(data, function (item) {
                                 return { label: item.Name, value: item.UserId };
-                            })
-                            response(nameList)
-
+                            });
+                            response(nameList);
                         }
                     })
                 },
@@ -114,33 +114,31 @@
             return true;
         }
     </script>
-
 }
 
 @{
-
     string title = string.Empty;
     if (ViewBag.RequestLevelPerson == "My")
     {
-        title = "My Day Wise Report";
+        title = "My Over Time Report";
     }
     else
     {
-        title = "Team - Day Wise Report";
+        title = "Team - Over Time Report";
     }
     if (Model.ErrorMsg != "" && Model.ErrorMsg != null)
     {
-        <div id="alert" class="col-sm-12">
-            <div class="alert alert-danger">
-                <span class="close" data-dismiss="alert">×</span>
-                <span>@Model.ErrorMsg</span>
-            </div>
+        <div class="alert alert-danger">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">x</span>
+            </button>
+            @Model.ErrorMsg
         </div>
     }
     <div id="alert_placeholder" class="col-sm-12">
     </div>
-
     @Html.Hidden("RequestLevelPerson", (string)ViewBag.RequestLevelPerson)
+
     @Html.HiddenFor(x => x.FromDate)
     @Html.HiddenFor(x => x.ToDate)
 
@@ -151,73 +149,44 @@
                     <h3 class="box-title">@title</h3>
                 </div>
                 <div class="box-body">
-                    <form id='your-range-form' action='@Url.Action("ExportToExcel", new { RequestLevelPerson = (string)ViewBag.RequestLevelPerson })' method='post'>
-                        @Html.HiddenFor(x => x.SearchUserID)
-                        @{
-                            if ((string)ViewBag.RequestLevelPerson == "My")
-                            {
-                                <div class="row">
-                                    <div class="col-sm-3">
+                    <div class="row">
+                        <form id='your-range-form' action='@Url.Action("ExportOverTimePermissionsExcel", new { RequestLevelPerson = (string)ViewBag.RequestLevelPerson })' method='post'>
+                            @Html.HiddenFor(x => x.SearchUserID)
+                            <div class="col-sm-3">
 
-                                        @Html.Label("Date Range")
-                                        @Html.TextBoxFor(m => m.DateRange, new { @class = "form-control",  @readonly = "readonly" })
-                                    </div>
-                                    <div class="col-sm-6"></div>
-                                    <div class="col-sm-1" style="padding-top:23px;">
-
-                                        <button type="button" class="btn btn-primary" onclick="loadDaywiseLeaves()">SEARCH</button>
-                                    </div>
-                                    <div class="col-sm-2" style="padding-top:23px;">
-                                        <input type='submit' class="btn btn-primary  pull-right" onclick="" value='EXPORT TO EXCEL' />
-                                    </div>
-                                </div>
-
-                            }
-                            else
-                            {
-                                <div class="row">
-                                    <div class="col-sm-3">
-
-                                        @Html.Label("Date Range")
-                                        @Html.TextBoxFor(m => m.DateRange, new { @class = "form-control", @readonly = "readonly" })
-                                    </div>
-                                    <div class="col-sm-4">
-
+                                @Html.Label("Date Range")
+                                @Html.TextBoxFor(m => m.DateRange, new { @class = "form-control" })
+                            </div>
+                            <div class="col-sm-4">
+                                @{ if ((string)ViewBag.RequestLevelPerson != "My")
+                                    {
                                         @Html.LabelFor(x => x.Name)
                                         @Html.TextBoxFor(m => m.Name, new { @class = "form-control" })
-                                    </div>
-                                    <div class="col-sm-5">
-                                        @{ if ((string)ViewBag.RequestLevelPerson == "Team")
-                                            {
-                                                <p> @Html.CheckBoxFor(m => m.OnlyReportedToMe)   My Direct Reportees</p>
-                                                        <p> @Html.CheckBoxFor(m => m.IsLeaveOnly)   Show Leaves Only </p>
-                                            }
-                                            else if ((string)ViewBag.RequestLevelPerson == "Admin")
-                                            {
-                                                <p> @Html.CheckBoxFor(m => m.DonotShowRejected)   Do Not Show Rejected & Cancelled Requests </p>
-                                                        <p> @Html.CheckBoxFor(m => m.IsLeaveOnly)   Show Leave Requests Only </p>
-                                            }
-                                        }
-                                    </div>
-                                </div>
-                                        <div class="row">
-                                            <div class="col-sm-9"></div>
-                                            <div class="col-sm-1">
+                                    }
+                                }
+                            </div>
+                            <div class="col-sm-2">
+                                @{ if ((string)ViewBag.RequestLevelPerson == "Team")
+                                    {
+                                        <p style="padding-top:30px;"> @Html.CheckBoxFor(m => m.OnlyReportedToMe)   My Direct Reportees</p>
 
-                                                <button type="button" class="btn btn-primary" onclick="loadDaywiseLeaves()">SEARCH</button>
-                                            </div>
-                                            <div class="col-sm-2">
-                                                <input type='submit' class="btn btn-primary  pull-right" onclick="return CheckAutoCompleteName()" value='EXPORT TO EXCEL' />
-                                            </div>
-                                        </div>
-                                            }
-                        }
-                    </form>
+                                    }
+
+                                }
+                            </div>
+                            <div class="col-sm-1" style="padding-top:23px;">
+                                <button type="button" class="btn btn-primary" onclick="loadoverTimePermissionDetail()">SEARCH</button>
+                            </div>
+                            <div class="col-sm-2" style="padding-top:23px;">
+                                <input type='submit' class="btn btn-primary pull-right" value='EXPORT TO EXCEL' onclick="return CheckAutoCompleteName()" />
+                            </div>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
-            <div id="divForDaywiseLeave" class="col-sm-12"></div>
+    <div id="divForPermissionDetail" class="col-sm-12"></div>
 
 }

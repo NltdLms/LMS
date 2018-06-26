@@ -655,7 +655,7 @@ function loadDaywiseLeaves() {
         function () {
             $("#Daywisetable_id").dataTable({
                 "aaSorting": [], columnDefs: [
-                    { type: 'date-eu', targets: 4 }
+                    { type: 'date-eu', targets: 3 }
                 ] })
             $("#divLoading").hide();
             $('html, body').animate({
@@ -696,6 +696,40 @@ function loadPermissionDetail() {
                 scrollTop: 230 // Means Less header height
             }, 400);
         });
+}
+function loadoverTimePermissionDetail() {
+    $("#alert_placeholder").empty();
+
+    if ($("#alert") != undefined) {
+        $("#alert").remove();
+    }
+
+    if ($("#OnlyReportedToMe").val() == undefined) {
+        var showTeam = false;
+    }
+    else {
+        var showTeam = $("#OnlyReportedToMe").prop('checked');
+    }
+    if ($("#Name").val() != undefined) {
+        if (!ValidateAutocompleteName($("#Name").val(), $("#SearchUserID").val())) {
+            Clearshowalert("Please Choose a valid Username from the List.", "alert alert-danger");
+            return;
+        }
+    }
+
+    $("#divLoading").show();
+    $("#divForPermissionDetail")
+        .load('/Admin/GetOverTimePermissionDetail?paramUserId=' + $("#SearchUserID").val() + '&reqUsr=' + $("#RequestLevelPerson").val() + '&startDate=' + $("#FromDate").val() + '&endDate=' + $("#ToDate").val() + '&OnlyReportedToMe=' + showTeam,
+            function () {
+                $("#Permissions_id").dataTable({
+                    columnDefs: [
+                        { type: 'date-eu', targets: 4 }]
+                });
+                $("#divLoading").hide();
+                $('html, body').animate({
+                    scrollTop: 230 // Means Less header height
+                }, 400);
+            });
 }
 
 function hideLeaveSplit(e) {
@@ -1278,6 +1312,49 @@ function loadAttendanceRangeSummary() {
             }
         });
 }
+
+function loadAccesCardAttendanceRangeSummary() {
+    $("#alert_placeholder").empty();
+    try {
+        $("#showalert").empty();
+    }
+    catch (e) {
+    }
+
+    //if ($("#RequestLevelPerson").val() === "Team") {
+    //    URL = '/Admin/loadAccesCardEmployeeAttendance?&FromDate=' + $('#FromDate').val() + '&ToDate=' + $('#ToDate').val() + '&requestLevelPerson=' + $('#RequestLevelPerson').val();
+    //}
+    //else {
+    URL = '/Admin/loadAccesCardEmployeeAttendance?ID=' + $("#CardID").val() + '&FromDate=' + $('#FromDate').val() + '&ToDate=' + $('#ToDate').val() + '&requestLevelPerson=' + $('#RequestLevelPerson').val();
+        //if (!ValidateAutocompleteName($("#Name").val(), $("#UserID").val())) {
+        //    Clearshowalert("Please Choose a valid Username from the List.", "alert alert-danger");
+        //    return;
+        //}
+    
+    $("#divLoading").show();
+    $("#divForEmployeeAttendance")
+        .load(URL,
+            function (responseText, textStatus, req) {
+                $("#divLoading").hide();
+                if (textStatus == "error") {
+                    Clearshowalert("No Records Found", "alert alert-danger");
+                    $('#Attendancetable_id').DataTable().clear().destroy();
+                }
+                else {
+                    $(".dtatable").dataTable({
+                        "aaSorting": [],
+                        columnDefs: [
+                            { type: 'date-eu', targets: 0 }
+                        ]
+                    });
+                    $('html, body').animate({
+                        scrollTop: 230  // Means Less header height
+                    }, 400);
+                }
+            });
+}
+
+
 function loadTimeSheetSummary() {
     $("#alert_placeholder").empty();
     var URL = '/Admin/LoadMyTeamTimesheet';
@@ -1622,6 +1699,16 @@ function ValidateAutocompleteName(name, userID) {
         }
     }
     if (name == "") {
+        if (userID != "") {
+            $("#SearchUserID").val("");
+            $("#UserID").val("");
+        }
+    }
+    return true;
+}
+
+function ValidateAceessCardNumber(CardId, userID) {
+    if (CardId == "") {
         if (userID != "") {
             $("#SearchUserID").val("");
             $("#UserID").val("");

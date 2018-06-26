@@ -117,6 +117,15 @@
 }
 
 @{
+    string title = string.Empty;
+    if (ViewBag.RequestLevelPerson == "My")
+    {
+        title = "My Permissions Report";
+    }
+    else
+    {
+        title = "Team - Permissions Report";
+    }
     if (Model.ErrorMsg != "" && Model.ErrorMsg != null)
     {
         <div class="alert alert-danger">
@@ -137,7 +146,7 @@
         <div class="col-sm-12">
             <div class="box box-primary">
                 <div class="box-header with-border">
-                    <h3 class="box-title">@((string)ViewBag.RequestLevelPerson + " Permissions Report")</h3>
+                    <h3 class="box-title">@title</h3>
                 </div>
                 <div class="box-body">
                     <div class="row">
@@ -146,7 +155,7 @@
                             <div class="col-sm-3">
 
                                 @Html.Label("Date Range")
-                                @Html.TextBoxFor(m => m.DateRange, new { @class = "form-control" })
+                                @Html.TextBoxFor(m => m.DateRange, new { @class = "form-control", @readonly = "readonly" })
                             </div>
                             <div class="col-sm-4">
                                 @{ if ((string)ViewBag.RequestLevelPerson != "My")
