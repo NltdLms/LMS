@@ -636,10 +636,9 @@
     <Content Include="Scripts\DataTables\responsive.bootstrap.js" />
     <Content Include="Scripts\DataTables\responsive.bootstrap.min.js" />
     <Content Include="Scripts\DataTables\responsive.bootstrap4.js" />
-    <Content Include="Scripts\DataTables\responsive.bootstrap4.min.js" />
-    <Content Include="Scripts\DataTables\responsive.foundation.js" />
+    <Content Include="Scripts\DataTables\responsive.bootstrap4.min.js" />   
     <Content Include="Scripts\DataTables\responsive.foundation.min.js" />
-    <Content Include="Scripts\DataTables\responsive.jqueryui.js" />
+
     <Content Include="Scripts\DataTables\responsive.jqueryui.min.js" />
     <Content Include="Scripts\DataTables\responsive.semanticui.js" />
     <Content Include="Scripts\DataTables\responsive.semanticui.min.js" />

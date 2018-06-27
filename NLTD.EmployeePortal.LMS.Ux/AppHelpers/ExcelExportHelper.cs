@@ -734,7 +734,7 @@ namespace NLTD.EmployeePortal.LMS.Ux.AppHelpers
                                                                                 UserID = at.UserID,
                                                                                 InOut = at.InOut,
                                                                                 AttendanceDate = at.InOutDate.ToString("dd-MM-yyyy"),
-                                                                                INOutTime = at.InOutDate.ToString("hh:mm:ss"),
+                                                                                INOutTime = at.InOutDate.ToString("HH:mm:ss"),
                                                                                 Name = at.Name
                                                                             }).ToList();
 
@@ -749,7 +749,7 @@ namespace NLTD.EmployeePortal.LMS.Ux.AppHelpers
                                                                                 UserID = at.UserID,
                                                                                 InOut = at.InOut,
                                                                                 AttendanceDate = at.InOutDate.ToString("dd-MM-yyyy"),
-                                                                                INOutTime = at.InOutDate.ToString("hh:mm:ss"),
+                                                                                INOutTime = at.InOutDate.ToString("HH:mm:ss"),
                                                                                 Name = at.Name,
                                                                                 CardID = at.CardID
                                                                             }).ToList();
