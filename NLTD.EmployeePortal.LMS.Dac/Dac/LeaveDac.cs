@@ -890,6 +890,7 @@ namespace NLTD.EmployeePortal.LMS.Dac
                 List<LeaveTypesModel> LeaveTypes = (from types in context.LeaveType
                                                     join emp in context.Employee on types.OfficeId equals emp.OfficeId
                                                     where types.OfficeId == OfficeId && emp.UserId == userId && (emp.Gender == types.ApplicableGender || types.ApplicableGender == "A")
+                                                    orderby types.SortOrder ascending
                                                     select new LeaveTypesModel
                                                     {
                                                         LeaveTypeId = types.LeaveTypeId,
