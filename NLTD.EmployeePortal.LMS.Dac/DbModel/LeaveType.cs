@@ -20,5 +20,7 @@ namespace NLTD.EmployeePortal.LMS.Dac.DbModel
         public bool IsLeave { get; set; }
 
         public bool IsTimeBased { get; set; }
+
+        public int SortOrder { get; set; }
     }
 }
