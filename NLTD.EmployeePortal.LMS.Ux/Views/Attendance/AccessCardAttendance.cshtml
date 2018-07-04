@@ -34,7 +34,7 @@
 @section scripts
 {
     <script src="~/Scripts/jquery-2.2.4.js"></script>
-    <script src="~/Scripts/lms.js?v=1.07"></script>
+    <script src="~/Scripts/lms.js?v=1.08"></script>
     <script type="text/javascript" src="~/Scripts/bootstrap.js"></script>
     <script src="~/Scripts/bootstrap-datetimepicker.js"></script>
     <link href="~/Content/bootstrap-datetimepicker.css" rel="stylesheet" />
@@ -130,25 +130,25 @@
 
                 });
 
-            $("#CardID").keydown(function (event) {
-                if (event.shiftKey) {
-                    event.preventDefault();
-                }
-                if (event.keyCode == 46 || event.keyCode == 8) {
-                }
-                else {
-                    if (event.keyCode < 95) {
-                        if (event.keyCode < 48 || event.keyCode > 57) {
-                            event.preventDefault();
-                        }
-                    }
-                    else {
-                        if (event.keyCode < 96 || event.keyCode > 105) {
-                            event.preventDefault();
-                        }
-                    }
-                }
-            });
+            //$("#CardID").keydown(function (event) {
+            //    if (event.shiftKey) {
+            //        event.preventDefault();
+            //    }
+            //    if (event.keyCode == 46 || event.keyCode == 8 || event.keyCode == 17) {
+            //    }
+            //    else {
+            //        if (event.keyCode < 95) {
+            //            if (event.keyCode < 48 || event.keyCode > 57) {
+            //                event.preventDefault();
+            //            }
+            //        }
+            //        else {
+            //            if (event.keyCode < 96 || event.keyCode > 105) {
+            //                event.preventDefault();
+            //            }
+            //        }
+            //    }
+            //});
         });
 
         function Validate() {
@@ -160,6 +160,12 @@
             }
         }
         function ValidateName() {
+            var x = $("#CardID").val();
+            if (isNaN(x)) {
+                Clearshowalert("Please Enter a valid Card Id.", "alert alert-danger");
+                return false;
+            }
+
             $("alert_placeholder").val("");
             if ($("#showalert") != undefined){
                 $("#showalert").remove();
@@ -183,7 +189,7 @@
     string heading = string.Empty;
     string exportExcel = string.Empty;
 
-    heading = "AccessCard Attendance";
+    heading = "Access Card Report";
 
     <div class="row">
         <div class="col-sm-12">
@@ -203,12 +209,12 @@
                                 <div class="col-sm-3">
 
                                     @Html.Label("Date Range")
-                                    @Html.TextBoxFor(m => m.DateRange, new { @class = "form-control" })
+                                    @Html.TextBoxFor(m => m.DateRange, new { @class = "form-control", @readonly = "readonly", @onpaste = "return true" })
                                 </div>
                                 <div class="col-sm-3">
 
                                     @Html.Label("AccessCard Number")
-                                    @Html.TextBoxFor(a =>a.CardID, null, new { @class = "form-control", @maxLength = "10" })
+                                    @Html.TextBoxFor(a => a.CardID, new { @class = "form-control", @maxLength = "9" })
                                 </div>
                                 @*<div class="col-sm-3" style="padding-top:10px">
                                         @if ((string)ViewBag.RequestLevelPerson == "Team")

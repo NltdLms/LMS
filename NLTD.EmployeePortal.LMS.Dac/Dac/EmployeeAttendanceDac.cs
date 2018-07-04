@@ -172,33 +172,7 @@ namespace NLTD.EmployeePortal.LMS.Dac.Dac
 
 
                                                                }).OrderBy(e => e.CardID).ToList();
-                            }
-                            else
-                            {
-                                IList<Int64> employeeIDs = null;
-                                EmployeeDac EmployeeHelperObj = new EmployeeDac();
-                                if (true)
-                                {
-                                    employeeIDs = EmployeeHelperObj.GetDirectEmployees(UserID);
-                                }
-                                else
-                                {
-                                    employeeIDs = EmployeeHelperObj.GetEmployeesReporting(UserID); // to get the employee Under the manager
-                                }
-
-                                employeeAttendanceModelList = (from ea in context.EmployeeAttendance
-                                                               join e in context.Employee on ea.UserID equals e.UserId
-                                                               where employeeIDs.Contains(ea.UserID ?? 0) && ea.InOutDate >= FromDateTime && ea.InOutDate <= ToDateTime
-                                                               select new EmployeeAttendanceModel
-                                                               {
-                                                                   UserID = ea.UserID,
-                                                                   InOutDate = ea.InOutDate,
-                                                                   //InOut = GetInOut(ea.InOut)
-                                                                   InOut = (ea.InOut ? "Out" : "In"),
-                                                                   Name = (e.FirstName + " " + e.LastName)
-                                                               }).OrderBy(e => e.Name).ThenByDescending(e => e.InOutDate).ToList();
-                                // Get all the employee time sheet under the manager
-                            }
+                            }                            
                         }
                     }
                 }

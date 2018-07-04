@@ -656,7 +656,8 @@ function loadDaywiseLeaves() {
             $("#Daywisetable_id").dataTable({
                 "aaSorting": [], columnDefs: [
                     { type: 'date-eu', targets: 3 }
-                ] })
+                ]
+            })
             $("#divLoading").hide();
             $('html, body').animate({
                 scrollTop: 230  // Means Less header height
@@ -697,7 +698,7 @@ function loadPermissionDetail() {
             }, 400);
         });
 }
-function loadoverTimePermissionDetail() {
+function loadOverTimePermissionDetail() {
     $("#alert_placeholder").empty();
 
     if ($("#alert") != undefined) {
@@ -720,16 +721,16 @@ function loadoverTimePermissionDetail() {
     $("#divLoading").show();
     $("#divForPermissionDetail")
         .load('/Admin/GetOverTimePermissionDetail?paramUserId=' + $("#SearchUserID").val() + '&reqUsr=' + $("#RequestLevelPerson").val() + '&startDate=' + $("#FromDate").val() + '&endDate=' + $("#ToDate").val() + '&OnlyReportedToMe=' + showTeam,
-            function () {
-                $("#Permissions_id").dataTable({
-                    columnDefs: [
-                        { type: 'date-eu', targets: 4 }]
-                });
-                $("#divLoading").hide();
-                $('html, body').animate({
-                    scrollTop: 230 // Means Less header height
-                }, 400);
+        function () {
+            $("#Permissions_id").dataTable({
+                columnDefs: [
+                    { type: 'date-eu', targets: 4 }]
             });
+            $("#divLoading").hide();
+            $('html, body').animate({
+                scrollTop: 230 // Means Less header height
+            }, 400);
+        });
 }
 
 function hideLeaveSplit(e) {
@@ -1260,7 +1261,8 @@ function loadTransactionLog() {
                     { type: 'date-eu', targets: 1 },
                     { type: 'date-eu', targets: 2 },
                     { type: 'date-eu', targets: 3 }
-                ] });
+                ]
+            });
             $("#divLoading").hide();
             $('html, body').animate({
                 scrollTop: 210  // Means Less header height
@@ -1305,7 +1307,8 @@ function loadAttendanceRangeSummary() {
                     "aaSorting": [],
                     columnDefs: [
                         { type: 'date-eu', targets: 0 }
-                    ]});
+                    ]
+                });
                 $('html, body').animate({
                     scrollTop: 230  // Means Less header height
                 }, 400);
@@ -1326,32 +1329,35 @@ function loadAccesCardAttendanceRangeSummary() {
     //}
     //else {
     URL = '/Admin/loadAccesCardEmployeeAttendance?ID=' + $("#CardID").val() + '&FromDate=' + $('#FromDate').val() + '&ToDate=' + $('#ToDate').val() + '&requestLevelPerson=' + $('#RequestLevelPerson').val();
-        //if (!ValidateAutocompleteName($("#Name").val(), $("#UserID").val())) {
-        //    Clearshowalert("Please Choose a valid Username from the List.", "alert alert-danger");
-        //    return;
-        //}
-    
+
+
+    var x = $("#CardID").val();
+    if (isNaN(x)) {
+        Clearshowalert("Please Enter a valid Card Id.", "alert alert-danger");
+        return;
+    }
+
     $("#divLoading").show();
     $("#divForEmployeeAttendance")
         .load(URL,
-            function (responseText, textStatus, req) {
-                $("#divLoading").hide();
-                if (textStatus == "error") {
-                    Clearshowalert("No Records Found", "alert alert-danger");
-                    $('#Attendancetable_id').DataTable().clear().destroy();
-                }
-                else {
-                    $(".dtatable").dataTable({
-                        "aaSorting": [],
-                        columnDefs: [
-                            { type: 'date-eu', targets: 0 }
-                        ]
-                    });
-                    $('html, body').animate({
-                        scrollTop: 230  // Means Less header height
-                    }, 400);
-                }
-            });
+        function (responseText, textStatus, req) {
+            $("#divLoading").hide();
+            if (textStatus == "error") {
+                Clearshowalert("No Records Found", "alert alert-danger");
+                $('#Attendancetable_id').DataTable().clear().destroy();
+            }
+            else {
+                $(".dtatable").dataTable({
+                    "aaSorting": [],
+                    columnDefs: [
+                        { type: 'date-eu', targets: 0 }
+                    ]
+                });
+                $('html, body').animate({
+                    scrollTop: 230  // Means Less header height
+                }, 400);
+            }
+        });
 }
 
 
