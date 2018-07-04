@@ -1333,7 +1333,7 @@ function loadAccesCardAttendanceRangeSummary() {
 
     var x = $("#CardID").val();
     if (isNaN(x)) {
-        Clearshowalert("Please Enter a valid Card Id.", "alert alert-danger");
+        Clearshowalert("Please enter a valid Card Id.", "alert alert-danger");
         return;
     }
 

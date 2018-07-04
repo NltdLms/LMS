@@ -162,7 +162,7 @@
         function ValidateName() {
             var x = $("#CardID").val();
             if (isNaN(x)) {
-                Clearshowalert("Please Enter a valid Card Id.", "alert alert-danger");
+                Clearshowalert("Please enter a valid Card Id.", "alert alert-danger");
                 return false;
             }
 
@@ -175,7 +175,7 @@
             }
             else {
                 if (!ValidateAceessCardNumber($("#CardID").val(), $("#UserID").val())) {
-                    Clearshowalert("Please Entere valid AccessCard Number", "alert alert-danger");
+                    Clearshowalert("Please entere valid AccessCard Number", "alert alert-danger");
                     return false;
                 }
             }
