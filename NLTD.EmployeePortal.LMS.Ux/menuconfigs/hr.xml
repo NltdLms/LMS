@@ -42,13 +42,13 @@
           <icon></icon>
         </MenuItem>
         <MenuItem>
-          <title>Over Time Report</title>
-          <url>/Admin/MyOverTimePermissions</url>
+          <title>Transaction Log</title>
+          <url>/Admin/MyTransactionLogs</url>
           <icon></icon>
         </MenuItem>
         <MenuItem>
-          <title>Transaction Log</title>
-          <url>/Admin/MyTransactionLogs</url>
+          <title>Over Time Report</title>
+          <url>/Admin/MyOverTimePermissions</url>
           <icon></icon>
         </MenuItem>
       </level1item>
@@ -96,6 +96,11 @@
         <MenuItem>
           <title>Transaction Log</title>
           <url>/Admin/TeamTransactionLogs</url>
+          <icon></icon>
+        </MenuItem>
+        <MenuItem>
+          <title>Over Time Report</title>
+          <url>/Admin/TeamOverTimePermissions</url>
           <icon></icon>
         </MenuItem>
       </level1item>
@@ -147,12 +152,7 @@
           <title>Shift Allocation - Team</title>
           <url>/Shift/TeamShiftAllocation</url>
           <icon></icon>
-        </MenuItem>
-              <MenuItem>
-          <title>AccessCard Attendance</title>
-          <url>/Attendance/AccessCardAttendance</url>
-          <icon></icon>
-        </MenuItem>
+        </MenuItem>             
       </level1item>
     </MenuItem>
     <MenuItem>
@@ -178,6 +178,11 @@
         <MenuItem>
           <title>Shift Master</title>
           <url>/Shift/ShiftMaster</url>
+          <icon></icon>
+        </MenuItem>
+        <MenuItem>
+          <title>Access Card Report</title>
+          <url>/Attendance/AccessCardAttendance</url>
           <icon></icon>
         </MenuItem>
       </level1item>

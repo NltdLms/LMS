@@ -90,7 +90,6 @@ namespace NLTD.EmployeePortal.LMS.Dac.Dac
             List<TimeSheetModel> timeSheetModelList = new List<TimeSheetModel>();
             List<ShiftQueryModel> ShiftQueryModelList = GetShiftDetails(UserID, FromDate, ToDate);
 
-            string personalPermisionLabel = ConfigurationManager.AppSettings["PersonalPermission"].ToString();
             string officialPermisionLabel = ConfigurationManager.AppSettings["PersonalOfficial"].ToString();
 
             var toDateShift = (from m in ShiftQueryModelList where m.ShiftDate == ToDate select new { fromTime = m.ShiftFromtime, toTime = m.ShiftTotime }).FirstOrDefault();
@@ -214,18 +213,17 @@ namespace NLTD.EmployeePortal.LMS.Dac.Dac
                 }
                 decimal LeaveDayQty = 0;
                 decimal permissionCountPersonal = 0;
-                decimal permissionCount = 0;
                 string StartDateType = "";
                 string EndDateType = "";
 
                 // To get the employee Leave Details
 
-                TimeSheetModelObj.Requests = GetLMSStatus(employeeLeaveList, ShiftQueryModelList[i].ShiftDate, out LeaveDayQty, out permissionCount);
+                TimeSheetModelObj.Requests = GetLMSStatus(employeeLeaveList, ShiftQueryModelList[i].ShiftDate, out LeaveDayQty, out permissionCountPersonal);
                 TimeSheetModelObj.StartDateType = GetHalfDayLMSType(employeeLeaveList, ShiftQueryModelList[i].ShiftDate, out StartDateType);
                 TimeSheetModelObj.EndDateType = GetHalfDayLMSType(employeeLeaveList, ShiftQueryModelList[i].ShiftDate, out EndDateType);
 
                 TimeSheetModelObj.LeaveDayQty = LeaveDayQty;
-                TimeSheetModelObj.PermissionCount = permissionCount;
+                TimeSheetModelObj.PermissionCount = permissionCountPersonal;
            
                
                 TimeSheetModelObj.permissionCountOfficial = permissionCountOfficial;

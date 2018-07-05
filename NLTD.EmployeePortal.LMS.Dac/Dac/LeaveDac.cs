@@ -1867,11 +1867,9 @@ namespace NLTD.EmployeePortal.LMS.Dac
                 for (int i = 0; i < permissions.Count; i++)
                 {
                     EmployeeProfile EmployeeProfileObj = new EmployeeDac().GetEmployeeProfile(permissions[i].UserId);
-                    string name = string.Empty;
                     string reportingManager = string.Empty;
                     if (EmployeeProfileObj != null)
                     {
-                        name = EmployeeProfileObj.FirstName + ' ' + EmployeeProfileObj.LastName;
                         reportingManager = EmployeeProfileObj.ReportedToName;
                     }
                     permissions[i].Month = ReturnMonthName(permissions[i].PermissionMonth);
