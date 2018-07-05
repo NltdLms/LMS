@@ -149,7 +149,6 @@ namespace NLTD.EmployeePortal.LMS.Dac
         public IList<LeaveSummary> GetLeaveSumary(long UserId, Int32 summaryYear)
         {
             IList<LeaveSummary> lstSummary;
-            string reportingName = string.Empty;
 
             using (var context = new NLTDDbContext())
             {
@@ -529,7 +528,6 @@ namespace NLTD.EmployeePortal.LMS.Dac
         public IList<TeamLeaves> GetLeaveRequests(ManageTeamLeavesQueryModel qryMdl)
         {
             IList<Int64> empList = GetEmployeesReporting(qryMdl.LeadId);
-            TeamLeaves teamLeaves = new TeamLeaves();
             string qryStatus = string.Empty;
             if (qryMdl.ShowApprovedLeaves)
             {
@@ -706,7 +704,6 @@ namespace NLTD.EmployeePortal.LMS.Dac
         public IList<TeamLeaves> GetTeamLeaveHistory(ManageTeamLeavesQueryModel qryMdl)
         {
             IList<Int64> empList = GetEmployeesReporting(qryMdl.LeadId);
-            TeamLeaves teamLeaves = new TeamLeaves();
             using (var context = new NLTDDbContext())
             {
                 DateTime QryFromDate = qryMdl.FromDate ?? Convert.ToDateTime("01/01/1900");
@@ -946,7 +943,6 @@ namespace NLTD.EmployeePortal.LMS.Dac
         public string SaveLeaveRequest(LeaveRequestModel request)
         {
             int isSaved = 0;
-            string retMsg = string.Empty;
             Int64 newId = 0;
             using (var context = new NLTDDbContext())
             {
@@ -959,7 +955,6 @@ namespace NLTD.EmployeePortal.LMS.Dac
                         string duplicateRequest = string.Empty;
                         if (isTimeBased)
                             request.LeaveUpto = request.LeaveFrom;
-                        string firstDayUptoTimeType = string.Empty;
 
                         var chkLeave = context.Leave
                         .Where(h => h.UserId == request.UserId && (h.Status == "A" || h.Status == "P") && ((request.LeaveFrom >= h.StartDate && request.LeaveFrom <= h.EndDate) || (request.LeaveUpto >= h.StartDate && request.LeaveUpto <= h.EndDate) || (request.LeaveFrom <= h.StartDate && request.LeaveUpto >= h.EndDate))).ToList();
@@ -1114,7 +1109,6 @@ namespace NLTD.EmployeePortal.LMS.Dac
                                 return "HolidayToDate";
                             }
                         }
-                        IList<WeekOffDayModel> lstOffDays = ReturnWeekOffDays(request.UserId);
                         if (isTimeBased)
                         {
                             if (request.LeaveFrom.Date != request.LeaveUpto.Date)
@@ -1565,7 +1559,6 @@ namespace NLTD.EmployeePortal.LMS.Dac
 
         public IList<LeaveHeaderModel> GetLeaveHederDtl(Int64 UserId)
         {
-            LeaveHeaderModel headMdl = new LeaveHeaderModel();
             IList<LeaveHeaderModel> lstRetMdl = new List<LeaveHeaderModel>();
             using (var context = new NLTDDbContext())
             {

@@ -11,7 +11,7 @@ namespace NLTD.EmployeePortal.LMS.Common.DisplayModel
         public DateTime InOutDate { get; set; }
 
         public string AttendanceDate { get; set; }
-        public string INOutTime { get; set; }
+        public string InOutTime { get; set; }
         public string InOut { get; set; }
 
         public string ErrorMessage { get; set; }

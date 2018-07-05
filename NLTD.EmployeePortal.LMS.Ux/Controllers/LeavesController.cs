@@ -347,7 +347,7 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
                     startDateFormatted = DateTime.Parse(FromDate, new CultureInfo("en-GB", true));
                     endDateFormatted = DateTime.Parse(ToDate, new CultureInfo("en-GB", true));
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     throw;
                 }
@@ -379,7 +379,7 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
                     startDateFormatted = DateTime.Parse(FromDate, new CultureInfo("en-GB", true));
                     endDateFormatted = DateTime.Parse(ToDate, new CultureInfo("en-GB", true));
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     throw;
                 }
@@ -482,7 +482,7 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
                         startDateFormatted = DateTime.Parse(startDate, new CultureInfo("en-GB", true));
                         endDateFormatted = DateTime.Parse(endDate, new CultureInfo("en-GB", true));
                     }
-                    catch (Exception ex)
+                    catch (Exception)
                     {
                         throw;
                     }
@@ -517,7 +517,7 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
                         startDateFormatted = DateTime.Parse(LeaveFrom, new CultureInfo("en-GB", true));
                         endDateFormatted = DateTime.Parse(LeaveUpto, new CultureInfo("en-GB", true));
                     }
-                    catch (Exception ex)
+                    catch
                     {
                     }
                 }
@@ -550,7 +550,7 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
                         startDateFormatted = DateTime.Parse(LeaveFrom, new CultureInfo("en-GB", true));
                         endDateFormatted = DateTime.Parse(LeaveUpto, new CultureInfo("en-GB", true));
                     }
-                    catch (Exception ex)
+                    catch (Exception)
                     {
                         throw;
                     }

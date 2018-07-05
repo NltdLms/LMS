@@ -733,7 +733,7 @@ namespace NLTD.EmployeePortal.LMS.Ux.AppHelpers
                                                                                 UserID = at.UserID,
                                                                                 InOut = at.InOut,
                                                                                 AttendanceDate = at.InOutDate.ToString("dd-MM-yyyy"),
-                                                                                INOutTime = at.InOutDate.ToString("HH:mm:ss"),
+                                                                                InOutTime = at.InOutDate.ToString("HH:mm:ss"),
                                                                                 Name = at.Name
                                                                             }).ToList();
 
@@ -748,7 +748,7 @@ namespace NLTD.EmployeePortal.LMS.Ux.AppHelpers
                                                                                 UserID = at.UserID,
                                                                                 InOut = at.InOut,
                                                                                 AttendanceDate = at.InOutDate.ToString("dd-MM-yyyy"),
-                                                                                INOutTime = at.InOutDate.ToString("HH:mm:ss"),
+                                                                                InOutTime = at.InOutDate.ToString("HH:mm:ss"),
                                                                                 Name = at.Name,
                                                                                 CardID = at.CardID
                                                                             }).ToList();
@@ -1095,8 +1095,8 @@ namespace NLTD.EmployeePortal.LMS.Ux.AppHelpers
                 DataTable dataTable = ListToDataTable<EmployeeAttendanceModel>(data);
 
                 dataTable.Columns["CardID"].ColumnName = "Card Id";
-                dataTable.Columns["AttendanceDate"].ColumnName = "Attendance Date";
-                dataTable.Columns["INOutTime"].ColumnName = "In Out Time";
+                dataTable.Columns["AttendanceDate"].ColumnName = "Date";
+                dataTable.Columns["InOutTime"].ColumnName = "In Out Time";
                 dataTable.Columns["InOut"].ColumnName = "In Out";
 
                 ExcelWorksheet workSheet = package.Workbook.Worksheets.Add("AttendanceDetails");

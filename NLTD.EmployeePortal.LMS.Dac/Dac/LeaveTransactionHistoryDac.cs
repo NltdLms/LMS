@@ -60,8 +60,7 @@ namespace NLTD.EmployeePortal.LMS.Dac.Dac
                                 }
                             }
                         }
-
-                        IList<LeaveTransactionDetail> retList = new List<LeaveTransactionDetail>();
+                        
                         var groupedLeaveList = transactionDetails.GroupBy(u => u.LeaveTypeId)
                                                               .Select(grp => new { LeaveTypeId = grp.Key, leaveTransactionHistoryModel = grp.ToList() })
                                                               .ToList();
