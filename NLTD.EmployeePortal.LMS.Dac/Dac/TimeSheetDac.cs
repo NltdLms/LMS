@@ -270,7 +270,8 @@ namespace NLTD.EmployeePortal.LMS.Dac.Dac
             LeaveDayQty = 0;
             PermissionCount = 0;
             string LMSStatus = string.Empty;
-            string LMSStatus_Final = string.Empty;
+            string LMSPermissionStatus = string.Empty;
+            string LMSLeaveStatus = string.Empty;
             string personalPermisionLabel = ConfigurationManager.AppSettings["PersonalPermission"].ToString();
             string officialPermisionLabel = ConfigurationManager.AppSettings["PersonalOfficial"].ToString();
             try
@@ -284,34 +285,42 @@ namespace NLTD.EmployeePortal.LMS.Dac.Dac
                         {
                             LMSStatus = string.Join(", ", Status.LeaveType);
                             LeaveDayQty = Status.LeaveDayQty;
-                            if (LMSStatus != officialPermisionLabel)
+                            if (LMSStatus == personalPermisionLabel || LMSStatus == officialPermisionLabel)
                             {
-                                PermissionCount = Status.PermissionCount;
-                            }
-                            if (string.IsNullOrEmpty(LMSStatus_Final))
-                            {
-                                if (LMSStatus != personalPermisionLabel)
+                                if (string.IsNullOrEmpty(LMSPermissionStatus))
                                 {
-                                    LMSStatus = "Permission (O: ";
-                                    LMSStatus_Final = LMSStatus + Status.PermissionCount + "hrs)";
+                                    if (LMSStatus == officialPermisionLabel)
+                                    {
+                                        LMSPermissionStatus = "Permission (O: " + Status.PermissionCount + "hrs)";
+                                    }
+                                    else
+                                    {
+                                        LMSPermissionStatus = "Permission (P: " + Status.PermissionCount + "hrs)";
+                                    }
                                 }
                                 else
                                 {
-                                    LMSStatus = "Permission (P: ";
-                                    LMSStatus_Final = LMSStatus + Status.PermissionCount + "hrs)";
+                                    if (LMSStatus == officialPermisionLabel)
+                                    {
+                                        LMSPermissionStatus = LMSPermissionStatus.Remove(LMSPermissionStatus.Length - 1) + ", O: " + Status.PermissionCount + "hrs)";
+                                    }
+                                    else
+                                    {
+                                        LMSPermissionStatus = LMSPermissionStatus.Remove(LMSPermissionStatus.Length - 1) + ", P: " + Status.PermissionCount + "hrs)";
+                                    }
+
                                 }
                             }
                             else
                             {
-                                if (LMSStatus != personalPermisionLabel)
+                                if (string.IsNullOrEmpty(LMSLeaveStatus))
                                 {
-                                    LMSStatus = "O: ";
+                                    LMSLeaveStatus = LMSStatus;
                                 }
                                 else
                                 {
-                                    LMSStatus = "P: ";
+                                    LMSLeaveStatus = ", " + LMSStatus;
                                 }
-                                LMSStatus_Final = LMSStatus_Final.Remove(LMSStatus_Final.Length - 1) + "," + LMSStatus + Status.PermissionCount + "hrs)";
                             }
                         }
                     }
@@ -320,8 +329,8 @@ namespace NLTD.EmployeePortal.LMS.Dac.Dac
             catch (Exception)
             {
                 throw;
-            }
-            return LMSStatus_Final;
+            } 
+            return LMSLeaveStatus + (LMSLeaveStatus.Length > 0 ? ", " : "") + LMSPermissionStatus;
         }
 
         public string GetHalfDayLMSType(List<EmployeeLeave> employeeLeaveList, DateTime statusDate, out string StartDateType)
