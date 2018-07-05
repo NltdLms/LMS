@@ -279,7 +279,7 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
                     startDateFormatted = DateTime.Parse(startDate, new CultureInfo("en-GB", true));
                     endDateFormatted = DateTime.Parse(endDate, new CultureInfo("en-GB", true));
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     throw;
                 }
@@ -356,7 +356,7 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
                     startDateFormatted = DateTime.Parse(startDate, new CultureInfo("en-GB", true));
                     endDateFormatted = DateTime.Parse(endDate, new CultureInfo("en-GB", true));
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     throw;
                 }
@@ -418,7 +418,7 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
                     startDateFormatted = DateTime.Parse(startDate, new CultureInfo("en-GB", true));
                     endDateFormatted = DateTime.Parse(endDate, new CultureInfo("en-GB", true));
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     throw;
                 }
@@ -503,7 +503,6 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
 
         public ActionResult loadEmployeeAttendance(string ID, string FromDate, string ToDate, string requestLevelPerson, bool myDirectEmployees)
         {
-            string errorMessage = string.Empty;
             IList<EmployeeAttendanceModel> employeeAttendanceModelList = GetEmployeeAttendanceList(ID, FromDate, ToDate, requestLevelPerson, myDirectEmployees);
             ViewBag.RequestLevelPerson = requestLevelPerson;
             return PartialView("EmployeeAttendanceDtlPartial", employeeAttendanceModelList);
@@ -511,7 +510,6 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
 
         public ActionResult loadAccesCardEmployeeAttendance(string ID, string FromDate, string ToDate, string requestLevelPerson)
         {
-            string errorMessage = string.Empty;
             IList<EmployeeAttendanceModel> employeeAttendanceModelList = GetAccessCardEmployeeAttendanceList(ID, FromDate, ToDate, requestLevelPerson);
             ViewBag.RequestLevelPerson = requestLevelPerson;
             return PartialView("EmployeeAcessCardAttendanceDtlPartial", employeeAttendanceModelList);
@@ -591,7 +589,6 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
         public List<TimeSheetModel> GetEmployeeTimeSheet(TimeSheetQueryModel TimeSheetQueryModelObj, out string errorMessage, string requestLevelPerson)
         {
             errorMessage = string.Empty;
-            List<EmployeeAttendanceModel> employeeAttendanceModelList = new List<EmployeeAttendanceModel>();
             ITimesheetHelper EmployeeAttendanceHelperObj = new TimesheetClient();
             DateTime currentDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day);
             if (string.IsNullOrEmpty(TimeSheetQueryModelObj.Name))
@@ -677,7 +674,7 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
                     TimeSheetQueryModelObj.FromDate = DateTime.Parse(startDate, new CultureInfo("en-GB", true));
                     TimeSheetQueryModelObj.ToDate = DateTime.Parse(endDate, new CultureInfo("en-GB", true));
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     throw;
                 }
@@ -723,14 +720,12 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
 
             if (excelData.Count > 0)
             {
-                List<string> columns = new List<string>() { "AttendanceDate", "INOutTime", "InOut", "Name" };
+                List<string> columns = new List<string>() { "AttendanceDate", "InOutTime", "InOut", "Name" };
                 // string fileName = "Attendance.xlsx";
                 string fileName = string.Format("Attendance_{0}{1}", DateTime.Now.ToString("ddMMyyyyHHmmss"), ".xlsx");
                 if (EmployeeAttendanceQueryModelObj.RequestLevelPerson == "My")
                 {
-                    columns = new List<string>() { "AttendanceDate", "INOutTime", "InOut" };
-                    EmployeeProfile profile = (EmployeeProfile)Session["Profile"];
-                    // fileName = string.Format("{0} {1}{2}{3}", profile.FirstName , profile.LastName, DateTime.Now.ToString("ddMMyyyyHHmmss"), ".xlsx");
+                    columns = new List<string>() { "AttendanceDate", "InOutTime", "InOut" };
                 }
 
                 byte[] filecontent = ExcelExportHelper.ExportExcelAttendance(excelData, "", false, columns.ToArray());
@@ -752,12 +747,11 @@ public ActionResult ExportAccessCardAttendanceToExcel(EmployeeAttendanceQueryMod
 
             if (excelData.Count > 0)
             {
-                List<string> columns = new List<string>() { "Card Id", "Attendance Date", "In Out Time", "In Out", "Name" };
+                List<string> columns = new List<string>() { "Card Id", "Date", "In Out Time", "In Out", "Name" };
                 string fileName = string.Format("AccessCardReport_{0}{1}", DateTime.Now.ToString("ddMMyyyyHHmmss"), ".xlsx");
                 if (EmployeeAttendanceQueryModelObj.RequestLevelPerson == "My")
                 {
-                    columns = new List<string>() { "Card Id", "Attendance Date", "In Out Time", "In Out", "Name" };
-                    EmployeeProfile profile = (EmployeeProfile)Session["Profile"];
+                    columns = new List<string>() { "Card Id", "Date", "In Out Time", "In Out", "Name" };
                 }
 
                 byte[] filecontent = ExcelExportHelper.ExportExcelAccessCardAttendance(excelData, "", false, columns.ToArray());
@@ -823,7 +817,7 @@ public ActionResult ExportAccessCardAttendanceToExcel(EmployeeAttendanceQueryMod
                     startDateFormatted = DateTime.Parse(startDate, new CultureInfo("en-GB", true));
                     endDateFormatted = DateTime.Parse(endDate, new CultureInfo("en-GB", true));
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     throw;
                 }
@@ -880,7 +874,7 @@ public ActionResult ExportAccessCardAttendanceToExcel(EmployeeAttendanceQueryMod
                     startDateFormatted = DateTime.Parse(startDate, new CultureInfo("en-GB", true));
                     endDateFormatted = DateTime.Parse(endDate, new CultureInfo("en-GB", true));
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     throw;
                 }

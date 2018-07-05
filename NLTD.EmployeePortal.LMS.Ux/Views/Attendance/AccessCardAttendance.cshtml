@@ -129,26 +129,6 @@
                         400);
 
                 });
-
-            //$("#CardID").keydown(function (event) {
-            //    if (event.shiftKey) {
-            //        event.preventDefault();
-            //    }
-            //    if (event.keyCode == 46 || event.keyCode == 8 || event.keyCode == 17) {
-            //    }
-            //    else {
-            //        if (event.keyCode < 95) {
-            //            if (event.keyCode < 48 || event.keyCode > 57) {
-            //                event.preventDefault();
-            //            }
-            //        }
-            //        else {
-            //            if (event.keyCode < 96 || event.keyCode > 105) {
-            //                event.preventDefault();
-            //            }
-            //        }
-            //    }
-            //});
         });
 
         function Validate() {
@@ -175,7 +155,7 @@
             }
             else {
                 if (!ValidateAceessCardNumber($("#CardID").val(), $("#UserID").val())) {
-                    Clearshowalert("Please entere valid AccessCard Number", "alert alert-danger");
+                    Clearshowalert("Please enter a valid Card Id.", "alert alert-danger");
                     return false;
                 }
             }
@@ -213,18 +193,9 @@
                                 </div>
                                 <div class="col-sm-3">
 
-                                    @Html.Label("AccessCard Number")
+                                    @Html.Label("Access Card Number")
                                     @Html.TextBoxFor(a => a.CardID, new { @class = "form-control", @maxLength = "9" })
                                 </div>
-                                @*<div class="col-sm-3" style="padding-top:10px">
-                                        @if ((string)ViewBag.RequestLevelPerson == "Team")
-                                        {
-                                            <br />
-                                            @Html.CheckBoxFor(m => m.DirectEmployees, new { id = "mydirectemployeecheck", @checked = "checked" })
-                                            @Html.Label("My Direct Reportees")
-
-                                        }
-                                    </div>*@
                                 <div class="col-sm-3" style="text-align:right">
                                     <br />
                                     <button style="margin: 6px 12px " type="button" class="btn btn-primary" onclick="loadAccesCardAttendanceRangeSummary()">SEARCH</button>

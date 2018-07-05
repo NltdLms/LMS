@@ -385,7 +385,6 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
 
             using (var client = new EmployeeLeaveBalanceClient())
             {
-                long userid = this.UserId;
                 lstProfile = client.GetLeaveBalanceEmpProfile(UserId);
             }
 

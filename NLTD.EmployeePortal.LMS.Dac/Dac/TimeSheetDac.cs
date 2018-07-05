@@ -327,7 +327,6 @@ namespace NLTD.EmployeePortal.LMS.Dac.Dac
         public string GetHalfDayLMSType(List<EmployeeLeave> employeeLeaveList, DateTime statusDate, out string StartDateType)
         {
             StartDateType = string.Empty;
-            string LMSStatus = string.Empty;
 
             try
             {
