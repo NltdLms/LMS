@@ -172,7 +172,8 @@ namespace NLTD.EmployeePortal.LMS.Dac.Dac
                                                               EndDate = ld.PermissionDate,
                                                               LeaveType = lt.Type,
                                                               TimeFrom = ld.TimeFrom,
-                                                              TimeTo = ld.TimeTo
+                                                              TimeTo = ld.TimeTo,
+                                                              LeaveTypeId=lt.LeaveTypeId
                                                           }
                                  ).ToList();
 
