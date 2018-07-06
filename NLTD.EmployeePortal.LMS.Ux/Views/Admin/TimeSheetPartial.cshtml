@@ -153,116 +153,71 @@ else
 
                         }
 
-                        <tr>
+                <tr>
 
-                            <td>
-                                @if (Model[i].WorkingDate != null)
-                                {
-                                    @Model[i].WorkingDate.ToString("dd-MM-yyyy")
-                                }
-                                else
-                                {
-                                    @Html.DisplayName("-")
-                                }
-                            </td>
-                            <td>
-                                @Model[i].WorkingDate.DayOfWeek
-                            </td>
-                            <td>
+                    <td>
+                        @if (Model[i].WorkingDate != null)
+        {
+                @Model[i].WorkingDate.ToString("dd-MM-yyyy")
+}
+else
+{
+                @Html.DisplayName("-")
+}
+                    </td>
+                    <td>
+                        @Model[i].WorkingDate.DayOfWeek
+                    </td>
+                    <td>
 
-                                @Model[i].Shift
-                            </td>
-                            <td>
-                                @if (Model[i].InTime == DateTime.MinValue)
-                                {
-                                    @Html.DisplayName("-")
-                                }
-                                else if (@Model[i].InTime != null)
-                                {
-                                    @Model[i].InTime.ToString("HH:mm:ss");
-                                }
+                        @Model[i].Shift
+                    </td>
+                    <td>
+                        @if (Model[i].InTime == DateTime.MinValue)
+        {
+                @Html.DisplayName("-")
+}
+else if (@Model[i].InTime != null)
+{
+                @Model[i].InTime.ToString("HH:mm:ss");
+}
 
-                                else
-                                {
-                                    @Html.DisplayName("-")
-                                }
-                            </td>
-                            <td>
+else
+{
+                @Html.DisplayName("-")
+}
+                    </td>
+                    <td>
 
-                                @if (Model[i].OutTime == DateTime.MinValue)
-                                {
-                                    @Html.DisplayName("-")
-                                }
-                                else if (@Model[i].OutTime != null)
-                                {
-                                    @Model[i].OutTime.ToString("HH:mm:ss")
-                                }
-                                else
-                                {
-                                    @Html.DisplayName("-")
-                                }
-                            </td>
-                            <td class="@statusStyle">
-                                @Model[i].WorkingHours
-                            </td>
-                            <td>
-                                @Model[i].Status
-                            </td>
-
-                            @if (Model[i].StartDateType == null && Model[i].EndDateType == null)
-                            {
-                                <td>
-                                    @Model[i].Requests
-                                </td>
-                            }
-
-                            else
-                            {
-                                if (Model[i].StartDateType == "F" && Model[i].EndDateType == "F")
-                                {
-                                    if (Model[i].Requests.Contains(','))
-                                    {
-                                        <td>
-                                            @string.Concat(Model[i].Requests.Split(',')[0], " (First Half)", ",", Model[i].Requests.Split(',')[1], " (Second Half)")
-                                        </td>
-                                    }
-                                    else
-                                    {
-                                        <td>
-                                            @string.Concat(Model[i].Requests, " (First Half)")
-                                        </td>
-                                    }
-                                }
-                                else if (@Model[i].StartDateType == "S" && @Model[i].EndDateType == "S")
-                                {
-                                    if (Model[i].Requests.Contains(','))
-                                    {
-                                        <td>
-                                            @string.Concat(Model[i].Requests.Split(',')[0], " (First Half)", ",", Model[i].Requests.Split(',')[1], " (Second Half)")
-                                        </td>
-                                    }
-                                    else
-                                    {
-                                        <td>
-                                            @string.Concat(Model[i].Requests, " (Second Half)")
-                                        </td>
-                                    }
-                                }
-                                else
-                                {
-                                    <td>
-                                        @Model[i].Requests
-                                    </td>
-                                }
-                            }
-
-                            <td>
-                                @Model[i].LateIn
-                            </td>
-                            <td>
-                                @Model[i].EarlyOut
-                            </td>
-                        </tr>
+                        @if (Model[i].OutTime == DateTime.MinValue)
+        {
+                @Html.DisplayName("-")
+}
+else if (@Model[i].OutTime != null)
+{
+                @Model[i].OutTime.ToString("HH:mm:ss")
+}
+else
+{
+                @Html.DisplayName("-")
+}
+                    </td>
+                    <td class="@statusStyle">
+                        @Model[i].WorkingHours
+                    </td>
+                    <td>
+                        @Model[i].Status
+                    </td>
+                    <td>
+                        @Model[i].Requests
+                    </td>
+                    <td>
+                        @Model[i].LateIn
+                    </td>
+                    <td>
+                        @Model[i].EarlyOut
+                    </td>
+                </tr>
 
                     }
                 }
