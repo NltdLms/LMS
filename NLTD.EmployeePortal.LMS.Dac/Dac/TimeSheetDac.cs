@@ -276,13 +276,13 @@ namespace NLTD.EmployeePortal.LMS.Dac.Dac
             {
                 if (employeeLeaveList.Count > 0)
                 {
-                    var StatusList = (from e in employeeLeaveList where statusDate >= e.StartDate && statusDate <= e.EndDate select new { e.LeaveType, e.LeaveDayQty, e.PermissionCount, e.StartDateType });
+                    var StatusList = (from e in employeeLeaveList where statusDate >= e.StartDate && statusDate <= e.EndDate select new { e.LeaveType, e.LeaveDayQty, e.PermissionCount, e.StartDateType,e.LeaveTypeId });
                     if (StatusList != null && StatusList.Count() > 0)
                     {
                         foreach (var Status in StatusList)
                         {
                             LeaveDayQty = Status.LeaveDayQty;
-                            if (Status.LeaveType == personalPermisionLabel || Status.LeaveType == officialPermisionLabel)
+                            if (Status.LeaveType == personalPermisionLabel || Status.LeaveType == officialPermisionLabel || Status.LeaveTypeId == 12)
                             {
                                 if (string.IsNullOrEmpty(LMSPermissionStatus))
                                 {
@@ -293,7 +293,11 @@ namespace NLTD.EmployeePortal.LMS.Dac.Dac
                                     else if (Status.LeaveType == personalPermisionLabel)
                                     {
                                         LMSPermissionStatus = "Permission (P: " + Status.PermissionCount + "hrs)";
-                                    }                                    
+                                    }
+                                    else
+                                    {
+                                        LMSPermissionStatus = Status.LeaveType + ": " + Status.PermissionCount + "hrs";
+                                    }
                                 }
                                 else
                                 {
@@ -304,7 +308,12 @@ namespace NLTD.EmployeePortal.LMS.Dac.Dac
                                     else if (Status.LeaveType == personalPermisionLabel)
                                     {
                                         LMSPermissionStatus = LMSPermissionStatus.Remove(LMSPermissionStatus.Length - 1) + ", P: " + Status.PermissionCount + "hrs)";
-                                    }                                    
+                                    }
+                                    else
+                                    {
+                                        LMSPermissionStatus = LMSPermissionStatus.Remove(LMSPermissionStatus.Length - 1) + ")," + Status.LeaveType + ": " + Status.PermissionCount + "hrs";
+                                    }
+
                                 }
                             }
                             else
