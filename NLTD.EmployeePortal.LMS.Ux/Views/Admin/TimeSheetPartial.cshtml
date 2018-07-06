@@ -455,58 +455,7 @@ else
             totalHours = "0" + totalHours;
         }
         return string.Format("{0}:{1}", totalHours, t.ToString("mm\\:ss"));
-    }
-
-    //public TimeSheetConsolidate CalculateTimeSheetConsolidation(TimeSheetModel TimeSheetModelObj, TimeSheetConsolidate TimeSheetConsolidateObj)
-    //{
-    //    TimeSheetConsolidateObj.weeklyHours = TimeSheetConsolidateObj.weeklyHours + TimeSheetModelObj.WorkingHours;
-    //    TimeSheetConsolidateObj.monthlyHours = TimeSheetConsolidateObj.monthlyHours + TimeSheetModelObj.WorkingHours;
-    //    if (TimeSheetModelObj.LateIn.Seconds > 0)
-    //    {
-    //        TimeSheetConsolidateObj.weeklyLateCount = TimeSheetConsolidateObj.weeklyLateCount + 1;
-    //        TimeSheetConsolidateObj.monthlyLateCount = TimeSheetConsolidateObj.monthlyLateCount + 1;
-    //    }
-    //    if (TimeSheetModelObj.EarlyOut.Seconds > 0)
-    //    {
-    //        TimeSheetConsolidateObj.weeklyEarlyCount = TimeSheetConsolidateObj.weeklyEarlyCount + 1;
-    //        TimeSheetConsolidateObj.monthlyEarlyCount = TimeSheetConsolidateObj.monthlyEarlyCount + 1;
-    //    }
-    //    if (!string.IsNullOrEmpty(TimeSheetModelObj.LMSStatus) &&
-    //            TimeSheetModelObj.LMSStatus.Contains("Permission"))
-    //    {
-    //        TimeSheetConsolidateObj.weeklyPermissionCount = TimeSheetConsolidateObj.weeklyPermissionCount + 1;
-    //        TimeSheetConsolidateObj.monthlyPermissionCount = TimeSheetConsolidateObj.monthlyPermissionCount + 1;
-    //    }
-    //    if (!string.IsNullOrEmpty(TimeSheetModelObj.LMSStatus) && TimeSheetModelObj.LMSStatus.Contains("Leave"))
-    //    {
-    //        TimeSheetConsolidateObj.weeklyLeaveCount = TimeSheetConsolidateObj.weeklyLeaveCount + 1;
-    //        TimeSheetConsolidateObj.monthlyLeaveCount = TimeSheetConsolidateObj.monthlyLeaveCount + 1;
-    //    }
-    //    TimeSheetConsolidateObj.isWeeklyHoursUpdate = true;
-    //    TimeSheetConsolidateObj.isMonthlyHoursUpdate = true;
-    //    return TimeSheetConsolidateObj;
-    //}
-    //public TimeSheetConsolidate ClearWeeklyTimeSheetConsolidation(TimeSheetConsolidate TimeSheetConsolidateObj)
-    //{
-    //    TimeSheetConsolidateObj.weeklyEarlyCount = 0;
-    //    TimeSheetConsolidateObj.weeklyLateCount = 0;
-    //    TimeSheetConsolidateObj.weeklyPermissionCount = 0;
-    //    TimeSheetConsolidateObj.weeklyLeaveCount = 0;
-    //    TimeSheetConsolidateObj.weeklyHours = new TimeSpan();
-    //    TimeSheetConsolidateObj.isWeeklyHoursUpdate = false;
-
-    //    return TimeSheetConsolidateObj;
-    //}
-    //public TimeSheetConsolidate ClearMonthlyTimeSheetConsolidation(TimeSheetConsolidate TimeSheetConsolidateObj)
-    //{
-    //    TimeSheetConsolidateObj.monthlyEarlyCount = 0;
-    //    TimeSheetConsolidateObj.monthlyLateCount = 0;
-    //    TimeSheetConsolidateObj.monthlyPermissionCount = 0;
-    //    TimeSheetConsolidateObj.monthlyLeaveCount = 0;
-    //    TimeSheetConsolidateObj.monthlyHours = new TimeSpan();
-    //    TimeSheetConsolidateObj.isMonthlyHoursUpdate = false;
-    //    return TimeSheetConsolidateObj;
-    //}
+    }    
 
     public TimeSheetConsolidate GetWeeklyHoursConsolidation(List<TimeSheetModel> TimeSheetModelList, DateTime fromDatetime, Int64 userID, string type)
     {
