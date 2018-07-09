@@ -29,5 +29,8 @@ namespace NLTD.EmployeePortal.LMS.Common.DisplayModel
         public String EndDateType { get; set; }
 
         public decimal PermissionCount { get; set; }
+
+        public decimal WorkFromHomeDayQty    { get; set; }
+
     }
 }
