@@ -568,7 +568,8 @@ namespace NLTD.EmployeePortal.LMS.Dac
                                            ReportingToId = user.ReportingToId,
                                            isTimeBased = types.IsTimeBased,
                                            Comments = leave.Comments,
-                                           AppliedById = leave.AppliedBy
+                                           AppliedById = leave.AppliedBy,
+                                           LeaveTypeId = types.LeaveTypeId
                                        }).AsQueryable();
 
                 List<LeaveItem> LeaveItems = new List<LeaveItem>();
@@ -601,8 +602,8 @@ namespace NLTD.EmployeePortal.LMS.Dac
                                   isTimeBased = l.isTimeBased,
                                   Comments = l.Comments,
                                   PermissionInMonth = (l.isTimeBased == false) ? "" : ReturnPermissionHoursPerMonth(l.LeaveFromDate.Month, l.UserId, l.LeaveTypeId),
-                                  AppliedByName = e.FirstName + " " + e.LastName,
-                                  LeaveTypeId = types.LeaveTypeId
+                                  AppliedByName = e.FirstName + " " + e.LastName
+                                  
                               }).ToList();
 
                 var pdLeaveId = (from items in LeaveItems
