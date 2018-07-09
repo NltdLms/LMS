@@ -600,8 +600,9 @@ namespace NLTD.EmployeePortal.LMS.Dac
                                   ReportingToId = l.ReportingToId,
                                   isTimeBased = l.isTimeBased,
                                   Comments = l.Comments,
-                                  PermissionInMonth = (l.isTimeBased == false) ? "" : ReturnPermissionHoursPerMonth(l.LeaveFromDate.Month, l.UserId),
-                                  AppliedByName = e.FirstName + " " + e.LastName
+                                  PermissionInMonth = (l.isTimeBased == false) ? "" : ReturnPermissionHoursPerMonth(l.LeaveFromDate.Month, l.UserId, l.LeaveTypeId),
+                                  AppliedByName = e.FirstName + " " + e.LastName,
+                                  LeaveTypeId = types.LeaveTypeId
                               }).ToList();
 
                 var pdLeaveId = (from items in LeaveItems
@@ -644,7 +645,7 @@ namespace NLTD.EmployeePortal.LMS.Dac
             }
         }
 
-        public string ReturnPermissionHoursPerMonth(int month, Int64 userId)
+        public string ReturnPermissionHoursPerMonth(int month, Int64 userId, long leaveTypeId)
         {
             string retSring = string.Empty;
             TimeSpan totalDuration = TimeSpan.Zero;
@@ -653,6 +654,7 @@ namespace NLTD.EmployeePortal.LMS.Dac
                 var permissions = (from l in context.Leave
                                    join lp in context.PermissionDetail on l.LeaveId equals lp.LeaveId
                                    where lp.PermissionDate.Month == month && l.UserId == userId && l.Status == "A" && l.StartDate.Year == DateTime.Now.Year
+                                    && l.LeaveTypeId == leaveTypeId
                                    select new { TimeFrom = lp.TimeFrom, TimeTo = lp.TimeTo }
                                      )
                                      .ToList();

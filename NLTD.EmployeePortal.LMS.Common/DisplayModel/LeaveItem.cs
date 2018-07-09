@@ -49,5 +49,7 @@ namespace NLTD.EmployeePortal.LMS.Common.DisplayModel
         public string AppliedByName { get; set; }
 
         public Int64? AppliedById { get; set; }
+
+        public long LeaveTypeId { get; set; }
     }
 }
