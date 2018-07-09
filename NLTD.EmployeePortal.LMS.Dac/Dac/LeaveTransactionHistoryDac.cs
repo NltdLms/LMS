@@ -157,7 +157,10 @@ namespace NLTD.EmployeePortal.LMS.Dac.Dac
                                      LeaveType = lt.Type,
                                      LeaveDayQty = ld.LeaveDayQty,
                                      StartDateType=l.StartDateType,
-                                     EndDateType=l.EndDateType
+                                     EndDateType=l.EndDateType,
+                                     LeaveTypeId = l.LeaveTypeId,
+                                     IsLeave=lt.IsLeave,
+                                     WorkFromHomeDayQty= ld.LeaveDayQty
                                  }
                                  ).ToList();
 
@@ -173,7 +176,8 @@ namespace NLTD.EmployeePortal.LMS.Dac.Dac
                                                               LeaveType = lt.Type,
                                                               TimeFrom = ld.TimeFrom,
                                                               TimeTo = ld.TimeTo,
-                                                              LeaveTypeId=lt.LeaveTypeId
+                                                              LeaveTypeId=l.LeaveTypeId,
+                                                              IsLeave=lt.IsLeave
                                                           }
                                  ).ToList();
 

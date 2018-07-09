@@ -438,7 +438,7 @@ else
                                                             earlyCount = g.Count(k => k.EarlyOut > new TimeSpan()),
                                                             fromDatetime = g.Min(k => k.WorkingDate),
                                                             toDatetime = g.Max(k => k.WorkingDate),
-                                                            WFHCount = (g.Where(k => k.Requests.Contains("Work From Home")).Select(x => x.LeaveDayQty)).Sum()
+                                                            WFHCount = (g.Where(k => k.Requests.Contains("Work From Home")).Select(x => x.WorkFromHomeDayQty)).Sum()
                                                         }).FirstOrDefault();
 
         return TimeSheetConsolidateObj;

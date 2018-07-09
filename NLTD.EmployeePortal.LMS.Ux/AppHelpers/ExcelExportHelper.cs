@@ -1054,13 +1054,12 @@ namespace NLTD.EmployeePortal.LMS.Ux.AppHelpers
             {
                 TimeSheetConsolidateObj.EarlyCount = TimeSheetConsolidateObj.EarlyCount + 1;
             }
-            if (!string.IsNullOrEmpty(TimeSheetModelObj.Requests) &&
-                    TimeSheetModelObj.Requests.Contains(officialPermisionLabel))
+            if (!string.IsNullOrEmpty(TimeSheetModelObj.Requests) && TimeSheetModelObj.permissionCountPersonal > 0)
+
             {
                 TimeSheetConsolidateObj.permissionCountOfficial = TimeSheetConsolidateObj.permissionCountOfficial + TimeSheetModelObj.permissionCountOfficial;
             }
-            if (!string.IsNullOrEmpty(TimeSheetModelObj.Requests) &&
-                    TimeSheetModelObj.Requests.Contains(personalPermisionLabel))
+            if (!string.IsNullOrEmpty(TimeSheetModelObj.Requests) && TimeSheetModelObj.permissionCountOfficial > 0)
             {
                 TimeSheetConsolidateObj.permissionCountPersonal = TimeSheetConsolidateObj.permissionCountPersonal + TimeSheetModelObj.permissionCountPersonal;
             }
@@ -1071,7 +1070,7 @@ namespace NLTD.EmployeePortal.LMS.Ux.AppHelpers
 
             if (!string.IsNullOrEmpty(TimeSheetModelObj.Requests) && TimeSheetModelObj.Requests.Contains("Work From Home"))
             {
-                TimeSheetConsolidateObj.WorkFromHomeCount = TimeSheetConsolidateObj.WorkFromHomeCount + TimeSheetModelObj.LeaveDayQty;
+                TimeSheetConsolidateObj.WorkFromHomeCount = TimeSheetConsolidateObj.WorkFromHomeCount + TimeSheetModelObj.WorkFromHomeDayQty;
             }
             return TimeSheetConsolidateObj;
         }

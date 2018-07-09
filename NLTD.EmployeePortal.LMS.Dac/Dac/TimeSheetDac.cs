@@ -90,6 +90,7 @@ namespace NLTD.EmployeePortal.LMS.Dac.Dac
             List<TimeSheetModel> timeSheetModelList = new List<TimeSheetModel>();
             List<ShiftQueryModel> ShiftQueryModelList = GetShiftDetails(UserID, FromDate, ToDate);
 
+            string PersonalPermisionLabel = ConfigurationManager.AppSettings["PersonalPermission"].ToString();
             string officialPermisionLabel = ConfigurationManager.AppSettings["PersonalOfficial"].ToString();
 
             var toDateShift = (from m in ShiftQueryModelList where m.ShiftDate == ToDate select new { fromTime = m.ShiftFromtime, toTime = m.ShiftTotime }).FirstOrDefault();
@@ -137,7 +138,7 @@ namespace NLTD.EmployeePortal.LMS.Dac.Dac
 
             for (int i = 0; i < ShiftQueryModelList.Count(); i++)
             {
-                decimal permissionCountOfficial = 0;
+                decimal permissionCountOfficial = 0, permissionCountPersonal = 0, LeaveDayQty = 0, WorkFromHomeDayQty = 0; 
                 TimeSheetModel TimeSheetModelObj = new TimeSheetModel();
                 DateTime shiftFromDateTime = ShiftQueryModelList[i].ShiftDate.Add(ShiftQueryModelList[i].ShiftFromtime.Add(new TimeSpan(-BeforeShiftBuffer, 0, 0)));
                 DateTime shiftEndDateTime = ShiftQueryModelList[i].ShiftDate.Add(ShiftQueryModelList[i].ShiftTotime.Add(new TimeSpan(AfterShiftBuffer, 0, 0)));
@@ -171,7 +172,42 @@ namespace NLTD.EmployeePortal.LMS.Dac.Dac
                         {
                             if (permissionTime.StartDate == TimeSheetModelObj.WorkingDate && permissionTime.LeaveType == officialPermisionLabel)
                             {
-                                permissionCountOfficial = permissionTime.PermissionCount;
+                                permissionCountOfficial += permissionTime.PermissionCount;
+                            }
+                        }
+                    }
+
+
+                    if (employeeLeaveList.Select(e => e.LeaveType == PersonalPermisionLabel).Count() > 0)
+                    {
+                        foreach (var permissionTime in employeeLeaveList)
+                        {
+                            if (permissionTime.StartDate == TimeSheetModelObj.WorkingDate && permissionTime.LeaveType == PersonalPermisionLabel)
+                            {
+                                permissionCountPersonal += permissionTime.PermissionCount;
+                            }
+
+                        }
+                    }
+
+                    if (employeeLeaveList.Select(e => e.LeaveTypeId = 0).Count() > 0)
+                    {
+                        foreach (var permissionTime in employeeLeaveList)
+                        {
+                            if (permissionTime.StartDate == TimeSheetModelObj.WorkingDate && permissionTime.LeaveDayQty != 0 && permissionTime.IsLeave == true)
+                            {
+                                LeaveDayQty += permissionTime.LeaveDayQty;
+                            }
+                        }
+                    }
+
+                    if (employeeLeaveList.Select(e => e.LeaveTypeId = 0).Count() > 0)
+                    {
+                        foreach (var permissionTime in employeeLeaveList)
+                        {
+                            if (permissionTime.StartDate == TimeSheetModelObj.WorkingDate && permissionTime.WorkFromHomeDayQty != 0 && permissionTime.IsLeave == false)
+                            {
+                                WorkFromHomeDayQty += permissionTime.WorkFromHomeDayQty;
                             }
                         }
                     }
@@ -206,23 +242,55 @@ namespace NLTD.EmployeePortal.LMS.Dac.Dac
                         {
                             if (permissionTime.StartDate == TimeSheetModelObj.WorkingDate && permissionTime.LeaveType == officialPermisionLabel)
                             {
-                                permissionCountOfficial = permissionTime.PermissionCount;
+                                permissionCountOfficial += permissionTime.PermissionCount;
+                            }
+                        }
+                    }
+
+                    if (employeeLeaveList.Select(e => e.LeaveType == PersonalPermisionLabel).Count() > 0)
+                    {
+                        foreach (var permissionTime in employeeLeaveList)
+                        {
+                            if (permissionTime.StartDate == TimeSheetModelObj.WorkingDate && permissionTime.LeaveType == PersonalPermisionLabel)
+                            {
+                                permissionCountPersonal += permissionTime.PermissionCount;
+                            }
+                        }
+                    }
+
+                    if (employeeLeaveList.Select(e => e.LeaveTypeId = 0).Count() > 0)
+                    {
+                        foreach (var permissionTime in employeeLeaveList)
+                        {
+                            if (permissionTime.StartDate == TimeSheetModelObj.WorkingDate && permissionTime.LeaveDayQty != 0 && permissionTime.IsLeave == true)
+                            {
+                                LeaveDayQty += permissionTime.LeaveDayQty;
+                            }
+                        }
+                    }
+                    if (employeeLeaveList.Select(e => e.LeaveTypeId = 0).Count() > 0)
+                    {
+                        foreach (var permissionTime in employeeLeaveList)
+                        {
+                            if (permissionTime.StartDate == TimeSheetModelObj.WorkingDate && permissionTime.WorkFromHomeDayQty != 0 && permissionTime.IsLeave == false)
+                            {
+                                WorkFromHomeDayQty += permissionTime.WorkFromHomeDayQty;
                             }
                         }
                     }
                 }
-                decimal LeaveDayQty = 0;
-                decimal permissionCountPersonal = 0;
+
                 string StartDateType = "";
                 string EndDateType = "";
 
                 // To get the employee Leave Details
 
-                TimeSheetModelObj.Requests = GetLMSStatus(employeeLeaveList, ShiftQueryModelList[i].ShiftDate, out LeaveDayQty, out permissionCountPersonal);
+                TimeSheetModelObj.Requests = GetLMSStatus(employeeLeaveList, ShiftQueryModelList[i].ShiftDate);
                 TimeSheetModelObj.StartDateType = GetHalfDayLMSType(employeeLeaveList, ShiftQueryModelList[i].ShiftDate, out StartDateType);
                 TimeSheetModelObj.EndDateType = GetHalfDayLMSType(employeeLeaveList, ShiftQueryModelList[i].ShiftDate, out EndDateType);
 
                 TimeSheetModelObj.LeaveDayQty = LeaveDayQty;
+                TimeSheetModelObj.WorkFromHomeDayQty = WorkFromHomeDayQty;
                 TimeSheetModelObj.PermissionCount = permissionCountPersonal;
 
 
@@ -265,24 +333,25 @@ namespace NLTD.EmployeePortal.LMS.Dac.Dac
             }
         }
 
-        public string GetLMSStatus(List<EmployeeLeave> employeeLeaveList, DateTime statusDate, out decimal LeaveDayQty, out decimal PermissionCount)
+        public string GetLMSStatus(List<EmployeeLeave> employeeLeaveList, DateTime statusDate)
         {
-            LeaveDayQty = 0;
-            PermissionCount = 0;
-            string LMSPermissionStatus = string.Empty, LMSLeaveStatus = string.Empty;
             string personalPermisionLabel = ConfigurationManager.AppSettings["PersonalPermission"].ToString();
             string officialPermisionLabel = ConfigurationManager.AppSettings["PersonalOfficial"].ToString();
             string overTimeLabel = ConfigurationManager.AppSettings["OverTime"].ToString();
+
+            string LMSPermissionStatus = string.Empty;
+            string LMSLeaveStatus = string.Empty;
+            string getLMSStatus = string.Empty;           
+
             try
             {
                 if (employeeLeaveList.Count > 0)
                 {
-                    var StatusList = (from e in employeeLeaveList where statusDate >= e.StartDate && statusDate <= e.EndDate select new { e.LeaveType, e.LeaveDayQty, e.PermissionCount, e.StartDateType,e.LeaveTypeId });
+                    var StatusList = (from e in employeeLeaveList where statusDate >= e.StartDate && statusDate <= e.EndDate select new { e.LeaveType, e.LeaveDayQty, e.PermissionCount, e.StartDateType, e.LeaveTypeId });
                     if (StatusList != null && StatusList.Count() > 0)
                     {
                         foreach (var Status in StatusList.OrderBy(e => e.LeaveTypeId))
                         {
-                            LeaveDayQty = Status.LeaveDayQty;
                             if (Status.LeaveType == personalPermisionLabel || Status.LeaveType == officialPermisionLabel || Status.LeaveType == overTimeLabel)
                             {
                                 if (string.IsNullOrEmpty(LMSPermissionStatus))
@@ -297,7 +366,7 @@ namespace NLTD.EmployeePortal.LMS.Dac.Dac
                                     }
                                     else
                                     {
-                                        LMSPermissionStatus =  "OT: " + Status.PermissionCount + "hrs";
+                                        LMSPermissionStatus = "OT: " + Status.PermissionCount + "hrs";
                                     }
                                 }
                                 else
@@ -325,7 +394,7 @@ namespace NLTD.EmployeePortal.LMS.Dac.Dac
                                 }
                                 else
                                 {
-                                    LMSLeaveStatus += ", " + Status.LeaveType;
+                                    LMSLeaveStatus = LMSLeaveStatus + ", " + Status.LeaveType;
                                 }
                                 if (Status.StartDateType == "F" || Status.StartDateType == "S")
                                 {
@@ -342,22 +411,13 @@ namespace NLTD.EmployeePortal.LMS.Dac.Dac
                         }
                     }
                 }
-                string FInalResult = (LMSLeaveStatus + (LMSLeaveStatus.Length > 0 ? ", " : "") + LMSPermissionStatus).Trim();
-
-                if (!string.IsNullOrEmpty(FInalResult))
-                {
-                    if (FInalResult.Substring(FInalResult.Length - 1, 1) == ",")
-                    {
-                        FInalResult = FInalResult.Remove(FInalResult.Length - 1);
-                    }
-                }
-                return FInalResult;
+                getLMSStatus = LMSLeaveStatus + (LMSLeaveStatus.Length > 0 && LMSPermissionStatus.Length > 0 ? ", " : "") + LMSPermissionStatus;                
             }
             catch (Exception)
             {
                 throw;
             }
-
+            return getLMSStatus;
         }
 
         public string GetHalfDayLMSType(List<EmployeeLeave> employeeLeaveList, DateTime statusDate, out string StartDateType)
@@ -408,5 +468,9 @@ namespace NLTD.EmployeePortal.LMS.Dac.Dac
         public string TimeTo { get; set; }
 
         public decimal PermissionCount { get; set; }
+
+        public bool IsLeave { get; set; }
+
+        public decimal WorkFromHomeDayQty { get; set; }
     }
 }
