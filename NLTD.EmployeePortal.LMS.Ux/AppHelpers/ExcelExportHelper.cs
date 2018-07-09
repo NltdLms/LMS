@@ -1043,7 +1043,7 @@ namespace NLTD.EmployeePortal.LMS.Ux.AppHelpers
         public static ConsolidateReport CalculateTimeSheetConsolidation(TimeSheetModel TimeSheetModelObj, ConsolidateReport TimeSheetConsolidateObj)
         {
             string personalPermisionLabel = ConfigurationManager.AppSettings["PersonalPermission"].ToString();
-            string officialPermisionLabel = ConfigurationManager.AppSettings["PersonalOfficial"].ToString();
+            string officialPermisionLabel = ConfigurationManager.AppSettings["OfficialPermission"].ToString();
 
             TimeSheetConsolidateObj.WorkingHours = TimeSheetConsolidateObj.WorkingHours + TimeSheetModelObj.WorkingHours;
             if (TimeSheetModelObj.LateIn.Seconds > 0)

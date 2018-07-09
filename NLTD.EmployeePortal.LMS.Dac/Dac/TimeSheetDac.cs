@@ -91,7 +91,7 @@ namespace NLTD.EmployeePortal.LMS.Dac.Dac
             List<ShiftQueryModel> ShiftQueryModelList = GetShiftDetails(UserID, FromDate, ToDate);
 
             string PersonalPermisionLabel = ConfigurationManager.AppSettings["PersonalPermission"].ToString();
-            string officialPermisionLabel = ConfigurationManager.AppSettings["PersonalOfficial"].ToString();
+            string officialPermisionLabel = ConfigurationManager.AppSettings["OfficialPermission"].ToString();
 
             var toDateShift = (from m in ShiftQueryModelList where m.ShiftDate == ToDate select new { fromTime = m.ShiftFromtime, toTime = m.ShiftTotime }).FirstOrDefault();
 
@@ -336,7 +336,7 @@ namespace NLTD.EmployeePortal.LMS.Dac.Dac
         public string GetLMSStatus(List<EmployeeLeave> employeeLeaveList, DateTime statusDate)
         {
             string personalPermisionLabel = ConfigurationManager.AppSettings["PersonalPermission"].ToString();
-            string officialPermisionLabel = ConfigurationManager.AppSettings["PersonalOfficial"].ToString();
+            string officialPermisionLabel = ConfigurationManager.AppSettings["OfficialPermission"].ToString();
             string overTimeLabel = ConfigurationManager.AppSettings["OverTime"].ToString();
 
             string LMSPermissionStatus = string.Empty;
