@@ -42,13 +42,18 @@
           <icon></icon>
         </MenuItem>
         <MenuItem>
-          <title>Transaction Log</title>
-          <url>/Admin/MyTransactionLogs</url>
+          <title>Over Time Report</title>
+          <url>/Admin/MyOverTimePermissions</url>
           <icon></icon>
         </MenuItem>
         <MenuItem>
-          <title>Over Time Report</title>
-          <url>/Admin/MyOverTimePermissions</url>
+          <title>Profile</title>
+          <url>Profile/MyLmsProfile</url>
+          <icon></icon>
+        </MenuItem>
+        <MenuItem>
+          <title>Transaction Log</title>
+          <url>/Admin/MyTransactionLogs</url>
           <icon></icon>
         </MenuItem>
       </level1item>

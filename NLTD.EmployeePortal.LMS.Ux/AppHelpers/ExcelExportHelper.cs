@@ -1054,23 +1054,24 @@ namespace NLTD.EmployeePortal.LMS.Ux.AppHelpers
             {
                 TimeSheetConsolidateObj.EarlyCount = TimeSheetConsolidateObj.EarlyCount + 1;
             }
-            if (!string.IsNullOrEmpty(TimeSheetModelObj.Requests) && TimeSheetModelObj.permissionCountPersonal > 0)
-
+            if (!string.IsNullOrEmpty(TimeSheetModelObj.Requests))
             {
-                TimeSheetConsolidateObj.permissionCountOfficial = TimeSheetConsolidateObj.permissionCountOfficial + TimeSheetModelObj.permissionCountOfficial;
-            }
-            if (!string.IsNullOrEmpty(TimeSheetModelObj.Requests) && TimeSheetModelObj.permissionCountOfficial > 0)
-            {
-                TimeSheetConsolidateObj.permissionCountPersonal = TimeSheetConsolidateObj.permissionCountPersonal + TimeSheetModelObj.permissionCountPersonal;
-            }
-            if (!string.IsNullOrEmpty(TimeSheetModelObj.Requests) && TimeSheetModelObj.Requests.Contains("Leave"))
-            {
-                TimeSheetConsolidateObj.LeaveCount = TimeSheetConsolidateObj.LeaveCount + TimeSheetModelObj.LeaveDayQty;
-            }
-
-            if (!string.IsNullOrEmpty(TimeSheetModelObj.Requests) && TimeSheetModelObj.Requests.Contains("Work From Home"))
-            {
-                TimeSheetConsolidateObj.WorkFromHomeCount = TimeSheetConsolidateObj.WorkFromHomeCount + TimeSheetModelObj.WorkFromHomeDayQty;
+                if (TimeSheetModelObj.permissionCountOfficial > 0)
+                {
+                    TimeSheetConsolidateObj.permissionCountOfficial = TimeSheetConsolidateObj.permissionCountOfficial + TimeSheetModelObj.permissionCountOfficial;
+                }
+                if (TimeSheetModelObj.permissionCountPersonal > 0)
+                {
+                    TimeSheetConsolidateObj.permissionCountPersonal = TimeSheetConsolidateObj.permissionCountPersonal + TimeSheetModelObj.permissionCountPersonal;
+                }
+                if (TimeSheetModelObj.Requests.Contains("Leave"))
+                {
+                    TimeSheetConsolidateObj.LeaveCount = TimeSheetConsolidateObj.LeaveCount + TimeSheetModelObj.LeaveDayQty;
+                }
+                if (TimeSheetModelObj.Requests.Contains("Work From Home"))
+                {
+                    TimeSheetConsolidateObj.WorkFromHomeCount = TimeSheetConsolidateObj.WorkFromHomeCount + TimeSheetModelObj.WorkFromHomeDayQty;
+                }
             }
             return TimeSheetConsolidateObj;
         }
