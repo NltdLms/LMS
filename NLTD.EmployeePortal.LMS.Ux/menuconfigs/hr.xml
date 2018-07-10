@@ -48,7 +48,7 @@
         </MenuItem>
         <MenuItem>
           <title>Profile</title>
-          <url>Profile/MyLmsProfile</url>
+          <url>/Profile/MyLmsProfile</url>
           <icon></icon>
         </MenuItem>
         <MenuItem>
