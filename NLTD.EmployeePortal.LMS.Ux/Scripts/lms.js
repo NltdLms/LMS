@@ -945,6 +945,8 @@ function hideRuleText() {
         $('#divSickLeaveMsg > p').html("* Please provide the date against which the Compensatory Off is to be availed in the Reason.");
     else if ($('#LeaveType :selected').text().indexOf("Debit Leave") != -1)
         $('#divSickLeaveMsg > p').html("* This leave will be debited from your leave balance when leaves are added to your account.");
+    else if ($('#LeaveType :selected').text().indexOf("Over") != -1)
+        $('#divSickLeaveMsg > p').html("* Applies only to BPO employees.");
     else
         $('#divSickLeaveMsg > p').html("");
 }
