@@ -636,10 +636,9 @@
     <Content Include="Scripts\DataTables\responsive.bootstrap.js" />
     <Content Include="Scripts\DataTables\responsive.bootstrap.min.js" />
     <Content Include="Scripts\DataTables\responsive.bootstrap4.js" />
-    <Content Include="Scripts\DataTables\responsive.bootstrap4.min.js" />
-    <Content Include="Scripts\DataTables\responsive.foundation.js" />
+    <Content Include="Scripts\DataTables\responsive.bootstrap4.min.js" />   
     <Content Include="Scripts\DataTables\responsive.foundation.min.js" />
-    <Content Include="Scripts\DataTables\responsive.jqueryui.js" />
+
     <Content Include="Scripts\DataTables\responsive.jqueryui.min.js" />
     <Content Include="Scripts\DataTables\responsive.semanticui.js" />
     <Content Include="Scripts\DataTables\responsive.semanticui.min.js" />
@@ -764,6 +763,11 @@
     <Content Include="Views\Report\ShiftBasedLateAndEarlyRptPartial.cshtml" />
     <Content Include="Views\Dashboard\DashboardAttendancePartial.cshtml" />
     <Content Include="Views\Dashboard\DashboardAttendancePartial.cshtml" />
+     <Content Include="Views\Admin\OverTimePermissions.cshtml" />
+    <Content Include="Views\Admin\ViewOverTimePermissionDetailPartial.cshtml" />
+    <Content Include="Views\Attendance\AccessCardAttendance.cshtml" />
+    <Content Include="Views\Admin\EmployeeAcessCardAttendanceDtlPartial.cshtml" />
+
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

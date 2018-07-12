@@ -48,6 +48,8 @@ namespace NLTD.EmployeePortal.LMS.Repository
 
         IList<PermissionDetailsModel> GetPermissionDetail(Int64? paramUserId, string reqUsr, DateTime? startDate, DateTime? endDate, bool OnlyReportedToMe, Int64 LeadId);
 
+        IList<PermissionDetailsModel> GetOverTimePermissionDetail(Int64? paramUserId, string reqUsr, DateTime? startDate, DateTime? endDate, bool OnlyReportedToMe, Int64 LeadId);
+
         decimal ReturnDuration(DateTime LeaveFrom, DateTime LeaveUpto, string LeaveFromTime, string LeaveUptoTime, Int64 UserId);
 
         LeaveRequestModel ApplyLeaveCommonData(Int64 UserId, Int64 OfficeId);

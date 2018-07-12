@@ -42,6 +42,16 @@
           <icon></icon>
         </MenuItem>
         <MenuItem>
+          <title>Over Time Report</title>
+          <url>/Admin/MyOverTimePermissions</url>
+          <icon></icon>
+        </MenuItem>
+        <MenuItem>
+          <title>Profile</title>
+          <url>/Profile/MyLmsProfile</url>
+          <icon></icon>
+        </MenuItem>
+        <MenuItem>
           <title>Transaction Log</title>
           <url>/Admin/MyTransactionLogs</url>
           <icon></icon>
@@ -84,7 +94,12 @@
           <icon></icon>
         </MenuItem>
         <MenuItem>
-          <title>Employee Profile</title>
+          <title>Over Time Report</title>
+          <url>/Admin/TeamOverTimePermissions</url>
+          <icon></icon>
+        </MenuItem>
+        <MenuItem>
+          <title>Profile</title>
           <url>/Profile/TeamLmsProfile</url>
           <icon></icon>
         </MenuItem>
@@ -132,7 +147,7 @@
           <title>Timesheet</title>
           <url>/Attendance/MyTeamTimeSheet</url>
           <icon></icon>
-        </MenuItem>
+        </MenuItem>       
       </level1item>
     </MenuItem>
   </menuitem>

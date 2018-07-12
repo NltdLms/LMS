@@ -4,6 +4,7 @@ using OfficeOpenXml.Style;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Configuration;
 using System.Data;
 using System.Linq;
 using System.Web;
@@ -152,6 +153,8 @@ namespace NLTD.EmployeePortal.LMS.Ux.AppHelpers
             return ExportExcel(ListToDataTable<T>(data), Heading, showSlno, ColumnsToTake);
         }
 
+
+
         public static byte[] ExportPermissionsExcel(DataTable dataTable, string heading = "", bool showSrNo = false, params string[] columnsToTake)
         {
             byte[] result = null;
@@ -249,9 +252,117 @@ namespace NLTD.EmployeePortal.LMS.Ux.AppHelpers
             return result;
         }
 
+        public static byte[] ExportOverTimeExcel(DataTable dataTable, string heading = "", bool showSrNo = false, params string[] columnsToTake)
+        {
+            byte[] result = null;
+            using (ExcelPackage package = new ExcelPackage())
+            {
+                ExcelWorksheet workSheet = package.Workbook.Worksheets.Add(String.Format("{0} Data", heading));
+                int startRowFrom = String.IsNullOrEmpty(heading) ? 1 : 3;
+
+                if (showSrNo)
+                {
+                    DataColumn dataColumn = dataTable.Columns.Add("#", typeof(int));
+                    dataColumn.SetOrdinal(0);
+                    int index = 1;
+                    foreach (DataRow item in dataTable.Rows)
+                    {
+                        item[0] = index;
+                        index++;
+                    }
+                }
+
+                dataTable.Columns["EmpID"].ColumnName = "Emp Id";
+                dataTable.Columns["TimeFrom"].ColumnName = "Time From";
+                dataTable.Columns["TimeTo"].ColumnName = "Time To";
+                dataTable.Columns["PermissionDate"].ColumnName = "Over Time Date";
+                dataTable.Columns["ApproverComments"].ColumnName = "Approver Comments";
+                dataTable.Columns["ReportingManager"].ColumnName = "Reporting Manager";
+
+                // add the content into the Excel file
+                workSheet.Cells["A" + startRowFrom].LoadFromDataTable(dataTable, true);
+
+                // autofit width of cells with small content
+                int columnIndex = 1;
+                foreach (DataColumn column in dataTable.Columns)
+                {
+                    ExcelRange columnCells = workSheet.Cells[workSheet.Dimension.Start.Row, columnIndex, workSheet.Dimension.End.Row, 15];
+                    //int maxLength = columnCells.Max(cell => cell.Value.ToString().Count()); //commented by suresh
+                    //if (maxLength < 150)
+                    //{
+                    workSheet.Column(columnIndex).AutoFit();
+                    //}
+                    //workSheet.Column(9).Style.WrapText = true;
+                    //workSheet.Column(10).Style.WrapText = true;
+                    columnIndex++;
+                }
+
+                // format header - bold, yellow on black
+                using (ExcelRange r = workSheet.Cells[startRowFrom, 1, startRowFrom, dataTable.Columns.Count])
+                {
+                    r.Style.Font.Color.SetColor(System.Drawing.Color.White);
+                    r.Style.Font.Bold = true;
+                    r.Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
+                    r.Style.Fill.BackgroundColor.SetColor(System.Drawing.ColorTranslator.FromHtml("#1fb5ad"));
+                }
+
+                // format cells - add borders
+                using (ExcelRange r = workSheet.Cells[startRowFrom + 1, 1, startRowFrom + dataTable.Rows.Count, dataTable.Columns.Count])
+                {
+                    r.Style.Border.Top.Style = ExcelBorderStyle.Thin;
+                    r.Style.Border.Bottom.Style = ExcelBorderStyle.Thin;
+                    r.Style.Border.Left.Style = ExcelBorderStyle.Thin;
+                    r.Style.Border.Right.Style = ExcelBorderStyle.Thin;
+
+                    r.Style.Border.Top.Color.SetColor(System.Drawing.Color.Black);
+                    r.Style.Border.Bottom.Color.SetColor(System.Drawing.Color.Black);
+                    r.Style.Border.Left.Color.SetColor(System.Drawing.Color.Black);
+                    r.Style.Border.Right.Color.SetColor(System.Drawing.Color.Black);
+                }
+
+                // removed ignored columns
+                for (int i = dataTable.Columns.Count - 1; i >= 0; i--)
+                {
+                    if (i == 0 && showSrNo)
+                    {
+                        continue;
+                    }
+                    if (!columnsToTake.Contains(dataTable.Columns[i].ColumnName))
+                    {
+                        workSheet.DeleteColumn(i + 1);
+                    }
+                }
+                //custom code for this excel
+                using (ExcelRange col = workSheet.Cells[2, 4, 2 + dataTable.Rows.Count, 4])
+                {
+                    col.Style.Numberformat.Format = "dd/MM/yyyy";
+                    col.Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
+                }
+
+                if (!String.IsNullOrEmpty(heading))
+                {
+                    workSheet.Cells["A1"].Value = heading;
+                    workSheet.Cells["A1"].Style.Font.Size = 20;
+
+                    workSheet.InsertColumn(1, 1);
+                    workSheet.InsertRow(1, 1);
+                    workSheet.Column(1).Width = 5;
+                }
+
+                result = package.GetAsByteArray();
+            }
+
+            return result;
+        }
+
         public static byte[] ExportPermissionsExcel<T>(List<T> data, string Heading = "", bool showSlno = false, params string[] ColumnsToTake)
         {
             return ExportPermissionsExcel(ListToDataTable<T>(data), Heading, showSlno, ColumnsToTake);
+        }
+
+        public static byte[] ExportOverTimeExcel<T>(List<T> data, string Heading = "", bool showSlno = false, params string[] ColumnsToTake)
+        {
+            return ExportOverTimeExcel(ListToDataTable<T>(data), Heading, showSlno, ColumnsToTake);
         }
 
         public static byte[] ExportExcelYearSummary(DataTable dataTable, string heading = "", bool showSrNo = false, params string[] columnsToTake)
@@ -622,11 +733,27 @@ namespace NLTD.EmployeePortal.LMS.Ux.AppHelpers
                                                                                 UserID = at.UserID,
                                                                                 InOut = at.InOut,
                                                                                 AttendanceDate = at.InOutDate.ToString("dd-MM-yyyy"),
-                                                                                INOutTime = at.InOutDate.ToString("hh:mm:ss"),
+                                                                                InOutTime = at.InOutDate.ToString("HH:mm:ss"),
                                                                                 Name = at.Name
                                                                             }).ToList();
 
             return ExportAttendanceExcel(employeeAttendanceModelListObj, Heading, showSlno, ColumnsToTake);
+        }
+
+        public static byte[] ExportExcelAccessCardAttendance(List<EmployeeAttendanceModel> data, string Heading = "", bool showSlno = false, params string[] ColumnsToTake)
+        {
+            List<EmployeeAttendanceModel> employeeAttendanceModelListObj = (from at in data
+                                                                            select new EmployeeAttendanceModel
+                                                                            {
+                                                                                UserID = at.UserID,
+                                                                                InOut = at.InOut,
+                                                                                AttendanceDate = at.InOutDate.ToString("dd-MM-yyyy"),
+                                                                                InOutTime = at.InOutDate.ToString("HH:mm:ss"),
+                                                                                Name = at.Name,
+                                                                                CardID = at.CardID
+                                                                            }).ToList();
+
+            return ExportAccessCardReportExcel(employeeAttendanceModelListObj, Heading, showSlno, ColumnsToTake);
         }
 
         public static byte[] ExportTimesheetExcel(List<TimeSheetModel> TimeSheetModelObj, string heading = "", bool showSrNo = false, params string[] columnsToTake)
@@ -742,7 +869,8 @@ namespace NLTD.EmployeePortal.LMS.Ux.AppHelpers
                 dataTable = ListToDataTable<ConsolidateReport>(weeklyTimeSheetConsolidateList);
                 dataTable.Columns["DateRange"].ColumnName = "Date";
                 dataTable.Columns["TotalWorkingHours"].ColumnName = "Total Working Hours";
-                dataTable.Columns["PermissionCount"].ColumnName = "Total Permission Hours";
+                dataTable.Columns["permissionCountOfficial"].ColumnName = "Total Permission Hours - Official";
+                dataTable.Columns["permissionCountPersonal"].ColumnName = "Total Permission Hours - Personal";
                 dataTable.Columns["LeaveCount"].ColumnName = "No .Of Leaves";
                 dataTable.Columns["LateCount"].ColumnName = "No. Of Late In";
                 dataTable.Columns["WorkFromHomeCount"].ColumnName = "No. Of Work From Home";
@@ -914,6 +1042,9 @@ namespace NLTD.EmployeePortal.LMS.Ux.AppHelpers
 
         public static ConsolidateReport CalculateTimeSheetConsolidation(TimeSheetModel TimeSheetModelObj, ConsolidateReport TimeSheetConsolidateObj)
         {
+            string personalPermisionLabel = ConfigurationManager.AppSettings["PersonalPermission"].ToString();
+            string officialPermisionLabel = ConfigurationManager.AppSettings["OfficialPermission"].ToString();
+
             TimeSheetConsolidateObj.WorkingHours = TimeSheetConsolidateObj.WorkingHours + TimeSheetModelObj.WorkingHours;
             if (TimeSheetModelObj.LateIn.Seconds > 0)
             {
@@ -923,19 +1054,24 @@ namespace NLTD.EmployeePortal.LMS.Ux.AppHelpers
             {
                 TimeSheetConsolidateObj.EarlyCount = TimeSheetConsolidateObj.EarlyCount + 1;
             }
-            if (!string.IsNullOrEmpty(TimeSheetModelObj.Requests) &&
-                    TimeSheetModelObj.Requests.Contains("Permission"))
+            if (!string.IsNullOrEmpty(TimeSheetModelObj.Requests))
             {
-                TimeSheetConsolidateObj.PermissionCount = TimeSheetConsolidateObj.PermissionCount + TimeSheetModelObj.PermissionCount;
-            }
-            if (!string.IsNullOrEmpty(TimeSheetModelObj.Requests) && TimeSheetModelObj.Requests.Contains("Leave"))
-            {
-                TimeSheetConsolidateObj.LeaveCount = TimeSheetConsolidateObj.LeaveCount + TimeSheetModelObj.LeaveDayQty;
-            }
-
-            if (!string.IsNullOrEmpty(TimeSheetModelObj.Requests) && TimeSheetModelObj.Requests.Contains("Work From Home"))
-            {
-                TimeSheetConsolidateObj.WorkFromHomeCount = TimeSheetConsolidateObj.WorkFromHomeCount + TimeSheetModelObj.LeaveDayQty;
+                if (TimeSheetModelObj.permissionCountOfficial > 0)
+                {
+                    TimeSheetConsolidateObj.permissionCountOfficial = TimeSheetConsolidateObj.permissionCountOfficial + TimeSheetModelObj.permissionCountOfficial;
+                }
+                if (TimeSheetModelObj.permissionCountPersonal > 0)
+                {
+                    TimeSheetConsolidateObj.permissionCountPersonal = TimeSheetConsolidateObj.permissionCountPersonal + TimeSheetModelObj.permissionCountPersonal;
+                }
+                if (TimeSheetModelObj.Requests.Contains("Leave"))
+                {
+                    TimeSheetConsolidateObj.LeaveCount = TimeSheetConsolidateObj.LeaveCount + TimeSheetModelObj.LeaveDayQty;
+                }
+                if (TimeSheetModelObj.Requests.Contains("Work From Home"))
+                {
+                    TimeSheetConsolidateObj.WorkFromHomeCount = TimeSheetConsolidateObj.WorkFromHomeCount + TimeSheetModelObj.WorkFromHomeDayQty;
+                }
             }
             return TimeSheetConsolidateObj;
         }
@@ -950,6 +1086,114 @@ namespace NLTD.EmployeePortal.LMS.Ux.AppHelpers
             return string.Format("{0}:{1}", totalHours, t.ToString("mm\\:ss"));
         }
 
+        public static byte[] ExportAccessCardReportExcel(List<EmployeeAttendanceModel> data, string heading = "", bool showSrNo = false, params string[] columnsToTake)
+        {
+            byte[] result = null;
+
+            using (ExcelPackage package = new ExcelPackage())
+            {
+                DataTable dataTable = ListToDataTable<EmployeeAttendanceModel>(data);
+
+                dataTable.Columns["CardID"].ColumnName = "Card Id";
+                dataTable.Columns["AttendanceDate"].ColumnName = "Date";
+                dataTable.Columns["InOutTime"].ColumnName = "In Out Time";
+                dataTable.Columns["InOut"].ColumnName = "In Out";
+
+                ExcelWorksheet workSheet = package.Workbook.Worksheets.Add("AttendanceDetails");
+                int startRowFrom = String.IsNullOrEmpty(heading) ? 1 : 3;
+
+                if (showSrNo)
+                {
+                    DataColumn dataColumn = dataTable.Columns.Add("#", typeof(int));
+                    dataColumn.SetOrdinal(0);
+
+                    int index = 1;
+                    foreach (DataRow item in dataTable.Rows)
+                    {
+                        item[0] = index;
+
+                        index++;
+                    }
+                }
+
+                // add the content into the Excel file
+                workSheet.Cells["A" + startRowFrom].LoadFromDataTable(dataTable, true);
+
+                // autofit width of cells with small content
+                int columnIndex = 1;
+                foreach (DataColumn column in dataTable.Columns)
+                {
+                    ExcelRange columnCells = workSheet.Cells[workSheet.Dimension.Start.Row, columnIndex, workSheet.Dimension.End.Row, columnIndex];
+                    //int maxLength = columnCells.Max(cell => cell.Value.ToString().Count());
+                    //if (maxLength < 150)
+                    //{
+                    workSheet.Column(columnIndex).AutoFit();
+                    //}
+
+                    columnIndex++;
+                }
+
+                // format header - bold, yellow on black
+                using (ExcelRange r = workSheet.Cells[startRowFrom, 1, startRowFrom, dataTable.Columns.Count])
+                {
+                    r.Style.Font.Color.SetColor(System.Drawing.Color.White);
+                    r.Style.Font.Bold = true;
+                    r.Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
+                    r.Style.Fill.BackgroundColor.SetColor(System.Drawing.ColorTranslator.FromHtml("#1fb5ad"));
+                }
+
+                // format cells - add borders
+                using (ExcelRange r = workSheet.Cells[startRowFrom + 1, 1, startRowFrom + dataTable.Rows.Count, dataTable.Columns.Count])
+                {
+                    r.Style.Border.Top.Style = ExcelBorderStyle.Thin;
+                    r.Style.Border.Bottom.Style = ExcelBorderStyle.Thin;
+                    r.Style.Border.Left.Style = ExcelBorderStyle.Thin;
+                    r.Style.Border.Right.Style = ExcelBorderStyle.Thin;
+
+                    r.Style.Border.Top.Color.SetColor(System.Drawing.Color.Black);
+                    r.Style.Border.Bottom.Color.SetColor(System.Drawing.Color.Black);
+                    r.Style.Border.Left.Color.SetColor(System.Drawing.Color.Black);
+                    r.Style.Border.Right.Color.SetColor(System.Drawing.Color.Black);
+                }
+
+                //
+                // removed ignored columns
+                for (int i = dataTable.Columns.Count - 1; i >= 0; i--)
+                {
+                    if (i == 0 && showSrNo)
+                    {
+                        continue;
+                    }
+                    if (!columnsToTake.Contains(dataTable.Columns[i].ColumnName))
+                    {
+                        workSheet.DeleteColumn(i + 1);
+                    }
+                }
+
+                //format the datetime field
+                //using (ExcelRange col = workSheet.Cells[2, 3, 1 + dataTable.Rows.Count, 3])
+                //{
+                //    col.Style.Numberformat.Format = "dd/MM/yyyy";
+                //    col.Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
+                //}
+                //using (ExcelRange col = workSheet.Cells[2, 5, 1 + dataTable.Rows.Count, 7])
+                //{
+                //    col.Style.Numberformat.Format = "HH:mm:ss";
+                //    col.Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
+                //}
+                if (!String.IsNullOrEmpty(heading))
+                {
+                    workSheet.Cells["A1"].Value = heading;
+                    workSheet.Cells["A1"].Style.Font.Size = 20;
+
+                    workSheet.InsertColumn(1, 1);
+                    workSheet.InsertRow(1, 1);
+                    workSheet.Column(1).Width = 5;
+                }
+                result = package.GetAsByteArray();
+            }
+            return result;
+        }
         public static byte[] ExportAttendanceExcel(List<EmployeeAttendanceModel> data, string heading = "", bool showSrNo = false, params string[] columnsToTake)
         {
             byte[] result = null;
@@ -1065,7 +1309,8 @@ namespace NLTD.EmployeePortal.LMS.Ux.AppHelpers
         public decimal LeaveCount { get; set; }
 
         public decimal WorkFromHomeCount { get; set; }
-        public decimal PermissionCount { get; set; }
+        public decimal permissionCountOfficial { get; set; }
+        public decimal permissionCountPersonal { get; set; }
         public int LateCount { get; set; }
         public int EarlyCount { get; set; }
 

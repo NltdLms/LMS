@@ -655,8 +655,9 @@ function loadDaywiseLeaves() {
         function () {
             $("#Daywisetable_id").dataTable({
                 "aaSorting": [], columnDefs: [
-                    { type: 'date-eu', targets: 4 }
-                ] })
+                    { type: 'date-eu', targets: 3 }
+                ]
+            })
             $("#divLoading").hide();
             $('html, body').animate({
                 scrollTop: 230  // Means Less header height
@@ -686,6 +687,40 @@ function loadPermissionDetail() {
     $("#divLoading").show();
     $("#divForPermissionDetail")
         .load('/Admin/GetPermissionDetail?paramUserId=' + $("#SearchUserID").val() + '&reqUsr=' + $("#RequestLevelPerson").val() + '&startDate=' + $("#FromDate").val() + '&endDate=' + $("#ToDate").val() + '&OnlyReportedToMe=' + showTeam,
+        function () {
+            $("#Permissions_id").dataTable({
+                columnDefs: [
+                    { type: 'date-eu', targets: 4 }]
+            });
+            $("#divLoading").hide();
+            $('html, body').animate({
+                scrollTop: 230 // Means Less header height
+            }, 400);
+        });
+}
+function loadOverTimePermissionDetail() {
+    $("#alert_placeholder").empty();
+
+    if ($("#alert") != undefined) {
+        $("#alert").remove();
+    }
+
+    if ($("#OnlyReportedToMe").val() == undefined) {
+        var showTeam = false;
+    }
+    else {
+        var showTeam = $("#OnlyReportedToMe").prop('checked');
+    }
+    if ($("#Name").val() != undefined) {
+        if (!ValidateAutocompleteName($("#Name").val(), $("#SearchUserID").val())) {
+            Clearshowalert("Please Choose a valid Username from the List.", "alert alert-danger");
+            return;
+        }
+    }
+
+    $("#divLoading").show();
+    $("#divForPermissionDetail")
+        .load('/Admin/GetOverTimePermissionDetail?paramUserId=' + $("#SearchUserID").val() + '&reqUsr=' + $("#RequestLevelPerson").val() + '&startDate=' + $("#FromDate").val() + '&endDate=' + $("#ToDate").val() + '&OnlyReportedToMe=' + showTeam,
         function () {
             $("#Permissions_id").dataTable({
                 columnDefs: [
@@ -910,6 +945,8 @@ function hideRuleText() {
         $('#divSickLeaveMsg > p').html("* Please provide the date against which the Compensatory Off is to be availed in the Reason.");
     else if ($('#LeaveType :selected').text().indexOf("Debit Leave") != -1)
         $('#divSickLeaveMsg > p').html("* This leave will be debited from your leave balance when leaves are added to your account.");
+    else if ($('#LeaveType :selected').text().indexOf("Over") != -1)
+        $('#divSickLeaveMsg > p').html("* Applies only to BPO employees.");
     else
         $('#divSickLeaveMsg > p').html("");
 }
@@ -1226,7 +1263,8 @@ function loadTransactionLog() {
                     { type: 'date-eu', targets: 1 },
                     { type: 'date-eu', targets: 2 },
                     { type: 'date-eu', targets: 3 }
-                ] });
+                ]
+            });
             $("#divLoading").hide();
             $('html, body').animate({
                 scrollTop: 210  // Means Less header height
@@ -1271,13 +1309,60 @@ function loadAttendanceRangeSummary() {
                     "aaSorting": [],
                     columnDefs: [
                         { type: 'date-eu', targets: 0 }
-                    ]});
+                    ]
+                });
                 $('html, body').animate({
                     scrollTop: 230  // Means Less header height
                 }, 400);
             }
         });
 }
+
+function loadAccesCardAttendanceRangeSummary() {
+    $("#alert_placeholder").empty();
+    try {
+        $("#showalert").empty();
+    }
+    catch (e) {
+    }
+
+    //if ($("#RequestLevelPerson").val() === "Team") {
+    //    URL = '/Admin/loadAccesCardEmployeeAttendance?&FromDate=' + $('#FromDate').val() + '&ToDate=' + $('#ToDate').val() + '&requestLevelPerson=' + $('#RequestLevelPerson').val();
+    //}
+    //else {
+    URL = '/Admin/loadAccesCardEmployeeAttendance?ID=' + $("#CardID").val() + '&FromDate=' + $('#FromDate').val() + '&ToDate=' + $('#ToDate').val() + '&requestLevelPerson=' + $('#RequestLevelPerson').val();
+
+
+    var x = $("#CardID").val();
+    if (isNaN(x)) {
+        Clearshowalert("Please enter a valid Card Id.", "alert alert-danger");
+        return;
+    }
+
+    $("#divLoading").show();
+    $("#divForEmployeeAttendance")
+        .load(URL,
+        function (responseText, textStatus, req) {
+            $("#divLoading").hide();
+            if (textStatus == "error") {
+                Clearshowalert("No Records Found", "alert alert-danger");
+                $('#Attendancetable_id').DataTable().clear().destroy();
+            }
+            else {
+                $(".dtatable").dataTable({
+                    "aaSorting": [],
+                    columnDefs: [
+                        { type: 'date-eu', targets: 0 }
+                    ]
+                });
+                $('html, body').animate({
+                    scrollTop: 230  // Means Less header height
+                }, 400);
+            }
+        });
+}
+
+
 function loadTimeSheetSummary() {
     $("#alert_placeholder").empty();
     var URL = '/Admin/LoadMyTeamTimesheet';
@@ -1622,6 +1707,16 @@ function ValidateAutocompleteName(name, userID) {
         }
     }
     if (name == "") {
+        if (userID != "") {
+            $("#SearchUserID").val("");
+            $("#UserID").val("");
+        }
+    }
+    return true;
+}
+
+function ValidateAceessCardNumber(CardId, userID) {
+    if (CardId == "") {
         if (userID != "") {
             $("#SearchUserID").val("");
             $("#UserID").val("");

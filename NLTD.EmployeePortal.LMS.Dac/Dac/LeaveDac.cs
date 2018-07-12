@@ -149,7 +149,6 @@ namespace NLTD.EmployeePortal.LMS.Dac
         public IList<LeaveSummary> GetLeaveSumary(long UserId, Int32 summaryYear)
         {
             IList<LeaveSummary> lstSummary;
-            string reportingName = string.Empty;
 
             using (var context = new NLTDDbContext())
             {
@@ -529,7 +528,6 @@ namespace NLTD.EmployeePortal.LMS.Dac
         public IList<TeamLeaves> GetLeaveRequests(ManageTeamLeavesQueryModel qryMdl)
         {
             IList<Int64> empList = GetEmployeesReporting(qryMdl.LeadId);
-            TeamLeaves teamLeaves = new TeamLeaves();
             string qryStatus = string.Empty;
             if (qryMdl.ShowApprovedLeaves)
             {
@@ -570,7 +568,8 @@ namespace NLTD.EmployeePortal.LMS.Dac
                                            ReportingToId = user.ReportingToId,
                                            isTimeBased = types.IsTimeBased,
                                            Comments = leave.Comments,
-                                           AppliedById = leave.AppliedBy
+                                           AppliedById = leave.AppliedBy,
+                                           LeaveTypeId = types.LeaveTypeId
                                        }).AsQueryable();
 
                 List<LeaveItem> LeaveItems = new List<LeaveItem>();
@@ -602,8 +601,9 @@ namespace NLTD.EmployeePortal.LMS.Dac
                                   ReportingToId = l.ReportingToId,
                                   isTimeBased = l.isTimeBased,
                                   Comments = l.Comments,
-                                  PermissionInMonth = (l.isTimeBased == false) ? "" : ReturnPermissionHoursPerMonth(l.LeaveFromDate.Month, l.UserId),
+                                  PermissionInMonth = (l.isTimeBased == false) ? "" : ReturnPermissionHoursPerMonth(l.LeaveFromDate.Month, l.UserId, l.LeaveTypeId),
                                   AppliedByName = e.FirstName + " " + e.LastName
+                                  
                               }).ToList();
 
                 var pdLeaveId = (from items in LeaveItems
@@ -646,7 +646,7 @@ namespace NLTD.EmployeePortal.LMS.Dac
             }
         }
 
-        public string ReturnPermissionHoursPerMonth(int month, Int64 userId)
+        public string ReturnPermissionHoursPerMonth(int month, Int64 userId, long leaveTypeId)
         {
             string retSring = string.Empty;
             TimeSpan totalDuration = TimeSpan.Zero;
@@ -655,6 +655,7 @@ namespace NLTD.EmployeePortal.LMS.Dac
                 var permissions = (from l in context.Leave
                                    join lp in context.PermissionDetail on l.LeaveId equals lp.LeaveId
                                    where lp.PermissionDate.Month == month && l.UserId == userId && l.Status == "A" && l.StartDate.Year == DateTime.Now.Year
+                                    && l.LeaveTypeId == leaveTypeId
                                    select new { TimeFrom = lp.TimeFrom, TimeTo = lp.TimeTo }
                                      )
                                      .ToList();
@@ -706,7 +707,6 @@ namespace NLTD.EmployeePortal.LMS.Dac
         public IList<TeamLeaves> GetTeamLeaveHistory(ManageTeamLeavesQueryModel qryMdl)
         {
             IList<Int64> empList = GetEmployeesReporting(qryMdl.LeadId);
-            TeamLeaves teamLeaves = new TeamLeaves();
             using (var context = new NLTDDbContext())
             {
                 DateTime QryFromDate = qryMdl.FromDate ?? Convert.ToDateTime("01/01/1900");
@@ -890,6 +890,7 @@ namespace NLTD.EmployeePortal.LMS.Dac
                 List<LeaveTypesModel> LeaveTypes = (from types in context.LeaveType
                                                     join emp in context.Employee on types.OfficeId equals emp.OfficeId
                                                     where types.OfficeId == OfficeId && emp.UserId == userId && (emp.Gender == types.ApplicableGender || types.ApplicableGender == "A")
+                                                    orderby types.SortOrder ascending
                                                     select new LeaveTypesModel
                                                     {
                                                         LeaveTypeId = types.LeaveTypeId,
@@ -945,7 +946,6 @@ namespace NLTD.EmployeePortal.LMS.Dac
         public string SaveLeaveRequest(LeaveRequestModel request)
         {
             int isSaved = 0;
-            string retMsg = string.Empty;
             Int64 newId = 0;
             using (var context = new NLTDDbContext())
             {
@@ -958,7 +958,6 @@ namespace NLTD.EmployeePortal.LMS.Dac
                         string duplicateRequest = string.Empty;
                         if (isTimeBased)
                             request.LeaveUpto = request.LeaveFrom;
-                        string firstDayUptoTimeType = string.Empty;
 
                         var chkLeave = context.Leave
                         .Where(h => h.UserId == request.UserId && (h.Status == "A" || h.Status == "P") && ((request.LeaveFrom >= h.StartDate && request.LeaveFrom <= h.EndDate) || (request.LeaveUpto >= h.StartDate && request.LeaveUpto <= h.EndDate) || (request.LeaveFrom <= h.StartDate && request.LeaveUpto >= h.EndDate))).ToList();
@@ -1113,7 +1112,6 @@ namespace NLTD.EmployeePortal.LMS.Dac
                                 return "HolidayToDate";
                             }
                         }
-                        IList<WeekOffDayModel> lstOffDays = ReturnWeekOffDays(request.UserId);
                         if (isTimeBased)
                         {
                             if (request.LeaveFrom.Date != request.LeaveUpto.Date)
@@ -1564,7 +1562,6 @@ namespace NLTD.EmployeePortal.LMS.Dac
 
         public IList<LeaveHeaderModel> GetLeaveHederDtl(Int64 UserId)
         {
-            LeaveHeaderModel headMdl = new LeaveHeaderModel();
             IList<LeaveHeaderModel> lstRetMdl = new List<LeaveHeaderModel>();
             using (var context = new NLTDDbContext())
             {
@@ -1657,7 +1654,7 @@ namespace NLTD.EmployeePortal.LMS.Dac
                            join l in context.Leave on emp.UserId equals l.UserId
                            join lt in context.LeaveType on l.LeaveTypeId equals lt.LeaveTypeId
                            join lp in context.PermissionDetail on l.LeaveId equals lp.LeaveId
-                           where lt.IsTimeBased == true
+                           where lt.IsTimeBased == true && lt.LeaveTypeId != 12
                            orderby l.StartDate descending
                            select new PermissionDetailsModel
                            {
@@ -1756,11 +1753,137 @@ namespace NLTD.EmployeePortal.LMS.Dac
                         permissionDateToTime = permissionDateToTime.AddDays(1);
                     permissions[i].Duration = permissionDateToTime.Subtract(permissionDateFromTime).ToString(@"hh\:mm");
                     permissions[i].Status = ReturnStatus(permissions[i].Status);
+                    if (permissions[i].PermissionType.Contains('-'))
+                    {
+                        string[] strPermissionType = permissions[i].PermissionType.Split('-');
+                        permissions[i].PermissionType = strPermissionType[1].ToString().Trim();
+                    }
                 }
             }
             return permissions;
         }
 
+
+        public IList<PermissionDetailsModel> GetOverTimePermissionDetail(Int64? paramUserId, string reqUsr, DateTime? startDate, DateTime? endDate, bool OnlyReportedToMe, Int64 LeadId)
+        {
+            IList<PermissionDetailsModel> permissions = new List<PermissionDetailsModel>();
+            IList<Int64> empList = GetEmployeesReporting(LeadId);
+            using (var context = new NLTDDbContext())
+            {
+                var qry = (from emp in context.Employee
+                           join l in context.Leave on emp.UserId equals l.UserId
+                           join lt in context.LeaveType on l.LeaveTypeId equals lt.LeaveTypeId
+                           join lp in context.PermissionDetail on l.LeaveId equals lp.LeaveId
+                           where lt.IsTimeBased == true && lt.LeaveTypeId == 12
+                           orderby l.StartDate descending
+                           select new PermissionDetailsModel
+                           {
+                               EmpId = emp.EmployeeId,
+                               UserId = emp.UserId,
+                               ReportingToId = emp.ReportingToId,
+                               Name = emp.FirstName + " " + emp.LastName,
+                               PermissionDetailId = lp.PermissionDetailId,
+                               LeaveId = l.LeaveId,
+                               PermissionMonth = lp.PermissionDate.Month,
+                               PermissionDate = lp.PermissionDate,
+                               TimeFrom = lp.TimeFrom,
+                               TimeTo = lp.TimeTo,
+                               PermissionType = lt.Type,
+                               Reason = l.Remarks,
+                               ApproverComments = l.Comments,
+                               Status = l.Status
+                           }
+                             ).AsQueryable();
+                DateTime QryFromDate = startDate ?? new DateTime(DateTime.Now.Year, 1, 1);
+                DateTime QryToDate = endDate ?? DateTime.Now;
+                qry = qry.Where(x => x.PermissionDate >= QryFromDate && x.PermissionDate <= QryToDate);
+                if (qry != null)
+                {
+                    if (reqUsr == "My")
+                    {
+                        permissions = qry.Where(x => x.UserId == LeadId).ToList();
+                    }
+                    var leadinfo = (from emp in context.Employee
+                                    join role in context.EmployeeRole on emp.EmployeeRoleId equals role.RoleId
+                                    where emp.UserId == LeadId
+                                    select new { RoleName = role.Role }).FirstOrDefault();
+                    if (leadinfo != null)
+                    {
+                        if (reqUsr == "Team")
+                        {
+                            if (leadinfo.RoleName.ToUpper() == "ADMIN" || leadinfo.RoleName.ToUpper() == "HR")
+                            {
+                                if (paramUserId > 0)
+                                {
+                                    permissions = qry.Where(x => x.UserId == paramUserId).ToList();
+                                }
+                                else
+                                {
+                                    if (OnlyReportedToMe)
+                                    {
+                                        permissions = qry.Where(x => x.ReportingToId == LeadId).ToList();
+                                    }
+                                    else
+                                    {
+                                        permissions = qry.ToList();
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                if (paramUserId > 0)
+                                {
+                                    permissions = qry.Where(t => empList.Contains(t.UserId)).ToList();
+                                    if (permissions.Count > 0)
+                                        permissions = permissions.Where(x => x.UserId == paramUserId).ToList();
+                                }
+                                else
+                                {
+                                    if (OnlyReportedToMe)
+                                    {
+                                        permissions = qry.Where(x => x.ReportingToId == LeadId).ToList();
+                                    }
+                                    else
+                                    {
+                                        permissions = qry.Where(t => empList.Contains(t.UserId)).ToList();
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            if (permissions.Count > 0)
+            {
+                TimeSpan timeFrom;
+                DateTime permissionDateFromTime;
+                TimeSpan timeTo;
+                DateTime permissionDateToTime;
+                for (int i = 0; i < permissions.Count; i++)
+                {
+                    EmployeeProfile EmployeeProfileObj = new EmployeeDac().GetEmployeeProfile(permissions[i].UserId);
+                    string reportingManager = string.Empty;
+                    if (EmployeeProfileObj != null)
+                    {
+                        reportingManager = EmployeeProfileObj.ReportedToName;
+                    }
+                    permissions[i].Month = ReturnMonthName(permissions[i].PermissionMonth);
+                    permissionDateFromTime = Convert.ToDateTime(permissions[i].TimeFrom);
+                    permissionDateToTime = Convert.ToDateTime(permissions[i].TimeTo);
+                    timeFrom = Convert.ToDateTime(permissions[i].TimeFrom).TimeOfDay;
+                    timeTo = Convert.ToDateTime(permissions[i].TimeTo).TimeOfDay;
+                    if ((timeFrom.Hours >= 0 && timeFrom.Hours < 12) && timeTo.Hours < 12)
+                        permissionDateFromTime = permissionDateFromTime.AddDays(1);
+                    if (timeTo.Hours >= 0 && timeTo.Hours < 12)
+                        permissionDateToTime = permissionDateToTime.AddDays(1);
+                    permissions[i].Duration = permissionDateToTime.Subtract(permissionDateFromTime).ToString(@"hh\:mm");
+                    permissions[i].Status = ReturnStatus(permissions[i].Status);
+                    permissions[i].ReportingManager = (reportingManager == null ? "" : reportingManager.Trim());
+                }
+            }
+            return permissions;
+        }
         public string ReturnMonthName(int month)
         {
             switch (month)

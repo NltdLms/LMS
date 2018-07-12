@@ -1,6 +1,6 @@
 ﻿@using OfficeOpenXml.FormulaParsing.Excel.Functions.Math
 @model NLTD.EmployeePortal.LMS.Common.DisplayModel.EmployeeProfile
-<script type="text/javascript" src="~/Scripts/lms.js?v=1.06"></script>
+<script type="text/javascript" src="~/Scripts/lms.js?v=1.08"></script>
 <script src="~/Scripts/bootstrap-datetimepicker.js"></script>
 <link href="~/Content/bootstrap-datetimepicker.css" rel="stylesheet" />
 <div id="@("alert_placeholder")"></div>
@@ -147,7 +147,7 @@
                         <div class="col-sm-3">
                             <div class="form-group">
                                 <div class="form-group">
-                                    @Html.LabelFor(e => e.ShiftId, "Employee Shift", new { @class = "required" })
+                                    @Html.LabelFor(e => e.ShiftId, "Default Shift", new { @class = "required" })
                                     <select id="ShiftId" name="ShiftId" class="form-control">
                                         <option value=""></option>
                                         @{

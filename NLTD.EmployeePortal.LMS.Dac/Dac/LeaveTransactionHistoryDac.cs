@@ -60,8 +60,7 @@ namespace NLTD.EmployeePortal.LMS.Dac.Dac
                                 }
                             }
                         }
-
-                        IList<LeaveTransactionDetail> retList = new List<LeaveTransactionDetail>();
+                        
                         var groupedLeaveList = transactionDetails.GroupBy(u => u.LeaveTypeId)
                                                               .Select(grp => new { LeaveTypeId = grp.Key, leaveTransactionHistoryModel = grp.ToList() })
                                                               .ToList();
@@ -156,7 +155,12 @@ namespace NLTD.EmployeePortal.LMS.Dac.Dac
                                      StartDate = ld.LeaveDate,
                                      EndDate = ld.LeaveDate,
                                      LeaveType = lt.Type,
-                                     LeaveDayQty = ld.LeaveDayQty
+                                     LeaveDayQty = ld.LeaveDayQty,
+                                     StartDateType=l.StartDateType,
+                                     EndDateType=l.EndDateType,
+                                     LeaveTypeId = l.LeaveTypeId,
+                                     IsLeave=lt.IsLeave,
+                                     WorkFromHomeDayQty= ld.LeaveDayQty
                                  }
                                  ).ToList();
 
@@ -171,7 +175,9 @@ namespace NLTD.EmployeePortal.LMS.Dac.Dac
                                                               EndDate = ld.PermissionDate,
                                                               LeaveType = lt.Type,
                                                               TimeFrom = ld.TimeFrom,
-                                                              TimeTo = ld.TimeTo
+                                                              TimeTo = ld.TimeTo,
+                                                              LeaveTypeId=l.LeaveTypeId,
+                                                              IsLeave=lt.IsLeave
                                                           }
                                  ).ToList();
 
