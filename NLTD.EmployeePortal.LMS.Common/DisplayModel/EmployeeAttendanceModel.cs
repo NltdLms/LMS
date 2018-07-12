@@ -17,5 +17,7 @@ namespace NLTD.EmployeePortal.LMS.Common.DisplayModel
         public string ErrorMessage { get; set; }
 
         public string requestLevelPerson { get; set; }
+
+        public string BreakDuration { get; set; }
     }
 }
