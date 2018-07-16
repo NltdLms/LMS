@@ -226,14 +226,12 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
 
                                 try
                                 {
-                                    EmailHelper emailHelper = new EmailHelper();
-                                    emailHelper.SendEmail(Convert.ToInt64(result.Substring(6)), "Pending");
-                                    //#if DEBUG
-                                    //                                    emailHelper.SendEmail(Convert.ToInt64(result.Substring(6)), "Pending");
-                                    //#else
-
-                                    //                                    //BackgroundJob.Enqueue(() => emailHelper.SendEmail(Convert.ToInt64(result.Substring(6)), "Pending"));
-                                    //#endif
+                                    EmailHelper emailHelper = new EmailHelper();                                   
+                                    #if DEBUG
+                                        emailHelper.SendEmail(Convert.ToInt64(result.Substring(6)), "Pending");
+                                    #else
+                                    BackgroundJob.Enqueue(() => emailHelper.SendEmail(Convert.ToInt64(result.Substring(6)), "Pending"));
+                                    #endif
                                 }
                                 catch
                                 {
@@ -424,15 +422,15 @@ namespace NLTD.EmployeePortal.LMS.Ux.Controllers
                     try
                     {
                         EmailHelper emailHelper = new EmailHelper();
-                        emailHelper.SendEmail(Convert.ToInt64(obj.LeaveId), action);
-                        //#if DEBUG
-                        //                        emailHelper.SendEmail(Convert.ToInt64(obj.LeaveId), action);
-                        //#else
-                        //                        BackgroundJob.Enqueue(() => emailHelper.SendEmail(Convert.ToInt64(obj.LeaveId), action));
-                        //#endif
+                        #if DEBUG
+                            emailHelper.SendEmail(Convert.ToInt64(obj.LeaveId), action);
+                        #else
+                            BackgroundJob.Enqueue(() => emailHelper.SendEmail(Convert.ToInt64(obj.LeaveId), action));
+                        #endif
                     }
                     catch
                     {
+                        throw;
                     }
                 }
                 return Json(Status);
