@@ -2469,7 +2469,7 @@ namespace NLTD.EmployeePortal.LMS.Dac
                         qry.ReportingToName = qryReportingTo.FirstName + " " + qryReportingTo.LastName;
                         qry.ToEmailId = qryReportingTo.EmailAddress;
                     }
-                    if (actionName == "Applied")
+                    if (actionName == "Pending")
                     {
                         qry.CcEmailIds.Remove(qry.ToEmailId);
                         qry.CcEmailIds.Add(qry.RequestorEmailId);
