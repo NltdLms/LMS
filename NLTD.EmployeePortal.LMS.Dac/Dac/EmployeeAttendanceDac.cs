@@ -118,58 +118,58 @@ namespace NLTD.EmployeePortal.LMS.Dac.Dac
             {
                 throw;
             }
-            TimeSpan breakTime = new TimeSpan();
-            employeeAttendanceModelList = employeeAttendanceModelList.OrderBy(e => e.Name).ThenBy(e => e.InOutDate).ToList();
+            //TimeSpan breakTime = new TimeSpan();
+            //employeeAttendanceModelList = employeeAttendanceModelList.OrderBy(e => e.Name).ThenBy(e => e.InOutDate).ToList();
 
-            for (int i = 0; i < employeeAttendanceModelList.Count; i++)
-            {
-                if (employeeAttendanceModelList[i].InOut == "Out")
-                {
-                    if (i < employeeAttendanceModelList.Count - 1)
-                    {
-                        if (employeeAttendanceModelList[i + 1].InOut == "In" && (employeeAttendanceModelList[i + 1].UserID== employeeAttendanceModelList[i].UserID))
-                        {
-                            // Do nothing
-                        }
-                        else if (employeeAttendanceModelList[i + 1].InOut == "Out" && (employeeAttendanceModelList[i + 1].UserID == employeeAttendanceModelList[i].UserID))
-                        {
-                            employeeAttendanceModelList[i].BreakDuration = "Missing In Punch";
-                            //missing IN
-                        }
-                        else if (employeeAttendanceModelList[i + 1].InOut == "In" && (employeeAttendanceModelList[i + 1].UserID == employeeAttendanceModelList[i].UserID))
-                        {
-                            employeeAttendanceModelList[i].BreakDuration = "Missing In Punch";
-                            //missing IN
-                        }
-                    }
-                }
-                else if (employeeAttendanceModelList[i].InOut == "In")
-                {
-                    if (i>0)
-                    {
-                        if (employeeAttendanceModelList[i - 1].InOut == "Out" && (employeeAttendanceModelList[i - 1].UserID == employeeAttendanceModelList[i].UserID))
-                        {
-                            breakTime = (employeeAttendanceModelList[i].InOutDate - employeeAttendanceModelList[i - 1].InOutDate);
-                            if (breakTime < new TimeSpan(8, 0, 0))
-                            {
-                                employeeAttendanceModelList[i].BreakDuration = breakTime.ToString();
-                            }
-                            //calculate break duration
-                        }
-                        else if (employeeAttendanceModelList[i + 1].InOut == "In" && (employeeAttendanceModelList[i + 1].UserID == employeeAttendanceModelList[i].UserID))
-                        {
-                            employeeAttendanceModelList[i].BreakDuration = "Missing Out Punch";
-                            //missing Out
-                        }
-                        else if (employeeAttendanceModelList[i + 1].InOut == "Out" && (employeeAttendanceModelList[i + 1].UserID == employeeAttendanceModelList[i].UserID))
-                        {
-                            employeeAttendanceModelList[i].BreakDuration = "Missing Out Punch";
-                            //missing Out
-                        }
-                    }
-                }
-            }
-            employeeAttendanceModelList = employeeAttendanceModelList.OrderBy(e => e.Name).ThenByDescending(e => e.InOutDate).ToList();
+            //for (int i = 0; i < employeeAttendanceModelList.Count; i++)
+            //{
+            //    if (employeeAttendanceModelList[i].InOut == "Out")
+            //    {
+            //        if (i < employeeAttendanceModelList.Count - 1)
+            //        {
+            //            if (employeeAttendanceModelList[i + 1].InOut == "In" && (employeeAttendanceModelList[i + 1].UserID== employeeAttendanceModelList[i].UserID))
+            //            {
+            //                // Do nothing
+            //            }
+            //            else if (employeeAttendanceModelList[i + 1].InOut == "Out" && (employeeAttendanceModelList[i + 1].UserID == employeeAttendanceModelList[i].UserID))
+            //            {
+            //                employeeAttendanceModelList[i].BreakDuration = "Missing In Punch";
+            //                //missing IN
+            //            }
+            //            else if (employeeAttendanceModelList[i + 1].InOut == "In" && (employeeAttendanceModelList[i + 1].UserID == employeeAttendanceModelList[i].UserID))
+            //            {
+            //                employeeAttendanceModelList[i].BreakDuration = "Missing In Punch";
+            //                //missing IN
+            //            }
+            //        }
+            //    }
+            //    else if (employeeAttendanceModelList[i].InOut == "In")
+            //    {
+            //        if (i>0)
+            //        {
+            //            if (employeeAttendanceModelList[i - 1].InOut == "Out" && (employeeAttendanceModelList[i - 1].UserID == employeeAttendanceModelList[i].UserID))
+            //            {
+            //                breakTime = (employeeAttendanceModelList[i].InOutDate - employeeAttendanceModelList[i - 1].InOutDate);
+            //                if (breakTime < new TimeSpan(8, 0, 0))
+            //                {
+            //                    employeeAttendanceModelList[i].BreakDuration = breakTime.ToString();
+            //                }
+            //                //calculate break duration
+            //            }
+            //            else if (employeeAttendanceModelList[i + 1].InOut == "In" && (employeeAttendanceModelList[i + 1].UserID == employeeAttendanceModelList[i].UserID))
+            //            {
+            //                employeeAttendanceModelList[i].BreakDuration = "Missing Out Punch";
+            //                //missing Out
+            //            }
+            //            else if (employeeAttendanceModelList[i + 1].InOut == "Out" && (employeeAttendanceModelList[i + 1].UserID == employeeAttendanceModelList[i].UserID))
+            //            {
+            //                employeeAttendanceModelList[i].BreakDuration = "Missing Out Punch";
+            //                //missing Out
+            //            }
+            //        }
+            //    }
+            //}
+            //employeeAttendanceModelList = employeeAttendanceModelList.OrderBy(e => e.Name).ThenByDescending(e => e.InOutDate).ToList();
             return employeeAttendanceModelList;
         }
 
